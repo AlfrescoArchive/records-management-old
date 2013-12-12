@@ -1,0 +1,349 @@
+buildscript {
+
+	repositories {
+		flatDir {
+			dirs 'mmt'
+		}
+		mavenCentral()		
+	}
+
+	dependencies {
+		classpath fileTree(dir: 'mmt', include: '*.jar')
+	    classpath 'com.yahoo.platform.yui:yuicompressor:2.4.6'
+	}
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.0-milestone-8'
+}
+
+task deleteDist(type: Delete) {
+    ant.delete(includeEmptyDirs: 'true', dir: 'dist')
+}
+
+task packageBuild (dependsOn: [':rm-server:amp', ':rm-share:amp']) << {
+	
+	distDir = file('dist')
+	if (distDir.exists() == false) {
+		distDir.mkdirs();
+	}
+	
+	packageBaseName = "${groupid}-${packageName}-${version}-${build}"
+	packageZipFile = "${packageBaseName}.zip"
+	alfrescoAmp = "${project(':rm-server').name}/${project(':rm-server').buildDistDir}/${project(':rm-server').ampFile}"
+	shareAmp = "${project(':rm-share').name}/${project(':rm-share').buildDistDir}/${project(':rm-share').ampFile}"
+	
+	ant.zip(destfile: "${distDir}/${packageZipFile}", update: 'true') {	
+		
+		ant.zipfileset(file: "${alfrescoAmp}")
+		ant.zipfileset(file: "${shareAmp}")		
+	}
+}
+
+/** Subproject configuration */
+subprojects {
+
+	apply plugin: 'java'	
+	apply plugin: 'eclipse'
+	
+	sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+	
+	explodedDepsDir = 'explodedDeps'	
+	explodedLibsDir = "${explodedDepsDir}/lib"
+	explodedConfigDir = "${explodedDepsDir}/config"
+	buildDistDir = 'build/dist'
+	buildLibDir = 'build/libs'
+	sourceJavaDir = 'source/java'
+	sourceWebDir = 'source/web'
+	assembleDir = 'build/assemble'
+	testJavaDir = 'test/java'
+	testResourceDir = 'test/resources'
+	configDir = 'config'
+	configModuleDir = "config/alfresco/module/${moduleid}"
+	moduleProperties = 'module.properties'
+	fileMapping = 'file-mapping.properties'
+	baseName = "${groupid}-${appName}-${version}-${build}"
+	jarFile = "${baseName}.jar"
+	ampFile = "${baseName}.amp"
+	tomcatRoot = System.getenv(tomcatEnv)
+	jarFilePath = "${buildLibDir}/${jarFile}"
+		
+	sourceSets {
+		main {
+			java {
+				srcDir sourceJavaDir
+			}			
+		}
+		test {
+			java {
+				srcDir testJavaDir
+			}	
+			resources {
+				srcDir testResourceDir
+			}
+		}
+	}
+
+	repositories { 
+	
+		flatDir {
+			dirs explodedLibsDir
+		}
+		mavenCentral()
+		maven {
+			url "https://artifacts.alfresco.com/nexus/content/groups/internal"
+			credentials {
+				username 'bamboo'
+				password 'b@mb00'
+			}
+		}
+        // Temporarily add the internal-staging Maven repo, to be able to get the yet unreleased 4.1.4
+		maven {
+			url "https://artifacts.alfresco.com/nexus/content/repositories/internal-staging"
+			credentials {
+				username 'bamboo'
+				password 'b@mb00'
+			}
+		}
+	}
+	
+	dependencies {		     		
+		
+		compile fileTree(dir: explodedLibsDir, include: '*.jar')     	
+	}	
+	
+	// make sure existing eclipse projects are cleared
+	tasks.eclipse.dependsOn(cleanEclipse)
+	
+	/** --- Compile tasks --- */
+		
+	// make sure that the dependancies have been unpacked before compiling the Java
+	compileJava.doFirst {
+		explodeDeps.execute()
+	}
+	compileJava.options.encoding = 'UTF-8'
+	compileTestJava.options.encoding = 'UTF-8'
+	
+	jar.archiveName = jarFile
+	
+	/** --- Dependancy tasks --- */
+	
+	task fetchWarFile(type:Copy) {
+        from configurations.testRuntime
+        into '.'
+        include '*.war'
+        rename { String filename -> warFile }
+	}
+
+	task explodeDeps << {
+	
+		explodedDir = file(explodedDepsDir)
+		explodedLibDir = file(explodedLibsDir)
+		explodedConfigDir = file("${explodedDepsDir}/config")
+		warFileObj = file(warFile)
+	
+		// if the WAR file still isn't there raise an error
+		if (warFileObj.exists() == true) {
+			
+			logger.lifecycle "${warFile} was found.  Checking dependancies ..."
+			
+			if (explodedDir.exists() == false) {
+				println(" ... creating destination dir ${explodedDir}")
+				explodedDir.mkdir()
+			}
+			
+			if (isUnpacked(explodedLibDir) == false) {
+			
+				println(" ... unpacking libs into ${explodedLibDir}")
+				
+				ant.unzip(src: warFileObj, dest: explodedLibDir) {
+					ant.patternset {
+						ant.include(name: 'WEB-INF/lib/*.jar')
+					}
+					ant.mapper(type: 'flatten')
+				}
+			}
+			
+			if (isUnpacked(explodedConfigDir) == false) {
+			
+				println(" ... unpacking config into ${explodedConfigDir}")
+				
+				ant.unzip(src: warFileObj, dest: explodedDir) {
+					ant.patternset {
+						ant.include(name: 'WEB-INF/classes/**/*')
+					}
+				}
+				
+				copy {
+					from "${explodedDir}/WEB-INF/classes"
+					into explodedConfigDir
+				}
+				
+				// TODO understand why this doesn't delete the folder as expected
+				ant.delete(includeEmptyDirs: 'true') {
+					ant.fileset(dir: "${explodedDir}/WEB-INF", includes: '**/*')			
+				}
+			}
+		}
+		else {			
+			logger.error "Dependant WAR file ${warFile} can not be found.  Please place it in ${warFileObj.getPath()} to continue."
+			throw new TaskInstantiationException("Dependant WAR file ${warFile} can not be found.  Please place it in ${warFileObj.getPath()} to continue.")
+		}		
+	}
+		
+	task cleanDeps << {
+		ant.delete(includeEmptyDirs: 'true', dir: explodedDepsDir)
+	}	
+	
+	/** --- AMP tasks --- */
+	
+	task copyWar(type: Copy) {
+		from warFile
+		into buildDistDir
+	}
+	
+	task amp(dependsOn: 'jar') << {
+	
+		delete assembleDir
+	
+		copy {
+			from "${configModuleDir}"
+			include "${moduleProperties}"
+			include "${fileMapping}"	
+			into assembleDir
+		}
+	
+		copy {
+			from jarFilePath
+			into "${assembleDir}/lib"
+		}
+		
+		copy {
+			from configDir
+			exclude "**/${moduleProperties}"
+			exclude "**/${fileMapping}"			
+			exclude "**/dev-context.xml"
+			into "${assembleDir}/config"		
+		}
+		
+		copy {
+			from sourceWebDir			
+			include '**/*'
+			into "${assembleDir}/web"
+		}
+		
+		tree = fileTree("${assembleDir}/web") {
+			include '**/*.js'
+			exclude '**/*-min.js'
+		}
+		
+		tree.each {File file ->
+				
+			destinationFile = new File(file.getPath().replaceFirst('\\.js', '-min.js'))
+			
+			file.withReader{ reader -> 
+				compressor = new com.yahoo.platform.yui.compressor.JavaScriptCompressor(reader, null)
+				destinationFile.withWriter { writer ->
+					compressor.compress(writer, -1, false, false, false, false)
+				}
+			}
+		}
+		
+		ant.zip(destfile: "${buildDistDir}/${ampFile}", update: 'true') {
+			ant.zipfileset(dir: assembleDir)
+		}	
+	}
+	
+	task localisationPackage (type: Copy) << {
+	
+		from configDir
+		include "**/*.properties"
+		into "${assembleDir}/i18n"				
+	}
+	
+	task deployExploded(dependsOn: 'jar') << {
+	
+		def jarFileObj = file(jarFilePath)
+		def configDirObj = file(configDir)
+		def sourceWebObj = file(sourceWebDir)
+	
+		explodedWebAppDir = new File("${tomcatRoot}/webapps/${webAppName}")
+		if (explodedWebAppDir.exists() == true) {
+		
+				// copy module properties
+				// TODO but not so important for now
+				
+				// copy jars
+				if (jarFileObj.exists()) {
+					copy {
+						from jarFilePath
+						into "${explodedWebAppDir}/WEB-INF/lib"
+					}
+				}
+				
+				// copy config
+				if (configDirObj.exists() == true) {
+					copy {
+						from(configDir) {
+							exclude "**/${moduleProperties}"
+							exclude  "**/${fileMapping}"
+						}
+						into "${explodedWebAppDir}/WEB-INF/classes"
+						
+					}
+				}
+				
+				// copy web
+				if (sourceWebObj.exists() == true) {
+					copy {
+						from sourceWebObj
+						into "${explodedWebAppDir}"						
+					}
+				}
+		}
+		else {
+			println "Exploded webapp directory ${explodedWebAppDir} does not exist."
+		}
+	}
+	
+	task installAmp(dependsOn: ['amp', 'copyWar']) << {
+		
+		def warFileLocation = file("${buildDistDir}/${warFile}")
+		def ampFileLocation = file("${buildDistDir}/${ampFile}")
+		
+		mmt = new org.alfresco.repo.module.tool.ModuleManagementTool()
+		mmt.setVerbose(true)		
+		mmt.installModule(ampFileLocation.getPath(), warFileLocation.getPath(), false, true, false)
+	}
+	
+	task cleanDeploy(type: Delete) {
+		delete "${tomcatRoot}/webapps/${webAppName}", "${tomcatRoot}/webapps/${warFile}"
+	}
+	
+	task deployAmp(dependsOn: ['cleanDeploy', 'installAmp']) << {
+	
+		tomcatRootDir = new File(tomcatRoot)
+		if (tomcatRootDir.exists() == true) {
+			
+			// copy war
+			copy {
+				from "${buildDistDir}/${warFile}"
+				into "${tomcatRoot}/webapps"
+			}
+		} 
+		else {
+			println "Tomcat root directory ${tomcatRoot} does not exist."
+		}		
+	}
+}
+
+/** Utility function - indicates wether the provided dir is unpacked (ie exists and has some contents) */
+Boolean isUnpacked(dir) {
+	if (dir.exists() == true && dir.list().length > 0) {
+		return true
+	}
+	else {
+		return false
+	}
+}
