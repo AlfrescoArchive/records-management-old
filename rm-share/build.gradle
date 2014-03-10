@@ -1,0 +1,3 @@
+dependencies {
+    alfrescoDeps "${alfrescoGroupId}:share:${alfrescoBaseVersion}@war"    
+}
