@@ -322,7 +322,7 @@ public class ManageFolders extends BaseTest
     /**
      * Delete user when suit is finished
      */
-    @AfterSuite(alwaysRun=true)
+    @AfterSuite
     protected void deleteTestUser()
     {
         // delete user

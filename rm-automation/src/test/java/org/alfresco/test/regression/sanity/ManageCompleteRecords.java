@@ -18,14 +18,12 @@
  */
 package org.alfresco.test.regression.sanity;
 
-import static org.alfresco.po.rm.console.audit.AuditEntryTypes.CONTENT;
-import static org.alfresco.po.rm.console.audit.AuditEvents.FILE_TO;
-import static org.alfresco.po.rm.console.audit.AuditEvents.UPDATED_METADATA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.alfresco.po.rm.actions.edit.EditElectronicRecordPage;
 import org.alfresco.po.rm.actions.edit.EditNonElectronicRecordPage;
@@ -33,6 +31,8 @@ import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
+import org.alfresco.po.rm.console.audit.AuditEntryTypes;
+import org.alfresco.po.rm.console.audit.AuditEvents;
 import org.alfresco.po.rm.details.record.ActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.share.properties.Content;
@@ -337,10 +337,10 @@ public class ManageCompleteRecords extends BaseTest
             //TODO verify the timestamp equals to cm:created
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
-                    || (auditEntry.getAuditEntryEvent().equals(FILE_TO.toString())));
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
+                    || (auditEntry.getAuditEntryEvent().equals(AuditEvents.FILE_TO.toString())));
             assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(CONTENT.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.CONTENT.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -357,10 +357,17 @@ public class ManageCompleteRecords extends BaseTest
             //TODO verify the timestamp equals to time the record was completed
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
-                    || auditEntry.getAuditEntryEvent().equals(COMPLETE_RECORD.toString()));
+            
+            // check audit entry
+            String auditEntryEvent = auditEntry.getAuditEntryEvent();
+            if (!auditEntryEvent.equals(AuditEvents.UPDATED_METADATA.toString()) &&
+                !auditEntryEvent.equals(AuditEvents.COMPLETE_RECORD.toString()))
+    		{
+            	fail("Expected audit entry to be 'updated' or 'complete', but was '" + auditEntryEvent + "'");
+    		}
+            
             assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(CONTENT.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.CONTENT.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -375,9 +382,9 @@ public class ManageCompleteRecords extends BaseTest
         //TODO verify the timestamp equals to time the record was edited
         assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
         //TODO verify the currently logged in user is displayed
-        assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString()));
+        assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString()));
         assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-        assertEquals(CONTENT.toString(), auditEntry.getAuditEntryType());
+        assertEquals(AuditEntryTypes.CONTENT.toString(), auditEntry.getAuditEntryType());
         assertEquals("/" + DOCUMENT_LIBRARY + "/"
                         + RECORD_CATEGORY_ONE + "/"
                         + SUB_RECORD_CATEGORY_NAME + "/"
@@ -393,10 +400,10 @@ public class ManageCompleteRecords extends BaseTest
             //TODO verify the timestamp equals to time the record was added to hold
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
-                    || auditEntry.getAuditEntryEvent().equals(ADD_TO_HOLD.toString()));
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
+                    || auditEntry.getAuditEntryEvent().equals(AuditEvents.ADD_TO_HOLD.toString()));
             assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(CONTENT.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.CONTENT.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -411,9 +418,9 @@ public class ManageCompleteRecords extends BaseTest
         //TODO verify the timestamp equals to time the record was removed from hold
         assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
         //TODO verify the currently logged in user is displayed
-        assertTrue(auditEntry.getAuditEntryEvent().equals(REMOVE_FROM_HOLD.toString()));
+        assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.REMOVE_FROM_HOLD.toString()));
         assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-        assertEquals(CONTENT.toString(), auditEntry.getAuditEntryType());
+        assertEquals(AuditEntryTypes.CONTENT.toString(), auditEntry.getAuditEntryType());
         assertEquals("/" + DOCUMENT_LIBRARY + "/"
                         + RECORD_CATEGORY_ONE + "/"
                         + SUB_RECORD_CATEGORY_NAME + "/"

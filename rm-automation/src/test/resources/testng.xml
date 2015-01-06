@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="TestNG AllTestSuite" verbose="1" time-out="300000">
-
+<!-- 
 	<test name="unit-tests">
     	<groups>
     		<run>
@@ -12,12 +12,15 @@
             <package name="org.alfresco.po.*"/> 
         </packages> 
     </test>
-
+-->
 
     <test name="sanity">
     	<groups>
     		<run>
-    			<include name="sanity"/>
+    			<include name="RMA-2664"/>
+    			<include name="RMA-2665"/>
+    			<include name="RMA-2666"/>
+    			<include name="RMA-2667"/>
     		</run>
     	</groups>
         <packages>                   
