@@ -109,7 +109,7 @@ public abstract class AddAuthorityDialog extends Dialog
      */
     public AddAuthorityDialog search(String search)
     {
-    	return search(search).clickOnSearch();
+    	return setSearch(search).clickOnSearch();
     }
     
     /**
