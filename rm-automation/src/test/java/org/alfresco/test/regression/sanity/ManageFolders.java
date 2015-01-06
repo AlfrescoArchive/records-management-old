@@ -18,10 +18,6 @@
  */
 package org.alfresco.test.regression.sanity;
 
-import static org.alfresco.po.rm.console.audit.AuditEntryTypes.RECORD_FOLDER;
-import static org.alfresco.po.rm.console.audit.AuditEvents.CREATED_OBJECT;
-import static org.alfresco.po.rm.console.audit.AuditEvents.MOVE_TO;
-import static org.alfresco.po.rm.console.audit.AuditEvents.UPDATED_METADATA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -33,6 +29,8 @@ import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
+import org.alfresco.po.rm.console.audit.AuditEntryTypes;
+import org.alfresco.po.rm.console.audit.AuditEvents;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.rm.details.folder.FolderDetails;
 import org.alfresco.po.rm.details.record.ActionsPanel;
@@ -251,10 +249,10 @@ public class ManageFolders extends BaseTest
             //TODO verify the timestamp equals to cm:created
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
-                    || (auditEntry.getAuditEntryEvent().equals(CREATED_OBJECT.toString())));
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
+                    || (auditEntry.getAuditEntryEvent().equals(AuditEvents.CREATED_OBJECT.toString())));
            // assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -270,9 +268,9 @@ public class ManageFolders extends BaseTest
             //TODO verify the timestamp equals to time when non-electronic record was added to hold and removed from hold, deleted and linked
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString()));
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString()));
             // assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -288,10 +286,10 @@ public class ManageFolders extends BaseTest
             //TODO verify the timestamp equals to time when folder was renamed
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
-                    || auditEntry.getAuditEntryEvent().equals(MOVE_TO.toString()));
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
+                    || auditEntry.getAuditEntryEvent().equals(AuditEvents.MOVE_TO.toString()));
           //  assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"
@@ -307,10 +305,10 @@ public class ManageFolders extends BaseTest
             //TODO verify the timestamp equals to time when folder was added to hold
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
-            assertTrue(auditEntry.getAuditEntryEvent().equals(UPDATED_METADATA.toString())
+            assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
                     || auditEntry.getAuditEntryEvent().equals(ADD_TO_HOLD.toString()));
             //  assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
-            assertEquals(RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
+            assertEquals(AuditEntryTypes.RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
                             + RECORD_CATEGORY_ONE + "/"
                             + SUB_RECORD_CATEGORY_NAME + "/"

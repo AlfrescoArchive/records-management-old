@@ -103,11 +103,11 @@ public class ManageDispositionScheduleForRecord extends BaseTest
      * Main regression test execution
      */
     @Test
-            (
-                    groups = { "RMA-2671", "sanity" },
-                    description = "Manage disposition schedule for Record",
-                    dependsOnGroups = { "RMA-2664" }
-            )
+    (
+            groups = { "RMA-2671", "sanity" },
+            description = "Manage disposition schedule for Record",
+            dependsOnGroups = { "RMA-2664" }
+    )
     public void manageDispositionScheduleForRecord()
     {
         // open file plan
@@ -359,7 +359,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
                 .clickOnUnfiledRecords();
 
         //verify the report is present
-        assertNotNull(unfiledRecords.getList().getByPartialName("Destruction Report"));
+        assertNotNull("Destruction report not present in unfiled records.", unfiledRecords.getList().getByPartialName("Destruction Report"));
 
         //TODO verify the information inside Destruction report
     }

@@ -169,7 +169,7 @@ public class CreateFilePlan extends BaseTest
     /**
      * delete collaboration site
      */
-    @AfterSuite(alwaysRun=true)
+    @AfterSuite
     protected void deleteCollaborationSite()
     {   
         MySitesDashlet mySites = openPage(userDashboardPage).getMySitesDashlet();

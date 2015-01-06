@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -112,6 +113,12 @@ public class EventsSection extends HtmlElement
         {
             WebElement link = events.findElement(getDispositionEventSelector(eventName));
             result = new Link(link);
+            
+            // ensure that the link is visible before we proceed
+            if (!result.isDisplayed())
+            {
+            	Utils.waitForVisibilityOf(link);
+            }
         }
         catch (NoSuchElementException e)
         {
