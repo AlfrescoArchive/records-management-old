@@ -61,6 +61,17 @@ public abstract class ButtonSet extends HtmlElement
     }
     
     /**
+     * Get the named button
+     * 
+     * @param name		button name
+     * @return Button	button, null if none
+     */
+    public Button getButton(String name)
+    {
+    	return getButtonMap().get(name);
+    }
+    
+    /**
      * Click on the named button.
      * <p>
      * The last rendered page will be returned and rendered.

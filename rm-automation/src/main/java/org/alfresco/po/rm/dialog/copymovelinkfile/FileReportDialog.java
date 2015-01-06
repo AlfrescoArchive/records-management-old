@@ -19,7 +19,12 @@
 package org.alfresco.po.rm.dialog.copymovelinkfile;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.share.page.Message;
+import org.alfresco.po.share.page.SharePage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import ru.yandex.qatools.htmlelements.element.Button;
 
 /**
  * File report dialog
@@ -29,6 +34,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileReportDialog extends CopyMoveLinkFileDialog
 {
+	@Autowired
+	private Message message;
+	
     /**
      * @see CopyMoveLinkFileDialog#select(java.lang.String)
      */
@@ -43,7 +51,10 @@ public class FileReportDialog extends CopyMoveLinkFileDialog
      */
     public Renderable clickOnFileReport()
     {
-        return buttonset.click(OK);
+        Button button = buttonset.getButton(OK);
+        button.click();
+        message.waitUntillVisible();
+        return SharePage.getLastRenderedPage().render();
     }
 
 }
