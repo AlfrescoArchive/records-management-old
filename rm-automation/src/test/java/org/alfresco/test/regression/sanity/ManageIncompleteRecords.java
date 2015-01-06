@@ -19,12 +19,20 @@
 package org.alfresco.test.regression.sanity;
 
 import static org.alfresco.po.rm.console.audit.AuditEntryTypes.NON_ELECTRONIC_DOCUMENT;
-import static org.alfresco.po.rm.console.audit.AuditEvents.*;
-import static org.junit.Assert.*;
+import static org.alfresco.po.rm.console.audit.AuditEvents.CREATED_OBJECT;
+import static org.alfresco.po.rm.console.audit.AuditEvents.FILE_TO;
+import static org.alfresco.po.rm.console.audit.AuditEvents.MOVE_TO;
+import static org.alfresco.po.rm.console.audit.AuditEvents.UPDATED_METADATA;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.alfresco.po.rm.actions.edit.EditNonElectronicRecordPage;
 import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
+import org.alfresco.po.rm.browse.fileplan.Actions;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.details.record.ActionsPanel;
@@ -77,7 +85,7 @@ public class ManageIncompleteRecords extends BaseTest
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
 
         // verify electronic record actions        
-        compareArrays(INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD, filePlan.getRecord(RECORD).getClickableActions());
+        compareArrays(Actions.INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD, filePlan.getRecord(RECORD).getClickableActions());
 
         // navigate to the electronic details page
         filePlan.getRecord(RECORD).clickOnLink();
@@ -104,7 +112,7 @@ public class ManageIncompleteRecords extends BaseTest
         // verify non-electronic record actions
         Record nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertNotNull(nonElectronicRecord);
-        compareArrays(INCOMPLETE_RECORD_ACTIONS, nonElectronicRecord.getClickableActions());
+        compareArrays(Actions.INCOMPLETE_RECORD_ACTIONS, nonElectronicRecord.getClickableActions());
                 
         //remember the non-electronic record name (before editing) and identifier to verify it on Audit log page
         String nameBefore = nonElectronicRecord.getName();
@@ -114,7 +122,7 @@ public class ManageIncompleteRecords extends BaseTest
         nonElectronicRecord.clickOnLink();
 
         // verify that all the expected actions are available
-        assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(INCOMPLETE_RECORD_ACTIONS));
+        assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(Actions.INCOMPLETE_RECORD_ACTIONS));
 
         // check download is not available on records detail page for
         // non-electronic record

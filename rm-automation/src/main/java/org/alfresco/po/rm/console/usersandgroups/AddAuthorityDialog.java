@@ -105,6 +105,14 @@ public abstract class AddAuthorityDialog extends Dialog
     }
 
     /**
+     * Helper method to initiate search
+     */
+    public AddAuthorityDialog search(String search)
+    {
+    	return search(search).clickOnSearch();
+    }
+    
+    /**
      * Set search string
      */
     public AddAuthorityDialog setSearch(String search)

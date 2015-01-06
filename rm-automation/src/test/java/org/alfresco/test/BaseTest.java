@@ -22,7 +22,6 @@ import static org.junit.Assert.assertArrayEquals;
 
 import java.util.UUID;
 
-import org.alfresco.po.rm.browse.fileplan.Actions;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
@@ -47,7 +46,7 @@ import org.testng.annotations.Listeners;
  */
 @ContextConfiguration(locations = {"classpath:rm-po-testContext.xml"})
 @Listeners(ResourceTeardown.class)
-public class BaseTest extends AbstractTestNGSpringContextTests implements TestData, Actions
+public class BaseTest extends AbstractTestNGSpringContextTests implements TestData
 {
     /** user dashboard page */
     @Autowired

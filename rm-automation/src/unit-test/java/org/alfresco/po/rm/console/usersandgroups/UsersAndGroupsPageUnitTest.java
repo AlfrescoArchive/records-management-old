@@ -120,8 +120,7 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
         // add group
         usersAndGroupsPage
             .clickOnAddGroup()
-            .setSearch(GROUP)
-            .clickOnSearch()
+            .search(GROUP)
             .clickOnAdd(GROUP);
      
         // check that the group has been added
@@ -165,8 +164,7 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
         // add user
         usersAndGroupsPage
             .clickOnAddUser()
-            .setSearch(USER)
-            .clickOnSearch()
+            .search(USER)
             .clickOnAdd(USER);
         
        // check user has been added

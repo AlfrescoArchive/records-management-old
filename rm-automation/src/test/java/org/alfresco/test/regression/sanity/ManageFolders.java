@@ -306,7 +306,7 @@ public class ManageFolders extends BaseTest
             assertEquals(auditEntry.getAuditEntryUser(), "Administrator");
             //TODO verify the currently logged in user is displayed
             assertTrue(auditEntry.getAuditEntryEvent().equals(AuditEvents.UPDATED_METADATA.toString())
-                    || auditEntry.getAuditEntryEvent().equals(ADD_TO_HOLD.toString()));
+                    || auditEntry.getAuditEntryEvent().equals(AuditEvents.ADD_TO_HOLD.toString()));
             //  assertEquals(identifier, auditEntry.getAuditEntryIdentifier());
             assertEquals(AuditEntryTypes.RECORD_FOLDER.toString(), auditEntry.getAuditEntryType());
             assertEquals("/" + DOCUMENT_LIBRARY + "/"
