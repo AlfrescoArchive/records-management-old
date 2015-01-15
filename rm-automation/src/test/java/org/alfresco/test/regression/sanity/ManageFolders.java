@@ -32,8 +32,9 @@ import org.alfresco.po.rm.browse.fileplan.RecordFolder;
 import org.alfresco.po.rm.console.audit.AuditEntryTypes;
 import org.alfresco.po.rm.console.audit.AuditEvents;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
-import org.alfresco.po.rm.details.folder.FolderDetails;
-import org.alfresco.po.rm.details.record.ActionsPanel;
+import org.alfresco.po.rm.details.folder.FolderActionsPanel;
+import org.alfresco.po.rm.details.folder.FolderDetailsPage;
+import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.VitalReviewPeriod;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class ManageFolders extends BaseTest
 
     /** folder details page */
     @Autowired
-    private FolderDetails folderDetails;
+    private FolderDetailsPage folderDetailsPage;
 
     /** edit non electronic record */
     @Autowired
@@ -86,12 +87,12 @@ public class ManageFolders extends BaseTest
 
        // verify record folder one actions
         assertNull(filePlan.getRecordFolder(RECORD_FOLDER_ONE).isActionsClickable(
-                RecordFolder.FOLDER_VIEW_DETAILS,
+                RecordFolder.VIEW_DETAILS,
                 RecordFolder.EDIT_METADATA,
                 RecordFolder.CLOSE_FOLDER,
                 RecordFolder.ADD_TO_HOLD,
-                RecordFolder.COPY_FOLDER,
-                RecordFolder.MOVE_FOLDER,
+                RecordFolder.COPY,
+                RecordFolder.MOVE,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.DELETE,
                 RecordFolder.VIEW_AUDIT));
@@ -100,18 +101,18 @@ public class ManageFolders extends BaseTest
         filePlan.getRecordFolder(RECORD_FOLDER_ONE).clickOnViewDetails();
 
         // verify that all the expected actions are available
-        assertTrue(folderDetails.getFolderActionsPanel().isActionsClickable(
-                ActionsPanel.EDIT_METADATA,
-                ActionsPanel.CLOSE_FOLDER,
-                ActionsPanel.COPY_FOLDER,
-                ActionsPanel.MOVE_FOLDER,
-                ActionsPanel.ADD_TO_HOLD,
-                ActionsPanel.MANAGE_PERMISSIONS,
-                ActionsPanel.DELETE,
-                ActionsPanel.VIEW_AUDIT));
+        assertTrue(folderDetailsPage.getFolderActionsPanel().isActionsClickable(
+                FolderActionsPanel.EDIT_METADATA,
+                FolderActionsPanel.CLOSE_FOLDER,
+                FolderActionsPanel.COPY,
+                FolderActionsPanel.MOVE,
+                FolderActionsPanel.ADD_TO_HOLD,
+                FolderActionsPanel.MANAGE_PERMISSIONS,
+                FolderActionsPanel.DELETE,
+                FolderActionsPanel.VIEW_AUDIT));
 
         //edit metadata
-        folderDetails.getFolderActionsPanel().clickOnAction(ActionsPanel.EDIT_METADATA, editRecordFolderPage);
+        folderDetailsPage.getFolderActionsPanel().clickOnAction(RecordActionsPanel.EDIT_METADATA, editRecordFolderPage);
         String folderName = RECORD_FOLDER_ONE + MODIFIED;
         editRecordFolderPage
                 .getContent().setNameValue(RECORD_FOLDER_ONE + MODIFIED)
@@ -126,7 +127,7 @@ public class ManageFolders extends BaseTest
         // TODO verify entered values are displayed on details page
 
         // navigate inside sub-category/ click on sub-category on breadcrumb
-        folderDetails.navigateUp(2);
+        folderDetailsPage.navigateUp(2);
 
         // TODO try to copy folder1 to folder2
 
@@ -150,7 +151,7 @@ public class ManageFolders extends BaseTest
         assertTrue(folder1.isHeld());
         // check the correct actions for a held folder are being shown
         assertNull(folder1.isActionsClickable(
-                RecordFolder.FOLDER_VIEW_DETAILS,
+                RecordFolder.VIEW_DETAILS,
                 RecordFolder.ADD_TO_HOLD,
                 RecordFolder.REMOVE_FROM_HOLD,
                 RecordFolder.VIEW_AUDIT));
@@ -199,10 +200,10 @@ public class ManageFolders extends BaseTest
         assertTrue(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isClosed());
         //verify the available actions
         assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isActionsClickable(
-                RecordFolder.FOLDER_VIEW_DETAILS,
+                RecordFolder.VIEW_DETAILS,
                 RecordFolder.REOPEN_FOLDER,
                 RecordFolder.ADD_TO_HOLD,
-                RecordFolder.COPY_FOLDER,
+                RecordFolder.COPY,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.VIEW_AUDIT));
 
@@ -214,8 +215,8 @@ public class ManageFolders extends BaseTest
         assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isActionsClickable(
                 RecordFolder.EDIT_METADATA,
                 RecordFolder.CLOSE_FOLDER,
-                RecordFolder.COPY_FOLDER,
-                RecordFolder.MOVE_FOLDER,
+                RecordFolder.COPY,
+                RecordFolder.MOVE,
                 RecordFolder.ADD_TO_HOLD,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.DELETE,

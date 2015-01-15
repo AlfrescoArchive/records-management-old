@@ -9,6 +9,7 @@ import org.alfresco.po.rm.dialog.create.NewRecordCategoryDialog;
 import org.alfresco.test.BaseRmUnitTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,12 +28,16 @@ public class NewRecordCategoryDialogUnitTest extends BaseRmUnitTest
     @Autowired
     private FilePlan filePlan;
 
-    @BeforeMethod
-    public void beforeMethod()
+    @BeforeClass
+    public void beforeClass()
     {
         // create RM site
         createRMSite();
-        
+    }
+
+    @BeforeMethod
+    public void beforeMethod()
+    {
         // open record category dialog
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .getToolbar()

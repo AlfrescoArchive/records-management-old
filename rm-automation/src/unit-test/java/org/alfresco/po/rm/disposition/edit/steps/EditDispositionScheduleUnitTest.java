@@ -19,7 +19,7 @@
 package org.alfresco.po.rm.disposition.edit.steps;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.details.category.DispositionBlock;
 import org.alfresco.po.rm.disposition.PeriodUnit;
 import org.alfresco.test.BaseRmUnitTest;
@@ -51,7 +51,7 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
 
     /** category details */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /** edit general information */
     @Autowired
@@ -75,7 +75,7 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
         filePlan
                 .getRecordCategory(RECORD_CATEGORY_NAME)
                 .clickOnViewDetails()
-                .clickOnCreateDispositionSchedule();
+                .createDispositionSchedule();
     }
 
     @BeforeMethod
@@ -86,8 +86,8 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
         //open category details page
         filePlan.getRecordCategory(RECORD_CATEGORY_NAME).clickOnViewDetails();
         //open edit general information page
-        categoryDetails
-                .clickEditDispositionSteps();
+        categoryDetailsPage
+                .editDispositionSteps();
     }
 
     @Test
@@ -177,14 +177,14 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
         addCutOffStep();
         editDispositionSchedulePage.clickOnDone();
 
-        DispositionBlock dispositionBlock = categoryDetails.getDispositionBlock();
+        DispositionBlock dispositionBlock = categoryDetailsPage.getDispositionBlock();
         //verify one step is displayed on category details page
         assertEquals(1, dispositionBlock.getStepsQuantity());
         //verify disposition step name
         assertEquals("Cut off after 2 day(s)", dispositionBlock.getDispositionStepName(1));
 
         //delete te step
-        categoryDetails.clickEditDispositionSteps();
+        categoryDetailsPage.editDispositionSteps();
         deleteStep(1);
     }
 

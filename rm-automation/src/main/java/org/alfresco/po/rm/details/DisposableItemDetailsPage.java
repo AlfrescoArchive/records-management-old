@@ -47,7 +47,7 @@ public class DisposableItemDetailsPage extends DetailsPage<RMSiteNavigation>
     /**
      * get event form Event Block
      * @param name - event name
-     * @return Event Block
+     * @return Event Block, null if there is no such event
      */
     public EventBlock getEventByName(String name)
     {

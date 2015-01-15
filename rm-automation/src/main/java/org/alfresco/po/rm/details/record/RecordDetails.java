@@ -38,7 +38,7 @@ public class RecordDetails extends DisposableItemDetailsPage
 {
     @Autowired
     @RenderableChild
-    private ActionsPanel recordActionsPanel;
+    private RecordActionsPanel recordActionsPanel;
 
     @Autowired
     @RenderableChild
@@ -55,7 +55,7 @@ public class RecordDetails extends DisposableItemDetailsPage
     @FindBy(css = ".onDownloadDocumentClick a")
     private List<Button> downloadButton;
 
-    public ActionsPanel getRecordActionsPanel()
+    public RecordActionsPanel getRecordActionsPanel()
     {
         return recordActionsPanel;
     }

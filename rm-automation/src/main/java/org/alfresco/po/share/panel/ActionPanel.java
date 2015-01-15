@@ -24,7 +24,6 @@ import java.text.MessageFormat;
 
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -34,28 +33,25 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
- * @author Roy Wetherall
+ * @author Roy Wetherall, Tatiana Kalinovskaya
  */
 public abstract class ActionPanel extends Panel
 {
-    @FindBy(css="div.document-actions h2")
-    private WebElement clickableTitle;
-    
     @FindBy(css="div.action-set")
     private WebElement actionSet;
     
     /** action selector */
     private static final String ACTION_SELECTOR_CSS = "div .{0} a";
-    
-    /**
-     * @see org.alfresco.po.share.panel.Panel#getClickableTitle()
+
+    /** is action panel expanded
+     *
+     * @return true is panel is expanded
      */
-    @Override
-    protected WebElement getClickableTitle()
+    public boolean isPanelExpanded()
     {
-        return clickableTitle;
+        return actionSet.isDisplayed();
     }
-    
+
     /**
      * Helper method to check whether the specified actions are clickable
      * 
@@ -100,7 +96,7 @@ public abstract class ActionPanel extends Panel
      */
     public Renderable clickOnAction(String actionName)
     {
-        return clickOnAction(actionName, SharePage.getLastRenderedPage());
+        return clickOnAction(actionName, SharePage.getLastRenderedPage(),true);
     }
     
     /**
@@ -108,14 +104,24 @@ public abstract class ActionPanel extends Panel
      */
     public <T extends Renderable> T clickOnAction(String actionName, T renderable)
     {
+        return clickOnAction(actionName, renderable, false);
+    }
+
+    /**
+     * Click on action
+     */
+    private <T extends Renderable> T clickOnAction(String actionName, T renderable, boolean waitForActionStaleness)
+    {
         // mouse over and click on the action
         Link action = getActionLink(actionName);
         Utils.mouseOver(action);
         action.click();
         
         // wait for the action link to become stale
-        if (!actionName.equals(Record.DESTROY))
+        if (waitForActionStaleness == true)
+        {
             waitForStalenessOf(action);
+        }
         
         // render the return page
         return renderable.render();

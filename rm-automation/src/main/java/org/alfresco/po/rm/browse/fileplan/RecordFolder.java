@@ -20,7 +20,7 @@ package org.alfresco.po.rm.browse.fileplan;
 
 import static org.alfresco.po.common.util.Utils.elementExists;
 
-import org.alfresco.po.rm.details.folder.FolderDetails;
+import org.alfresco.po.rm.details.folder.FolderDetailsPage;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
 import org.openqa.selenium.By;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
  */
 @Scope("prototype")
 @Component
-public class RecordFolder extends DisposableItem
+public class RecordFolder extends DisposableItem implements FolderActions
 {
     /** cutoff indicator */
     private static By cutoffFolderIndicatorSelector = By.cssSelector("img[alt='rm-cutoff-folder']");
@@ -51,7 +51,7 @@ public class RecordFolder extends DisposableItem
 
     /** record folder details page */
     @Autowired
-    private FolderDetails folderDetails;
+    private FolderDetailsPage folderDetailsPage;
 
     /**
      * @return  true if folder is closed, false otherwise
@@ -64,9 +64,9 @@ public class RecordFolder extends DisposableItem
     /**
      * Click on View Details
      */
-    public FolderDetails clickOnViewDetails()
+    public FolderDetailsPage clickOnViewDetails()
     {
-        return clickOnAction(FOLDER_VIEW_DETAILS,folderDetails);
+        return clickOnAction(VIEW_DETAILS, folderDetailsPage);
     }
 
     /**
@@ -74,7 +74,7 @@ public class RecordFolder extends DisposableItem
      */
     public CopyDialog clickOnCopyTo()
     {
-        return clickOnAction(COPY_FOLDER, copyDialog);
+        return clickOnAction(COPY, copyDialog);
     }
 
     /**
@@ -82,7 +82,7 @@ public class RecordFolder extends DisposableItem
      */
     public MoveDialog clickOnMoveTo()
     {
-        return clickOnAction(MOVE_FOLDER, moveDialog);
+        return clickOnAction(MOVE, moveDialog);
     }
 
     /**

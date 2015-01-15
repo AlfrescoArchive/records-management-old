@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Tatiana Kalinovskaya
  */
-public abstract class DisposableItem extends FilePlanListItem
+public abstract class DisposableItem extends FilePlanListItem implements DispositionActions, HoldActions
 {
     /** transferred indicator */
     private static By transferredIndicatorSelector = By.cssSelector("img[alt='rm-transferred']");

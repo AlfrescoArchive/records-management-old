@@ -16,18 +16,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.rm.details.record;
+package org.alfresco.po.rm.details.category;
 
-import org.alfresco.po.rm.browse.fileplan.Actions;
+import org.alfresco.po.rm.browse.fileplan.CategoryActions;
 import org.alfresco.po.share.panel.ActionPanel;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Roy Wetherall
+ * Category Actions Panel
+ * @author Tatiana Kalinovskaya
  */
 @Component
-public class ActionsPanel extends ActionPanel
-                                implements Actions
+public class CategoryActionsPanel extends ActionPanel
+        implements CategoryActions
 {
+    @FindBy(css="div.folder-actions h2")
+    private WebElement clickableTitle;
 
+    /**
+     * @see org.alfresco.po.share.panel.Panel#getClickableTitle()
+     */
+    @Override
+    protected WebElement getClickableTitle()
+    {
+        return clickableTitle;
+    }
 }
+

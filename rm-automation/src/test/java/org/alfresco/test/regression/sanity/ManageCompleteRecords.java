@@ -33,7 +33,7 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.console.audit.AuditEntryTypes;
 import org.alfresco.po.rm.console.audit.AuditEvents;
-import org.alfresco.po.rm.details.record.ActionsPanel;
+import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.share.properties.Content;
 import org.alfresco.test.BaseTest;
@@ -90,8 +90,8 @@ public class ManageCompleteRecords extends BaseTest
                 Record.EDIT_METADATA,
                 Record.REOPEN_RECORD,
                 Record.ADD_TO_HOLD,
-                Record.COPY_RECORD,
-                Record.MOVE_RECORD,
+                Record.COPY,
+                Record.MOVE,
                 Record.LINK,
                 Record.DELETE,
                 Record.VIEW_AUDIT));
@@ -103,14 +103,14 @@ public class ManageCompleteRecords extends BaseTest
         
         // verify that all the expected actions are available
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
-                ActionsPanel.EDIT_METADATA,
-                ActionsPanel.REOPEN_RECORD,
-                ActionsPanel.ADD_TO_HOLD,
-                ActionsPanel.COPY_RECORD,
-                ActionsPanel.MOVE_RECORD,
-                ActionsPanel.LINK,
-                ActionsPanel.DELETE,
-                ActionsPanel.VIEW_AUDIT));
+                RecordActionsPanel.EDIT_METADATA,
+                RecordActionsPanel.REOPEN_RECORD,
+                RecordActionsPanel.ADD_TO_HOLD,
+                RecordActionsPanel.COPY,
+                RecordActionsPanel.MOVE,
+                RecordActionsPanel.LINK,
+                RecordActionsPanel.DELETE,
+                RecordActionsPanel.VIEW_AUDIT));
 
         // check that download is available for electronic record on
         // record details page
@@ -124,8 +124,8 @@ public class ManageCompleteRecords extends BaseTest
                 Record.EDIT_METADATA, 
                 Record.REOPEN_RECORD,
                 Record.ADD_TO_HOLD, 
-                Record.COPY_RECORD,
-                Record.MOVE_RECORD,
+                Record.COPY,
+                Record.MOVE,
                 Record.LINK, 
                 Record.DELETE, 
                 Record.VIEW_AUDIT));
@@ -138,14 +138,14 @@ public class ManageCompleteRecords extends BaseTest
 
         // verify that all the expected actions are available
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
-                ActionsPanel.EDIT_METADATA,
-                ActionsPanel.REOPEN_RECORD,
-                ActionsPanel.ADD_TO_HOLD,
-                ActionsPanel.COPY_RECORD,
-                ActionsPanel.MOVE_RECORD,
-                ActionsPanel.LINK,
-                ActionsPanel.DELETE,
-                ActionsPanel.VIEW_AUDIT));
+                RecordActionsPanel.EDIT_METADATA,
+                RecordActionsPanel.REOPEN_RECORD,
+                RecordActionsPanel.ADD_TO_HOLD,
+                RecordActionsPanel.COPY,
+                RecordActionsPanel.MOVE,
+                RecordActionsPanel.LINK,
+                RecordActionsPanel.DELETE,
+                RecordActionsPanel.VIEW_AUDIT));
 
         // check download is not available on records detail page for
         // non-electronic record
@@ -237,8 +237,8 @@ public class ManageCompleteRecords extends BaseTest
                 Record.EDIT_METADATA,
                 Record.REOPEN_RECORD,
                 Record.ADD_TO_HOLD,
-                Record.COPY_RECORD,
-                Record.MOVE_RECORD,
+                Record.COPY,
+                Record.MOVE,
                 Record.LINK,
                 Record.DELETE,
                 Record.VIEW_AUDIT));

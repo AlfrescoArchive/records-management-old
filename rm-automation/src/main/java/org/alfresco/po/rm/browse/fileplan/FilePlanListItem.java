@@ -3,7 +3,6 @@ package org.alfresco.po.rm.browse.fileplan;
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
-import org.alfresco.po.rm.details.record.ActionsPanel;
 import org.alfresco.po.share.browse.ListItem;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +59,7 @@ public abstract class FilePlanListItem extends ListItem  implements Actions
      */
     public ConfirmationPrompt clickOnDelete()
     {
-        return clickOnAction(ActionsPanel.DELETE, confirmationPrompt);
+        return clickOnAction(DELETE, confirmationPrompt);
     }
 
     //@TODO clickOnManagePermissions

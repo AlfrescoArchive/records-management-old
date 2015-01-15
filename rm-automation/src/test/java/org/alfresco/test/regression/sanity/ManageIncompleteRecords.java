@@ -32,10 +32,10 @@ import static org.junit.Assert.assertTrue;
 import org.alfresco.po.rm.actions.edit.EditNonElectronicRecordPage;
 import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
-import org.alfresco.po.rm.browse.fileplan.Actions;
+import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
-import org.alfresco.po.rm.details.record.ActionsPanel;
+import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
 import org.alfresco.test.BaseTest;
@@ -85,22 +85,22 @@ public class ManageIncompleteRecords extends BaseTest
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
 
         // verify electronic record actions        
-        compareArrays(Actions.INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD, filePlan.getRecord(RECORD).getClickableActions());
+        compareArrays(RecordActions.INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD, filePlan.getRecord(RECORD).getClickableActions());
 
         // navigate to the electronic details page
         filePlan.getRecord(RECORD).clickOnLink();
         
         // verify that all the expected actions are available
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
-                ActionsPanel.EDIT_METADATA,
-                ActionsPanel.COMPLETE_RECORD,
-                ActionsPanel.ADD_TO_HOLD,
-                ActionsPanel.COPY_RECORD,
-                ActionsPanel.MOVE_RECORD,
-                ActionsPanel.LINK,
-                ActionsPanel.DELETE,
-                ActionsPanel.VIEW_AUDIT,
-                ActionsPanel.REQUEST_INFORMATION));
+                RecordActionsPanel.EDIT_METADATA,
+                RecordActionsPanel.COMPLETE_RECORD,
+                RecordActionsPanel.ADD_TO_HOLD,
+                RecordActionsPanel.COPY,
+                RecordActionsPanel.MOVE,
+                RecordActionsPanel.LINK,
+                RecordActionsPanel.DELETE,
+                RecordActionsPanel.VIEW_AUDIT,
+                RecordActionsPanel.REQUEST_INFORMATION));
 
         // check that download is available for electronic record on record
         // details page
@@ -112,7 +112,7 @@ public class ManageIncompleteRecords extends BaseTest
         // verify non-electronic record actions
         Record nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertNotNull(nonElectronicRecord);
-        compareArrays(Actions.INCOMPLETE_RECORD_ACTIONS, nonElectronicRecord.getClickableActions());
+        compareArrays(RecordActions.INCOMPLETE_RECORD_ACTIONS, nonElectronicRecord.getClickableActions());
                 
         //remember the non-electronic record name (before editing) and identifier to verify it on Audit log page
         String nameBefore = nonElectronicRecord.getName();
@@ -122,14 +122,14 @@ public class ManageIncompleteRecords extends BaseTest
         nonElectronicRecord.clickOnLink();
 
         // verify that all the expected actions are available
-        assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(Actions.INCOMPLETE_RECORD_ACTIONS));
+        assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(RecordActions.INCOMPLETE_RECORD_ACTIONS));
 
         // check download is not available on records detail page for
         // non-electronic record
         assertFalse(recordDetails.isDownloadButtonPresent());
 
         // edit non-electronic metadata
-        recordDetails.getRecordActionsPanel().clickOnAction(ActionsPanel.EDIT_METADATA, editNonElectronicRecordPage);
+        recordDetails.getRecordActionsPanel().clickOnAction(RecordActionsPanel.EDIT_METADATA, editNonElectronicRecordPage);
         editNonElectronicRecordPage
             .getContent().setNameValue(NON_ELECTRONIC_RECORD + MODIFIED)
             .setTitle(TITLE + MODIFIED)

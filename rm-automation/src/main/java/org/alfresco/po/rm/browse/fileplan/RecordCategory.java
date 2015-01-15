@@ -18,7 +18,7 @@
  */
 package org.alfresco.po.rm.browse.fileplan;
 
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  */
 @Scope("prototype")
 @Component
-public class RecordCategory extends FilePlanListItem
+public class RecordCategory extends FilePlanListItem implements CategoryActions
 {
     /** copy dialog */
     @Autowired
@@ -42,14 +42,14 @@ public class RecordCategory extends FilePlanListItem
 
     /** category details */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /**
      * Click on View Details
      */
-    public CategoryDetails clickOnViewDetails()
+    public CategoryDetailsPage clickOnViewDetails()
     {
-        return clickOnAction(CATEGORY_VIEW_DETAILS,categoryDetails);
+        return clickOnAction(VIEW_DETAILS, categoryDetailsPage);
     }
 
     /**
@@ -57,7 +57,7 @@ public class RecordCategory extends FilePlanListItem
      */
     public CopyDialog clickOnCopyTo()
     {
-        return clickOnAction(COPY_CATEGORY, copyDialog);
+        return clickOnAction(COPY, copyDialog);
     }
 
     /**
@@ -65,7 +65,7 @@ public class RecordCategory extends FilePlanListItem
      */
     public MoveDialog clickOnMoveTo()
     {
-        return clickOnAction(MOVE_CATEGORY, moveDialog);
+        return clickOnAction(MOVE, moveDialog);
     }
 
 }

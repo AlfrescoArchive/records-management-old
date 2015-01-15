@@ -8,10 +8,10 @@ import org.alfresco.po.rm.actions.edit.EditRecordCategoryPage;
 import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
-import org.alfresco.po.rm.details.category.CategoryDetails;
-import org.alfresco.po.rm.details.record.ActionsPanel;
+import org.alfresco.po.rm.details.category.CategoryActionsPanel;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
+import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.VitalReviewPeriod;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class ManageCategories extends BaseTest
      * category details
      */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /**
      * edit category page
@@ -67,27 +67,27 @@ public class ManageCategories extends BaseTest
 
         // verify sub-category actions
         assertNull(filePlan.getRecordCategory(SUB_RECORD_CATEGORY_NAME).isActionsClickable(
-                RecordCategory.CATEGORY_VIEW_DETAILS,
-                Record.EDIT_METADATA,
-                Record.COPY_CATEGORY,
-                Record.MOVE_CATEGORY,
-                Record.DELETE,
-                Record.VIEW_AUDIT));
+                RecordCategory.VIEW_DETAILS,
+                RecordCategory.EDIT_METADATA,
+                RecordCategory.COPY,
+                RecordCategory.MOVE,
+                RecordCategory.DELETE,
+                RecordCategory.VIEW_AUDIT));
 
         // navigate to the sub-category details page
         filePlan.getRecordCategory(SUB_RECORD_CATEGORY_NAME).clickOnViewDetails();
 
         // verify that all the expected actions are available
-        assertTrue(categoryDetails.getCategoryActionsPanel().isActionsClickable(
-                ActionsPanel.EDIT_METADATA,
-                ActionsPanel.MANAGE_PERMISSIONS,
-                ActionsPanel.COPY_CATEGORY,
-                ActionsPanel.MOVE_CATEGORY,
-                ActionsPanel.DELETE,
-                ActionsPanel.VIEW_AUDIT));
+        assertTrue(categoryDetailsPage.getCategoryActionsPanel().isActionsClickable(
+                CategoryActionsPanel.EDIT_METADATA,
+                CategoryActionsPanel.MANAGE_PERMISSIONS,
+                CategoryActionsPanel.COPY,
+                CategoryActionsPanel.MOVE,
+                CategoryActionsPanel.DELETE,
+                CategoryActionsPanel.VIEW_AUDIT));
 
         //edit metadata
-        categoryDetails.getCategoryActionsPanel().clickOnAction(ActionsPanel.EDIT_METADATA, editRecordCategoryPage);
+        categoryDetailsPage.getCategoryActionsPanel().clickOnAction(RecordActionsPanel.EDIT_METADATA, editRecordCategoryPage);
         String SubCategoryName = SUB_RECORD_CATEGORY_NAME + MODIFIED;
         editRecordCategoryPage
                 .getContent().setNameValue(SUB_RECORD_CATEGORY_NAME + MODIFIED)
@@ -103,7 +103,7 @@ public class ManageCategories extends BaseTest
         //TODO Copy the Sub-Category to Folder2
 
         //navigate to root of File Plan/ click on File Plan on breadcrumb
-        categoryDetails.navigateUp(3);
+        categoryDetailsPage.navigateUp(3);
 
         // create new category2
         filePlan

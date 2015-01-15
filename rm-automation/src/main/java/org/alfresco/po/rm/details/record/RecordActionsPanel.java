@@ -16,36 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.rm.browse.transfers;
+package org.alfresco.po.rm.details.record;
+
+import org.alfresco.po.rm.browse.fileplan.HoldActions;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
-import org.alfresco.po.rm.browse.fileplan.TransferActions;
-import org.alfresco.po.share.browse.ListItem;
-import org.springframework.context.annotation.Scope;
+import org.alfresco.po.share.panel.ActionPanel;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
- * Transfer
- *
- * @author Tatiana Kalinovskaya
+ * @author Roy Wetherall, Tatiana Kalinovskaya
  */
-@Scope("prototype")
 @Component
-public class Transfer extends ListItem implements TransferActions
+public class RecordActionsPanel extends ActionPanel
+                                implements RecordActions, HoldActions
 {
-    /**
-     * Click on complete transfer action
-     */
-    public Transfers clickOnCompleteTransfer()
-    {
-        return (Transfers)clickOnAction(COMPLETE_TRANSFER);
-    }
+    @FindBy(css = "div.document-actions h2")
+    private WebElement clickableTitle;
 
     /**
-     * Click on complete accession action
+     * @see org.alfresco.po.share.panel.Panel#getClickableTitle()
      */
-    public Transfers clickOnCompleteAccession()
+    @Override
+    protected WebElement getClickableTitle()
     {
-        return (Transfers)clickOnAction(COMPLETE_ACCESSION);
+        return clickableTitle;
     }
-
 }

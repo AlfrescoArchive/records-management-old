@@ -19,13 +19,16 @@
 package org.alfresco.po.rm.details.category;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
+import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
  * Disposition block of the category details page
@@ -34,6 +37,23 @@ import ru.yandex.qatools.htmlelements.element.HtmlElement;
  */
 public class DispositionBlock extends HtmlElement
 {
+
+    /** Create Disposition Schedule button */
+    @FindBy(css = "button[id*='createschedule-button']")
+    private Button createDispositionScheduleButton;
+
+    /** Edit disposition general information button */
+    @FindBy(css = "button[id*='editproperties-button']")
+    private  Button editDispositionGeneralButton;
+
+    /** Edit disposition steps button */
+    @FindBy(css = "button[id*='editschedule-button']")
+    private  Button editDispositionStepsButton;
+
+    /** disposition title */
+    @FindBy (css =".disposition .title")
+    private WebElement dispositionTitle;
+
     /** disposition authority */
     @FindBy (xpath = ".//div[@class='properties']/div[1]/span[2]")
     private HtmlElement dispositionAuthority;
@@ -54,6 +74,14 @@ public class DispositionBlock extends HtmlElement
     @FindBy (css = ".actions")
     private WebElement dispositionSteps;
 
+    /** view step description link*/
+    @FindBy  (css = ".more")
+    private List<Link> viewDescription;
+
+    /**step description */
+    @FindBy (css = ".description")
+    private List <WebElement> stepDescription;
+
     private static final String DISPOSITION_STEP_SELECTOR_XPATH = ".//div[{0}]/div[@class=''name'']";
     
     public String getDispositionAuthority()
@@ -69,11 +97,6 @@ public class DispositionBlock extends HtmlElement
     public String getAppliedTo()
     {
         return appliedTo.getText();
-    }
-
-    public boolean isUnpublishedUpdateAvailable()
-    {
-        return (unpublishedUpdates.getText().equals("Yes")) ? true : false;
     }
 
     /**
@@ -111,5 +134,47 @@ public class DispositionBlock extends HtmlElement
         String eventXPATH = MessageFormat.format(DISPOSITION_STEP_SELECTOR_XPATH, stepNumber);
         return By.xpath(eventXPATH);
     }
-    
+
+    public String getStepDescription(int number)
+    {
+        return stepDescription.get(number-1).getText();
+    }
+
+    /** unpublished updates available
+     * @return true if "Yes", els false
+     */
+    public boolean isUnpublishedUpdateAvailable()
+    {
+        return (unpublishedUpdates.getText().equals("Yes")) ? true : false;
+    }
+
+    public boolean isCreateDispositionScheduleEnabled()
+    {
+        return createDispositionScheduleButton.isEnabled();
+    }
+
+    public boolean isDispositionScheduleCreated()
+    {
+        return !dispositionTitle.getText().equals("No disposition schedule found");
+    }
+
+    public void clickOnViewDescription(int number)
+    {
+        viewDescription.get(number - 1).click();
+    }
+
+    public void clickOnCreateDispositionSchedule()
+    {
+        createDispositionScheduleButton.click();
+    }
+
+    public void clickOnEditDispositionGeneral()
+    {
+        editDispositionGeneralButton.click();
+    }
+
+    public void clickOnEditDispositionSteps()
+    {
+        editDispositionStepsButton.click();
+    }
 }

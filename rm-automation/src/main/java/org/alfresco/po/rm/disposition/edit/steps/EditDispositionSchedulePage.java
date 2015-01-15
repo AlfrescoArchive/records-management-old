@@ -20,7 +20,7 @@ package org.alfresco.po.rm.disposition.edit.steps;
 
 import java.util.List;
 import org.alfresco.po.common.ConfirmationPrompt;
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -65,7 +65,7 @@ public class EditDispositionSchedulePage extends SharePage
 
     /** category details page */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /** confirmation prompt */
     @Autowired
@@ -186,10 +186,10 @@ public class EditDispositionSchedulePage extends SharePage
     /**
      * Click on Done
      */
-    public CategoryDetails clickOnDone()
+    public CategoryDetailsPage clickOnDone()
     {
         doneButton.click();
-        return categoryDetails.render();
+        return categoryDetailsPage.render();
     }
 
 

@@ -28,7 +28,7 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.transfers.Transfers;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.details.category.DispositionBlock;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.DestroyConfirmationDialog;
@@ -60,7 +60,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
 
     /** category details     */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /** record details page */
     @Autowired
@@ -117,16 +117,16 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         filePlan.getRecordCategory(CATEGORY_RECORD_DISPOSITION).clickOnViewDetails();
 
         //create disposition schedule
-        categoryDetails.clickOnCreateDispositionSchedule();
+        categoryDetailsPage.createDispositionSchedule();
 
         // edit General information
-        categoryDetails
-                .clickEditDispositionGeneral()
+        categoryDetailsPage
+                .editDispositionGeneral()
                 .setDispositionAuthority(DISPOSITION_AUTHORITY + RECORD)
                 .setDispositionInstructions(DISPOSITION_INSTRUCTIONS + RECORD)
                 .setDispositionLevel(DispositionLevel.RECORD)
                 .clickOnSave();
-        DispositionBlock dispositionBlock = categoryDetails.getDispositionBlock();
+        DispositionBlock dispositionBlock = categoryDetailsPage.getDispositionBlock();
         //verify the category details page reflect the changes
         assertEquals(DISPOSITION_AUTHORITY + RECORD, dispositionBlock.getDispositionAuthority());
         assertEquals(DISPOSITION_INSTRUCTIONS + RECORD, dispositionBlock.getDispositionInstructions());
@@ -137,7 +137,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
 
         //assert the category details page reflect the changes
         {
-            dispositionBlock = categoryDetails.getDispositionBlock();
+            dispositionBlock = categoryDetailsPage.getDispositionBlock();
             //verify general information
             assertEquals(DISPOSITION_AUTHORITY + RECORD, dispositionBlock.getDispositionAuthority());
             assertEquals(DISPOSITION_INSTRUCTIONS + RECORD, dispositionBlock.getDispositionInstructions());
@@ -151,7 +151,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
             assertEquals(DESTROY_LABEL, dispositionBlock.getDispositionStepName(5));
         }
         //navigate inside the category
-        categoryDetails.navigateUp();
+        categoryDetailsPage.navigateUp();
 
         //create folder
         // open new record folder dialog
@@ -192,7 +192,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
                 Record.EDIT_METADATA,
                 Record.UNDO_CUTOFF,
                 Record.EDIT_DISPOSITION_DATE,
-                Record.COPY_RECORD,
+                Record.COPY,
                 Record.LINK,
                 Record.DELETE,
                 Record.VIEW_AUDIT,
@@ -218,7 +218,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         assertNull(record.isActionsClickable(
                 Record.DOWNLOAD,
                 Record.EDIT_METADATA,
-                Record.COPY_RECORD,
+                Record.COPY,
                 Record.LINK,
                 Record.DELETE,
                 Record.VIEW_AUDIT,
@@ -241,7 +241,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
                 Record.EDIT_METADATA,
                 Record.TRANSFER,
-                Record.COPY_RECORD,
+                Record.COPY,
                 Record.LINK,
                 Record.DELETE,
                 Record.MANAGE_PERMISSIONS,
@@ -366,7 +366,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
 
     public  void editSteps()
     {
-        editDispositionSchedulePage = categoryDetails.clickEditDispositionSteps();
+        editDispositionSchedulePage = categoryDetailsPage.editDispositionSteps();
 
         //From 'Add Steps' drop-down select 'Cutoff'
         DispositionStepBlock dispositionStep =

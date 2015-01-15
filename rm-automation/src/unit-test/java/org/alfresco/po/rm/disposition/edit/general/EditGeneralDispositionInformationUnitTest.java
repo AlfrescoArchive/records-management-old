@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.details.category.DispositionBlock;
 import org.alfresco.po.rm.disposition.DispositionLevel;
 import org.alfresco.test.BaseRmUnitTest;
@@ -46,7 +46,7 @@ public class EditGeneralDispositionInformationUnitTest extends BaseRmUnitTest
 
     /** category details */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /** edit general information */
     @Autowired
@@ -70,7 +70,7 @@ public class EditGeneralDispositionInformationUnitTest extends BaseRmUnitTest
         filePlan
                 .getRecordCategory(RECORD_CATEGORY_NAME)
                 .clickOnViewDetails()
-                .clickOnCreateDispositionSchedule();
+                .createDispositionSchedule();
     }
     
     @BeforeMethod
@@ -81,8 +81,8 @@ public class EditGeneralDispositionInformationUnitTest extends BaseRmUnitTest
         //open category details page
         filePlan.getRecordCategory(RECORD_CATEGORY_NAME).clickOnViewDetails();
         //open edit general information page
-        categoryDetails
-                .clickEditDispositionGeneral();
+        categoryDetailsPage
+                .editDispositionGeneral();
     }
 
     @Test
@@ -95,7 +95,7 @@ public class EditGeneralDispositionInformationUnitTest extends BaseRmUnitTest
                 .setDispositionInstructions(DISPOSITION_INSTRUCTIONS)
                 .setDispositionLevel(DispositionLevel.RECORD)
                 .clickOnSave();
-        DispositionBlock dispositionBlock = categoryDetails.getDispositionBlock();
+        DispositionBlock dispositionBlock = categoryDetailsPage.getDispositionBlock();
         //verify general information
         assertEquals(DISPOSITION_AUTHORITY, dispositionBlock.getDispositionAuthority());
         assertEquals(DISPOSITION_INSTRUCTIONS, dispositionBlock.getDispositionInstructions());
@@ -125,7 +125,7 @@ public class EditGeneralDispositionInformationUnitTest extends BaseRmUnitTest
                 .setDispositionInstructions(DISPOSITION_INSTRUCTIONS + MODIFIED)
                 .setDispositionLevel(DispositionLevel.RECORD_FOLDER)
                 .clickOnCancel();
-        DispositionBlock dispositionBlock = categoryDetails.getDispositionBlock();
+        DispositionBlock dispositionBlock = categoryDetailsPage.getDispositionBlock();
         //verify general information hasn't changed
         assertEquals(DISPOSITION_AUTHORITY, dispositionBlock.getDispositionAuthority());
         assertEquals(DISPOSITION_INSTRUCTIONS, dispositionBlock.getDispositionInstructions());

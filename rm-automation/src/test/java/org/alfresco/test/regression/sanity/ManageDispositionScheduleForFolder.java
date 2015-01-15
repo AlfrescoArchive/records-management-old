@@ -28,9 +28,9 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
 import org.alfresco.po.rm.browse.transfers.Transfers;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
-import org.alfresco.po.rm.details.category.CategoryDetails;
+import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.details.category.DispositionBlock;
-import org.alfresco.po.rm.details.folder.FolderDetails;
+import org.alfresco.po.rm.details.folder.FolderDetailsPage;
 import org.alfresco.po.rm.dialog.EditDispositionDateDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.po.rm.disposition.DispositionLevel;
@@ -65,11 +65,11 @@ public class ManageDispositionScheduleForFolder extends BaseTest
      * category details
      */
     @Autowired
-    private CategoryDetails categoryDetails;
+    private CategoryDetailsPage categoryDetailsPage;
 
     /** folder details page */
     @Autowired
-    private FolderDetails folderDetails;
+    private FolderDetailsPage folderDetailsPage;
 
     /**
      * edit disposition date dialog
@@ -118,16 +118,16 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         filePlan.getRecordCategory(CATEGORY_FOLDER_DISPOSITION).clickOnViewDetails();
 
         //create disposition schedule
-        categoryDetails.clickOnCreateDispositionSchedule();
+        categoryDetailsPage.createDispositionSchedule();
 
         // edit General information
-        categoryDetails
-                .clickEditDispositionGeneral()
+        categoryDetailsPage
+                .editDispositionGeneral()
                 .setDispositionAuthority(DISPOSITION_AUTHORITY + FOLDER)
                 .setDispositionInstructions(DISPOSITION_INSTRUCTIONS + FOLDER)
                 .setDispositionLevel(DispositionLevel.RECORD_FOLDER)
                 .clickOnSave();
-        DispositionBlock dispositionBlock = categoryDetails.getDispositionBlock();
+        DispositionBlock dispositionBlock = categoryDetailsPage.getDispositionBlock();
         //verify the category details page reflect the changes
         assertEquals(DISPOSITION_AUTHORITY + FOLDER, dispositionBlock.getDispositionAuthority());
         assertEquals(DISPOSITION_INSTRUCTIONS + FOLDER, dispositionBlock.getDispositionInstructions());
@@ -138,7 +138,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
 
         //assert the category details page reflect the changes
         {
-            dispositionBlock = categoryDetails.getDispositionBlock();
+            dispositionBlock = categoryDetailsPage.getDispositionBlock();
             //verify general information
             assertEquals(DISPOSITION_AUTHORITY + FOLDER, dispositionBlock.getDispositionAuthority());
             assertEquals(DISPOSITION_INSTRUCTIONS + FOLDER, dispositionBlock.getDispositionInstructions());
@@ -152,7 +152,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
             assertEquals(DESTROY_LABEL, dispositionBlock.getDispositionStepName(5));
         }
         //navigate inside the category
-        categoryDetails.navigateUp();
+        categoryDetailsPage.navigateUp();
 
         //create folder
         // open new record folder dialog
@@ -205,39 +205,39 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         assertTrue(folder.isClosed());
         //verify available actions
         assertNull(folder.isActionsClickable(
-                RecordFolder.FOLDER_VIEW_DETAILS,
+                RecordFolder.VIEW_DETAILS,
                 RecordFolder.UNDO_CUTOFF,
-                RecordFolder.COPY_FOLDER,
+                RecordFolder.COPY,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.MANAGE_RULES,
                 RecordFolder.VIEW_AUDIT));
 
         //navigate to details page of folder
-        folderDetails = folder.clickOnViewDetails();
+        folderDetailsPage = folder.clickOnViewDetails();
 
         //verify Abolished event is present
-        assertEquals(1, folderDetails.getEventsQuantity());
-        assertNotNull(folderDetails.getEventByName(ABOLISHED));
+        assertEquals(1, folderDetailsPage.getEventsQuantity());
+        assertNotNull(folderDetailsPage.getEventByName(ABOLISHED));
 
         //complete the event
-        folderDetails
+        folderDetailsPage
                 .clickOnCompleteEvent(ABOLISHED)
                 .clickOnOk();
 
         //verify available actions
-        assertTrue(folderDetails.getFolderActionsPanel().isActionsClickable(
+        assertTrue(folderDetailsPage.getFolderActionsPanel().isActionsClickable(
                 RecordFolder.UNDO_CUTOFF,
                 RecordFolder.TRANSFER,
-                RecordFolder.COPY_FOLDER,
+                RecordFolder.COPY,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.MANAGE_RULES,
                 RecordFolder.VIEW_AUDIT));
 
         //transfer folder
-        folderDetails.getFolderActionsPanel().clickOnAction(RecordFolder.TRANSFER);
+        folderDetailsPage.getFolderActionsPanel().clickOnAction(RecordFolder.TRANSFER);
 
         //verify the awaiting transfer indicator is displayed for folder
-        folderDetails.navigateUp(2);
+        folderDetailsPage.navigateUp(2);
         assertTrue(filePlan.getRecordFolder(RECORD_FOLDER_ONE).isTransferPending());
 
         //navigate to transfers
@@ -263,40 +263,40 @@ public class ManageDispositionScheduleForFolder extends BaseTest
                 .clickOnViewDetails();
 
         //verify Case Complete event is present
-        assertEquals(1, folderDetails.getEventsQuantity());
-        assertNotNull(folderDetails.getEventByName(CASE_COMPLETE));
+        assertEquals(1, folderDetailsPage.getEventsQuantity());
+        assertNotNull(folderDetailsPage.getEventByName(CASE_COMPLETE));
 
         //complete the event
-        folderDetails
+        folderDetailsPage
                 .clickOnCompleteEvent(CASE_COMPLETE)
                 .clickOnOk();
 
         //verify available actions
-        assertTrue(folderDetails.getFolderActionsPanel().isActionsClickable(
+        assertTrue(folderDetailsPage.getFolderActionsPanel().isActionsClickable(
                 RecordFolder.END_RETENTION,
-                RecordFolder.COPY_FOLDER,
+                RecordFolder.COPY,
                 RecordFolder.MANAGE_PERMISSIONS,
                 RecordFolder.MANAGE_RULES,
                 RecordFolder.VIEW_AUDIT));
 
         //end retention
-        folderDetails.getFolderActionsPanel().clickOnAction(RecordFolder.END_RETENTION);
+        folderDetailsPage.getFolderActionsPanel().clickOnAction(RecordFolder.END_RETENTION);
 
         //verify obsolete and superseded events are displayed
-        assertEquals(2,folderDetails.getEventsQuantity());
-        assertNotNull(folderDetails.getEventByName(OBSOLETE));
-        assertNotNull(folderDetails.getEventByName(SUPERSEDED));
+        assertEquals(2, folderDetailsPage.getEventsQuantity());
+        assertNotNull(folderDetailsPage.getEventByName(OBSOLETE));
+        assertNotNull(folderDetailsPage.getEventByName(SUPERSEDED));
 
         //verify Accession action is not available
-        assertFalse(folderDetails.getFolderActionsPanel().isActionAvailable(RecordFolder.ACCESSION));
+        assertFalse(folderDetailsPage.getFolderActionsPanel().isActionAvailable(RecordFolder.ACCESSION));
 
         //complete obsolete event
-        folderDetails
+        folderDetailsPage
                 .clickOnCompleteEvent(OBSOLETE)
                 .clickOnOk();
 
         //navigate to browse view - inside the category
-        folderDetails.navigateUp(2);
+        folderDetailsPage.navigateUp(2);
 
         //verify Accession is available
         folder = filePlan.getRecordFolder(RECORD_FOLDER_ONE);
@@ -326,28 +326,28 @@ public class ManageDispositionScheduleForFolder extends BaseTest
                 .clickOnViewDetails();
 
         //verify case closed and no longer needed events are displayed
-        assertEquals(2,folderDetails.getEventsQuantity());
-        assertNotNull(folderDetails.getEventByName(NO_LONGER_NEEDED));
-        assertNotNull(folderDetails.getEventByName(CASE_CLOSED));
+        assertEquals(2, folderDetailsPage.getEventsQuantity());
+        assertNotNull(folderDetailsPage.getEventByName(NO_LONGER_NEEDED));
+        assertNotNull(folderDetailsPage.getEventByName(CASE_CLOSED));
 
         //complete the 'No longer needed' event
-        folderDetails
+        folderDetailsPage
                 .clickOnCompleteEvent(NO_LONGER_NEEDED)
                 .clickOnOk();
 
         //verify Destroy action is not available
-        assertFalse(folderDetails.getFolderActionsPanel().isActionAvailable(RecordFolder.DESTROY));
+        assertFalse(folderDetailsPage.getFolderActionsPanel().isActionAvailable(RecordFolder.DESTROY));
 
         //complete 'Case Closed' event
-        folderDetails
+        folderDetailsPage
                 .clickOnCompleteEvent(CASE_CLOSED)
                 .clickOnOk();
 
         //verify Destroy is now available
-        assertTrue(folderDetails.getFolderActionsPanel().isActionClickable(RecordFolder.DESTROY));
+        assertTrue(folderDetailsPage.getFolderActionsPanel().isActionClickable(RecordFolder.DESTROY));
 
         //navigate to browse view
-        folderDetails.navigateUp(2);
+        folderDetailsPage.navigateUp(2);
 
         //click on Destroy and confirm
         filePlan
@@ -377,7 +377,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
 
     public  void editSteps()
     {
-        editDispositionSchedulePage = categoryDetails.clickEditDispositionSteps();
+        editDispositionSchedulePage = categoryDetailsPage.editDispositionSteps();
 
         //From 'Add Steps' drop-down select 'Cutoff'
         DispositionStepBlock dispositionStep =

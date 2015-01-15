@@ -20,7 +20,6 @@ package org.alfresco.po.rm.details.folder;
 
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.rm.details.DisposableItemDetailsPage;
-import org.alfresco.po.rm.details.record.ActionsPanel;
 import org.alfresco.po.share.details.document.PropertyPanel;
 import org.alfresco.po.share.details.document.SharePanel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,12 @@ import org.springframework.stereotype.Component;
  * @author Tatiana Kalinovskaya
  */
 @Component
-public class FolderDetails extends DisposableItemDetailsPage
+public class FolderDetailsPage extends DisposableItemDetailsPage
 {
     /** folder actions panel */
     @Autowired
     @RenderableChild
-    private ActionsPanel folderActionsPanel;
+    private FolderActionsPanel folderActionsPanel;
 
     /** share panel */
     @Autowired
@@ -49,11 +48,10 @@ public class FolderDetails extends DisposableItemDetailsPage
     @RenderableChild
     private PropertyPanel propertyPanel;
 
-
     /**
      * @return Folder Actions panel
      */
-    public ActionsPanel getFolderActionsPanel()
+    public FolderActionsPanel getFolderActionsPanel()
     {
         return folderActionsPanel;
     }

@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
  */
 @Scope("prototype")
 @Component
-public class Record extends DisposableItem
+public class Record extends DisposableItem implements RecordActions
 {
     /** link selector */
     private static final String IDENTIFIER_SELECTOR_XPATH = (".//td[contains(@class,'fileName')]/div/div[{0}]/span");
@@ -127,7 +127,7 @@ public class Record extends DisposableItem
      */
     public CopyDialog clickOnCopyTo()
     {
-        return clickOnAction(COPY_RECORD, copyDialog);
+        return clickOnAction(COPY, copyDialog);
     }
 
     /**
@@ -135,7 +135,7 @@ public class Record extends DisposableItem
      */
     public MoveDialog clickOnMoveTo()
     {
-        return clickOnAction(MOVE_RECORD, moveDialog);
+        return clickOnAction(MOVE, moveDialog);
     }
 
     /**

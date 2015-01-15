@@ -53,6 +53,8 @@ public abstract class AddAuthorityDialog extends Dialog
 
     private static final By ADD_BUTTON_SELECTOR = By.cssSelector("button");
 
+    private static final By MESSAGE_SELECTOR = By.cssSelector("div[style*='visibility: visible'] tbody[class$='message'] div");
+
     /**
      * search text input
      */
@@ -64,12 +66,6 @@ public abstract class AddAuthorityDialog extends Dialog
      */
     @FindBy(css = "div[style*='visibility: visible'] button[id$='search-button-button']")
     private Button searchButton;
-
-    /**
-     * message
-     */
-    @FindBy(css = "div[style*='visibility: visible'] tbody[class$='message'] div")
-    private WebElement message;
 
     /**
      * close
@@ -146,16 +142,15 @@ public abstract class AddAuthorityDialog extends Dialog
         {
             public Boolean apply(WebDriver arg0)
             {
-                boolean result = false;
+                WebElement message = getResultsWebElement().findElement(MESSAGE_SELECTOR);
                 if (message.isDisplayed() && message.getText().contains("Searching"))
                 {
-                    result = false;
+                    return false;
                 }
                 else
                 {
-                    result = true;
+                    return true;
                 }
-                return result;
             }
         };
     }
