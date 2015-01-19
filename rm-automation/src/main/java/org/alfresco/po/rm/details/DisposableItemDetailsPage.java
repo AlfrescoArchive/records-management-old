@@ -61,10 +61,29 @@ public class DisposableItemDetailsPage extends DetailsPage<RMSiteNavigation>
 
     /**
      * get the quantity of events displayed on folder/record details page
+     * @return events quantity; 0 if there is no events
      */
     public int getEventsQuantity()
     {
-        return events.size();
+        try
+        {
+            return events.size();
+        }
+        catch (NullPointerException e)
+        {
+            return 0;
+        }
+    }
+
+    /** is Complete button available for te event
+     *
+     * @param  name of event
+     * @return true if "Complete" button is available
+     *         false if "Undo" button is available
+     */
+    public boolean isCompleteAvailable(String name)
+    {
+        return this.getEventByName(name).isCompleteAvailable();
     }
 
     /**

@@ -235,7 +235,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         //complete the event
         recordDetails
                 .clickOnCompleteEvent(SEPARATION)
-                .clickOnOk();
+                .clickOnOk(recordDetails);
 
         //verify available actions
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
@@ -280,7 +280,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         //complete the "Study Complete" event
         recordDetails
                 .clickOnCompleteEvent(STUDY_COMPLETE)
-                .clickOnOk();
+                .clickOnOk(recordDetails);
 
         //verify Accession action is available
         assertTrue(recordDetails.getRecordActionsPanel().isActionAvailable(Record.ACCESSION));
@@ -325,7 +325,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         //complete 'Case Closed' event
         recordDetails
                 .clickOnCompleteEvent(CASE_CLOSED)
-                .clickOnOk();
+                .clickOnOk(recordDetails);
 
         //verify Destroy action is not available
         assertFalse(recordDetails.getRecordActionsPanel().isActionAvailable(Record.DESTROY));
@@ -333,7 +333,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         //complete the 'No longer needed' event
         recordDetails
                 .clickOnCompleteEvent(NO_LONGER_NEEDED)
-                .clickOnOk();
+                .clickOnOk(recordDetails);
 
         //verify Destroy is now available
         assertTrue(recordDetails.getRecordActionsPanel().isActionClickable(Record.DESTROY));
@@ -405,8 +405,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         //check 'When event occurs' check-box, select 'Separation' event
         dispositionStep
                 .checkEvents(true)
-                .getEventsSection()
-                .selectEvent(SEPARATION);
+                .addEvent(SEPARATION);
         //fill 'Step Description' and click 'Save' button
         dispositionStep
                 .setDescription(TRANSFER_LABEL)

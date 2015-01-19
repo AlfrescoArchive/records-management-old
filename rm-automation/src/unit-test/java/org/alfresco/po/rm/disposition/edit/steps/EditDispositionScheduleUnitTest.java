@@ -135,7 +135,7 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
     public void clickOnEditStep()
     {
         List<String> addedEvents = new ArrayList<>();
-        //add step
+        //add step with events
        addedEvents = addCutOffStep();
         //click on edit for the first (just added) step
         DispositionStepBlock dispositionStep =  editDispositionSchedulePage.clickOnEdit(1);
@@ -153,6 +153,11 @@ public class EditDispositionScheduleUnitTest extends BaseRmUnitTest
         EventsSection events = dispositionStep.getEventsSection();
         assertEquals(addedEvents, events.getAddedEventsNames());
         assertFalse(events.isEligibleOnFirstCompleteEvent());
+        //remove first added event
+        events.deleteEvent(1);
+        addedEvents.remove(0);
+        //verify the event is removed
+        assertEquals(addedEvents, events.getAddedEventsNames());
 
         //click on Cancel
         dispositionStep.clickOnCancel();

@@ -89,6 +89,11 @@ public class EventsSection extends HtmlElement
         return this;
     }
 
+    /** isEligibleOnFirstCompleteEvent
+     *
+     * @return true if 'Which ever event is earlier'
+     *         false if 'When all events have occurred'
+     */
     public boolean isEligibleOnFirstCompleteEvent ()
     {
         return eligibleOnFirstCompleteEvent.getFirstSelectedOption().equals("true") ? true : false;
@@ -138,8 +143,9 @@ public class EventsSection extends HtmlElement
      */
     public EventsSection deleteEvent(int eventNumber)
     {
-        deleteEventIcons.get(eventNumber).click();
-        SharePage.getLastRenderedPage().render();
+        if (deleteEventIcons.size()<eventNumber)
+            throw new RuntimeException("The event could not be removed");
+        deleteEventIcons.get(eventNumber-1).click();
         return this;
 
     }

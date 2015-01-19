@@ -21,6 +21,7 @@ package org.alfresco.po.rm.details.event;
 import org.alfresco.po.common.buttonset.OkCancelButtonSet;
 import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.rm.details.DisposableItemDetailsPage;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
@@ -39,17 +40,17 @@ public class CompleteEventDialog extends Renderable implements StandardButtons
     /**
      * Click on ok
      */
-    public Renderable clickOnOk()
+    public <T extends DisposableItemDetailsPage> T clickOnOk(T renderable)
     {
-        return buttonset.click(OK);
+        return buttonset.click(OK, renderable);
     }
 
     /**
      * Click on cancel
      */
-    public Renderable clickOnCancel()
+    public <T extends DisposableItemDetailsPage> T clickOnCancel(T renderable)
     {
-        return buttonset.click(CANCEL);
+        return buttonset.click(CANCEL, renderable);
     }
 
 }

@@ -174,6 +174,29 @@ public class DispositionStepBlock extends HtmlElement
         return this;
     }
 
+    /** add event
+     * @param eventName
+     * @return DispositionStepBlock
+     */
+    public DispositionStepBlock addEvent(String eventName)
+    {
+        this.checkEvents(true);
+        eventsSection.selectEvent(eventName);
+        SharePage.getLastRenderedPage().render();
+        return this;
+    }
+
+    /** remove event
+     *
+     * @param eventNumber
+     * @return DispositionStepBlock
+     */
+    public DispositionStepBlock removeEvent(int eventNumber)
+    {
+        eventsSection.deleteEvent(eventNumber);
+        SharePage.getLastRenderedPage().render();
+        return this;
+    }
     /**
      * Check ghost checkbox
      */

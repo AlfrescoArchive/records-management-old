@@ -222,7 +222,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //complete the event
         folderDetailsPage
                 .clickOnCompleteEvent(ABOLISHED)
-                .clickOnOk();
+                .clickOnOk(folderDetailsPage);
 
         //verify available actions
         assertTrue(folderDetailsPage.getFolderActionsPanel().isActionsClickable(
@@ -269,7 +269,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //complete the event
         folderDetailsPage
                 .clickOnCompleteEvent(CASE_COMPLETE)
-                .clickOnOk();
+                .clickOnOk(folderDetailsPage);
 
         //verify available actions
         assertTrue(folderDetailsPage.getFolderActionsPanel().isActionsClickable(
@@ -293,7 +293,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //complete obsolete event
         folderDetailsPage
                 .clickOnCompleteEvent(OBSOLETE)
-                .clickOnOk();
+                .clickOnOk(folderDetailsPage);
 
         //navigate to browse view - inside the category
         folderDetailsPage.navigateUp(2);
@@ -333,7 +333,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //complete the 'No longer needed' event
         folderDetailsPage
                 .clickOnCompleteEvent(NO_LONGER_NEEDED)
-                .clickOnOk();
+                .clickOnOk(folderDetailsPage);
 
         //verify Destroy action is not available
         assertFalse(folderDetailsPage.getFolderActionsPanel().isActionAvailable(RecordFolder.DESTROY));
@@ -341,7 +341,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //complete 'Case Closed' event
         folderDetailsPage
                 .clickOnCompleteEvent(CASE_CLOSED)
-                .clickOnOk();
+                .clickOnOk(folderDetailsPage);
 
         //verify Destroy is now available
         assertTrue(folderDetailsPage.getFolderActionsPanel().isActionClickable(RecordFolder.DESTROY));
@@ -402,8 +402,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //check 'When event occurs' check-box, select 'Abolished' event
         dispositionStep
                 .checkEvents(true)
-                .getEventsSection()
-                .selectEvent(ABOLISHED);
+                .addEvent(ABOLISHED);
         //fill 'Step Description' and click 'Save' button
         dispositionStep
                 .setDescription(TRANSFER_LABEL)
@@ -416,8 +415,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         //check 'When event occurs' check-box, select 'Case Complete' event
         dispositionStep
                 .checkEvents(true)
-                .getEventsSection()
-                .selectEvent(CASE_COMPLETE);
+                .addEvent(CASE_COMPLETE);
         //fill 'Step Description' and click 'Save' button
         dispositionStep
                 .setDescription(RETAIN_LABEL)

@@ -39,21 +39,33 @@ public class EventBlock extends HtmlElement
     @FindBy(xpath = ".//button")
     private Button completeEventButton;
 
+    /** get the name of event */
     public String getEventName()
     {
         return eventName.getText();
     }
 
+    /** is Complete button available for te event
+     *
+     * @return true if "Complete" button is available
+     *         false if "Undo" button is available
+     */
+    public boolean isCompleteAvailable()
+    {
+        return completeEventButton.getWrappedElement().getText().equals("Complete Event");
+    }
+
+
     public void clickOnCompleteEvent()
     {
-        if (completeEventButton.getName().equals("Complete Event Button"))
+        if (isCompleteAvailable())
             completeEventButton.click();
         else throw new RuntimeException("Complete event button doesn't exist");
     }
 
     public void clickOnUndoEvent()
     {
-        if (completeEventButton.getName().equals("Undo"))
+        if (!isCompleteAvailable())
             completeEventButton.click();
         else throw new RuntimeException("Undo event button doesn't exist");
     }

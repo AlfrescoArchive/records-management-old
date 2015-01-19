@@ -74,16 +74,15 @@ public class RequestInformationDialog extends Dialog implements StandardButtons
      */
     public <T extends Renderable> T clickRequestInformation(T renderable)
     {
-        buttonset.click(REQUEST_INFORMATION);
-        return renderable.render();
+        return buttonset.click(REQUEST_INFORMATION, renderable);
     }
 
     /**
      * Click on cancel
      */
-    public Renderable clickOnCancel()
+    public <T extends Renderable> T clickOnCancel(T renderable)
     {
-        return buttonset.click(CANCEL);
+        return buttonset.click(CANCEL, renderable);
     }
 
 }

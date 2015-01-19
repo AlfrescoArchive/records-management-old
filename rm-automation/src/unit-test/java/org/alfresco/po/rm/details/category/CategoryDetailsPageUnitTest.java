@@ -105,8 +105,8 @@ public class CategoryDetailsPageUnitTest extends BaseRmUnitTest
         categoryDetailsPage.getCategoryActionsPanel().clickOnTitle();
         //verify it is expanded
         assertTrue(categoryDetailsPage.getCategoryActionsPanel().isPanelExpanded());
-
     }
+
     @Test
     public void noDispositionCreated()
     {
