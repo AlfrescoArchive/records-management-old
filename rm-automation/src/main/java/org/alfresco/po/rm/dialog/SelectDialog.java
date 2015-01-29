@@ -3,6 +3,7 @@ package org.alfresco.po.rm.dialog;
 import org.alfresco.po.common.buttonset.OkCancelButtonSet;
 import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -19,10 +20,17 @@ public class SelectDialog extends Renderable implements StandardButtons
     /** search input */
     @FindBy(xpath = "//input[@class='search-input']")
     private TextInput searchInput;
+    
+    @FindBy(css = "input[id*='search-text']")
+    private TextInput authoritySearchInput;
 
     /** search button */
     @FindBy(xpath="//button[text()='Search']")
     private Button searchButton;
+    
+    /** authority search button*/
+    @FindBy(css = "button[id*='search-button-button']")
+    private Button authoritySearchButton;
 
     /** add icon */
     @FindBy(xpath="//*[@class='addIcon']")
@@ -35,6 +43,10 @@ public class SelectDialog extends Renderable implements StandardButtons
     /** button set */
     @FindBy(css=".bdft")
     private OkCancelButtonSet buttonset;
+    
+    @FindBy(xpath = "//button[contains(text(),'Add')]")
+    //@FindBy(css = "button[id*='button']")
+    private Button addButton;
 
     /**
      * Click on ok
@@ -79,5 +91,24 @@ public class SelectDialog extends Renderable implements StandardButtons
         searchButton.click();
         return this.render();
     }
-
+    
+    /**
+     * perform the search 
+     */
+    public SelectDialog authoritySearch(String request)
+    {
+        authoritySearchInput.sendKeys(request);
+        authoritySearchButton.click();
+        return this.render();
+    }
+    /**
+     * click on Add button
+     */
+    public SelectDialog clickAddButton()
+    {
+        Utils.mouseOver(addButton);
+        addButton.click();
+        return this.render();
+    }
+    
 }

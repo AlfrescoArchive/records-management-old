@@ -27,6 +27,7 @@ import org.alfresco.po.rm.dialog.RequestInformationDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.RecordLinkDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -75,6 +76,10 @@ public class Record extends DisposableItem implements RecordActions
     /** request information dialog*/
     @Autowired
     private RequestInformationDialog requestInformationDialog;
+    
+    /** manage permissions dialog**/
+    @Autowired
+    private ManagePermissions managePermissions;
     
     @Override
     public RecordDetails clickOnLink()
@@ -152,6 +157,14 @@ public class Record extends DisposableItem implements RecordActions
     public RequestInformationDialog clickOnRequestInformation()
     {
         return clickOnAction(REQUEST_INFORMATION, requestInformationDialog);
+    }
+    
+    /**
+     * Click on Manage Permission action
+     */
+    public ManagePermissions clickOnManagePermission()
+    {
+        return clickOnAction(MANAGE_PERMISSIONS, managePermissions);
     }
 
     /**

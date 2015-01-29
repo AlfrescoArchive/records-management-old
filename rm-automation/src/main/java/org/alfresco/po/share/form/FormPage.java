@@ -36,6 +36,12 @@ public abstract class FormPage extends SharePage
     
     @FindBy(css="button[id$='cancel-button']")
     private Button cancelButton;
+    
+    @FindBy(css="button[id*='okButton']")
+    private Button okButton;
+    
+    @FindBy(css="button[id*='cancelButton']")
+    private Button okcancelButton;
 
     private Renderable returnPage;
 
@@ -62,6 +68,15 @@ public abstract class FormPage extends SharePage
         saveButton.click();
         return returnPage.render();
     }
+    
+    /**
+     * Click on save
+     */
+    public Renderable clickOnOK()
+    {
+        okButton.click();
+        return returnPage.render();
+    }
 
     /**
      * Click on cancel
@@ -69,6 +84,15 @@ public abstract class FormPage extends SharePage
     public Renderable clickOnCancel()
     {
         cancelButton.click();
+        return returnPage.render();
+    }
+    
+    /**
+     * Click on cancel
+     */
+    public Renderable clickOnOkCancel()
+    {
+        okcancelButton.click();
         return returnPage.render();
     }
 }

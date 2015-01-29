@@ -234,7 +234,7 @@ public abstract class ListItem
             throw new RuntimeException("The action " + actionName + " could not be found for list item " + getName());
         
         // mouse over and click
-        Utils.mouseOver(action);
+        //Utils.mouseOver(action);
         action.click();
 
         if (waitForActionStaleness == true)

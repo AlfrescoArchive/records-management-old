@@ -21,6 +21,7 @@ package org.alfresco.po.rm.browse.fileplan;
 import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,10 @@ public class RecordCategory extends FilePlanListItem implements CategoryActions
     /** category details */
     @Autowired
     private CategoryDetailsPage categoryDetailsPage;
+    
+    /** manage permissions */
+    @Autowired
+    private ManagePermissions managePermissions;
 
     /**
      * Click on View Details
@@ -67,5 +72,11 @@ public class RecordCategory extends FilePlanListItem implements CategoryActions
     {
         return clickOnAction(MOVE, moveDialog);
     }
+    /**Click on manage permissions action */
+    public ManagePermissions clickonManagePermissions()
+    {
+        return clickOnAction(MANAGE_PERMISSIONS, managePermissions);
+    }
+
 
 }

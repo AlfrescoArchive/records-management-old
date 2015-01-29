@@ -23,6 +23,7 @@ import static org.alfresco.po.common.util.Utils.elementExists;
 import org.alfresco.po.rm.details.folder.FolderDetailsPage;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +41,10 @@ public class RecordFolder extends DisposableItem implements FolderActions
 
     /** closed indicator */
     private static By closedSelector = By.cssSelector("img[alt='rm-closed']");
+    
+    /** Manage permissions */
+    @Autowired
+    private ManagePermissions managePermissions;
 
     /** copy dialog */
     @Autowired
@@ -99,6 +104,13 @@ public class RecordFolder extends DisposableItem implements FolderActions
     public FilePlan clickOnReopenFolder()
     {
         return (FilePlan)clickOnAction(REOPEN_FOLDER);
+    }
+
+
+    /**Click on manage permissions action */
+    public ManagePermissions clickonManagePermissions()
+    {
+        return clickOnAction(MANAGE_PERMISSIONS, managePermissions);
     }
 
     /**
