@@ -235,17 +235,21 @@ public class ManageIncompleteRecords extends BaseTest
 
         // request information
         Record electronicRecord = filePlan.getRecord(RECORD);
-
         requestInformationDialog = electronicRecord.clickOnRequestInformation();
         String name =  electronicRecord.getName();
+        
         //verify the name of the record (the information is requested for) is correct
         assertEquals(name, requestInformationDialog.getRecordName());
+        
         //add Administrator to 'Request information from' select
         requestInformationDialog.clickOnSelectUsersAndGroups().search("Administrator").clickAddIcon().clickOnOk();
+        
         // fill in Requested information
         requestInformationDialog.setRequestedInfoArea("What is that?");
+        
         // click Request Information
         requestInformationDialog.clickRequestInformation(filePlan);
+        
         // verify the information requested indicator is displayed
         electronicRecord = filePlan.getRecord(RECORD);
         assertTrue("Information should be requested for electronic record", electronicRecord.isInformationRequested());

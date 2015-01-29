@@ -42,14 +42,29 @@ public class Message extends Renderable
      */
     public void waitUntillHidden()
     {
+        boolean shown = false;
         try
         {
-            webDriverWait().until(
-                   ExpectedConditions.invisibilityOfElementLocated(MESSAGE_SELECTOR));            
+            webDriverWait(1).until(
+               ExpectedConditions.visibilityOfElementLocated(MESSAGE_SELECTOR));
+            shown = true;
         }
         catch (TimeoutException exception)
         {
-            // do nothing and carry on
+            // do nothing and carry on           
+        }
+        
+        if (shown == true)
+        {
+            try
+            {
+                webDriverWait().until(
+                       ExpectedConditions.invisibilityOfElementLocated(MESSAGE_SELECTOR));            
+            }
+            catch (TimeoutException exception)
+            {
+                // do nothing and carry on
+            }
         }
     }
     

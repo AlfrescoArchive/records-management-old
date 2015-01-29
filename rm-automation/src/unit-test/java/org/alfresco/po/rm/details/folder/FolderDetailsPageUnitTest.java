@@ -18,20 +18,19 @@
  */
 package org.alfresco.po.rm.details.folder;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
-import org.alfresco.po.rm.details.category.CategoryActionsPanel;
-import org.alfresco.po.rm.details.category.DispositionBlock;
 import org.alfresco.test.BaseRmUnitTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Folder Details page Unit Test

@@ -46,16 +46,16 @@ public class Record extends DisposableItem implements RecordActions
     private static final String IDENTIFIER_SELECTOR_XPATH = (".//td[contains(@class,'fileName')]/div/div[{0}]/span");
 
     /** info banner */
-    private static By infoBannerSelector = By.cssSelector("div.info-banner");
+    private static final By INFO_BANNER_SELECTOR = By.cssSelector("div.info-banner");
 
     /** linked indicator */
-    private static By linkedSelector = By.cssSelector("img[alt='rm-multi-parent']");
+    private static final By LINKED_SELECTOR = By.cssSelector("img[alt='rm-multi-parent']");
 
     /** information requested indicator */
-    private static By informationRequestedSelector = By.cssSelector("img[alt='rm-info-requested']");
+    private static final By INFO_REQUESTED_SELECTOR = By.cssSelector("img[alt='rm-info-requested']");
 
     /** cutoff indicator */
-    private static By cutoffRecordIndicatorSelector = By.cssSelector("img[alt='rm-cutoff']");
+    private static final By CUTTOFF_INDICATOR_SELECTOR = By.cssSelector("img[alt='rm-cutoff']");
 
     /** record copy dialog */
     @Autowired
@@ -81,6 +81,9 @@ public class Record extends DisposableItem implements RecordActions
     @Autowired
     private ManagePermissions managePermissions;
     
+    /**
+     * Click on record details link
+     */
     @Override
     public RecordDetails clickOnLink()
     {
@@ -92,7 +95,7 @@ public class Record extends DisposableItem implements RecordActions
      */
     public boolean isIncomplete()
     {
-        return elementExists(getRow(), infoBannerSelector);
+        return elementExists(getRow(), INFO_BANNER_SELECTOR);
     }
     
     /**
@@ -100,7 +103,7 @@ public class Record extends DisposableItem implements RecordActions
      */
     public boolean isLinked()
     {
-        return elementExists(getRow(), linkedSelector);
+        return elementExists(getRow(), LINKED_SELECTOR);
     }
 
     /**
@@ -108,7 +111,7 @@ public class Record extends DisposableItem implements RecordActions
      */
     public boolean isInformationRequested()
     {
-        return elementExists(getRow(), informationRequestedSelector);
+        return elementExists(getRow(), INFO_REQUESTED_SELECTOR);
     }
 
     /**
@@ -190,7 +193,7 @@ public class Record extends DisposableItem implements RecordActions
      * Helper method to get identifier
      * @return get identifier
      */
-    public String getIdentifier(int index)
+    private String getIdentifier(int index)
     {
         String identifierString = (getRow().findElement(getIdentifierSelector(index))).getText();
         return identifierString.substring(identifierString.lastIndexOf(':')+2, identifierString.length());
@@ -201,7 +204,7 @@ public class Record extends DisposableItem implements RecordActions
      */
     public boolean isCutOff()
     {
-        return elementExists(getRow(), cutoffRecordIndicatorSelector);
+        return elementExists(getRow(), CUTTOFF_INDICATOR_SELECTOR);
     }
 
 }

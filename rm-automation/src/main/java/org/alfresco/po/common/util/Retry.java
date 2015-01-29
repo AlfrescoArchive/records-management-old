@@ -16,35 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.rm.browse.transfers;
-import org.alfresco.po.rm.browse.fileplan.TransferActions;
-import org.alfresco.po.share.browse.ListItem;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+package org.alfresco.po.common.util;
 
 /**
- * Transfer
- *
- * @author Tatiana Kalinovskaya
+ * Retry execution class.
+ * 
+ * @author Roy Wetherall
  */
-@Scope("prototype")
-@Component
-public class Transfer extends ListItem implements TransferActions
+abstract class Retry <T extends Object> 
 {
     /**
-     * Click on complete transfer action
+     * retry execution
      */
-    public Transfers clickOnCompleteTransfer()
-    {
-        return (Transfers)clickOnAction(COMPLETE_TRANSFER);
-    }
-
-    /**
-     * Click on complete accession action
-     */
-    public Transfers clickOnCompleteAccession()
-    {
-        return (Transfers)clickOnAction(COMPLETE_ACCESSION);
-    }
-
+    abstract T execute();
 }

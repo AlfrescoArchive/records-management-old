@@ -109,6 +109,8 @@ public abstract class ButtonSet extends HtmlElement
                 
                 // TODO check for error message (dialog only?)
                 
+                
+                
                 // render
                 return renderable.render();
             }

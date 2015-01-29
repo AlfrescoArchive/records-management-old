@@ -50,6 +50,9 @@ public final class Utils implements ApplicationContextAware
     /** application context */
     private static ApplicationContext applicationContext;
     
+    /** default wait 10 seconds */
+    private static final int DEFAULT_WAIT = 10;
+    
     /**
      * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
      */
@@ -68,6 +71,16 @@ public final class Utils implements ApplicationContextAware
     {
         return (WebDriver)Utils.applicationContext.getBean("webDriver");
     }
+    
+    /**
+     * Helper to get web driver wait object
+     * 
+     * @return
+     */
+    public static WebDriverWait webDriverWait(int waitSeconds)
+    {
+        return new WebDriverWait(getWebDriver(), waitSeconds);
+    }
 
     /**
      * Helper to get web driver wait object
@@ -76,7 +89,7 @@ public final class Utils implements ApplicationContextAware
      */
     public static WebDriverWait webDriverWait()
     {
-        return new WebDriverWait(getWebDriver(), 10);
+        return webDriverWait(DEFAULT_WAIT);
     }
     
     /**
@@ -276,5 +289,41 @@ public final class Utils implements ApplicationContextAware
         {
             throw new RuntimeException("Unable to create test file.");
         }
+    }
+    
+    /**
+     * Helper method to retry, ignoring failures until success or all retries
+     * are used up
+     * 
+     * @param retry     retry execution
+     * @param count     number of retries
+     * @return T        result of retry execution
+     */
+    public static final <T> T retry(Retry<T> retry, int count)
+    {
+        T result = null;
+        int attempt = 0;
+        
+        while (true)
+        {
+            try
+            {
+                // try and execute 
+                result = retry.execute();
+                break;
+            }
+            catch (Exception exception)
+            {
+                // if we have used up all our tried throw the exception
+                if (attempt >= count)
+                {
+                    throw exception;
+                }
+                
+                // otherwise do nothing and try again
+            }
+        }
+        
+        return result;
     }
 }
