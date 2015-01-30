@@ -18,11 +18,13 @@
  */
 package org.alfresco.po.rm.actions.viewaudit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.page.SharePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
@@ -48,10 +50,6 @@ public class AuditLogPage extends Page
     /** audit data */
     @FindBy(css = "div[id$='default-audit']")
     private WebElement auditData;
-
-    /** audit entries block */
-    @FindBy(xpath="//div[@class='audit-entry']")
-    private List<AuditEntry> auditEntryList;
 
     /** audit page header*/
     @FindBy(xpath="//h1")
@@ -137,16 +135,40 @@ public class AuditLogPage extends Page
         return fileAsRecord.isEnabled();
     }
 
+    /**
+     * Get audit entry by index
+     */
     public AuditEntry getAuditEntry(int count)
     {
-        return auditEntryList.get(count);
+        return getAuditEntries().get(count);
     }
 
+    /**
+     * Get audit entry count
+     */
     public int getAuditEntryCount()
     {
-        return auditEntryList.size();
+        return getAuditEntries().size();
     }
 
+    /**
+     * Helper method to get all audit entries
+     */
+    private List<AuditEntry> getAuditEntries()
+    {
+        List<WebElement> elements = auditData.findElements(By.cssSelector("div.audit-entry"));
+        List<AuditEntry> auditEntries = new ArrayList<AuditEntry>(elements.size());
+        for (WebElement element : elements)
+        {
+            AuditEntry auditEntry = new AuditEntry(element);
+            auditEntries.add(auditEntry);
+        }
+        return auditEntries;
+    }
+    
+    /**
+     * Get audit page header
+     */
     public String getAuditPageHeader()
     {
         return auditPageHeader.getText();

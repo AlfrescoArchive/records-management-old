@@ -2,51 +2,62 @@ package org.alfresco.po.rm.actions.viewaudit;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-
-import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 /**
  * Audit Entry block for Audit Log page
  *
  * @author Tatiana Kalinovskaya
  */
-public class AuditEntry extends HtmlElement
+public class AuditEntry 
 {
-    @FindBy(xpath = "./div[@class='audit-entry-header']/*")
-    private List<WebElement> auditEntryHeader;
+    private WebElement auditEntry;
 
-    @FindBy(xpath = "./div[@class='audit-entry-node']/*")
-    private List<WebElement> auditEntryNode;
-
+    /*package*/ AuditEntry(WebElement auditEntry)
+    {
+        this.auditEntry = auditEntry;
+    }
+    
+    private String getHeaderValue(int index)
+    {
+        List<WebElement> webElements = auditEntry.findElements(By.cssSelector("div.audit-entry-header span.value"));
+        return webElements.get(index).getText();
+    }
+    
+    private String getEntryValue(int index)
+    {
+        List<WebElement> webElements = auditEntry.findElements(By.cssSelector("div.audit-entry-node span.value"));
+        return webElements.get(index).getText();
+    }
+    
     public String getAuditEntryTimestamp()
     {
-        return auditEntryHeader.get(1).getText();
+        return getHeaderValue(0);
     }
 
     public String getAuditEntryUser()
     {
-        return auditEntryHeader.get(3).getText();
+        return getHeaderValue(1);
     }
 
     public String getAuditEntryEvent()
     {
-        return auditEntryHeader.get(5).getText();
+        return getHeaderValue(2);
     }
 
     public String getAuditEntryIdentifier()
     {
-        return auditEntryNode.get(1).getText();
+        return getEntryValue(0);
     }
 
     public String getAuditEntryType()
     {
-        return auditEntryNode.get(3).getText();
+        return getEntryValue(1);
     }
 
     public String getAuditEntryLocation()
     {
-        return auditEntryNode.get(5).getText();
+        return getEntryValue(2);
     }
 }
