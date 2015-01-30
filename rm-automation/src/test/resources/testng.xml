@@ -2,26 +2,12 @@
 
 <suite name="TestNG AllTestSuite" verbose="1" time-out="300000">
 
-	<test name="unit-tests">
-    	<groups>
-    		<run>
-    			<include name="unit-test"/>
-    		</run>
-    	</groups>
-        <packages>                   
-            <package name="org.alfresco.po.*"/> 
-        </packages> 
-    </test>
+	<test name="Managepermissions">
 
-    <test name="sanity">
-    	<groups>
-    		<run>
-    			<include name="sanity"/>
-    		</run>
-    	</groups>
-        <packages>                   
-            <package name="org.alfresco.test.regression.*"/> 
-        </packages> 
-    </test>
+		<classes>
+			<class name="org.alfresco.po.rm.managepermissions.ManagePermissionsUnitTest" />
+		</classes>
+
+	</test>
 
 </suite>
