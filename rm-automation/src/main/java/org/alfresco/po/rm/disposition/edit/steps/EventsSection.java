@@ -87,10 +87,15 @@ public class EventsSection extends HtmlElement
         
         // find the correct event link
         boolean eventClicked = false;
+        StringBuffer eventsChecked = new StringBuffer(255);
         List<WebElement> eventLinks = availableEvents.findElements(By.cssSelector("a.yuimenuitemlabel"));
         for (WebElement eventLink : eventLinks)
         {
-            if (eventName.equals(eventLink.getText()))
+            // get the text in the event link
+            String eventLinkText = eventLink.getText().trim();
+            eventsChecked.append(eventLinkText).append(", ");
+
+            if (eventName.equals(eventLinkText))
             {
                 // wait for the event link to be clickable
                 Utils.webDriverWait().until(ExpectedConditions.elementToBeClickable(eventLink));
@@ -105,7 +110,8 @@ public class EventsSection extends HtmlElement
         // if no event clicked throw exception
         if (eventClicked == false)
         {
-            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + " events.");
+            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + 
+                                       " events [" + eventsChecked.toString() + "]");
         }        
         
         return this;
