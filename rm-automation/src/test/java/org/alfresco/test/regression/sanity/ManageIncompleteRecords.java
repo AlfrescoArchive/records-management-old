@@ -29,12 +29,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.alfresco.po.common.util.Retry;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.actions.edit.EditNonElectronicRecordPage;
 import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
-import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
+import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
@@ -274,13 +276,21 @@ public class ManageIncompleteRecords extends BaseTest
         assertTrue(auditLogPage.isFileAsRecordButtonEnabled());
 
         //TODO specify all values as static elements
-        // Verify 5 entries are displayed
-        int auditEntriesCount = auditLogPage.getAuditEntryCount();
-        assertEquals(5, auditEntriesCount);
-
+        
+        Utils.retry(new Retry<Void>()
+        {
+            public Void execute()
+            {
+                // Verify 5 entries are displayed
+                int auditEntriesCount = auditLogPage.getAuditEntryCount();
+                assertEquals(5, auditEntriesCount);
+                return null;
+            }
+        }, 5);
+        
         /** Verify the first 3 audit entries*/
         AuditEntry auditEntry;
-        for (int i=0; i<auditEntriesCount - 2; i++)
+        for (int i=0; i<5 - 2; i++)
         {
             auditEntry = auditLogPage.getAuditEntry(i);
             assertNotNull(auditEntry.getAuditEntryTimestamp());
@@ -301,7 +311,7 @@ public class ManageIncompleteRecords extends BaseTest
         }
         
         /** Verify the last 2 entries*/
-        for (int i=auditEntriesCount - 2; i<auditEntriesCount; i++)
+        for (int i=5 - 2; i<5; i++)
         {
             auditEntry = auditLogPage.getAuditEntry(i);
             assertNotNull(auditEntry.getAuditEntryTimestamp());

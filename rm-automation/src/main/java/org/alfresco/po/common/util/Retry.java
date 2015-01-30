@@ -23,10 +23,10 @@ package org.alfresco.po.common.util;
  * 
  * @author Roy Wetherall
  */
-abstract class Retry <T extends Object> 
+public abstract class Retry <T extends Object> 
 {
     /**
      * retry execution
      */
-    abstract T execute();
+    public abstract T execute();
 }
