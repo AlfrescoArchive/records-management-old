@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -58,6 +59,10 @@ public class EventsSection extends HtmlElement
     /** list of added events */
     @FindBy (css = ".events-list .action-event-name")
     private List <WebElement> addedEventsNames;
+    
+    /** list of avilable events */
+    @FindBy (css = "div.events-header ul")
+    private WebElement availableEvents;
 
     private static final String DISPOSITION_EVENT_SELECTOR_XPATH = ".//a[text()=''{0}'']";
 
@@ -66,7 +71,12 @@ public class EventsSection extends HtmlElement
      */
     public EventsSection clickOnAddEvent()
     {
+        // click on the add event button
         addEventButton.click();
+        
+        // wait for the available events list to be visible
+        Utils.waitForVisibilityOf(availableEvents);
+        
         return this;
     }
 
