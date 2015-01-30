@@ -18,13 +18,11 @@
  */
 package org.alfresco.po.rm.disposition.edit.steps;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -64,8 +62,6 @@ public class EventsSection extends HtmlElement
     @FindBy (css = "div.events-header ul")
     private WebElement availableEvents;
 
-    private static final String DISPOSITION_EVENT_SELECTOR_XPATH = ".//a[text()=''{0}'']";
-
     /**
      * Click on Add Event
      */
@@ -87,14 +83,28 @@ public class EventsSection extends HtmlElement
     {
         // click on add event button
         clickOnAddEvent();
-
-        // get disposition action link
-        Link event = getDispositionEventLink(eventName);
-        if (event == null || !event.isEnabled() || !event.isDisplayed())
+        
+        // find the correct event link
+        boolean eventClicked = false;
+        List<WebElement> eventLinks = availableEvents.findElements(By.cssSelector("a.yuimenuitemlabel"));
+        for (WebElement eventLink : eventLinks)
         {
-            throw new RuntimeException("The event " + eventName + " could not be added");
+            if (eventLink.isEnabled() &&
+                eventName.equals(eventLink.getText()))
+            {
+                // click event link
+                eventLink.click();
+                eventClicked = true;
+                break;
+            }
         }
-        event.click();
+        
+        // if no event clicked throw exception
+        if (eventClicked == false)
+        {
+            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + "events.");
+        }        
+        
         return this;
     }
 
@@ -116,32 +126,6 @@ public class EventsSection extends HtmlElement
     {
         eligibleOnFirstCompleteEvent.selectByValue(String.valueOf(check));
         return this;
-    }
-
-    /**
-     * Helper method to get the disposition event link
-     */
-    private Link getDispositionEventLink(String eventName)
-    {
-        Link result = null;
-        try
-        {
-            WebElement link = events.findElement(getDispositionEventSelector(eventName));
-            result = new Link(link);
-        }
-        catch (NoSuchElementException e)
-        {
-            // do nothing, just return null
-        }
-        return result;
-    }
-    /**
-     * Helper method to get the event selector
-     */
-    private By getDispositionEventSelector(String eventName)
-    {
-        String eventXPATH = MessageFormat.format(DISPOSITION_EVENT_SELECTOR_XPATH, eventName);
-        return By.xpath(eventXPATH);
     }
 
     /**
