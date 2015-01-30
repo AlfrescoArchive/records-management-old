@@ -125,7 +125,7 @@ public class EditDispositionSchedulePage extends SharePage
     public EditDispositionSchedulePage clickOnAddStep()
     {
         addStepButton.click();
-        return this.render();
+        return this;
     }
 
 

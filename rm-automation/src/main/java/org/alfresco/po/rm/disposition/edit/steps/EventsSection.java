@@ -25,6 +25,7 @@ import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
@@ -89,9 +90,11 @@ public class EventsSection extends HtmlElement
         List<WebElement> eventLinks = availableEvents.findElements(By.cssSelector("a.yuimenuitemlabel"));
         for (WebElement eventLink : eventLinks)
         {
-            if (eventLink.isEnabled() &&
-                eventName.equals(eventLink.getText()))
+            if (eventName.equals(eventLink.getText()))
             {
+                // wait for the event link to be clickable
+                Utils.webDriverWait().until(ExpectedConditions.elementToBeClickable(eventLink));
+                
                 // click event link
                 eventLink.click();
                 eventClicked = true;
@@ -102,7 +105,7 @@ public class EventsSection extends HtmlElement
         // if no event clicked throw exception
         if (eventClicked == false)
         {
-            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + "events.");
+            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + " events.");
         }        
         
         return this;
