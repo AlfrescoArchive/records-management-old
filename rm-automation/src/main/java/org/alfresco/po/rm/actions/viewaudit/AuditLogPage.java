@@ -44,6 +44,10 @@ public class AuditLogPage extends Page
     /** file as record button */
     @FindBy(css = "button[id$=audit-file-record-button]")
     private Button fileAsRecord;
+    
+    /** audit data */
+    @FindBy(css = "div[id$='default-audit']")
+    private WebElement auditData;
 
     /** audit entries block */
     @FindBy(xpath="//div[@class='audit-entry']")
@@ -70,12 +74,21 @@ public class AuditLogPage extends Page
         
         // switch to the newly opened popup window
         parentWindow = webDriver.getWindowHandle();
+        boolean switched = false;
         for (String winHandle : webDriver.getWindowHandles())
         {
             if (!winHandle.equals(parentWindow))
             {
                 webDriver.switchTo().window(winHandle);
+                switched = true;
+                break;
             }
+        }
+        
+        // check that control has been passed to the audit pop-up window
+        if (switched == false)
+        {
+            throw new RuntimeException("Unable to render audit log page, because pop-up window was not found.");
         }
         
         // render
