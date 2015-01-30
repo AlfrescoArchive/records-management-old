@@ -50,7 +50,7 @@ public class ManagePermissions extends FormPage
     @FindBy(css = "div[id*= 'manage-permissions']")
     private WebElement managePermissionsTitle;
 
-    @FindBy(css = "button[id$='inheritedButton-button']")
+    @FindBy(css = "button[id*='inheritedButton-button']")
     private Button inheritPermissionsButton;
 
     @FindBy(css = "button[id$='addUserGroupButton-button']")
