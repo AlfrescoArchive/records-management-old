@@ -6,6 +6,7 @@ import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
@@ -106,6 +107,7 @@ public class SelectDialog extends Renderable implements StandardButtons
      */
     public SelectDialog clickAddButton()
     {
+        try{Thread.sleep(1000);}catch(Exception exception){};
         Utils.mouseOver(addButton);
         addButton.click();
         return this.render();
