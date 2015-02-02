@@ -49,7 +49,6 @@ public class SelectDialog extends Renderable implements StandardButtons
     
    
     @FindBy(xpath = "//button[contains(text(),'Add')]")
-    @WaitFor
     private Button addButton;
 
     /**
