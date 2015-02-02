@@ -107,9 +107,14 @@ public class SelectDialog extends Renderable implements StandardButtons
      */
     public SelectDialog clickAddButton()
     {
-        try{Thread.sleep(1000);}catch(Exception exception){};
+        //would like to see other alternatives before delete the sleep.
+        //try{Thread.sleep(1000);}catch(Exception exception){};
         Utils.mouseOver(addButton);
-        addButton.click();
+        while(!addButton.isDisplayed())
+        { System.out.println("here at add button");
+        
+            Utils.mouseOver(addButton); 
+        }
         return this.render();
     }
     
