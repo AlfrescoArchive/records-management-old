@@ -93,6 +93,7 @@ public class ManageIncompleteRecords extends BaseTest
     )
     public void manageIncompleteRecords()
     {
+        createUser(userName);
         // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
