@@ -1,5 +1,7 @@
 package org.alfresco.po.rm.dialog;
 
+import org.alfresco.po.common.annotations.WaitFor;
+import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.buttonset.OkCancelButtonSet;
 import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
@@ -45,8 +47,9 @@ public class SelectDialog extends Renderable implements StandardButtons
     @FindBy(css=".bdft")
     private OkCancelButtonSet buttonset;
     
+   
     @FindBy(xpath = "//button[contains(text(),'Add')]")
-    //@FindBy(css = "button[id*='button']")
+    @WaitFor
     private Button addButton;
 
     /**
@@ -105,17 +108,11 @@ public class SelectDialog extends Renderable implements StandardButtons
     /**
      * click on Add button
      */
-    public SelectDialog clickAddButton()
+    public void clickAddButton()
     {
-        //would like to see other alternatives before delete the sleep.
-        //try{Thread.sleep(1000);}catch(Exception exception){};
-        Utils.mouseOver(addButton);
-        while(!addButton.isDisplayed())
-        { System.out.println("here at add button");
         
-            Utils.mouseOver(addButton); 
-        }
-        return this.render();
+        Utils.mouseOver(addButton);       
+        addButton.click();
     }
     
 }
