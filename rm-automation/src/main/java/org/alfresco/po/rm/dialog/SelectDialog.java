@@ -111,7 +111,11 @@ public class SelectDialog extends Renderable implements StandardButtons
     public void clickAddButton()
     {
         
-        Utils.mouseOver(addButton);       
+        Utils.mouseOver(addButton);
+        while(!addButton.isEnabled())
+        {
+           Utils.mouseOver(addButton);
+        }
         addButton.click();
     }
     
