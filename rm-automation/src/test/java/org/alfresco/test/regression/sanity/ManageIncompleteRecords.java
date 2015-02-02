@@ -40,6 +40,8 @@ import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
+import org.alfresco.po.rm.dialog.SelectDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -70,6 +72,15 @@ public class ManageIncompleteRecords extends BaseTest
     /**request information dialog*/
     @Autowired
     private RequestInformationDialog requestInformationDialog;
+    /**Manage permissions*/
+    @Autowired
+    private ManagePermissions managePermissions;
+    
+    /**Select dialog*/
+    @Autowired
+    private SelectDialog selectDialog;
+    
+    private static String userName = "user1";
 
     /**
      * Main regression test execution
@@ -256,7 +267,37 @@ public class ManageIncompleteRecords extends BaseTest
         electronicRecord = filePlan.getRecord(RECORD);
         assertTrue("Information should be requested for electronic record", electronicRecord.isInformationRequested());
 
+        //manage permissions
+        managePermissions = electronicRecord.clickOnManagePermission();
+        selectDialog = managePermissions.clickOnSelectUsersAndGroups();        
+        // add test authority
+        String testUserName = "user1 user1";
+        selectDialog.authoritySearch(testUserName).clickAddButton();
+        managePermissions.clickOnOK();        
+       
+        //Manage permissions for user1
+        String actualPermissionsName;
+        String expectedPermissionName = "Read Only";
+        electronicRecord = filePlan.getRecord(RECORD);        
+        //open manage permissions for electronic record
+        managePermissions = electronicRecord.clickOnManagePermission();
+        //get default permission set for test user
+        actualPermissionsName = managePermissions.getPermission(testUserName);        
+        //verify the default settings
+        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        //change the permission to read and file
+        expectedPermissionName = "Read and File";
+        //set the authority permission type
+        managePermissions.setPermissions(testUserName, expectedPermissionName);        
+        //get the test authority permission type and assert ther results
+        actualPermissionsName = managePermissions.getPermission(testUserName);
+        //verify the permissions set
+        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        managePermissions.clickOnOK();
+        
         // complete electronic record
+        filePlan.getRecordFolder(RECORD_FOLDER_ONE);        
+        electronicRecord = filePlan.getRecord(RECORD);   
         assertTrue(electronicRecord.isIncomplete());
         electronicRecord.clickOnCompleteRecord();
         assertFalse(filePlan.getRecord(RECORD).isIncomplete());
