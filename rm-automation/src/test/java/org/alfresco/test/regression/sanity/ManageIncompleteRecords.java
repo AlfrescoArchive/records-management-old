@@ -37,6 +37,7 @@ import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
@@ -79,7 +80,7 @@ public class ManageIncompleteRecords extends BaseTest
     
     /**Select dialog*/
     @Autowired
-    private AuthoritySelectDialog authoritySelectDialog;
+    private AuthoritySelectDialog authoritySelectDialog;    
     
     private static String userName = "user1";
 
