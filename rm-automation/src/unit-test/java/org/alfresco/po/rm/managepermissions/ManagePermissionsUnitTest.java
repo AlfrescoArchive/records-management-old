@@ -17,15 +17,13 @@ package org.alfresco.po.rm.managepermissions;
 import static org.junit.Assert.assertTrue;
 // import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
 import java.util.List;
-
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
 import org.alfresco.po.rm.details.record.RecordDetails;
-import org.alfresco.po.rm.dialog.SelectDialog;
+import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseRmUnitTest;
 import org.junit.BeforeClass;
@@ -47,7 +45,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
 
     /** select Dialog */
     @Autowired
-    private SelectDialog selectDialog;
+    private AuthoritySelectDialog authoritySelectDialog;
 
     /** file plan */
     @Autowired
@@ -115,10 +113,10 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
 
         // search forsitecollaborator from the users and groups
-        selectDialog = managePermissions.clickOnSelectUsersAndGroups();
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
 
         // add the user listed from the result
-        selectDialog.authoritySearch("Collaborator").clickAddButton();
+        authoritySelectDialog.authoritySearch("Collaborator").clickAddButton();
 
         // get the roles list from inherit panel
         List<String> rolesList = managePermissions.getLocalRoles();
@@ -163,8 +161,8 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     public void setFolderLocalPermissions()
     {
         // Add a user to localset permissions from the local users and groups section.
-        selectDialog = managePermissions.clickOnSelectUsersAndGroups();
-        selectDialog.authoritySearch("Administrator").clickAddButton();
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
+        authoritySelectDialog.authoritySearch("Administrator").clickAddButton();
 
         // verify the above user in the local permissions user list.
         List<String> localRoleList = managePermissions.getLocalRoles();
@@ -196,8 +194,8 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
         // add test authority
         // managePermissions.clickOnInheritPermissionButton().clickOnCancel();
-        selectDialog = managePermissions.clickOnSelectUsersAndGroups();
-        selectDialog.authoritySearch(testUserName).clickAddButton();
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
+        authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
 
         //get the authority permission type
         //actualPermissionsName = managePermissions.getPermission(testUserName);

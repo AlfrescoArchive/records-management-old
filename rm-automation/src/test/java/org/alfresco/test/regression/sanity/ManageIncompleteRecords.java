@@ -39,6 +39,7 @@ import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
+import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
 import org.alfresco.po.rm.dialog.SelectDialog;
 import org.alfresco.po.rm.managepermissions.ManagePermissions;
@@ -78,7 +79,7 @@ public class ManageIncompleteRecords extends BaseTest
     
     /**Select dialog*/
     @Autowired
-    private SelectDialog selectDialog;
+    private AuthoritySelectDialog authoritySelectDialog;
     
     private static String userName = "user1";
 
@@ -270,10 +271,10 @@ public class ManageIncompleteRecords extends BaseTest
 
         //manage permissions
         managePermissions = electronicRecord.clickOnManagePermission();
-        selectDialog = managePermissions.clickOnSelectUsersAndGroups();        
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();        
         // add test authority
         String testUserName = "user1 user1";
-        selectDialog.authoritySearch(testUserName).clickAddButton();
+        authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
         managePermissions.clickOnOK();        
        
         //Manage permissions for user1

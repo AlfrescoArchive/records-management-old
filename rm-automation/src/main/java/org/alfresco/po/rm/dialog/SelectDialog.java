@@ -1,14 +1,10 @@
 package org.alfresco.po.rm.dialog;
 
-import org.alfresco.po.common.annotations.WaitFor;
-import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.buttonset.OkCancelButtonSet;
 import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
@@ -94,28 +90,5 @@ public class SelectDialog extends Renderable implements StandardButtons
         searchButton.click();
         return this.render();
     }
-    
-    /**
-     * perform the search 
-     */
-    public SelectDialog authoritySearch(String request)
-    {
-        authoritySearchInput.sendKeys(request);
-        authoritySearchButton.click();
-        return this.render();
-    }
-    /**
-     * click on Add button
-     */
-    public void clickAddButton()
-    {
-        
-        Utils.mouseOver(addButton);
-        while(!addButton.isEnabled())
-        {
-           Utils.mouseOver(addButton);
-        }
-        addButton.click();
-    }
-    
+           
 }

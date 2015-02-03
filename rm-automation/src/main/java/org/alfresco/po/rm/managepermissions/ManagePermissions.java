@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.rm.dialog.SelectDialog;
+import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.share.form.FormPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -43,7 +43,7 @@ public class ManagePermissions extends FormPage
     private ConfirmationPrompt confirmationPrompt;
 
     @Autowired
-    private SelectDialog selectDialog;
+    private AuthoritySelectDialog authoritySelectDialog;
 
     private By userListSection = By.cssSelector(".yui-dt-liner");
 
@@ -96,10 +96,10 @@ public class ManagePermissions extends FormPage
      * 
      * @return SelectDialog selectdialog
      */
-    public SelectDialog clickOnSelectUsersAndGroups()
+    public AuthoritySelectDialog clickOnSelectUsersAndGroups()
     {
         addUserGroupButton.click();
-        return selectDialog.render();
+        return authoritySelectDialog.render();
     }
 
     /**
