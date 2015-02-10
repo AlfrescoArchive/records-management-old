@@ -35,10 +35,15 @@ import org.alfresco.po.rm.console.audit.AuditEntryTypes;
 import org.alfresco.po.rm.console.audit.AuditEvents;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
+import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.share.properties.Content;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
+import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
+
+
 
 /**
  * Manage complete records regression test
@@ -66,6 +71,14 @@ public class ManageCompleteRecords extends BaseTest
     /** audit log page*/
     @Autowired
     private AuditLogPage auditLogPage;
+    
+    @Autowired
+    private ManagePermissions managePermissions;
+    
+    /**Select dialog*/
+    @Autowired
+    private AuthoritySelectDialog authoritySelectDialog; 
+    
 
     /**
      * Main regression test execution
@@ -309,7 +322,41 @@ public class ManageCompleteRecords extends BaseTest
         // check the record actions
         assertFalse("Complete record action should not be clickable", filePlan.getRecord(RECORD).isActionClickable(Record.COMPLETE_RECORD));
         assertTrue("Reopen record action should be clickable", filePlan.getRecord(RECORD).isActionClickable(Record.REOPEN_RECORD));
+        
+        //manage permissions
+        managePermissions = filePlan
+                .getRecord(NON_ELECTRONIC_RECORD)
+                .clickOnManagePermission();  
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();        
+       
+        // add test authority
+        String testUserName ="user1 user1";
+        authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
+        managePermissions.clickOnOK(); 
+      
+        //Manage permissions for user1
+        String actualPermissionsName;
+        String expectedPermissionName = "Read Only";
+        Record nelectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);    
+        //open manage permissions for electronic record
+        managePermissions = nelectronicRecord.clickOnManagePermission();
+        //get default permission set for test user
+        actualPermissionsName = managePermissions.getPermission(testUserName);        
+        //verify the default settings
+        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        //change the permission to read and file
+        expectedPermissionName = "Read and File";
+        //set the authority permission type
+        managePermissions.setPermissions(testUserName, expectedPermissionName);        
+        //get the test authority permission type and assert ther results
+        actualPermissionsName = managePermissions.getPermission(testUserName);
+        //verify the permissions set
+        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        managePermissions.clickOnOK();
     }
+
+
+    
 
     /**
      * Verify the contents of the audit log
