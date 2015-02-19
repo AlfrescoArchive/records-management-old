@@ -58,7 +58,7 @@ public class EventsSection extends HtmlElement
     /** list of added events */
     @FindBy (css = ".events-list .action-event-name")
     private List <WebElement> addedEventsNames;
-    
+
     /** list of avilable events */
     @FindBy (css = "div.events-header ul")
     private WebElement availableEvents;
@@ -70,10 +70,10 @@ public class EventsSection extends HtmlElement
     {
         // click on the add event button
         addEventButton.click();
-        
+
         // wait for the available events list to be visible
         Utils.waitForVisibilityOf(availableEvents);
-        
+
         return this;
     }
 
@@ -84,7 +84,7 @@ public class EventsSection extends HtmlElement
     {
         // click on add event button
         clickOnAddEvent();
-        
+
         // find the correct event link
         boolean eventClicked = false;
         StringBuffer eventsChecked = new StringBuffer(255);
@@ -99,21 +99,21 @@ public class EventsSection extends HtmlElement
             {
                 // wait for the event link to be clickable
                 Utils.webDriverWait().until(ExpectedConditions.elementToBeClickable(eventLink));
-                
+
                 // click event link
                 eventLink.click();
                 eventClicked = true;
                 break;
             }
         }
-        
+
         // if no event clicked throw exception
         if (eventClicked == false)
         {
-            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() + 
+            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() +
                                        " events [" + eventsChecked.toString() + "]");
-        }        
-        
+        }
+
         return this;
     }
 
