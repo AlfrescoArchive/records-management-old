@@ -36,12 +36,11 @@ import org.alfresco.po.rm.console.audit.AuditEvents;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
+import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.alfresco.po.share.properties.Content;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
-import org.alfresco.po.rm.managepermissions.ManagePermissions;
 
 
 

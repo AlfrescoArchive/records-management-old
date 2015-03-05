@@ -21,6 +21,7 @@ package org.alfresco.po.rm.disposition.edit.steps;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -80,39 +81,47 @@ public class EventsSection extends HtmlElement
     /**
      * Select Event
      */
-    public EventsSection selectEvent(String eventName)
+    public EventsSection selectEvent(final String eventName)
     {
         // click on add event button
         clickOnAddEvent();
 
-        // find the correct event link
-        boolean eventClicked = false;
-        StringBuffer eventsChecked = new StringBuffer(255);
-        List<WebElement> eventLinks = availableEvents.findElements(By.cssSelector("a.yuimenuitemlabel"));
-        for (WebElement eventLink : eventLinks)
+        Utils.retry(new Retry<Void>()
         {
-            // get the text in the event link
-            String eventLinkText = eventLink.getText().trim();
-            eventsChecked.append(eventLinkText).append(", ");
-
-            if (eventName.equals(eventLinkText))
+            public Void execute()
             {
-                // wait for the event link to be clickable
-                Utils.webDriverWait().until(ExpectedConditions.elementToBeClickable(eventLink));
+                // find the correct event link
+                boolean eventClicked = false;
+                StringBuffer eventsChecked = new StringBuffer(255);
+                List<WebElement> eventLinks = availableEvents.findElements(By.cssSelector("a.yuimenuitemlabel"));
+                for (WebElement eventLink : eventLinks)
+                {
+                    // get the text in the event link
+                    String eventLinkText = eventLink.getText().trim();
+                    eventsChecked.append(eventLinkText).append(", ");
 
-                // click event link
-                eventLink.click();
-                eventClicked = true;
-                break;
+                    if (eventName.equals(eventLinkText))
+                    {
+                        // wait for the event link to be clickable
+                        Utils.webDriverWait().until(ExpectedConditions.elementToBeClickable(eventLink));
+
+                        // click event link
+                        eventLink.click();
+                        eventClicked = true;
+                        break;
+                    }
+                }
+
+                // if no event clicked throw exception
+                if (eventClicked == false)
+                {
+                    throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() +
+                                               " events [" + eventsChecked.toString() + "]");
+                }
+                
+                return null;
             }
-        }
-
-        // if no event clicked throw exception
-        if (eventClicked == false)
-        {
-            throw new RuntimeException("The event " + eventName + " could not be added from a list of " + eventLinks.size() +
-                                       " events [" + eventsChecked.toString() + "]");
-        }
+         }, 5);
 
         return this;
     }

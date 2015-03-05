@@ -19,14 +19,12 @@
 package org.alfresco.po.share.console;
 
 import org.alfresco.po.share.page.SharePage;
-import org.springframework.stereotype.Component;
 
 /**
  * Console page
  * 
  * @author Roy Wetherall
  */
-@Component
 public abstract class ConsolePage extends SharePage
 {
     /**

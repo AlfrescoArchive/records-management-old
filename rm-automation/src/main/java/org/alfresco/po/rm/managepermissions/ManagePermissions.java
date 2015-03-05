@@ -33,9 +33,8 @@ import ru.yandex.qatools.htmlelements.element.Button;
  * Manage permissions Page.
  * 
  * @author hamara
- *         since2.3
+ * @since  2.3
  */
-
 @Component
 public class ManagePermissions extends FormPage
 {
