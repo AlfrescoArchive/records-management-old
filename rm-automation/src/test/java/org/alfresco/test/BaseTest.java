@@ -20,6 +20,7 @@ package org.alfresco.test;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
@@ -248,9 +249,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
      * @param actual    actual array
      */
     protected void compareArrays(String[] expected, String[] actual)
-    {        
+    {     
         assertArrayEquals(
-                "Expected " + expected.toString() + ", but actual is " + actual.toString(),
+                "Expected " + Arrays.toString(expected) + ", but actual is " + Arrays.toString(actual),
                 expected, 
                 actual);
     }
