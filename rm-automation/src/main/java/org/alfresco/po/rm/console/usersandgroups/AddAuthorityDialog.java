@@ -142,17 +142,26 @@ public abstract class AddAuthorityDialog extends Dialog
         {
             public Boolean apply(WebDriver arg0)
             {
-                WebElement message = getResultsWebElement().findElement(MESSAGE_SELECTOR);
-                if (message.isDisplayed() && message.getText().contains("Searching"))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return isSearchingMessageVisible();
             }
         };
+    }
+    
+    /**
+     * Helper to determine whether the "Searching" message is still showing.
+     * @return
+     */
+    private boolean isSearchingMessageVisible()
+    {
+        WebElement message = getResultsWebElement().findElement(MESSAGE_SELECTOR);
+        if (message.isDisplayed() && message.getText().contains("Searching"))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }        
     }
 
     /**
