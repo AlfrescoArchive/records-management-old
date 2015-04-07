@@ -35,6 +35,11 @@ import org.testng.annotations.Test;
  * @since 2.2
  * @version 1.0
  */
+@Test
+(
+   groups = {"RMA-2664", "sanity"},
+   description = "Create RM Site"
+)
 public class CreateRMSite extends BaseTest
 {
     /** rm site dashboard */
@@ -49,12 +54,10 @@ public class CreateRMSite extends BaseTest
     @Autowired
     private CreateSiteDialog createSiteDialog;
     
-    @Test
-    (
-       groups = {"RMA-2664", "sanity"},
-       description = "Create RM Site"
-    )
-    public void createRMSite()
+    /**
+     * Create RM site sanity test
+     */
+    @Test public void createRMSite()
     {     
     	// create RM site
         openPage(userDashboardPage);

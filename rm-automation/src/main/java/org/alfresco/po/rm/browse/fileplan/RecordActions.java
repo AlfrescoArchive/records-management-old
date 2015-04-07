@@ -33,6 +33,7 @@ public interface RecordActions extends Actions
     static final String LINK = "rm-link-to";
     static final String REQUEST_INFORMATION = "rm-request-info";
     static final String ADD_RELATIONSHIP = "rm-add-relationship";
+    static final String CLASSIFY = "rm-classify-document";
 
     /** incomplete record actions with download */
     static final String[] INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD = new String[]
@@ -48,7 +49,8 @@ public interface RecordActions extends Actions
         VIEW_AUDIT,
         REQUEST_INFORMATION,
         MANAGE_PERMISSIONS,
-        ADD_RELATIONSHIP
+        ADD_RELATIONSHIP,
+        CLASSIFY
     };
     
     /** incomplete record actions */
@@ -64,7 +66,8 @@ public interface RecordActions extends Actions
         VIEW_AUDIT,
         REQUEST_INFORMATION,
         MANAGE_PERMISSIONS,
-        ADD_RELATIONSHIP
+        ADD_RELATIONSHIP,
+        CLASSIFY
     };
 
 }

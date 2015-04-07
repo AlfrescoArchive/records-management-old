@@ -48,6 +48,12 @@ import org.testng.annotations.Test;
  *
  * @author Tatiana Kalinovskaya
  */
+@Test
+(
+        groups = { "RMA-2671", "sanity" },
+        description = "Manage disposition schedule for Record",
+        dependsOnGroups = { "RMA-2664" }
+)
 public class ManageDispositionScheduleForRecord extends BaseTest
 {
     /** file plan     */
@@ -102,13 +108,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
     /**
      * Main regression test execution
      */
-    @Test
-    (
-            groups = { "RMA-2671", "sanity" },
-            description = "Manage disposition schedule for Record",
-            dependsOnGroups = { "RMA-2664" }
-    )
-    public void manageDispositionScheduleForRecord()
+    @Test public void manageDispositionScheduleForRecord()
     {
         // open file plan
         openPage(filePlan, RM_SITE_ID, "documentlibrary");
