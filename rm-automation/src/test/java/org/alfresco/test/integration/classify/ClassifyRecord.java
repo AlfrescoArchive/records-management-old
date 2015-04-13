@@ -38,7 +38,7 @@ public class ClassifyRecord extends BaseTest {
             (
                     groups = {"integration"},
                     description = "Verify Classify Record behaviour",
-                    dependsOnGroups = {"integration-dataSetup-all"}
+                    dependsOnGroups = {"integration-dataSetup-rmSite", "integration-dataSetup-collab", "integration-dataSetup-fileplan"}
             )
     public void classifyRecord() {
 

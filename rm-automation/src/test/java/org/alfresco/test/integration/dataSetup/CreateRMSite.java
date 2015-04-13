@@ -18,8 +18,6 @@
  */
 package org.alfresco.test.integration.dataSetup;
 
-import org.alfresco.po.rm.site.RMSiteDashboard;
-import org.alfresco.po.share.site.create.CreateSiteDialog;
 import org.alfresco.po.share.site.create.SiteType;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
@@ -36,24 +34,16 @@ import org.testng.annotations.Test;
  */
 public class CreateRMSite extends BaseTest
 {
-    /** rm site dashboard */
-    @Autowired
-    private RMSiteDashboard rmSiteDashboard;
-    
     /** my sites dashlet */
     @Autowired
     private MySitesDashlet mySitesDashlet;
-    
-    /** create site dialog */
-    @Autowired
-    private CreateSiteDialog createSiteDialog;
     
     /**
      * Create RM site for Integration tests
      */
     @Test
             (
-                    groups = {"integration-dataSetup-rmSite", "integration-dataSetup-all"},
+                    groups = {"integration-dataSetup-rmSite"},
                     description = "Create RM Site"
             )
     public void createRMSite()

@@ -58,7 +58,7 @@ public class CreateCollabSite extends BaseTest {
      */
     @Test
             (
-                    groups = {"integration-dataSetup-collab", "integration-dataSetup-all"},
+                    groups = {"integration-dataSetup-collab"},
                     description = "Create Collaboration Site"
             )
     public void createFilePlan() {
