@@ -16,22 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.share.browse.documentlibrary;
+package org.alfresco.po.share.details.document;
 
-import org.alfresco.po.share.browse.BrowsePage;
-import org.alfresco.po.share.site.CollaborationSiteNavigation;
+import org.alfresco.po.common.site.SiteNavigation;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Roy Wetherall
+ * RM Site Navigation
+ * 
+ * @author David Webster
  */
 @Component
-public class DocumentLibrary extends BrowsePage<CollaborationSiteNavigation, DocumentLibraryList, DocumentLibraryToolbar> 
+public class DetailsSiteNavigation extends SiteNavigation
 {
-    /**
-     * Helper method to get the named record from the list
-     */
-    public Document getDocument(String documentName) {
-        return getList().getByPartialName(documentName, Document.class);
-    }
 }

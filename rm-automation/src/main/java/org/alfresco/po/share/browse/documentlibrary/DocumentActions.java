@@ -18,20 +18,15 @@
  */
 package org.alfresco.po.share.browse.documentlibrary;
 
-import org.alfresco.po.share.browse.BrowsePage;
-import org.alfresco.po.share.site.CollaborationSiteNavigation;
-import org.springframework.stereotype.Component;
+import org.alfresco.po.rm.browse.fileplan.Actions;
 
 /**
- * @author Roy Wetherall
+ * Record Actions
+ * @author David Webster
  */
-@Component
-public class DocumentLibrary extends BrowsePage<CollaborationSiteNavigation, DocumentLibraryList, DocumentLibraryToolbar> 
+public interface DocumentActions extends Actions
 {
-    /**
-     * Helper method to get the named record from the list
-     */
-    public Document getDocument(String documentName) {
-        return getList().getByPartialName(documentName, Document.class);
-    }
+    /** actions */
+    static final String CLASSIFY = "rm-classify-document";
+
 }
