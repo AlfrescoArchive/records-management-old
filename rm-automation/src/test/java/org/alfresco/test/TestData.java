@@ -54,6 +54,7 @@ public interface TestData
     /** collaboration site data */
     public static final String COLLAB_SITE_NAME = "My Site";
     public static final String DOCUMENT = "my-document";
+    public static final String IN_PLACE_RECORD = "my-inplace-record";
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
 
     /** standard property values */
