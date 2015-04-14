@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.alfresco.po.share.details.document;
 
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.share.details.DetailsPage;
+import org.alfresco.po.share.site.CollaborationSiteNavigation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,12 +30,14 @@ import org.springframework.stereotype.Component;
  * @since 3.0
  */
 @Component
-public class DocumentDetails extends DetailsPage<DetailsSiteNavigation> {
+public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
+{
     @Autowired
     @RenderableChild
     private DocumentActionsPanel documentActionsPanel;
 
-    public DocumentActionsPanel getDocumentActionsPanel() {
+    public DocumentActionsPanel getDocumentActionsPanel()
+    {
         return documentActionsPanel;
     }
 }
