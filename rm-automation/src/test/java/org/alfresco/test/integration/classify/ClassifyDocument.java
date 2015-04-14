@@ -50,7 +50,6 @@ public class ClassifyDocument extends BaseTest
             .isActionClickable(DocumentActions.CLASSIFY));
 
         // navigate to the document details page
-        // FIXME: this breaks...
         documentLibrary.getDocument(DOCUMENT)
             .clickOnLink();
 

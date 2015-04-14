@@ -19,6 +19,8 @@
 package org.alfresco.po.share.browse.documentlibrary;
 
 import org.alfresco.po.share.browse.ListItem;
+import org.alfresco.po.share.details.document.DocumentDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -32,13 +34,25 @@ import org.springframework.stereotype.Component;
 public class Document extends ListItem
 {
     public static final String ACTION_DECLARE_RECORD = "rm-create-record";
-    
+
+    @Autowired
+    private DocumentDetails documentDetails;
+
     /**
      * Click on declare as record action
      */
     public DocumentLibrary clickOnDeclareAsRecord()
     {
         return (DocumentLibrary)clickOnAction(ACTION_DECLARE_RECORD);
+    }
+
+    /**
+     * Click on record details link
+     */
+    @Override
+    public DocumentDetails clickOnLink()
+    {
+        return super.clickOnLink(documentDetails);
     }
 
 }
