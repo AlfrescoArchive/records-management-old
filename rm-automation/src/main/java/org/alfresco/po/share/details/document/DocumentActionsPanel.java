@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.alfresco.po.share.details.document;
 
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
@@ -28,8 +29,8 @@ import org.springframework.stereotype.Component;
  * @author David Webster
  */
 @Component
-public class DocumentActionsPanel extends ActionPanel
-        implements DocumentActions {
+public class DocumentActionsPanel extends ActionPanel implements DocumentActions
+{
     @FindBy(css = "div.document-actions h2")
     private WebElement clickableTitle;
 
@@ -37,7 +38,8 @@ public class DocumentActionsPanel extends ActionPanel
      * @see org.alfresco.po.share.panel.Panel#getClickableTitle()
      */
     @Override
-    protected WebElement getClickableTitle() {
+    protected WebElement getClickableTitle()
+    {
         return clickableTitle;
     }
 }

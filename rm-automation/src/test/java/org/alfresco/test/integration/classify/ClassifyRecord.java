@@ -18,7 +18,8 @@ import static org.junit.Assert.assertTrue;
  * @author David Webster
  * @since 3.0
  */
-public class ClassifyRecord extends BaseTest {
+public class ClassifyRecord extends BaseTest
+{
     /**
      * file plan
      */
@@ -35,12 +36,15 @@ public class ClassifyRecord extends BaseTest {
      * Main test execution
      */
     @Test
-            (
-                    groups = {"integration"},
-                    description = "Verify Classify Record behaviour",
-                    dependsOnGroups = {"integration-dataSetup-rmSite", "integration-dataSetup-collab", "integration-dataSetup-fileplan"}
-            )
-    public void classifyRecord() {
+    (
+        groups = { "integration" },
+        description = "Verify Classify Record behaviour",
+        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-collab",
+            "integration-dataSetup-fileplan" }
+    )
+
+    public void classifyRecord()
+    {
 
         /*
             STORY (RM-2052):
@@ -52,17 +56,20 @@ public class ClassifyRecord extends BaseTest {
         */
 
         // open record folder one
-        openPage(filePlan, RM_SITE_ID, "documentlibrary")
-                .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
+        openPage(filePlan, RM_SITE_ID, "documentlibrary").navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME,
+            RECORD_FOLDER_ONE);
 
         // verify electronic record actions
-        assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
+        assertTrue(filePlan.getRecord(RECORD)
+            .isActionClickable(RecordActions.CLASSIFY));
 
         // navigate to the electronic details page
-        filePlan.getRecord(RECORD).clickOnLink();
+        filePlan.getRecord(RECORD)
+            .clickOnLink();
 
         // verify that all the expected actions are available
-        assertTrue(recordDetails.getRecordActionsPanel().isActionClickable(RecordActionsPanel.CLASSIFY));
+        assertTrue(recordDetails.getRecordActionsPanel()
+            .isActionClickable(RecordActionsPanel.CLASSIFY));
 
         // close the record details page
         recordDetails.navigateUp();
@@ -72,13 +79,15 @@ public class ClassifyRecord extends BaseTest {
         assertNotNull(nonElectronicRecord);
 
         // Is the link available on the file plan for a non-electronic record?
-        assertTrue(recordDetails.getRecordActionsPanel().isActionClickable(RecordActions.CLASSIFY));
+        assertTrue(recordDetails.getRecordActionsPanel()
+            .isActionClickable(RecordActions.CLASSIFY));
 
         // navigate to the record details page
         nonElectronicRecord.clickOnLink();
 
         // Is the action available on the record details page?
-        assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(RecordActionsPanel.CLASSIFY));
+        assertTrue(recordDetails.getRecordActionsPanel()
+            .isActionsClickable(RecordActionsPanel.CLASSIFY));
 
         /*
         Acceptance Criteria from RM-2052

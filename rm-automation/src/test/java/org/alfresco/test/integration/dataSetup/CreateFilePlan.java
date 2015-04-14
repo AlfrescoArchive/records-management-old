@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.alfresco.test.integration.dataSetup;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
@@ -41,34 +42,46 @@ import static org.junit.Assert.*;
 
 /**
  * Create File Plan for Integration tests
- * 
+ *
  * @author Roy Wetherall, David Webster
  * @since 3.0
  * todo: Copied form org.alfresco.test.regression.sanity - needs modification.
  */
 public class CreateFilePlan extends BaseTest
 {
-    /** file plan browse view*/
+    /**
+     * file plan browse view
+     */
     @Autowired
     private FilePlan filePlan;
-    
-    /** document library browse view */
+
+    /**
+     * document library browse view
+     */
     @Autowired
     private DocumentLibrary documentLibrary;
-    
-    /** unfiled records browse view */
+
+    /**
+     * unfiled records browse view
+     */
     @Autowired
     private UnfiledRecords unfiledRecords;
-    
-    /** holds browse view */
+
+    /**
+     * holds browse view
+     */
     @Autowired
     private Holds holds;
-    
-    /** collab site dashboard */
+
+    /**
+     * collab site dashboard
+     */
     @Autowired
     private CollaborationSiteDashboard siteDashboard;
 
-    /** user trashcan */
+    /**
+     * user trashcan
+     */
     @Autowired
     private UserTrashcanPage userTrashcan;
 
@@ -82,16 +95,18 @@ public class CreateFilePlan extends BaseTest
      * Integration test execution
      */
     @Test
-            (
-                    groups = {"integration-dataSetup-fileplan"},
-                    description = "Create File Plan"
-            )
+    (
+        groups = { "integration-dataSetup-fileplan" },
+        description = "Create File Plan"
+    )
+
     public void createFilePlan()
     {
         // open the RM site and navigate to file plan
-        openPage(userDashboardPage)
-            .getMySitesDashlet().clickOnRMSite(RM_SITE_ID)
-            .getNavigation().clickOnFilePlan(); 
+        openPage(userDashboardPage).getMySitesDashlet()
+            .clickOnRMSite(RM_SITE_ID)
+            .getNavigation()
+            .clickOnFilePlan();
 
         // TODO: Only do this is the data doesn't already exist
         // create root category
@@ -107,8 +122,8 @@ public class CreateFilePlan extends BaseTest
         createRecordFolderAndClickOnLink(RECORD_FOLDER_ONE, true);
 
         // create non electronic record in folder 1
-        filePlan
-            .getToolbar().clickOnFile()
+        filePlan.getToolbar()
+            .clickOnFile()
             .clickOnNonElectronic()
             .setName(NON_ELECTRONIC_RECORD)
             .setTitle(TITLE)
@@ -119,8 +134,8 @@ public class CreateFilePlan extends BaseTest
         assertNotNull(nonElectronicRecord);
 
         // create electronic record in folder 1
-        filePlan
-            .getToolbar().clickOnFile()
+        filePlan.getToolbar()
+            .clickOnFile()
             .clickOnElectronic()
             .uploadFile(RECORD);
 
@@ -152,53 +167,55 @@ public class CreateFilePlan extends BaseTest
 
     /**
      * Create a category
-     * 
-     * @param categoryName  category name
-     * @param clickOnLink   true if newly created record category link should be created, false otherwise
+     *
+     * @param categoryName category name
+     * @param clickOnLink  true if newly created record category link should be created, false otherwise
      */
     private void createCategoryAndClickOnLink(String categoryName, boolean clickOnLink)
     {
         // check that create category button is clickable
-        assertTrue(filePlan.getToolbar().isNewCategoryClickable());
+        assertTrue(filePlan.getToolbar()
+            .isNewCategoryClickable());
 
         // create new category
-        filePlan
-            .getToolbar()
+        filePlan.getToolbar()
             .clickOnNewCategory()
             .setName(categoryName)
             .setTitle(TITLE)
             .clickOnSave();
-        
+
         // check that the newly created record category is in the display list
         RecordCategory recordCategory = filePlan.getRecordCategory(categoryName);
         assertNotNull(recordCategory);
         assertEquals(categoryName, recordCategory.getName());
-        
+
         if (clickOnLink)
         {
             // click on link
             recordCategory.clickOnLink();
-        }        
+        }
     }
-    
-    /** 
+
+    /**
      * Create record folder
-     * 
-     * @param folderName    folder name
-     * @param clickOnLink   click on created folder link if true, otherwise false
+     *
+     * @param folderName  folder name
+     * @param clickOnLink click on created folder link if true, otherwise false
      */
     private void createRecordFolderAndClickOnLink(String folderName, boolean clickOnLink)
     {
         // check that create category button is clickable
-        assertTrue(filePlan.getToolbar().isNewRecordFolderClickable());
+        assertTrue(filePlan.getToolbar()
+            .isNewRecordFolderClickable());
 
         // open new record category dialog
-        NewRecordFolderDialog dialog = filePlan.getToolbar().clickOnNewRecordFolder();
+        NewRecordFolderDialog dialog = filePlan.getToolbar()
+            .clickOnNewRecordFolder();
 
         // enter details of new record folder and click save
         dialog.setName(folderName)
-               .setTitle(TITLE)
-               .clickOnSave();
+            .setTitle(TITLE)
+            .clickOnSave();
 
         // check that the newly created record folder is in the display list
         RecordFolder recordFolder = filePlan.getRecordFolder(folderName);
@@ -218,24 +235,22 @@ public class CreateFilePlan extends BaseTest
     private void declareInplaceRecord()
     {
         // navigate to the collaboration site
-        openPage(userDashboardPage)
-           .getMySitesDashlet()
-           .clickOnCollaborationSite(COLLAB_SITE_ID);
+        openPage(userDashboardPage).getMySitesDashlet()
+            .clickOnCollaborationSite(COLLAB_SITE_ID);
 
         // Upload document to turn into in place record
-        siteDashboard
-                .getNavigation()
-                .clickOnDocumentLibrary()
-                .getToolbar()
-                .clickOnFile()
-                .uploadFile(IN_PLACE_RECORD);
+        siteDashboard.getNavigation()
+            .clickOnDocumentLibrary()
+            .getToolbar()
+            .clickOnFile()
+            .uploadFile(IN_PLACE_RECORD);
 
         // get document
-        Document document = siteDashboard
-                                        .getNavigation()
-                                        .clickOnDocumentLibrary()
-                                        .getList()
-                                        .getByPartialName(IN_PLACE_RECORD, Document.class);
+        Document document = siteDashboard.getNavigation()
+            .clickOnDocumentLibrary()
+            .getList()
+            .getByPartialName(IN_PLACE_RECORD, Document.class);
+
         assertNotNull(document);
         String originalName = document.getName();
 
@@ -243,37 +258,41 @@ public class CreateFilePlan extends BaseTest
         document.clickOnDeclareAsRecord();
 
         // refresh the document item
-        InplaceRecord inplaceRecord = documentLibrary.getList().getByPartialName(IN_PLACE_RECORD, InplaceRecord.class);
+        InplaceRecord inplaceRecord = documentLibrary.getList()
+            .getByPartialName(IN_PLACE_RECORD, InplaceRecord.class);
 
         // check that the document name has changed
         String recordName = inplaceRecord.getName();
         assertFalse(recordName.equals(originalName));
 
         // naviagate to the unfiled records
-        openPage(userDashboardPage)
-            .getMySitesDashlet()
+        openPage(userDashboardPage).getMySitesDashlet()
             .clickOnRMSite(RM_SITE_ID)
-            .getNavigation().clickOnFilePlan()
-            .getFilterPanel().clickOnUnfiledRecords();
+            .getNavigation()
+            .clickOnFilePlan()
+            .getFilterPanel()
+            .clickOnUnfiledRecords();
 
-        Record record = unfiledRecords.getList().get(recordName, Record.class);
+        Record record = unfiledRecords.getList()
+            .get(recordName, Record.class);
         assertNotNull("Unfiled record not found.", record);
     }
 
     /**
      * Create hold
      *
-     * @param holdName  hold name
+     * @param holdName hold name
      */
     private void createHold(String holdName)
     {
-        holds
-            .getToolbar().clickOnNewHold()
+        holds.getToolbar()
+            .clickOnNewHold()
             .setName(holdName)
             .setReason(REASON)
             .clickOnSave();
 
-        Hold hold = holds.getList().get(holdName, Hold.class);
+        Hold hold = holds.getList()
+            .get(holdName, Hold.class);
         assertNotNull(hold);
     }
 }

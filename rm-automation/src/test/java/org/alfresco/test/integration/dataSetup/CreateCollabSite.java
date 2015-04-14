@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.alfresco.test.integration.dataSetup;
 
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
@@ -33,7 +34,8 @@ import static org.junit.Assert.*;
  *
  * @author David Webster
  */
-public class CreateCollabSite extends BaseTest {
+public class CreateCollabSite extends BaseTest
+{
 
     /**
      * collab site dashboard
@@ -57,38 +59,40 @@ public class CreateCollabSite extends BaseTest {
      * Regression test execution
      */
     @Test
-            (
-                    groups = {"integration-dataSetup-collab"},
-                    description = "Create Collaboration Site"
-            )
-    public void createFilePlan() {
+    (
+        groups = { "integration-dataSetup-collab" },
+        description = "Create Collaboration Site"
+    )
+
+    public void createFilePlan()
+    {
         // create collaboration site
         openPage(userDashboardPage);
 
         // create site if it doesn't exist
-        if (!mySitesDashlet.siteExists(COLLAB_SITE_ID)) {
-            mySitesDashlet
-                    .clickOnCreateSite()
-                    .setSiteName(COLLAB_SITE_NAME)
-                    .setSiteURL(COLLAB_SITE_ID)
-                    .setSiteDescription(DESCRIPTION)
-                    .clickOnOk();
+        if (!mySitesDashlet.siteExists(COLLAB_SITE_ID))
+        {
+            mySitesDashlet.clickOnCreateSite()
+                .setSiteName(COLLAB_SITE_NAME)
+                .setSiteURL(COLLAB_SITE_ID)
+                .setSiteDescription(DESCRIPTION)
+                .clickOnOk();
         }
 
         // upload document
-        siteDashboard
-                .getNavigation()
-                .clickOnDocumentLibrary()
-                .getToolbar()
-                .clickOnFile()
-                .uploadFile(DOCUMENT);
+        siteDashboard.getNavigation()
+            .clickOnDocumentLibrary()
+            .getToolbar()
+            .clickOnFile()
+            .uploadFile(DOCUMENT);
     }
 
     /**
      * delete collaboration site
      */
     @AfterSuite
-    protected void deleteCollaborationSite() {
+    protected void deleteCollaborationSite()
+    {
         // check for existence of site
         if (mySitesDashlet.siteExists(COLLAB_SITE_ID))
         {
@@ -97,8 +101,7 @@ public class CreateCollabSite extends BaseTest {
             assertFalse(mySitesDashlet.siteExists(COLLAB_SITE_ID));
 
             // open the user trash can and empty it
-            openPage(userTrashcan, getAdminName())
-                .clickOnEmpty()
+            openPage(userTrashcan, getAdminName()).clickOnEmpty()
                 .clickOnConfirm(userTrashcan);
         }
     }

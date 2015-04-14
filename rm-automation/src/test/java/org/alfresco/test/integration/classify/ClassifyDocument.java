@@ -16,7 +16,8 @@ import static org.junit.Assert.assertTrue;
  * @author David Webster
  * @since 3.0
  */
-public class ClassifyDocument extends BaseTest {
+public class ClassifyDocument extends BaseTest
+{
     /**
      * Doc Lib
      */
@@ -33,23 +34,28 @@ public class ClassifyDocument extends BaseTest {
      * Main test execution
      */
     @Test
-            (
-                    groups = {"integration"},
-                    description = "Verify Classify Document behaviour",
-                    dependsOnGroups = {"integration-dataSetup-collab"}
-            )
-    public void classifyDocument() {
+    (
+        groups = { "integration" },
+        description = "Verify Classify Document behaviour",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+
+    public void classifyDocument()
+    {
         // Open Collab site DocumentLibrary.
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
 
         // verify document actions
-        assertTrue(documentLibrary.getDocument(DOCUMENT).isActionClickable(DocumentActions.CLASSIFY));
+        assertTrue(documentLibrary.getDocument(DOCUMENT)
+            .isActionClickable(DocumentActions.CLASSIFY));
 
         // navigate to the document details page
         // FIXME: this breaks...
-        documentLibrary.getDocument(DOCUMENT).clickOnLink();
+        documentLibrary.getDocument(DOCUMENT)
+            .clickOnLink();
 
         // verify that all the expected actions are available
-        assertTrue(documentDetails.getDocumentActionsPanel().isActionClickable(DocumentActionsPanel.CLASSIFY));
+        assertTrue(documentDetails.getDocumentActionsPanel()
+            .isActionClickable(DocumentActionsPanel.CLASSIFY));
     }
 }
