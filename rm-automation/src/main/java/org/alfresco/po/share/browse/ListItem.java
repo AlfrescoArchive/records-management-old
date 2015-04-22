@@ -52,6 +52,10 @@ public abstract class ListItem
     private static By moreActionsSelector = By.xpath(".//div[@class='internal-show-more']/a");
     private static By moreActionsPanelSelector = By.xpath(".//div[starts-with(@class,'more-actions')]");
 
+    /* indicator selector */
+    private static final By INDICATOR_SELECTORS = By.cssSelector("div.status img");
+    private static final String INDICATOR_SELECTOR_CSS = "div.status img[alt=''{0}'']";
+
     /** data row */
     private WebElement row;
 
@@ -273,5 +277,63 @@ public abstract class ListItem
         return By.xpath(actionXPATH);
     }
 
+    /**
+     * Build a list of the item's indicator icons.
+     *
+     * @return String[]
+     */
+    public String[] getIndicators()
+    {
+        List<WebElement> indicators = row.findElements(INDICATOR_SELECTORS);
+        List<String> result = new ArrayList<String>();
+        for (WebElement indicator : indicators)
+        {
+            String indicatorName = indicator.getAttribute("alt");
+            result.add(indicatorName);
+        }
+
+        return result.toArray(new String[result.size()]);
+    }
+
+    /**
+     * A private helper method to parse the CSS selector path with the indicatorName to return the actual selector
+     * to locate a specific indicator icon.
+     *
+     * @param indicatorName String
+     * @return By
+     */
+    private By getIndicatorSelector(String indicatorName)
+    {
+        String indicatorCss = MessageFormat.format(INDICATOR_SELECTOR_CSS, indicatorName);
+        return By.cssSelector(indicatorCss);
+    }
+
+    /**
+     * Does the current row have the requested indicator?
+     *
+     * @param indicator {String}
+     * @return boolean
+     */
+    public boolean hasIndicator(String indicator)
+    {
+        WebElement indicatorElement = null;
+        boolean result = false;
+
+        try
+        {
+            indicatorElement = row.findElement(getIndicatorSelector(indicator));
+        }
+        catch (NoSuchElementException e)
+        {
+            // Nothing needs to be done.
+        }
+
+        if (indicatorElement != null)
+        {
+            result = true;
+        }
+
+        return result;
+    }
 
 }
