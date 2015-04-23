@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * Extends the Record Details page to add in the classified properties panel.
+ *
  * @author David Webster
  * @since 3.0
  */
