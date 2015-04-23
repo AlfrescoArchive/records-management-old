@@ -32,12 +32,12 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
     @FindBy(css="div.document-metadata-header h2")
     private WebElement classifiedTitle;
 
-    private static By CLASSIFIED_PROPERTIES_SELECTOR = By.cssSelector("div.document-details-panel .set-panel .viewmode-value");
+    private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.cssSelector("div.document-details-panel .set-panel .viewmode-value");
 
-    public static Integer ORIGINAL_CLASSIFICATION = 0;
-    public static Integer CURRENT_CLASSIFICATION = 1;
-    public static Integer CLASSIFICATION_AUTHORITY = 2;
-    public static Integer CLASSIFICATION_REASON = 3;
+    public static final Integer ORIGINAL_CLASSIFICATION = 0;
+    public static final Integer CURRENT_CLASSIFICATION = 1;
+    public static final Integer CLASSIFICATION_AUTHORITY = 2;
+    public static final Integer CLASSIFICATION_REASON = 3;
 
     public String getClassifiedProperty(Integer property)
     {
