@@ -52,7 +52,7 @@ public class ClassifiedDocumentProperties extends BaseTest
      */
     @Test(
         groups = { "integration" },
-        description = "Verify Classify Document behaviour"
+        description = "Verify Classified Document Properties behaviour"
         // FIXME: Add dataSetup method here, once work for RM-2051 is complete (e.g. req. classify content dialog PO)
         // ,
         // dependsOnGroups = { "integration-dataSetup-collab-classified" }
@@ -70,5 +70,11 @@ public class ClassifiedDocumentProperties extends BaseTest
         // verify that classification is as expected.
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION)
             .equals(CLASSIFIED_DOCUMENT_CLASSIFICATION));
+
+        assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY)
+            .equals(CLASSIFIED_DOCUMENT_AUTHORITY));
+
+        assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON)
+            .equals(CLASSIFIED_DOCUMENT_REASON));
     }
 }
