@@ -42,6 +42,8 @@ public interface TestData
     public static final String NON_ELECTRONIC_RECORD = "non-electronic-record";
     public static final String RECORD = "record";
     public static final String FOLDER = "folder";
+    public static final String CLASSIFIED_RECORD = "classified-record";
+    public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String UNFILED_RECORD_FOLDER = "unfiled-record-folder";
     public static final String HOLD1 = "hold-1";
     public static final String HOLD2 = "hold2";
@@ -56,6 +58,8 @@ public interface TestData
     public static final String DOCUMENT = "my-document";
     public static final String IN_PLACE_RECORD = "my-inplace-record";
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
+    public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
+    public static final String CLASSIFIED_DOCUMENT_CLASSIFICATION = "TopSecret";
 
     /** standard property values */
     public static final String TITLE = "Title";
