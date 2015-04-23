@@ -49,6 +49,9 @@ public interface TestData
     public static final String HOLD2 = "hold2";
     public static final String CATEGORY_FOLDER_DISPOSITION = "category-disp-folder";
     public static final String CATEGORY_RECORD_DISPOSITION = "category-disp-record";
+    public static final String CLASSIFIED_RECORD_CLASSIFICATION = "TopSecret";
+    public static final String CLASSIFIED_RECORD_AUTHORITY = "ClassificationAuthority";
+    public static final String CLASSIFIED_RECORD_REASON = "1.4(c)";
 
     /** record category/folder identifier */
     public static final String RECORD_IDENTIFIER = "id-";
@@ -60,6 +63,8 @@ public interface TestData
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
     public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
     public static final String CLASSIFIED_DOCUMENT_CLASSIFICATION = "TopSecret";
+    public static final String CLASSIFIED_DOCUMENT_AUTHORITY = "ClassificationAuthority";
+    public static final String CLASSIFIED_DOCUMENT_REASON = "1.4(c)";
 
     /** standard property values */
     public static final String TITLE = "Title";
