@@ -19,8 +19,7 @@
 
 package org.alfresco.po.rm.details.record;
 
-import org.alfresco.po.common.annotations.WaitFor;
-import org.alfresco.po.common.annotations.WaitForStatus;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
@@ -33,8 +32,7 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
     @FindBy(css="div.document-metadata-header h2")
     private WebElement classifiedTitle;
 
-    @FindBy(css="div.document-details-panel .set-panel .viewmode-value")
-    private List<WebElement> classifiedProperties;
+    private static By CLASSIFIED_PROPERTIES_SELECTOR = By.cssSelector("div.document-details-panel .set-panel .viewmode-value");
 
     public static Integer ORIGINAL_CLASSIFICATION = 0;
     public static Integer CURRENT_CLASSIFICATION = 1;
@@ -43,6 +41,11 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
 
     public String getClassifiedProperty(Integer property)
     {
-        return classifiedProperties.get(property).getText();
+        return getClassifiedProperties().get(property).getText();
+    }
+
+    public List<WebElement> getClassifiedProperties()
+    {
+        return webDriver.findElements(CLASSIFIED_PROPERTIES_SELECTOR);
     }
 }

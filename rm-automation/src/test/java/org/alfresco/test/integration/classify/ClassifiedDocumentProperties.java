@@ -58,7 +58,7 @@ public class ClassifiedDocumentProperties extends BaseTest
         // dependsOnGroups = { "integration-dataSetup-collab-classified" }
     )
 
-    public void classifyDocumentIndicator()
+    public void classifyDocumentProperties()
     {
         // Open Collab site DocumentLibrary.
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
