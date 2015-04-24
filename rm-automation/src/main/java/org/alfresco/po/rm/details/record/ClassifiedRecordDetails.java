@@ -19,6 +19,7 @@
 
 package org.alfresco.po.rm.details.record;
 
+import org.alfresco.po.common.annotations.RenderableChild;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 public class ClassifiedRecordDetails extends RecordDetails
 {
     @Autowired
+    @RenderableChild
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
 
     public ClassifiedPropertiesPanel getClassifiedPropertiesPanel()

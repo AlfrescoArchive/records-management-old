@@ -19,6 +19,7 @@
 
 package org.alfresco.po.share.details.document;
 
+import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
 public class ClassifiedDocumentDetails extends DocumentDetails
 {
     @Autowired
+    @RenderableChild
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
 
     public ClassifiedPropertiesPanel getClassifiedPropertiesPanel()
