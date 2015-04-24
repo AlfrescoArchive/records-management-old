@@ -33,36 +33,36 @@ public interface RecordActions extends Actions
     static final String LINK = "rm-link-to";
     static final String REQUEST_INFORMATION = "rm-request-info";
     static final String ADD_RELATIONSHIP = "rm-add-relationship";
-    static final String CLASSIFY = "rm-classify-document";
+    static final String CLASSIFY = "rm-classify-content";
 
     /** incomplete record actions with download */
     static final String[] INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD = new String[]
     {
         DOWNLOAD,
-        EDIT_METADATA, 
+        EDIT_METADATA,
         COMPLETE_RECORD,
         HoldActions.ADD_TO_HOLD,
         COPY,
         MOVE,
-        LINK, 
-        DELETE, 
+        LINK,
+        DELETE,
         VIEW_AUDIT,
         REQUEST_INFORMATION,
         MANAGE_PERMISSIONS,
         ADD_RELATIONSHIP,
         CLASSIFY
     };
-    
+
     /** incomplete record actions */
     static final String[] INCOMPLETE_RECORD_ACTIONS = new String[]
     {
-        EDIT_METADATA, 
+        EDIT_METADATA,
         COMPLETE_RECORD,
         HoldActions.ADD_TO_HOLD,
         COPY,
         MOVE,
-        LINK, 
-        DELETE, 
+        LINK,
+        DELETE,
         VIEW_AUDIT,
         REQUEST_INFORMATION,
         MANAGE_PERMISSIONS,
