@@ -29,7 +29,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 import ru.yandex.qatools.htmlelements.element.Radio;
 import ru.yandex.qatools.htmlelements.element.Select;
@@ -37,24 +36,24 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
  * Create site dialog
- * 
+ *
  * @author Roy Wetherall
  */
 @Component
 public class CreateSiteDialog extends Dialog
-{    
+{
     /** buttons */
-    @FindBy(css = VISBILE_DIALOG)
+    @FindBy(css = VISIBLE_DIALOG)
     private OkCancelButtonSet buttonset;
-    
+
     /** collaboration site dashboard */
     @Autowired
     private CollaborationSiteDashboard collaborationSiteDashboard;
-    
+
     /** rm site dashboard */
     @Autowired
     private RMSiteDashboard rmSiteDashboard;
-    
+
     /**
      * radio buttons
      */
@@ -239,7 +238,7 @@ public class CreateSiteDialog extends Dialog
     {
         return selectCompliance.isDisplayed();
     }
-    
+
     public Renderable clickOnOk()
     {
         Renderable result = null;
@@ -251,10 +250,10 @@ public class CreateSiteDialog extends Dialog
         {
             result = rmSiteDashboard;
         }
-        
+
         return buttonset.click(OK, result);
     }
-    
+
     public Renderable clickOnCancel()
     {
         return buttonset.click(CANCEL);

@@ -27,12 +27,11 @@ import org.alfresco.po.common.renderable.Renderable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import ru.yandex.qatools.htmlelements.element.CheckBox;
 
 /**
  * Add to / remove from hold base dialog
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class AddToRemoveFromHold extends Dialog
@@ -41,17 +40,17 @@ public abstract class AddToRemoveFromHold extends Dialog
     /** data element */
     @FindBy(css="div[id$='listofholds'] tbody[class$='data']")
     private WebElement data;
-    
+
     /** names selector */
     private By namesSelector = By.cssSelector("tr td.yui-dt-col-name div");
-    
+
     /** checkbox selector */
     private By checkboxesSelector = By.cssSelector("tr td.yui-dt-col-check input");
-    
+
     /** button set */
-    @FindBy(css=VISBILE_DIALOG)
+    @FindBy(css=VISIBLE_DIALOG)
     private OkCancelButtonSet buttonset;
-    
+
     /**
      * @return  true if the hold is present in the list, false otherwise
      */
@@ -67,7 +66,7 @@ public abstract class AddToRemoveFromHold extends Dialog
 
     /**
      * Select/deselect hold in the list
-     * 
+     *
      * @param name - name of hold to select/deselect
      * @param select - select if true, deselect if false
      */
@@ -84,17 +83,17 @@ public abstract class AddToRemoveFromHold extends Dialog
             throw new RuntimeException("Hold " + name + " not found.");
         }
     }
-    
+
     /**
      * Helper to find the checkbox for a given hold
      */
     private CheckBox findHoldCheckBox(String name)
     {
         try{Thread.sleep(1000);}catch(Exception e){}
-        
+
         List<WebElement> nameElements = data.findElements(namesSelector);
         List<WebElement> checkboxes = data.findElements(checkboxesSelector);
-        
+
         CheckBox checkbox = null;
         int index = 0;
         for (WebElement nameElement : nameElements)
@@ -104,12 +103,12 @@ public abstract class AddToRemoveFromHold extends Dialog
                 checkbox = new CheckBox(checkboxes.get(index));
                 break;
             }
-            
+
             index++;
         }
         return checkbox;
     }
-    
+
     /**
      * Click on ok
      */
@@ -117,7 +116,7 @@ public abstract class AddToRemoveFromHold extends Dialog
     {
         return buttonset.click(OK);
     }
-    
+
     /**
      * Click on cancel
      */

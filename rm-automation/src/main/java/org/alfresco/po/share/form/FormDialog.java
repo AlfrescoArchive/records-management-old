@@ -24,12 +24,11 @@ import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.buttonset.SaveCancelButtonSet;
 import org.alfresco.po.common.renderable.Renderable;
 import org.openqa.selenium.support.FindBy;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
  * Form dialog
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class FormDialog extends Dialog
@@ -37,9 +36,9 @@ public abstract class FormDialog extends Dialog
     /** button names */
     public static final String SAVE = "save";
     public static final String CANCEL = "cancel";
-    
+
     /** button set */
-    @FindBy(css = VISBILE_DIALOG)
+    @FindBy(css = VISIBLE_DIALOG)
     private SaveCancelButtonSet buttonset;
 
     /** name text input */

@@ -25,16 +25,16 @@ import org.openqa.selenium.support.FindBy;
 
 /**
  * Dialog implementation
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class Dialog extends Renderable
                              implements StandardButtons
-{	
+{
     /** visible dialog selector string */
-    protected static final String VISBILE_DIALOG = "div[id$='dialog_c'][style*='visibility: visible']";
-    
+    protected static final String VISIBLE_DIALOG = "div[id$='dialog_c'][style*='visibility: visible']";
+
     /** dialog element */
-    @FindBy(css=VISBILE_DIALOG)
-    protected WebElement dialog;    
+    @FindBy(css=VISIBLE_DIALOG)
+    protected WebElement dialog;
 }

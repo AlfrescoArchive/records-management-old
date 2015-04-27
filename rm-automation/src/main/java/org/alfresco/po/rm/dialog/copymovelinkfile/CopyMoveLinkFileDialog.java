@@ -33,25 +33,25 @@ import org.openqa.selenium.support.FindBy;
 
 /**
  * Base dialog for copy, move, link
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class CopyMoveLinkFileDialog extends Dialog
                                          implements StandardButtons
 {
     /** buttonset */
-    @FindBy(css = VISBILE_DIALOG)
+    @FindBy(css = VISIBLE_DIALOG)
     protected OkCancelButtonSet buttonset;
-    
+
     /** tree view */
-    @FindBy(css = VISBILE_DIALOG + " div.treeview")
+    @FindBy(css = VISIBLE_DIALOG + " div.treeview")
     @WaitFor
     private WebElement tree;
-    
+
     /** selectors */
-    private static By selectedSelector = By.cssSelector(VISBILE_DIALOG + " div.treeview div.selected");
+    private static By selectedSelector = By.cssSelector(VISIBLE_DIALOG + " div.treeview div.selected");
     private static By spanSelector = By.cssSelector("div.ygtvitem span");
-    
+
     /**
      * Select an item in the tree
      */
@@ -59,7 +59,7 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
     {
         // wait for the selected item to be visible
         Utils.waitForVisibilityOf(selectedSelector);
-        
+
         // re-try in order to deal with unreliable rendering
         for (int retryCount = 0; retryCount < 3; retryCount++)
         {
@@ -67,7 +67,7 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
             {
                 // get all the items in the tree
                 List<WebElement> spans = tree.findElements(spanSelector);
-    
+
                 for (WebElement span : spans)
                 {
                     // find the item that matches the text provided
@@ -78,7 +78,7 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
                         span.click();
                     }
                 }
-                
+
                 // break on success
                 break;
             }
@@ -88,13 +88,13 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
                 {
                     throw exception;
                 }
-            }            
+            }
         }
-                        
+
         return this;
     }
-    
-    /** 
+
+    /**
      * Click on cancel button
      */
     public Renderable clickOnCancel()
