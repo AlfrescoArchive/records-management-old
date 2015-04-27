@@ -20,14 +20,14 @@ package org.alfresco.test;
 
 /**
  * Test data used in tests
- * 
+ *
  * @author Roy Wetherall
  */
 public interface TestData
 {
     /** users */
     public static final String USER1 = "userone";
-    
+
     /** site id's */
     public static final String RM_SITE_ID = "rm";
     public static final String COLLAB_SITE_ID = "my-site" + System.currentTimeMillis();
@@ -42,29 +42,20 @@ public interface TestData
     public static final String NON_ELECTRONIC_RECORD = "non-electronic-record";
     public static final String RECORD = "record";
     public static final String FOLDER = "folder";
-    public static final String CLASSIFIED_RECORD = "classified-record";
-    public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String UNFILED_RECORD_FOLDER = "unfiled-record-folder";
     public static final String HOLD1 = "hold-1";
     public static final String HOLD2 = "hold2";
     public static final String CATEGORY_FOLDER_DISPOSITION = "category-disp-folder";
     public static final String CATEGORY_RECORD_DISPOSITION = "category-disp-record";
-    public static final String CLASSIFIED_RECORD_CLASSIFICATION = "TopSecret";
-    public static final String CLASSIFIED_RECORD_AUTHORITY = "ClassificationAuthority";
-    public static final String CLASSIFIED_RECORD_REASON = "1.4(c)";
 
     /** record category/folder identifier */
     public static final String RECORD_IDENTIFIER = "id-";
-    
+
     /** collaboration site data */
     public static final String COLLAB_SITE_NAME = "My Site";
     public static final String DOCUMENT = "my-document";
     public static final String IN_PLACE_RECORD = "my-inplace-record";
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
-    public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
-    public static final String CLASSIFIED_DOCUMENT_CLASSIFICATION = "TopSecret";
-    public static final String CLASSIFIED_DOCUMENT_AUTHORITY = "ClassificationAuthority";
-    public static final String CLASSIFIED_DOCUMENT_REASON = "1.4(c)";
 
     /** standard property values */
     public static final String TITLE = "Title";
@@ -108,6 +99,13 @@ public interface TestData
     public static final String NO_LONGER_NEEDED = "No longer needed";
     public static final String CASE_CLOSED = "Case Closed";
 
-
+    /* Classification data. */
+    public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
+    public static final String CLASSIFIED_RECORD = "classified-record";
+    public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
+    public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "TopSecret";
+    public static final String CLASSIFICATION_LEVEL_TEXT = "Top Secret";
+    public static final String CLASSIFICATION_AUTHORITY = "ClassificationAuthority";
+    public static final String CLASSIFICATION_REASON = "1.4(c)";
 
 }

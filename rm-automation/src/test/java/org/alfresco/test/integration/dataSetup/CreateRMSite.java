@@ -46,7 +46,7 @@ public class CreateRMSite extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup-rmSite" },
+        groups = { "integration-dataSetup", "integration-dataSetup-rmSite" },
         description = "Create RM Site"
     )
 

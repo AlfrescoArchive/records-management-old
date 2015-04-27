@@ -69,12 +69,12 @@ public class ClassifiedDocumentProperties extends BaseTest
 
         // verify that classification is as expected.
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION)
-            .equals(CLASSIFIED_DOCUMENT_CLASSIFICATION));
+            .equals(CLASSIFICATION_LEVEL_ABBREVIATION));
 
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY)
-            .equals(CLASSIFIED_DOCUMENT_AUTHORITY));
+            .equals(CLASSIFICATION_AUTHORITY));
 
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON)
-            .equals(CLASSIFIED_DOCUMENT_REASON));
+            .equals(CLASSIFICATION_REASON));
     }
 }

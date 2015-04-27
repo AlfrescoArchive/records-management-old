@@ -31,8 +31,14 @@ import org.openqa.selenium.support.FindBy;
 public abstract class Dialog extends Renderable
                              implements StandardButtons
 {
-    /** visible dialog selector string */
-    protected static final String VISIBLE_DIALOG = "div[id$='dialog_c'][style*='visibility: visible']";
+    /**
+     * Visible dialog selector string.
+     * <p>
+     * The first part of the selector matches traditional Share dialogs. The second part matches Aikau Dojo-based
+     * dialogs. In both cases only the visible dialogs are returned.
+     */
+    protected static final String VISIBLE_DIALOG = "div[id$='dialog_c'][style*='visibility: visible'],"
+                + "div:not([style*='display: none']).alfresco-dialog-AlfDialog";
 
     /** dialog element */
     @FindBy(css=VISIBLE_DIALOG)

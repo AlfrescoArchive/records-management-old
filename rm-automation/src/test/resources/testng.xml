@@ -2,33 +2,44 @@
 
 <suite name="TestNG AllTestSuite" verbose="1" time-out="300000">
 
-	<!-- Exclude unit tests until reliability issues have been resolved -->
-    <!-- 
-	<test name="unit-tests">
-    	<groups>
-    		<run>
-    			<include name="unit-test"/>
-    		</run>
-    	</groups>
-        <packages>                   
-            <package name="org.alfresco.po.*"/> 
-        </packages> 
+    <!-- Exclude unit tests until reliability issues have been resolved -->
+    <!--
+    <test name="unit-tests">
+        <groups>
+            <run>
+                <include name="unit-test"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="org.alfresco.po.*"/>
+        </packages>
     </test>
      -->
 
     <test name="sanity">
-    	<groups>
-    		<run>
-    			<include name="sanity"/>
-    			
-    			<!-- Temporary exclusion of unreliable sanity tests -->
-    			<exclude name="RMA-2670"/>  <!-- Manage disposition schedule for folder -->
-    			<exclude name="RMA-2671"/>  <!-- Manage disposition schedule for record  -->
-    		</run>
-    	</groups>
-        <packages>                   
-            <package name="org.alfresco.test.regression.*"/> 
-        </packages> 
+        <groups>
+            <run>
+                <include name="sanity"/>
+
+                <!-- Temporary exclusion of unreliable sanity tests -->
+                <exclude name="RMA-2670"/>  <!-- Manage disposition schedule for folder -->
+                <exclude name="RMA-2671"/>  <!-- Manage disposition schedule for record  -->
+            </run>
+        </groups>
+        <packages>
+            <package name="org.alfresco.test.regression.*"/>
+        </packages>
+    </test>
+    <test name="classification">
+        <groups>
+            <run>
+                <include name="integration-dataSetup"/>
+                <include name="classification"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="org.alfresco.test.integration.*"/>
+        </packages>
     </test>
 
 </suite>

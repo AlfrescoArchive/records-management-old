@@ -25,7 +25,11 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -34,12 +38,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 /**
  * Utility class containing helpful methods.
- * 
+ *
  * @author Tuna Aksoy
  * @since 2.2
  * @version 1.0
@@ -49,10 +52,10 @@ public final class Utils implements ApplicationContextAware
 {
     /** application context */
     private static ApplicationContext applicationContext;
-    
+
     /** default wait 10 seconds */
     private static final int DEFAULT_WAIT = 10;
-    
+
     /**
      * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)
      */
@@ -64,17 +67,17 @@ public final class Utils implements ApplicationContextAware
 
     /**
      * Helper to get web driver
-     * 
+     *
      * @return
      */
     public static WebDriver getWebDriver()
     {
         return (WebDriver)Utils.applicationContext.getBean("webDriver");
     }
-    
+
     /**
      * Helper to get web driver wait object
-     * 
+     *
      * @return
      */
     public static WebDriverWait webDriverWait(int waitSeconds)
@@ -84,14 +87,14 @@ public final class Utils implements ApplicationContextAware
 
     /**
      * Helper to get web driver wait object
-     * 
+     *
      * @return
      */
     public static WebDriverWait webDriverWait()
     {
         return webDriverWait(DEFAULT_WAIT);
     }
-    
+
     /**
      * Helper method to see if element exists on page
      */
@@ -107,7 +110,7 @@ public final class Utils implements ApplicationContextAware
             return false;
         }
     }
-    
+
     /**
      * Helper method to see if element exists within element
      */
@@ -128,7 +131,7 @@ public final class Utils implements ApplicationContextAware
             return true;
         }
     }
-    
+
     /**
      * Helper method to wait for the staleness of an element
      */
@@ -136,7 +139,7 @@ public final class Utils implements ApplicationContextAware
     {
         webDriverWait().until(ExpectedConditions.stalenessOf(webElement));
     }
-    
+
     /**
      * @see Utils#waitForStalenessOf(WebElement)
      */
@@ -144,7 +147,7 @@ public final class Utils implements ApplicationContextAware
     {
         waitForStalenessOf(webElement.getWrappedElement());
     }
-    
+
     /**
      * Helper method to wait for the visibility of an element
      */
@@ -152,7 +155,7 @@ public final class Utils implements ApplicationContextAware
     {
         webDriverWait().until(ExpectedConditions.visibilityOf(webElement));
     }
-    
+
     /**
      * @see Utils#waitForVisibilityOf(WebElement)
      */
@@ -160,7 +163,7 @@ public final class Utils implements ApplicationContextAware
     {
         waitForVisibilityOf(webElement.getWrappedElement());
     }
-    
+
     /**
      * Helper method to wait for the visibility of element located
      * by selector
@@ -169,7 +172,15 @@ public final class Utils implements ApplicationContextAware
     {
         webDriverWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
-    
+
+    /**
+     * Helper method to wait for the invisibility of an element
+     */
+    public static void waitForInvisibilityOf(WebElement webElement)
+    {
+        webDriverWait().until(ExpectedConditions.not(ExpectedConditions.visibilityOf(webElement)));
+    }
+
     /**
      * Helper method to wait for the invisibility of an element located
      * by selector
@@ -181,7 +192,7 @@ public final class Utils implements ApplicationContextAware
 
     /**
      * Helper to mouse over element
-     * 
+     *
      * @param webElement
      * @return
      */
@@ -194,7 +205,7 @@ public final class Utils implements ApplicationContextAware
 
     /**
      * Heler method to mouse over element
-     * 
+     *
      * @param wrapsElement
      * @return
      */
@@ -227,38 +238,38 @@ public final class Utils implements ApplicationContextAware
 
     /**
      * Check mandatory parameter values
-     * 
+     *
      * @param paramName parameter name
      * @param object object value
      */
     public static <E> void checkMandotaryParam(final String paramName, final Object object)
     {
-        if (StringUtils.isBlank(paramName)) 
-        { 
+        if (StringUtils.isBlank(paramName))
+        {
             throw new IllegalArgumentException(String.format(
-                "The parameter paramName is required and can not be'%s'", paramName)); 
+                "The parameter paramName is required and can not be'%s'", paramName));
         }
-        if (object == null) 
-        { 
+        if (object == null)
+        {
             throw new IllegalArgumentException(String.format(
-                "'%s' is a mandatory parameter and must have a value", paramName)); 
+                "'%s' is a mandatory parameter and must have a value", paramName));
         }
-        if (object instanceof String && StringUtils.isBlank((String) object)) 
-        { 
+        if (object instanceof String && StringUtils.isBlank((String) object))
+        {
             throw new IllegalArgumentException(
-                String.format("'%s' is a mandatory parameter", paramName)); 
+                String.format("'%s' is a mandatory parameter", paramName));
         }
-        if (object instanceof Collection<?> && ((Collection<?>) object).isEmpty()) 
-        { 
+        if (object instanceof Collection<?> && ((Collection<?>) object).isEmpty())
+        {
             throw new IllegalArgumentException(
-                String.format("'%s' is a mandatory parameter and can not be empty", paramName)); 
+                String.format("'%s' is a mandatory parameter and can not be empty", paramName));
         }
     }
 
     /**
      * Create temp file TODO .. support multiple mimetypes .. build files with
      * real size content
-     * 
+     *
      * @param name file name
      * @return {@link File} file
      */
@@ -290,11 +301,11 @@ public final class Utils implements ApplicationContextAware
             throw new RuntimeException("Unable to create test file.");
         }
     }
-    
+
     /**
      * Helper method to retry, ignoring failures until success or all retries
      * are used up
-     * 
+     *
      * @param retry     retry execution
      * @param count     number of retries
      * @return T        result of retry execution
@@ -303,12 +314,12 @@ public final class Utils implements ApplicationContextAware
     {
         T result = null;
         int attempt = 0;
-        
+
         while (true)
         {
             try
             {
-                // try and execute 
+                // try and execute
                 result = retry.execute();
                 break;
             }
@@ -319,11 +330,11 @@ public final class Utils implements ApplicationContextAware
                 {
                     throw exception;
                 }
-                
+
                 // otherwise do nothing and try again
             }
         }
-        
+
         return result;
     }
 }

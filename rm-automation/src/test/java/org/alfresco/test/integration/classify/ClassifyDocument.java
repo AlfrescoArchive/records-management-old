@@ -19,6 +19,9 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertTrue;
+
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
@@ -26,8 +29,6 @@ import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Classify document integration test
@@ -49,16 +50,18 @@ public class ClassifyDocument extends BaseTest
     @Autowired
     private DocumentDetails documentDetails;
 
+    @Autowired
+    private ClassifyContentDialog classifyContentDialog;
+
     /**
      * Main test execution
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "classification" },
         description = "Verify Classify Document behaviour",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
-
     public void classifyDocument()
     {
         // Open Collab site DocumentLibrary.
@@ -75,5 +78,20 @@ public class ClassifyDocument extends BaseTest
         // verify that all the expected actions are available
         assertTrue(documentDetails.getDocumentActionsPanel()
             .isActionClickable(DocumentActionsPanel.CLASSIFY));
+
+        // Open the classify document dialog
+        documentDetails.getDocumentActionsPanel().clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        // Verify that a classify document dialog has appeared.
+        assertTrue("Classify content dialog is not visible.", classifyContentDialog.isDisplayed());
+
+        // Fill in the classification details.
+        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON)
+            .cancelDialog();
+
+        // TODO: This test can currently only be run once as reclassification is not possible.
+        // Presumably it would be good to add a tear-down method to delete and re-create the document.
     }
 }

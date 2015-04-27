@@ -19,16 +19,14 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
-import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Classify document integration test
@@ -72,12 +70,12 @@ public class ClassifiedRecordProperties extends BaseTest
 
         // verify that classification is as expected.
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION)
-            .equals(CLASSIFIED_RECORD_CLASSIFICATION));
+            .equals(CLASSIFICATION_LEVEL_ABBREVIATION));
 
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY)
-            .equals(CLASSIFIED_RECORD_AUTHORITY));
+            .equals(CLASSIFICATION_AUTHORITY));
 
         assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON)
-            .equals(CLASSIFIED_RECORD_REASON));
+            .equals(CLASSIFICATION_REASON));
     }
 }

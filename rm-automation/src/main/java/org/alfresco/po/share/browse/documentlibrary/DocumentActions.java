@@ -27,6 +27,6 @@ import org.alfresco.po.rm.browse.fileplan.Actions;
 public interface DocumentActions extends Actions
 {
     /** actions */
-    static final String CLASSIFY = "rm-classify-document";
+    static final String CLASSIFY = "rm-classify-content";
 
 }

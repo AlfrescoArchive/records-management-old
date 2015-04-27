@@ -19,13 +19,17 @@
 
 package org.alfresco.test.integration.dataSetup;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
 import org.alfresco.po.rm.browse.holds.Hold;
 import org.alfresco.po.rm.browse.holds.Holds;
-import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecordFolder;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
@@ -37,8 +41,6 @@ import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Create File Plan for Integration tests
@@ -96,8 +98,9 @@ public class CreateFilePlan extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup-fileplan" },
-        description = "Create File Plan"
+        groups = { "integration-dataSetup", "integration-dataSetup-fileplan" },
+        description = "Create File Plan",
+        dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
 
     public void createFilePlan()

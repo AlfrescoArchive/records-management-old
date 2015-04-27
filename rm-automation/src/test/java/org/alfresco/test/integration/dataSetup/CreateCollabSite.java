@@ -19,6 +19,8 @@
 
 package org.alfresco.test.integration.dataSetup;
 
+import static org.junit.Assert.assertFalse;
+
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
@@ -26,8 +28,6 @@ import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Create Collaboration Site for Integration tests
@@ -60,7 +60,7 @@ public class CreateCollabSite extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup-collab" },
+        groups = { "integration-dataSetup", "integration-dataSetup-collab" },
         description = "Create Collaboration Site"
     )
 
