@@ -68,6 +68,12 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Cancel']")
     private WebElement cancelButton;
 
+    /**
+     * Set the classification level.
+     *
+     * @param levelId The label on the classification level dropdown button.
+     * @return The dialog to allow chaining of actions.
+     */
     public ClassifyContentDialog setLevel(String levelId)
     {
         // Open the dropdown menu.
@@ -90,6 +96,13 @@ public class ClassifyContentDialog extends Dialog
         return this;
     }
 
+    /**
+     * Search for a classification reason by typing part of the label into the box then, when the dropdown options are
+     * visible, click on the desired reason.
+     *
+     * @param id The classification reason id (e.g. "1.4(c)") - note this is currently not displayed on the page.
+     * @return The dialog to allow chaining of actions.
+     */
     public ClassifyContentDialog addReason(String id)
     {
         // Assume that the classification reason is on the first page of results for the search "i".
@@ -102,9 +115,16 @@ public class ClassifyContentDialog extends Dialog
         return this;
     }
 
+    /**
+     * Remove a reason that has previously been selected.
+     *
+     * @param id The classification reason id (e.g. "1.4(c)") - note this is currently not displayed on the page.
+     * @return The dialog to allow chaining of actions.
+     * @throws NoSuchElementException If the reason with the given id has not been applied to the content.
+     */
     public ClassifyContentDialog removeSelectedReason(String id) throws NoSuchElementException
     {
-        String selector = "[data-aikau-value='"+id+"'] ~ a";
+        String selector = "[data-aikau-value='" + id + "'] ~ a";
         WebElement removeButton = reasonsContainer.findElement(By.cssSelector(selector));
         removeButton.click();
         return this;
