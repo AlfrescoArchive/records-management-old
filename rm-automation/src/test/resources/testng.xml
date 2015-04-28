@@ -22,6 +22,8 @@
                 <include name="sanity"/>
 
                 <!-- Temporary exclusion of unreliable sanity tests -->
+                <exclude name="RMA-2666"/>  <!-- Manage incomplete records -->
+                <exclude name="RMA-2667"/>  <!-- Manage complete records -->
                 <exclude name="RMA-2670"/>  <!-- Manage disposition schedule for folder -->
                 <exclude name="RMA-2671"/>  <!-- Manage disposition schedule for record  -->
             </run>
