@@ -28,9 +28,13 @@ public interface TestData
     /** users */
     public static final String USER1 = "userone";
 
-    /** site id's */
+    /* site identifiers */
+    /** The id of the RM site. */
     public static final String RM_SITE_ID = "rm";
+    /** An id for the collaboration site used by the UI integration tests. */
     public static final String COLLAB_SITE_ID = "my-site" + System.currentTimeMillis();
+    /** An id for the collaboration site used by the sanity tests. */
+    public static final String SANITY_COLLAB_SITE_ID = "my-site-sanity" + System.currentTimeMillis();
 
     /** file plan test data */
     public static final String RECORD_CATEGORY_NAME = "record-category";

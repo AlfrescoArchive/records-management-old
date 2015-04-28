@@ -63,8 +63,7 @@ public class CreateCollabSite extends BaseTest
         groups = { "integration-dataSetup", "integration-dataSetup-collab" },
         description = "Create Collaboration Site"
     )
-
-    public void createFilePlan()
+    public void createCollabSite()
     {
         // create collaboration site
         openPage(userDashboardPage);

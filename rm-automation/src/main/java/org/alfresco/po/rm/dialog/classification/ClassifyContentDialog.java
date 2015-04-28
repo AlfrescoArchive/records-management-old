@@ -60,6 +60,9 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#REASONS_CONTROL input")
     private TextInput reasonTextInput;
 
+    @FindBy(css="#REASONS_CONTROL_RESULTS")
+    private WebElement reasonsResultsContainer;
+
     /** Here we rely on the text node being "Create". */
     @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Create']")
     private WebElement createButton;
@@ -97,20 +100,18 @@ public class ClassifyContentDialog extends Dialog
     }
 
     /**
-     * Search for a classification reason by typing part of the label into the box then, when the dropdown options are
-     * visible, click on the desired reason.
+     * Search for a classification reason then, when the dropdown options are visible, click on the desired reason.
      *
      * @param id The classification reason id (e.g. "1.4(c)") - note this is currently not displayed on the page.
      * @return The dialog to allow chaining of actions.
      */
     public ClassifyContentDialog addReason(String id)
     {
-        // Assume that the classification reason is on the first page of results for the search "i".
-        // This hack currently works as all three pre-configured classification reasons have an "i" in them.
-        clearAndType(reasonTextInput, "i");
-        String selector = "#REASONS_CONTROL .alfresco-forms-controls-MultiSelect__result[data-aikau-value='" + id + "']";
+        // Clearing the search box activates the drop-down. Assume that the classification reason is on the first page of results.
+        reasonTextInput.getWrappedElement().clear();
+        String selector = "#REASONS_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
         Utils.waitForVisibilityOf(By.cssSelector(selector));
-        WebElement reason = dialog.findElement(By.cssSelector(selector));
+        WebElement reason = reasonsResultsContainer.findElement(By.cssSelector(selector));
         reason.click();
         return this;
     }
