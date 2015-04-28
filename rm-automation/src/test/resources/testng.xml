@@ -24,6 +24,8 @@
                 <!-- Temporary exclusion of unreliable sanity tests -->
                 <exclude name="RMA-2666"/>  <!-- Manage incomplete records -->
                 <exclude name="RMA-2667"/>  <!-- Manage complete records -->
+                <exclude name="RMA-2668"/>  <!-- Manage folders (depends on RMA-2667) -->
+                <exclude name="RMA-2669"/>  <!-- Manage categories (depends on RMA-2668) -->
                 <exclude name="RMA-2670"/>  <!-- Manage disposition schedule for folder -->
                 <exclude name="RMA-2671"/>  <!-- Manage disposition schedule for record  -->
             </run>
