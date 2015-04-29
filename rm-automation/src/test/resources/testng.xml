@@ -35,12 +35,13 @@
         </packages>
     </test>
 
-    <!-- TODO Re-enable this once the reason for failure on Bamboo is determined. -->
     <test name="classification">
         <groups>
             <run>
                 <include name="integration-dataSetup"/>
                 <include name="classification"/>
+                <!-- TODO These tests should be changed so that they don't corrupt the system state. -->
+                <include name="classification-irreversible"/>
             </run>
         </groups>
         <packages>

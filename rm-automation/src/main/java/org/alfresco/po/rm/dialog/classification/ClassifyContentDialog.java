@@ -20,6 +20,9 @@ package org.alfresco.po.rm.dialog.classification;
 
 import static org.alfresco.po.common.util.Utils.clearAndType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
@@ -156,5 +159,36 @@ public class ClassifyContentDialog extends Dialog
     public boolean isDisplayed()
     {
         return (createButton != null && createButton.isDisplayed());
+    }
+
+    /** @return <code>true</code> if the create button is visible and enabled. */
+    public boolean isCreateButtonEnabled()
+    {
+        if (createButton == null || !createButton.isDisplayed())
+        {
+            return false;
+        }
+        List<WebElement> disabledMembers = createButton.findElements(By.cssSelector("span[role='button'][aria-disabled='true']"));
+        return (disabledMembers.size() == 0);
+    }
+
+    /** @return The classification authority entered. */
+    public String getAuthority()
+    {
+        return authorityTextInput.getText();
+    }
+
+    /** @return The list of selected classification reasons. */
+    public List<String> getReasons()
+    {
+        List<WebElement> reasons = reasonsContainer.findElements(By
+                    .cssSelector(".alfresco-forms-controls-MultiSelect__choice__content"));
+        List<String> reasonIds = new ArrayList<String>();
+        for (WebElement reason : reasons)
+        {
+            String reasonId = reason.getAttribute("data-aikau-value");
+            reasonIds.add(reasonId);
+        }
+        return reasonIds;
     }
 }
