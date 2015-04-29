@@ -63,12 +63,12 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#REASONS_CONTROL_RESULTS")
     private WebElement reasonsResultsContainer;
 
-    /** Here we rely on the create button being the first in the footer. */
-    @FindBy(css=".footer > .alfresco-buttons-AlfButton:nth-child(1) > .dijitButtonNode")
+    /** Here we rely on the text node being "Create". */
+    @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Create']")
     private WebElement createButton;
 
-    /** Here we rely on the cancel button being the second in the footer. */
-    @FindBy(css=".footer > .alfresco-buttons-AlfButton:nth-child(2) > .dijitButtonNode")
+    /** Here we rely on the text node being "Cancel". */
+    @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Cancel']")
     private WebElement cancelButton;
 
     /**
