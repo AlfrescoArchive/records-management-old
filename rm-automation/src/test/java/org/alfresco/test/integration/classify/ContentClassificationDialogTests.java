@@ -20,12 +20,19 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
+import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
+import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.Document;
+import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
+import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -41,24 +48,93 @@ public class ContentClassificationDialogTests extends BaseTest
     private DocumentLibrary documentLibrary;
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
+    @Autowired
+    private ClassifiedPropertiesPanel classifiedPropertiesPanel;
+    @Autowired
+    private DocumentDetails documentDetails;
+    @Autowired
+    private DeleteConfirmationDialog deleteConfirmationDialog;
 
     /**
-     * Opening the classify content dialog
+     * Opening the classify content dialog and classifying a document. This test covers the following two (very similar)
+     * acceptance criteria.
      *
+     * <pre>
      * Given that I have clicked the classify content action
      * When the classify content dialog opens
      * Then all the fields will be blank *** TODO Check that having the level prepopulated is ok. ***
      * And the "ok" button will be disabled
      * Until valid values have been entered for all the mandatory fields
      * Then the "ok" button will be enabled
+     *
+     * Given that I have opened the classify content dialog
+     * And have entered valid values for all the mandatory fields
+     * When I click "ok"
+     * Then the content is classified
+     * And the classify content action is no longer available
+     * </pre>
      */
     @Test
     (
-        groups = { "integration", "classification-irreversible" },
+        groups = { "integration", "classification" },
         description = "Verify Classify Document behaviour",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
     public void classifyDocument()
+    {
+        // Open collaboration site DocumentLibrary and click on the "Classify" action.
+        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        documentLibrary.getDocument(DOCUMENT)
+            .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        // Verify that a classify document dialog has appeared.
+        assertTrue("Classify content dialog is not visible.", classifyContentDialog.isDisplayed());
+
+        // Check all the fields start blank (except the classification level).
+        assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
+        assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
+
+        // Check the "Create" button is disabled.
+        assertFalse("Create button should not initially be enabled.", classifyContentDialog.isCreateButtonEnabled());
+
+        // Fill in the classification details.
+        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON);
+
+        // Check the "Create" button is now enabled.
+        assertTrue("Create button should be enabled now form is filled.", classifyContentDialog.isCreateButtonEnabled());
+
+        // Classify the content.
+        classifyContentDialog.submitDialog();
+
+        // Check that the classify content action is no longer available.
+        String[] clickableActions = documentLibrary.getDocument(DOCUMENT).getClickableActions();
+        assertFalse("The classify action should no longer be available.",
+                    Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
+
+        // Delete the document and recreate it again.
+        recreateDocument();
+    }
+
+    /**
+     * Check that cancelling the classification dialog works.
+     *
+     * <pre>
+     * Given that I have clicked the classify content action
+     * And the classify content dialog opens
+     * Even if data has been set in the inputs (or options have been selected)
+     * When clicking on Cancel then the dialog is closed and the Classify option is still available.
+     * Also when opening again the dialog, the previous inserted/selected data is not displayed, the inputs are blank
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Verify Classify Document behaviour",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void cancelClassifyDialog()
     {
         // Open Collab site DocumentLibrary.
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
@@ -69,54 +145,82 @@ public class ContentClassificationDialogTests extends BaseTest
         // Verify that a classify document dialog has appeared.
         assertTrue("Classify content dialog is not visible.", classifyContentDialog.isDisplayed());
 
-        // Check all the fields start blank (except the classification level).
-        assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
-        assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
-
-        // Check the "ok" button is disabled.
-        assertFalse("Create button should not initially be enabled.", classifyContentDialog.isCreateButtonEnabled());
-
         // Fill in the classification details.
         classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON);
 
-        // Check the "ok" button is now enabled.
-        assertTrue("Create button should be enabled now form is filled.", classifyContentDialog.isCreateButtonEnabled());
+        // Click the cancel button.
+        classifyContentDialog.cancelDialog();
 
-        // Classify the content.
-        classifyContentDialog.submitDialog();
+        // Check the classify document dialog has closed.
+        assertFalse("Classify content dialog should have closed.", classifyContentDialog.isDisplayed());
+        // Check that the classify content action is still available.
+        String[] clickableActions = document.getClickableActions();
+        assertTrue("The classify action should still be available.",
+                    Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
+        // Reopen the classify document dialog
+        document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
-        // TODO: This test can currently only be run once as reclassification is not possible.
-        // Presumably it would be good to add a tear-down method to delete and re-create the document.
+        // Open the dialog again and check the fields are as they were initially.
+        assertEquals("The level should be back to the default.", DEFAULT_CLASSIFICATION_LEVEL_TEXT,
+                    classifyContentDialog.getLevel());
+        assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
+        assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
     }
 
-    /*
-    RM-1845 Acceptance criteria currently without tests.
+    /**
+     * Check that content can be "classified" with a level of "No Clearance".
+     *
+     * <pre>
+     * Given that I have opened the classify content dialog
+     * And have selected "Unclassified"
+     * And entered all other values required
+     * When I click "ok"
+     * Then the content is classified as "Unclassified"
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Check that content can be classified with a level of No Clearance.",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void classifyAsNoClearance()
+    {
+        // Open the document preview page.
+        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        documentLibrary.getDocument(DOCUMENT).clickOnLink();
 
-    Classifying content
+        // Classify the document with a level of "No Clearance".
+        DocumentActionsPanel documentActionsPanel = documentDetails.getDocumentActionsPanel();
+        documentActionsPanel.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+        classifyContentDialog.setLevel(NO_CLEARANCE_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON)
+            .submitDialog();
 
-    Given that I have opened the classify content dialog
-    And have entered valid values for all the mandatory fields
-    When I click "ok"
-    Then the content is classified
-    And the classify content action is no longer available
+        // Check that the document is classified and has level "No Clearance".
+        assertNotNull("Classified properties not found.", classifiedPropertiesPanel);
+        String level = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION);
+        assertEquals("Unexpected current classification.", NO_CLEARANCE_LEVEL_TEXT, level);
 
-    Unclassified content
+        // Delete the document and recreate it again.
+        recreateDocument();
+    }
 
-    Given that I have opened the classify content dialog
-    And have selected "Unclassified"
-    And entered all other values required
-    When I click "ok"
-    Then the content is classified as "Unclassified"
-
-    Cancelling the classification
-
-    Given that I have clicked the classify content action
-    And the classify content dialog opens
-    Even if data has been set in the inputs (or options have been selected)
-    When clicking on Cancel then the dialog is closed and the Classify option is still available.
-    Also when opening again the dialog, the previous inserted/selected data is not displayed, the inputs are blank
-    */
-
+    /**
+     * Delete and re-upload a document. This is used to allow resetting after classifying a document. TODO: Implement
+     * removal of classification and use that instead.
+     */
+    private void recreateDocument()
+    {
+        documentDetails.getDocumentActionsPanel()
+            .clickOnAction(DocumentActions.DELETE, deleteConfirmationDialog);
+        deleteConfirmationDialog.confirmDelete();
+        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(DOCUMENT);
+    }
 }

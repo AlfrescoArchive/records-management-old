@@ -137,7 +137,6 @@ public class ClassifyContentDialog extends Dialog
     public Renderable submitDialog()
     {
         createButton.click();
-        Utils.waitForInvisibilityOf(createButton);
         return SharePage.getLastRenderedPage().render();
     }
 

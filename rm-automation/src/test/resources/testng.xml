@@ -40,8 +40,6 @@
             <run>
                 <include name="integration-dataSetup"/>
                 <include name="classification"/>
-                <!-- TODO These tests should be changed so that they don't corrupt the system state. -->
-                <include name="classification-irreversible"/>
             </run>
         </groups>
         <packages>

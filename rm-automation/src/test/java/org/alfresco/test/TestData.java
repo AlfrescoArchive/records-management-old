@@ -107,8 +107,10 @@ public interface TestData
     public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
     public static final String CLASSIFIED_RECORD = "classified-record";
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
-    public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "TopSecret";
-    public static final String CLASSIFICATION_LEVEL_TEXT = "Top Secret";
+    public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "Secret";
+    public static final String CLASSIFICATION_LEVEL_TEXT = "Secret";
+    public static final String NO_CLEARANCE_LEVEL_TEXT = "No Clearance";
+    public static final String DEFAULT_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String CLASSIFICATION_AUTHORITY = "ClassificationAuthority";
     public static final String CLASSIFICATION_REASON = "1.4(c)";
 

@@ -21,12 +21,14 @@ package org.alfresco.po.share.browse.documentlibrary;
 import org.alfresco.po.rm.browse.fileplan.Actions;
 
 /**
- * Record Actions
+ * Actions that may be performed on a document.
+ *
  * @author David Webster
  */
 public interface DocumentActions extends Actions
 {
-    /** actions */
+    /** Delete the document. */
+    static final String DELETE = "document-delete";
+    /** Classify the document. */
     static final String CLASSIFY = "rm-classify-content";
-
 }
