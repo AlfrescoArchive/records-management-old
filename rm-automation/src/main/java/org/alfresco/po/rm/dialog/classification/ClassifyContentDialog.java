@@ -66,12 +66,12 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#REASONS_CONTROL_RESULTS")
     private WebElement reasonsResultsContainer;
 
-    /** Here we rely on the text node being "Create". */
-    @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Create']")
+    /** Here we rely on the create button being the first in the footer. */
+    @FindBy(css=".footer .alfresco-buttons-AlfButton:nth-child(1) [role=button]")
     private WebElement createButton;
 
-    /** Here we rely on the text node being "Cancel". */
-    @FindBy(xpath="//div[contains(@class, 'footer')]//span[contains(@class, 'alfresco-buttons-AlfButton')]//span[contains(@class, 'dijitButtonText')][.='Cancel']")
+    /** Here we rely on the cancel button being the second in the footer. */
+    @FindBy(css=".footer .alfresco-buttons-AlfButton:nth-child(2) [role=button]")
     private WebElement cancelButton;
 
     /**
@@ -168,8 +168,8 @@ public class ClassifyContentDialog extends Dialog
         {
             return false;
         }
-        List<WebElement> disabledMembers = createButton.findElements(By.cssSelector("span[role='button'][aria-disabled='true']"));
-        return (disabledMembers.size() == 0);
+        String disabledAttribute = createButton.getAttribute("aria-disabled");
+        return (disabledAttribute == null || disabledAttribute.toLowerCase().equals("false"));
     }
 
     /** @return The classification authority entered. */
