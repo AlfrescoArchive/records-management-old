@@ -56,7 +56,7 @@ public class ContentClassificationDialogTests extends BaseTest
     private DeleteConfirmationDialog deleteConfirmationDialog;
 
     /**
-     * Opening the classify content dialog and classifying a document. This test covers the following two (very similar)
+     * Opening the classify content dialog and classifying a document. This test covers the following two (very related)
      * acceptance criteria.
      *
      * <pre>
@@ -77,12 +77,12 @@ public class ContentClassificationDialogTests extends BaseTest
     @Test
     (
         groups = { "integration", "classification" },
-        description = "Verify Classify Document behaviour",
+        description = "Use the classify content dialog to classify a document.",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
     public void classifyDocument()
     {
-        // Open collaboration site DocumentLibrary and click on the "Classify" action.
+        // Open collaboration site document library and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
         documentLibrary.getDocument(DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
@@ -131,7 +131,7 @@ public class ContentClassificationDialogTests extends BaseTest
     @Test
     (
         groups = { "integration", "classification" },
-        description = "Verify Classify Document behaviour",
+        description = "Check that cancelling the classification dialog works.",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
     public void cancelClassifyDialog()
@@ -141,9 +141,6 @@ public class ContentClassificationDialogTests extends BaseTest
         Document document = documentLibrary.getDocument(DOCUMENT);
         // Open the classify document dialog
         document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
-
-        // Verify that a classify document dialog has appeared.
-        assertTrue("Classify content dialog is not visible.", classifyContentDialog.isDisplayed());
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
@@ -159,10 +156,9 @@ public class ContentClassificationDialogTests extends BaseTest
         String[] clickableActions = document.getClickableActions();
         assertTrue("The classify action should still be available.",
                     Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
-        // Reopen the classify document dialog
-        document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         // Open the dialog again and check the fields are as they were initially.
+        document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
         assertEquals("The level should be back to the default.", DEFAULT_CLASSIFICATION_LEVEL_TEXT,
                     classifyContentDialog.getLevel());
         assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
