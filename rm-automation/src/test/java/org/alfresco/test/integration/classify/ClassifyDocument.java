@@ -19,7 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertTrue;
 
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
