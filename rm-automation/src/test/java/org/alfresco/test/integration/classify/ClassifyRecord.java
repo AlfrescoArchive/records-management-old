@@ -21,6 +21,7 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
@@ -38,6 +39,18 @@ import org.testng.annotations.Test;
  * @author David Webster
  * @since 3.0
  */
+@Test
+(
+    groups = { "integration", "classification", "classify-record" },
+    description = "Verify classify record action exists",
+    dependsOnGroups = 
+    { 
+    		"integration-dataSetup-rmSite", 
+    		"integration-dataSetup-collab",	
+            "integration-dataSetup-fileplan",
+            "integration-dataSetup-holds"
+    }
+)
 public class ClassifyRecord extends BaseTest
 {
     /**
@@ -62,12 +75,6 @@ public class ClassifyRecord extends BaseTest
      * Note that there is no explicit acceptance criteria for this, but it is clearly required.
      */
     @Test
-    (
-        groups = { "integration", "classification" },
-        description = "Verify classify record action exists",
-        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-collab",
-            "integration-dataSetup-fileplan" }
-    )
     public void checkClassifyActionExists()
     {
         // open record folder one
@@ -102,6 +109,43 @@ public class ClassifyRecord extends BaseTest
         assertTrue(recordDetails.getRecordActionsPanel()
             .isActionsClickable(RecordActionsPanel.CLASSIFY));
     }
+    
+    /**
+     * Given that a record is held
+     * And unclassified
+     * When I view the available actions
+     * Then classify is not available
+     */
+    @Test
+    public void cantClassifyHeldRecord()
+    {
+    	// open record folder one
+        openPage(filePlan, RM_SITE_ID, "documentlibrary")
+            .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
+        
+        // show that the classify action is available
+        assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
+        
+        // add record to hold
+        filePlan
+        	.getRecord(RECORD)
+        	.clickOnAddToHold()
+        	.selectHold(HOLD1)
+        	.clickOnOk();
+    	
+        // show that classify action is not available
+        assertFalse(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
+        
+        // remove record from hold
+        filePlan
+        	.getRecord(RECORD)
+        	.clickOnRemoveFromHold()
+        	.selectHold(HOLD1)
+        	.clickOnOk();
+        
+        // show that the classify action is now available
+        assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
+    }
 
     /*
     RM-2052 Acceptance criteria currently without tests.
@@ -117,12 +161,5 @@ public class ClassifyRecord extends BaseTest
             When I view the unclassified record
             Then I can not set a classification
                 TODO: non admin user with read & file permissions, but without security clearance
-        - A held record can still be classified
-            Given that I am a cleared user
-            And have 'read & file' permission on the unclassified record
-            And the record is held
-            When I view the unclassified record
-            Then I can set a classification
-                TODO: held record test
      */
 }
