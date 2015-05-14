@@ -19,7 +19,7 @@
 package org.alfresco.po.share.login;
 
 import static org.alfresco.po.common.util.Utils.clearAndType;
-import static org.alfresco.po.common.util.Utils.checkMandotaryParam;
+import static org.alfresco.po.common.util.Utils.checkMandatoryParam;
 
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
@@ -69,7 +69,7 @@ public class LoginPage extends Renderable
      */
     public LoginPage setUsername(String username)
     {
-    	checkMandotaryParam("username", username);
+    	checkMandatoryParam("username", username);
     	clearAndType(usernameField, username);
         return this;
     }
@@ -79,7 +79,7 @@ public class LoginPage extends Renderable
      */
     public LoginPage setPassword(String password)
     {
-    	checkMandotaryParam("password", password);
+    	checkMandatoryParam("password", password);
     	clearAndType(passwordField, password);
         return this;
     }

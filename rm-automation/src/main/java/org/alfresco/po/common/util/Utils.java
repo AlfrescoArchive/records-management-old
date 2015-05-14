@@ -204,7 +204,7 @@ public final class Utils implements ApplicationContextAware
     }
 
     /**
-     * Heler method to mouse over element
+     * Helper method to mouse over element
      *
      * @param wrapsElement
      * @return
@@ -220,8 +220,8 @@ public final class Utils implements ApplicationContextAware
      */
     public static <T extends WebElement> T clearAndType(T field, String text)
     {
-        checkMandotaryParam("field", field);
-        checkMandotaryParam("text", text);
+        checkMandatoryParam("field", field);
+        checkMandatoryParam("text", text);
         field.clear();
         field.sendKeys(text);
         return field;
@@ -237,12 +237,19 @@ public final class Utils implements ApplicationContextAware
     }
 
     /**
-     * Check mandatory parameter values
+     * Checks that the provided parameter satisfies all mandatory preconditions. These include:
+     * <ul>
+     *     <li>{@code paramName} should be non-null and not blank.</li>
+     *     <li>{@code object} should be non-null.</li>
+     *     <li>String {@code object}s should not be blank.</li>
+     *     <li>Collection {@code object}s should not be empty.</li>
+     * </ul>
      *
      * @param paramName parameter name
      * @param object object value
+     * @throws IllegalArgumentException if any violations have occurred.
      */
-    public static <E> void checkMandotaryParam(final String paramName, final Object object)
+    public static void checkMandatoryParam(final String paramName, final Object object)
     {
         if (StringUtils.isBlank(paramName))
         {
@@ -281,24 +288,18 @@ public final class Utils implements ApplicationContextAware
             File file = File.createTempFile(name, ".txt");
 
             // create writer
-            OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8")
-                    .newEncoder());
-            try
+            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8")
+                    .newEncoder()))
             {
                 // place content in file
                 writer.write("this is a sample test upload file");
-            }
-            finally
-            {
-                // close writer
-                writer.close();
             }
 
             return file;
         }
         catch (Exception exception)
         {
-            throw new RuntimeException("Unable to create test file.");
+            throw new RuntimeException("Unable to create test file.", exception);
         }
     }
 
@@ -312,7 +313,7 @@ public final class Utils implements ApplicationContextAware
      */
     public static final <T> T retry(Retry<T> retry, int count)
     {
-        T result = null;
+        T result;
         int attempt = 0;
 
         while (true)
@@ -325,7 +326,7 @@ public final class Utils implements ApplicationContextAware
             }
             catch (Exception exception)
             {
-                // if we have used up all our tried throw the exception
+                // if we have used up all our tries throw the exception
                 if (attempt >= count)
                 {
                     throw exception;

@@ -18,7 +18,7 @@
  */
 package org.alfresco.po.common.renderable;
 
-import static org.alfresco.po.common.util.Utils.checkMandotaryParam;
+import static org.alfresco.po.common.util.Utils.checkMandatoryParam;
 import static org.alfresco.po.common.util.Utils.webDriverWait;
 
 import java.lang.annotation.Annotation;
@@ -81,7 +81,7 @@ public abstract class Renderable
 	public <T extends Renderable> T render()
     {
     	// check the web driver
-    	checkMandotaryParam("webDriver", webDriver);
+    	checkMandatoryParam("webDriver", webDriver);
     	
     	// wait for page to load
     	waitForPageLoad();

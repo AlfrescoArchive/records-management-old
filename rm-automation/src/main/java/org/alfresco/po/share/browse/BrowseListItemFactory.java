@@ -43,7 +43,7 @@ public abstract class BrowseListItemFactory
      */
     protected WebElement getImage(WebElement row)
     {
-        Utils.checkMandotaryParam("row", row);
+        Utils.checkMandatoryParam("row", row);
         return row.findElement(imageSelector);
     }
         
@@ -52,7 +52,7 @@ public abstract class BrowseListItemFactory
      */
     public ListItem getItem(WebElement row)
     {
-        Utils.checkMandotaryParam("row", row);
+        Utils.checkMandatoryParam("row", row);
         ListItem result = (ListItem)applicationContext.getBean(getBeanName(row));        
         result.setRow(row);        
         return result;
