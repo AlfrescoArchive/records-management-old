@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
@@ -32,6 +33,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -84,9 +86,21 @@ public class ClassifyContentDialog extends Dialog
     {
         // Open the dropdown menu.
         levelSelectButton.click();
+        
         // Choose the appropriate option by the label.
         String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
-        WebElement level = levelsMenu.findElement(By.cssSelector(selector));
+        
+        // retry since wait seems unreliable
+        WebElement level = Utils.retry(new Retry<WebElement>()
+        {
+			@Override
+			public WebElement execute() 
+			{
+				return levelsMenu.findElement(By.cssSelector(selector));
+			}
+		}, 5);
+         
+        // select the right level
         level.click();
         return this;
     }
