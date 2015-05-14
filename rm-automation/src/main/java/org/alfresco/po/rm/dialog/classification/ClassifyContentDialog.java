@@ -88,7 +88,7 @@ public class ClassifyContentDialog extends Dialog
         levelSelectButton.click();
         
         // Choose the appropriate option by the label.
-        String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
+        final String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
         
         // retry since wait seems unreliable
         WebElement level = Utils.retry(new Retry<WebElement>()
