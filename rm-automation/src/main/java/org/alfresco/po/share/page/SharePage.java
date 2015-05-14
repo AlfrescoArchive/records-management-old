@@ -37,14 +37,17 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class SharePage extends Page
 {
+	/** page footer */
     @WaitFor(status=WaitForStatus.VISIBLE)
     @FindBy(css="div.sticky-footer")
     private WebElement footer;
     
+    /** share page navigation */
     @Autowired
 	@RenderableChild
 	private SharePageNavigation sharePageNavigation;
     
+    /** login page */
     @Autowired
     private LoginPage loginPage;
     
@@ -59,10 +62,16 @@ public abstract class SharePage extends Page
 		return sharePageNavigation;
 	}
 	
+	/**
+	 * @see org.alfresco.po.common.Page#render()
+	 */
     @Override
     public <T extends Renderable> T render() 
     {
-        message.waitUntillHidden();
+    	if (!(getLastRendered() instanceof SharePage))
+    	{
+    		message.waitUntillHidden();
+    	}
         return super.render();
     }
     

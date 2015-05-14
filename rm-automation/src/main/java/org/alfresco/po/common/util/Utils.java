@@ -80,7 +80,7 @@ public final class Utils implements ApplicationContextAware
      *
      * @return
      */
-    public static WebDriverWait webDriverWait(int waitSeconds)
+    public static WebDriverWait webDriverWait(long waitSeconds)
     {
         return new WebDriverWait(getWebDriver(), waitSeconds);
     }

@@ -64,6 +64,17 @@ public abstract class Renderable
 	/** elements to wait for during rendering */
 	private Map<WrapsElement, WaitFor> waitForHtmlElements;
 	
+	/** last rendered */
+	private static Renderable lastRendered;
+	
+	/**
+	 * @return	last rendered renderable item
+	 */
+	protected static Renderable getLastRendered()
+	{
+		return lastRendered;
+	}
+	
 	/**
      * Render method
      */
@@ -86,9 +97,13 @@ public abstract class Renderable
         waitFor();
         
         // return this
+        lastRendered = this;
         return (T)this;
     }
 
+    /**
+     * Helper to wait for the page to load
+     */
     private void waitForPageLoad() 
     {
         ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() 

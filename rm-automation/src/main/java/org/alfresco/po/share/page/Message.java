@@ -58,7 +58,7 @@ public class Message extends Renderable
         {
             try
             {
-                webDriverWait().until(
+                webDriverWait(5).until(
                        ExpectedConditions.invisibilityOfElementLocated(MESSAGE_SELECTOR));            
             }
             catch (TimeoutException exception)

@@ -124,6 +124,7 @@ public class ClassifyRecord extends BaseTest
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
         
         // show that the classify action is available
+        assertFalse(filePlan.getRecord(RECORD).isHeld());
         assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
         
         // add record to hold
@@ -134,6 +135,7 @@ public class ClassifyRecord extends BaseTest
         	.clickOnOk();
     	
         // show that classify action is not available
+        assertTrue(filePlan.getRecord(RECORD).isHeld());
         assertFalse(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
         
         // remove record from hold
@@ -144,6 +146,7 @@ public class ClassifyRecord extends BaseTest
         	.clickOnOk();
         
         // show that the classify action is now available
+        assertFalse(filePlan.getRecord(RECORD).isHeld());
         assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
     }
 
