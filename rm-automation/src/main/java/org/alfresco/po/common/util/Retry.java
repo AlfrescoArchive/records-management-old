@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -23,10 +23,11 @@ package org.alfresco.po.common.util;
  * 
  * @author Roy Wetherall
  */
-public abstract class Retry <T extends Object> 
+@FunctionalInterface
+public interface Retry <T extends Object>
 {
     /**
      * retry execution
      */
-    public abstract T execute();
+    T execute();
 }

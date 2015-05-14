@@ -285,11 +285,11 @@ public final class Utils implements ApplicationContextAware
         try
         {
             // create file
-            File file = File.createTempFile(name, ".txt");
+            final File file = File.createTempFile(name, ".txt");
 
             // create writer
-            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file), Charset.forName("UTF-8")
-                    .newEncoder()))
+            try (FileOutputStream   fos    = new FileOutputStream(file);
+                 OutputStreamWriter writer = new OutputStreamWriter(fos, Charset.forName("UTF-8").newEncoder()))
             {
                 // place content in file
                 writer.write("this is a sample test upload file");
@@ -304,16 +304,17 @@ public final class Utils implements ApplicationContextAware
     }
 
     /**
-     * Helper method to retry, ignoring failures until success or all retries
+     * Helper method to retry the provided {@link Retry code block}, ignoring failures until either
+     * the code block completes successfully or the maximum number of retries has been reached.
      * are used up
      *
-     * @param retry     retry execution
-     * @param count     number of retries
-     * @return T        result of retry execution
+     * @param <T>       the return type from the code block.
+     * @param retry     a code block to execute.
+     * @param count     maximum number of retries.
+     * @return          result of the code block.
      */
     public static final <T> T retry(Retry<T> retry, int count)
     {
-        T result;
         int attempt = 0;
 
         while (true)
@@ -321,12 +322,12 @@ public final class Utils implements ApplicationContextAware
             try
             {
                 // try and execute
-                result = retry.execute();
-                break;
+                return retry.execute();
             }
             catch (Exception exception)
             {
-                // if we have used up all our tries throw the exception
+                attempt++;
+                // if we have used up all our retries throw the exception
                 if (attempt >= count)
                 {
                     throw exception;
@@ -335,7 +336,5 @@ public final class Utils implements ApplicationContextAware
                 // otherwise do nothing and try again
             }
         }
-
-        return result;
     }
 }
