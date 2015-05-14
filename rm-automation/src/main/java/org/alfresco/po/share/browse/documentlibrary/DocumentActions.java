@@ -31,4 +31,6 @@ public interface DocumentActions extends Actions
     static final String DELETE = "document-delete";
     /** Classify the document. */
     static final String CLASSIFY = "rm-classify-content";
+    /** Declare record */
+    static final String ACTION_DECLARE_RECORD = "rm-create-record";
 }

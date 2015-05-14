@@ -18,6 +18,7 @@
  */
 package org.alfresco.po.share.browse.documentlibrary;
 
+import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.share.browse.ListItem;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,13 @@ import org.springframework.stereotype.Component;
  */
 @Scope("prototype")
 @Component
-public class Document extends ListItem
+public class Document extends ListItem implements DocumentActions
 {
-    public static final String ACTION_DECLARE_RECORD = "rm-create-record";
-
     @Autowired
     private DocumentDetails documentDetails;
+    
+    @Autowired
+    private DeleteConfirmationDialog deleteConfirmationDialog;
 
     /**
      * Click on declare as record action
@@ -53,6 +55,14 @@ public class Document extends ListItem
     public DocumentDetails clickOnLink()
     {
         return super.clickOnLink(documentDetails);
+    }
+    
+    /**
+     * Click on delete action
+     */
+    public DeleteConfirmationDialog clickOnDelete()
+    {
+    	return (DeleteConfirmationDialog)clickOnAction(DELETE, deleteConfirmationDialog);
     }
 
 }

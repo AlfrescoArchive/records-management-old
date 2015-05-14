@@ -29,7 +29,6 @@ import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.Document;
-import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
@@ -76,7 +75,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration", "classification", "content-classification-dialog" },
         description = "Use the classify content dialog to classify a document.",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
@@ -202,6 +201,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertEquals("Unexpected current classification.", NO_CLEARANCE_LEVEL_TEXT, level);
 
         // Delete the document and recreate it again.
+        documentDetails.navigateUp();
         recreateDocument();
     }
 
@@ -211,9 +211,11 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     private void recreateDocument()
     {
-        documentDetails.getDocumentActionsPanel()
-            .clickOnAction(DocumentActions.DELETE, deleteConfirmationDialog);
-        deleteConfirmationDialog.confirmDelete();
+        documentLibrary
+        	.getDocument(DOCUMENT)
+        	.clickOnDelete()
+        	.confirmDelete();
+        
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
         documentLibrary.getToolbar()
             .clickOnFile()

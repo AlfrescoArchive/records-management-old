@@ -85,8 +85,8 @@ public class ClassifyContentDialog extends Dialog
         // Open the dropdown menu.
         levelSelectButton.click();
         // Choose the appropriate option by the label.
-        String selector = "//table[@id='LEVELS_CONTROL_menu']//td[contains(@class, 'dijitMenuItemLabel')][.='" + levelId + "']";
-        WebElement level = levelsMenu.findElement(By.xpath(selector));
+        String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
+        WebElement level = levelsMenu.findElement(By.cssSelector(selector));
         level.click();
         return this;
     }
