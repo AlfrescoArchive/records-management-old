@@ -78,7 +78,6 @@ public abstract class Renderable
 	/**
      * Render method
      */
-    @SuppressWarnings({"unchecked" })
 	public <T extends Renderable> T render()
     {
     	// check the web driver
@@ -106,13 +105,8 @@ public abstract class Renderable
      */
     private void waitForPageLoad() 
     {
-        ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() 
-        {
-            public Boolean apply(WebDriver driver) 
-            {
-                return ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
-            }
-        };
+        ExpectedCondition<Boolean> pageLoadCondition =
+                driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
         webDriverWait().until(pageLoadCondition);
     };
     
@@ -198,7 +192,7 @@ public abstract class Renderable
     @SuppressWarnings("unchecked")
     private <T extends Object, A extends Annotation> Map<T, A> getAnnotatedFileds(Class<T> fieldClass, Class<A> annotationClass)
     {
-        Map<T, A> result = new HashMap<T, A>();
+        Map<T, A> result = new HashMap<>();
             
         for (Field field : getAllFields(getClass())) 
         {
@@ -228,7 +222,7 @@ public abstract class Renderable
      */
     protected List<Field> getAllFields(Class<?> clazz) 
     {
-        List<Field> result = new ArrayList<Field>();
+        List<Field> result = new ArrayList<>();
 
         Class<?> i = clazz;
         while (i != null && i != Object.class) 
