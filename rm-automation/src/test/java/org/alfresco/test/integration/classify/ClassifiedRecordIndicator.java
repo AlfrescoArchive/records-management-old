@@ -19,18 +19,13 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.browse.fileplan.Record;
-import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
-import org.alfresco.po.rm.details.record.RecordActionsPanel;
-import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Classify document integration test

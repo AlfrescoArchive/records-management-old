@@ -20,7 +20,6 @@
 package org.alfresco.test.integration.dataSetup;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -28,14 +27,11 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
-import org.alfresco.po.rm.browse.holds.Hold;
 import org.alfresco.po.rm.browse.holds.Holds;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
-import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
@@ -235,6 +231,7 @@ public class CreateFilePlan extends BaseTest
     /**
      * Declare inplace record
      */
+    /*
     private void declareInplaceRecord()
     {
         // navigate to the collaboration site
@@ -280,12 +277,14 @@ public class CreateFilePlan extends BaseTest
             .get(recordName, Record.class);
         assertNotNull("Unfiled record not found.", record);
     }
+    */
 
     /**
      * Create hold
      *
      * @param holdName hold name
      */
+    /*
     private void createHold(String holdName)
     {
         holds.getToolbar()
@@ -298,4 +297,5 @@ public class CreateFilePlan extends BaseTest
             .get(holdName, Hold.class);
         assertNotNull(hold);
     }
+    */
 }

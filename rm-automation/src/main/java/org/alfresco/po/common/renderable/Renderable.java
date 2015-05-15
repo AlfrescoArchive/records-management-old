@@ -54,19 +54,19 @@ public abstract class Renderable
     /** web driver */
     @Autowired
 	protected WebDriver webDriver;
-	
+
 	/** cached list of renderable children */
 	private Set<Renderable> renderableChildren;
-	
+
 	/** renderable parent, null if none */
 	protected Renderable renderableParent;
-	
+
 	/** elements to wait for during rendering */
 	private Map<WrapsElement, WaitFor> waitForHtmlElements;
-	
+
 	/** last rendered */
 	private static Renderable lastRendered;
-	
+
 	/**
 	 * @return	last rendered renderable item
 	 */
@@ -74,27 +74,28 @@ public abstract class Renderable
 	{
 		return lastRendered;
 	}
-	
+
 	/**
      * Render method
      */
-	public <T extends Renderable> T render()
+	@SuppressWarnings("unchecked")
+    public <T extends Renderable> T render()
     {
     	// check the web driver
     	checkMandatoryParam("webDriver", webDriver);
-    	
+
     	// wait for page to load
     	waitForPageLoad();
-    	
+
     	// init elements
         PageFactory.initElements(new HtmlElementDecorator(webDriver), this);
 
         // render children
-        renderChildren();        
-        
+        renderChildren();
+
         // wait for control status
         waitFor();
-        
+
         // return this
         lastRendered = this;
         return (T)this;
@@ -103,13 +104,13 @@ public abstract class Renderable
     /**
      * Helper to wait for the page to load
      */
-    private void waitForPageLoad() 
+    private void waitForPageLoad()
     {
         ExpectedCondition<Boolean> pageLoadCondition =
                 driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
         webDriverWait().until(pageLoadCondition);
     };
-    
+
     /**
      * Wait for the annotated html elements on this renderable item
      */
@@ -117,7 +118,7 @@ public abstract class Renderable
     {
         for (Map.Entry<WrapsElement, WaitFor> entry : getWaitForHTMLElements().entrySet())
         {
-            WrapsElement element = entry.getKey();            
+            WrapsElement element = entry.getKey();
             switch (entry.getValue().status())
             {
                 case VISIBLE:
@@ -136,16 +137,16 @@ public abstract class Renderable
                 case CLICKABLE:
                 {
                     webDriverWait().until(
-                            ExpectedConditions.elementToBeClickable(element.getWrappedElement()));                    
+                            ExpectedConditions.elementToBeClickable(element.getWrappedElement()));
                     break;
                 }
             }
-        }        
+        }
     }
-    
+
     /**
      * Get all the html elements this renderable item has to wait for
-     * 
+     *
      * @return  List<WrapsElement>   list of html elements
      */
     private Map<WrapsElement, WaitFor> getWaitForHTMLElements()
@@ -154,22 +155,22 @@ public abstract class Renderable
         {
             waitForHtmlElements = getAnnotatedFileds(WrapsElement.class, WaitFor.class);
         }
-        
+
         return waitForHtmlElements;
     }
-    
+
     /**
      * Render children
      */
     protected void renderChildren()
     {
-    	for (Renderable renderableChild : getRenderableChildren()) 
+    	for (Renderable renderableChild : getRenderableChildren())
     	{
     	    renderableChild.renderableParent = this;
         	renderableChild.render();
 		}
     }
-    
+
     /**
      * Get the renderable children
      */
@@ -177,14 +178,14 @@ public abstract class Renderable
     {
     	if (renderableChildren == null)
     	{
-    		renderableChildren = getAnnotatedFileds(Renderable.class, RenderableChild.class).keySet(); 	
+    		renderableChildren = getAnnotatedFileds(Renderable.class, RenderableChild.class).keySet();
     	}
     	return renderableChildren;
     }
-    
+
     /**
      * Helper method to retrieve all the field values for a given annotation class
-     * 
+     *
      * @param   fieldClass          field class
      * @param   annotationClass     annotation class
      * @return  List<T>             list of field values
@@ -193,13 +194,13 @@ public abstract class Renderable
     private <T extends Object, A extends Annotation> Map<T, A> getAnnotatedFileds(Class<T> fieldClass, Class<A> annotationClass)
     {
         Map<T, A> result = new HashMap<>();
-            
-        for (Field field : getAllFields(getClass())) 
+
+        for (Field field : getAllFields(getClass()))
         {
             A annotation = field.getAnnotation(annotationClass);
             if (annotation != null)
             {
-                try 
+                try
                 {
                     field.setAccessible(true);
                     Object fieldValue = field.get(this);
@@ -207,25 +208,25 @@ public abstract class Renderable
                     {
                         result.put((T)fieldValue, annotation);
                     }
-                } 
-                catch (IllegalArgumentException | IllegalAccessException e) 
+                }
+                catch (IllegalArgumentException | IllegalAccessException e)
                 {
                     e.printStackTrace();
                 }
             }
-        }           
+        }
         return result;
     }
-    
+
     /**
      * Get all fields for this object
      */
-    protected List<Field> getAllFields(Class<?> clazz) 
+    protected List<Field> getAllFields(Class<?> clazz)
     {
         List<Field> result = new ArrayList<>();
 
         Class<?> i = clazz;
-        while (i != null && i != Object.class) 
+        while (i != null && i != Object.class)
         {
         	Collections.addAll(result, i.getDeclaredFields());
             i = i.getSuperclass();
