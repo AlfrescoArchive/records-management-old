@@ -165,7 +165,7 @@ public class ContentClassificationDialogTests extends BaseTest
     }
 
     /**
-     * Check that content can be "classified" with a level of "No Clearance".
+     * Check that content can be "classified" with a level of "Unclassified".
      *
      * <pre>
      * Given that I have opened the classify content dialog
@@ -178,10 +178,10 @@ public class ContentClassificationDialogTests extends BaseTest
     @Test
     (
         groups = { "integration", "classification" },
-        description = "Check that content can be classified with a level of No Clearance.",
+        description = "Check that content can be classified with a level of Unclassified.",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
-    public void classifyAsNoClearance()
+    public void classifyAsUnclassified()
     {
         // Open the document preview page.
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
@@ -190,15 +190,15 @@ public class ContentClassificationDialogTests extends BaseTest
         // Classify the document with a level of "No Clearance".
         DocumentActionsPanel documentActionsPanel = documentDetails.getDocumentActionsPanel();
         documentActionsPanel.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
-        classifyContentDialog.setLevel(NO_CLEARANCE_LEVEL_TEXT)
+        classifyContentDialog.setLevel(UNCLASSIFIED_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
 
-        // Check that the document is classified and has level "No Clearance".
+        // Check that the document is classified and has level "Unclassified".
         assertNotNull("Classified properties not found.", classifiedPropertiesPanel);
         String level = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION);
-        assertEquals("Unexpected current classification.", NO_CLEARANCE_LEVEL_TEXT, level);
+        assertEquals("Unexpected current classification.", UNCLASSIFIED_TEXT, level);
 
         // Delete the document and recreate it again.
         documentDetails.navigateUp();
@@ -212,10 +212,10 @@ public class ContentClassificationDialogTests extends BaseTest
     private void recreateDocument()
     {
         documentLibrary
-        	.getDocument(DOCUMENT)
-        	.clickOnDelete()
-        	.confirmDelete();
-        
+            .getDocument(DOCUMENT)
+            .clickOnDelete()
+            .confirmDelete();
+
         openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
         documentLibrary.getToolbar()
             .clickOnFile()
