@@ -32,6 +32,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.BeansException;
@@ -132,6 +133,11 @@ public final class Utils implements ApplicationContextAware
         }
     }
 
+    public static <T> void waitFor(ExpectedCondition<T> condition)
+    {
+        webDriverWait().until(condition);
+    }
+
     /**
      * Helper method to wait for the staleness of an element
      */
@@ -216,14 +222,33 @@ public final class Utils implements ApplicationContextAware
     }
 
     /**
+     * Clear control
+     */
+    public static <T extends WebElement> T clear(T field)
+    {
+        checkMandatoryParam("field", field);
+        field.clear();
+        return field;
+    }
+
+    /**
      * Clear control and enter text
      */
     public static <T extends WebElement> T clearAndType(T field, String text)
     {
-        checkMandatoryParam("field", field);
+        clear(field);
+
         checkMandatoryParam("text", text);
-        field.clear();
         field.sendKeys(text);
+        return field;
+    }
+
+    /**
+     * Clear control and enter text
+     */
+    public static <T extends WrapsElement> T clear(T field)
+    {
+        clear(field.getWrappedElement());
         return field;
     }
 
