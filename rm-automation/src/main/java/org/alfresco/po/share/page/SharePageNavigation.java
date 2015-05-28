@@ -19,11 +19,11 @@
 package org.alfresco.po.share.page;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.share.admin.AdminToolsNavigation;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
@@ -36,16 +36,31 @@ import ru.yandex.qatools.htmlelements.element.Link;
 @Component
 public class SharePageNavigation extends Renderable
 {
-	@FindBy(css="a[title='Home']")
-	private Link homeLink;
-	
-	@Autowired
-	private UserDashboardPage userDashboardPage;
-	
-	public UserDashboardPage clickOnHome()
-	{
-		homeLink.click();
-		return userDashboardPage.render();
-	}
-	
+    @FindBy(css="a[title='Home']")
+    private Link homeLink;
+
+    @FindBy(css="a[title='Admin Tools']")
+    private Link adminToolsLink;
+
+    @Autowired
+    private UserDashboardPage userDashboardPage;
+    @Autowired
+    private AdminToolsNavigation adminToolsNavigation;
+
+    public UserDashboardPage clickOnHome()
+    {
+        homeLink.click();
+        return userDashboardPage.render();
+    }
+
+    /**
+     * Click on the admin tools link.
+     *
+     * @return The admin tools navigation menu.
+     */
+    public AdminToolsNavigation clickOnAdminTools()
+    {
+        adminToolsLink.click();
+        return adminToolsNavigation.render();
+    }
 }

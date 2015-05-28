@@ -97,6 +97,12 @@ public class SecurityClearancePage extends ConsolePage
         return this;
     }
 
+    /** Get the text from the name filter box. */
+    public String getNameFilter()
+    {
+        return nameFilterTextInput.getText();
+    }
+
     /** Get the specified user's Security Clearance as a String.
      *
      *  @throws TimeoutException if the provided {@code filterTerm} does not match exactly one user.
@@ -131,7 +137,7 @@ public class SecurityClearancePage extends ConsolePage
         this.setNameFilter(filterTerm);
 
         // We will wait for the table to have a single result row.
-        Utils.waitFor(driver -> driver.findElements(USER_NAME_SELECTOR).size() == 1 );
+        Utils.waitFor(driver -> driver.findElements(USER_NAME_SELECTOR).size() == 1);
 
         // TODO It would be nice here to be able to also wait for the appearance of "Could not find any users..."
         //          But there is no css class on that div which makes it tricky.
@@ -175,6 +181,33 @@ public class SecurityClearancePage extends ConsolePage
 
         return zip(userStream, clearanceStream).collect(Collectors.toMap(pair -> pair.getLeft(), pair -> pair.getRight()));
     }
+
+
+    /**
+     * TODO
+     */
+    public SecurityClearancePage setClearance(String string)
+    {
+        return this;
+    }
+
+    /**
+     * TODO
+     */
+    public SecurityClearancePage andConfirm()
+    {
+        return this;
+    }
+
+
+    /**
+     * TODO
+     */
+    public List<String> getClearanceOptions(String userName)
+    {
+        return null;
+    }
+
 
     // TODO Get available Security Clearance dropdown options.
 }

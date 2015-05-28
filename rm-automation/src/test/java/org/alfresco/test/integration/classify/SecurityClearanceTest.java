@@ -18,7 +18,15 @@
  */
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.alfresco.po.share.console.users.SecurityClearancePage;
+import org.alfresco.po.share.page.SharePageNavigation;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -29,10 +37,15 @@ import org.testng.annotations.Test;
  * @author tpage
  * @since 3.0
  */
+@Test(enabled=false) // TODO ENABLE THIS
 public class SecurityClearanceTest extends BaseTest
 {
+    private static final List<String> CONFIGURED_CLEARANCES = Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance");
+
     @Autowired
     private SecurityClearancePage securityClearancePage;
+    @Autowired
+    private SharePageNavigation sharePageNavigation;
 
     /**
      * Check the security clearance page loads and contains an ordered list of users and clearances.
@@ -62,7 +75,20 @@ public class SecurityClearanceTest extends BaseTest
     )
     public void loadSecurityClearancePage()
     {
+        sharePageNavigation.clickOnAdminTools().clickOnSecurityClearanceLink();
+        assertEquals("Expected the filter to be initially empty.", "", securityClearancePage.getNameFilter());
 
+        // Check the displayed users are ordered alphabetically.
+        List<String> displayedUsers = securityClearancePage.getDisplayedUsers();
+        List<String> expectedOrder = new ArrayList<>(displayedUsers);
+        expectedOrder.sort(String.CASE_INSENSITIVE_ORDER);
+        assertEquals("Displayed users are not sorted alphabetically.", expectedOrder, displayedUsers);
+
+        // Check each user has a valid clearance.
+        for (String clearance : securityClearancePage.getUserClearances().values())
+        {
+            assertTrue("Unrecognised security clearance: " + clearance, CONFIGURED_CLEARANCES.contains(clearance));
+        }
     }
 
     /**
@@ -118,7 +144,17 @@ public class SecurityClearanceTest extends BaseTest
     )
     public void giveUserClearance()
     {
+        String clearance = openPage(securityClearancePage).getUserSecurityClearance(USER1);
+        assertEquals("No Clearance", clearance);
 
+        List<String> options = securityClearancePage.getClearanceOptions(USER1);
+        assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance"), options);
+
+        clearance = securityClearancePage
+                        .setClearance("Secret")
+                        .andConfirm()
+                        .getUserSecurityClearance(USER1);
+        assertEquals("Secret", clearance);
     }
 
     /*
