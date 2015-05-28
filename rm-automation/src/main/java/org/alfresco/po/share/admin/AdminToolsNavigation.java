@@ -23,6 +23,7 @@ import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * A generic page object for Admin Tools pages that can be extended.
@@ -30,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author tpage
  * @since 3.0
  */
+@Component
 public class AdminToolsNavigation extends Renderable
 {
     @FindBy(css = "a[href=security-clearance]")
