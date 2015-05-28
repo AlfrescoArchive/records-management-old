@@ -18,18 +18,21 @@
  */
 package org.alfresco.po.share.console.users;
 
+import static org.alfresco.po.common.StreamHelper.zip;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.console.ConsolePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.TextInput;
-
-import java.util.List;
 
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
@@ -39,7 +42,7 @@ import java.util.List;
 public class SecurityClearancePage extends ConsolePage
 {
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
-    
+
     /** Selects the "User Name" text from within the table showing users and their clearances.
      * Example value: "Alice Beecher (abeecher)".
      * <p/>
@@ -47,7 +50,6 @@ public class SecurityClearancePage extends ConsolePage
      * Note that this selector assumes that the table only has one row. Therefore the table
      * must be restricted to one row by {@link #setNameFilter(String) adding some filter text}. */
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
-
 
     /** Selects the "Security Clearance" text from within the table showing users and their clearances.
      * Example value: "No Clearance".
@@ -71,7 +73,10 @@ public class SecurityClearancePage extends ConsolePage
 
     @FindBy(css=".security-clearance-filter .control input[name=nameFilter]")
     private TextInput nameFilterTextInput;
-    
+
+    @FindBy(css=".alfresco-lists-views-AlfListView")
+    private WebElement clearanceTable;
+
     public String getPageURL(String ... context)
     {
         return PAGE_URL;
@@ -112,7 +117,8 @@ public class SecurityClearancePage extends ConsolePage
         return secClearanceSpans.get(0).getText();
     }
 
-    private void filterTableToOneUser(String filterTerm) {
+    private void filterTableToOneUser(String filterTerm)
+    {
         // Reset the table to show all results. We must do this so that the waiting code below will work.
         // If we don't reset the table, then there is the chance that the table has only one row in it
         // before this search is performed, which would cause an error when we wait for its size to be 1.
@@ -129,6 +135,45 @@ public class SecurityClearancePage extends ConsolePage
 
         // TODO It would be nice here to be able to also wait for the appearance of "Could not find any users..."
         //          But there is no css class on that div which makes it tricky.
+    }
+
+    /**
+     * Get all the user names displayed on the page.
+     *
+     * @return The list of users.
+     */
+    public List<String> getDisplayedUsers()
+    {
+        return clearanceTable
+                    .findElements(USER_NAME_SELECTOR)
+                    .stream()
+                    .map(webElement -> webElement.getText())
+                    .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the text nodes of all elements found using the selector.
+     *
+     * @param container The node to search within.
+     * @param selector The selector to use.
+     * @return A stream of strings found in the text nodes of the matched elements.
+     */
+    private Stream<String> getTextNodesOfElements(WebElement container, By selector)
+    {
+        return container.findElements(selector).stream().map(webElement -> webElement.getText());
+    }
+
+    /**
+     * Get all user clearances displayed on the page.
+     *
+     * @return A map from users to their clearances.
+     */
+    public Map<String, String> getUserClearances()
+    {
+        Stream<String> userStream = getTextNodesOfElements(clearanceTable, USER_NAME_SELECTOR);
+        Stream<String> clearanceStream = getTextNodesOfElements(clearanceTable, SECURITY_CLEARANCE_SELECTOR);
+
+        return zip(userStream, clearanceStream).collect(Collectors.toMap(pair -> pair.getLeft(), pair -> pair.getRight()));
     }
 
     // TODO Get available Security Clearance dropdown options.
