@@ -18,6 +18,7 @@
  */
 package org.alfresco.po.share.page;
 
+import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.admin.AdminToolsNavigation;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
@@ -46,6 +47,9 @@ public class SharePageNavigation extends Renderable
     private UserDashboardPage userDashboardPage;
     @Autowired
     private AdminToolsNavigation adminToolsNavigation;
+    @Autowired
+    @RenderableChild
+    private UserDropdown userDropdown;
 
     public UserDashboardPage clickOnHome()
     {
@@ -62,5 +66,11 @@ public class SharePageNavigation extends Renderable
     {
         adminToolsLink.click();
         return adminToolsNavigation.render();
+    }
+
+    /** Open the user menu. */
+    public UserDropdown openUserDropdownMenu()
+    {
+        return userDropdown.revealDropdown();
     }
 }

@@ -97,7 +97,7 @@ public class ClassifyDocument extends BaseTest
     )
     public void checkClassifyActionUnavailableInVariousCases()
     {
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
 
         Document sharedDocument = documentLibrary.getDocument(SHARED_DOCUMENT);
         assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
@@ -106,6 +106,28 @@ public class ClassifyDocument extends BaseTest
 
         Document lockedDocument = documentLibrary.getDocument(LOCKED_DOCUMENT);
         assertFalse(lockedDocument.isActionClickable(DocumentActions.CLASSIFY));
+    }
+
+    /**
+     * Check that a user with no security clearance doesn't see the 'Classify' action.
+     *
+     * Given that I have a security clearance level of 'No Clearance'
+     * And 'write' permission on the unclassified content
+     * When I view the unclassified content
+     * Then I cannot set a classification
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Check that a user with no security clearance doesn't see the 'Classify' action",
+        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-users" }
+    )
+    public void checkUnclearedUserCannotClassify()
+    {
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
+
+        Document sharedDocument = documentLibrary.getDocument(DOCUMENT);
+        assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
     }
 
     /*
@@ -117,13 +139,6 @@ public class ClassifyDocument extends BaseTest
     And may have a security clearance level above 'No Clearance'
     When I view the unclassified content
     Then I am unable to set a classification
-
-    User with no security clearance can't set content classification
-
-    Given that I have a security clearance level of 'No Clearance'
-    And 'write' permission on the unclassified content
-    When I view the unclassified content
-    Then I can not set a classification
 
     Can't sync classified content to the cloud
 

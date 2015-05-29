@@ -16,31 +16,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.test.integration.dataSetup;
+package org.alfresco.po.share.page;
 
-import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
-import org.alfresco.test.BaseTest;
-import org.testng.annotations.Test;
+import org.alfresco.po.common.renderable.Renderable;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.springframework.stereotype.Component;
 
 /**
- * Create the test users.
+ * The user dropdown menu in the Share page header.
  *
  * @author tpage
  * @since 3.0
  */
-public class CreateUsers extends BaseTest
+@Component
+public class UserDropdown extends Renderable
 {
-    /**
-     * Create users for use in tests.
-     */
-    @Test
-    (
-        groups = { "integration-dataSetup-rmSite", "integration-dataSetup", "integration-dataSetup-users" },
-        description = "Create users"
-    )
-    public void createRMUsers()
+    @FindBy(css = "#HEADER_USER_MENU_POPUP")
+    private WebElement dropdownButton;
+
+    @FindBy(css = "#HEADER_USER_MENU_LOGOUT_text")
+    private WebElement logoutButton;
+
+    public UserDropdown revealDropdown()
     {
-        createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
-        createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        dropdownButton.click();
+        return this;
+    }
+
+    public void logout()
+    {
+        logoutButton.click();
     }
 }

@@ -37,52 +37,54 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class SharePage extends Page
 {
-	/** page footer */
+    protected static ThreadLocal<String> currentLoggedInUser = new ThreadLocal<>();
+
+    /** page footer */
     @WaitFor(status=WaitForStatus.VISIBLE)
     @FindBy(css="div.sticky-footer")
     private WebElement footer;
-    
+
     /** share page navigation */
     @Autowired
-	@RenderableChild
-	private SharePageNavigation sharePageNavigation;
-    
+    @RenderableChild
+    private SharePageNavigation sharePageNavigation;
+
     /** login page */
     @Autowired
     private LoginPage loginPage;
-    
+
     @Autowired
     private Message message;
-	
-	/**
-	 * Get share page navigation
-	 */
-	public SharePageNavigation getSharePageNavigation()
-	{
-		return sharePageNavigation;
-	}
-	
-	/**
-	 * @see org.alfresco.po.common.Page#render()
-	 */
-    @Override
-    public <T extends Renderable> T render() 
+
+    /**
+     * Get share page navigation
+     */
+    public SharePageNavigation getSharePageNavigation()
     {
-    	if (!(getLastRendered() instanceof SharePage))
-    	{
-    		message.waitUntillHidden();
-    	}
+        return sharePageNavigation;
+    }
+
+    /**
+     * @see org.alfresco.po.common.Page#render()
+     */
+    @Override
+    public <T extends Renderable> T render()
+    {
+        if (!(getLastRendered() instanceof SharePage))
+        {
+            message.waitUntillHidden();
+        }
         return super.render();
     }
-    
+
     /**
      * Get the URL of the page
      */
     protected abstract String getPageURL(String ... context);
-    
+
     /**
      * Open this page, login to Share if required.
-     * 
+     *
      * @param server        base server URL
      * @param userName      user name
      * @param password      password
@@ -93,10 +95,17 @@ public abstract class SharePage extends Page
     {
         // get the page URL
         String url = server + getPageURL(context);
-        
+
+        // Logout if previously logged in as someone else.
+        String previousUser = currentLoggedInUser.get();
+        if (previousUser != null && !userName.equals(previousUser))
+        {
+            sharePageNavigation.openUserDropdownMenu().logout();
+        }
+
         // open the page
         webDriver.get(url);
-        
+
         // if redirected to the login page
         if (webDriver.getTitle().contains("Login"))
         {
@@ -106,8 +115,9 @@ public abstract class SharePage extends Page
                 .setUsername(userName)
                 .setPassword(password)
                 .clickOnLoginButton();
+            currentLoggedInUser.set(userName);
         }
-        
+
         return this.render();
     }
 }

@@ -137,7 +137,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     @SuppressWarnings("unchecked")
     protected <P extends SharePage> P openPage(String userName, String password, P page, String ... context)
     {
-        return (P)page.open(moduleProperties.getShareURL(), getAdminName(), getAdminPassword(), context);
+        return (P)page.open(moduleProperties.getShareURL(), userName, password, context);
     }
 
     /**
