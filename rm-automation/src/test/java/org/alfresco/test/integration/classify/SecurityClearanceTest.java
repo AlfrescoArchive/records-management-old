@@ -132,7 +132,8 @@ public class SecurityClearanceTest extends BaseTest
     }
 
     /**
-     * Give a user clearance, reload the page and then revoke it again.
+     * Give a user clearance and check the page reflects this. Note that this test has a side effect of providing the
+     * user with "Secret" clearance, and is used as a dependency of other tests.
      *
      * <pre>
      * Given that there is no filter set
@@ -153,7 +154,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "user_1_has_secret_clearance" },
         description = "Give a user clearance, reload the page and then revoke it again",
         dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users" }
     )

@@ -117,4 +117,17 @@ public class ClassifyDocument extends BaseTest
     When I view the available actions
     Then the classify action will be available
     */
+
+    /*
+    Acceptance criteria from RM-2017 which are not covered here.
+
+    Given that I am a user with the highest security clearance
+    When I classify content
+    Then all levels in the classification hierarchy are available to me
+
+    Given that I am a user with mid level security clearance
+    When I classify content
+    Then only classifications that match my security clearance and those below are available to me
+    And those above my security clearance level are not visible to me
+     */
 }

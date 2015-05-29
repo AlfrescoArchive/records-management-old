@@ -52,26 +52,26 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     /** user dashboard page */
     @Autowired
     protected UserDashboardPage userDashboardPage;
-    
+
     @Autowired
     private WebDriver webDriver;
 
     /** Module Properties */
     @Autowired
     private ModuleProperties moduleProperties;
-    
+
     /** users page */
     @Autowired
     private UsersPage usersPage;
-    
+
     /** new users page */
     @Autowired
     private NewUsersPage newUsersPage;
-    
+
     /** users profile page */
     @Autowired
     private UserProfilePage userProfilePage;
-    
+
     /** users and groups page */
     @Autowired
     private UsersAndGroupsPage usersAndGroupsPage;
@@ -111,10 +111,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
      */
     @BeforeClass(alwaysRun = true)
     public void beforeClass()
-    {        
+    {
         webDriver.manage().window().maximize();
     }
-    
+
     /**
      * Helper to open page
      */
@@ -122,7 +122,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     {
         return openPage(page, ArrayUtils.EMPTY_STRING_ARRAY);
     }
-    
+
     /**
      * Helper to open page
      */
@@ -130,16 +130,16 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     {
         return openPage(getAdminName(), getAdminPassword(), page, context);
     }
-    
+
     /**
      * Helper to open page
      */
     @SuppressWarnings("unchecked")
     protected <P extends SharePage> P openPage(String userName, String password, P page, String ... context)
-    {       
+    {
         return (P)page.open(moduleProperties.getShareURL(), getAdminName(), getAdminPassword(), context);
     }
-    
+
     /**
      * Generate random string suitable for property values
      */
@@ -147,20 +147,20 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     {
         return UUID.randomUUID().toString();
     }
-    
+
     /**
      * Helper method to create new users
-     * 
+     *
      * @param userName user name
      */
     protected void createUser(String userName)
     {
         createUser(userName, null);
     }
-    
+
     /**
      * Helper method to create a new user with a specific RM role
-     * 
+     *
      * @param userName  user name
      * @param role      RM role
      */
@@ -175,10 +175,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 .setLastName(userName)
                 .setEmail(userName + "@alfresco.com")
                 .setUserName(userName)
-                .setPassword("password")
-                .setVerifyPassword("password")
+                .setPassword(DEFAULT_PASSWORD)
+                .setVerifyPassword(DEFAULT_PASSWORD)
                 .clickOnCreateUser();
-                    
+
             // verify that user has been created
             // keep trying until SOLR has updated it's index!
             // TODO limit the retry
@@ -189,7 +189,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                     .setSearch(userName)
                     .clickOnSearch();
             }
-            
+
             // if a role is provided
             if (role != null)
             {
@@ -198,7 +198,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                     .selectRole(role)
                     .clickOnAddUser()
                     .setSearch(userName);
-                
+
                 // we may need to keep trying this until the SOLR index catches up
                 addAuthorityDialog.clickOnSearch();
                 while(addAuthorityDialog.isResultsEmpty())
@@ -207,13 +207,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                     try{Thread.sleep(1000);}catch(Exception exception){};
                     addAuthorityDialog.clickOnSearch();
                 }
-                
+
                 // add the new user
                 addAuthorityDialog.clickOnAdd(userName);
             }
         }
     }
-    
+
     /**
      * Helper method to determine whether the user already exists or not
      */
@@ -222,12 +222,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
         return openPage(usersPage)
             .setSearch(userName)
             .clickOnSearch()
-            .isUserFound(userName);        
+            .isUserFound(userName);
     }
-    
+
     /**
      * Helper method to delete a user
-     * 
+     *
      * @param userName  user name
      */
     protected void deleteUser(String userName)
@@ -241,18 +241,18 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 .clickOnConfirm();
         }
     }
-    
+
     /**
      * Helper to improve the usefulness of the reported error when arrays are compared
-     * 
+     *
      * @param expected  expected array
      * @param actual    actual array
      */
     protected void compareArrays(String[] expected, String[] actual)
-    {     
+    {
         assertArrayEquals(
                 "Expected " + Arrays.toString(expected) + ", but actual is " + Arrays.toString(actual),
-                expected, 
+                expected,
                 actual);
     }
 }

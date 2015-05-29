@@ -40,7 +40,7 @@ public class CreateUsers extends BaseTest
     )
     public void createUsers()
     {
-        // create user
         createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 }

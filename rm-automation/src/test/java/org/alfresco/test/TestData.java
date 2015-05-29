@@ -25,8 +25,13 @@ package org.alfresco.test;
  */
 public interface TestData
 {
-    /** users */
+    /** A user who will be given "Secret" security clearance. */
     public static final String USER1 = "userone";
+    /** A user who will have no security clearance. */
+    public static final String UNCLEARED_USER = "uncleared_user";
+
+    /** The default password used when creating test users. */
+    public static final String DEFAULT_PASSWORD = "password";
 
     /* site identifiers */
     /** The id of the RM site. */
