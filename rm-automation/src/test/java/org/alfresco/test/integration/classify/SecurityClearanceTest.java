@@ -21,7 +21,6 @@ package org.alfresco.test.integration.classify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +45,24 @@ public class SecurityClearanceTest extends BaseTest
     private SecurityClearancePage securityClearancePage;
     @Autowired
     private SharePageNavigation sharePageNavigation;
+
+    /**
+     * Check that the displayed users are sorted correctly.
+     *
+     * @param displayedUsers The list of user strings found on the page (in the format "First-name Surname (userid)").
+     * @throws AssertionError If the list is sorted incorrectly.
+     */
+    protected void checkUserOrdering(List<String> displayedUsers)
+    {
+        String previousUserId = "";
+        for (String user : displayedUsers)
+        {
+            String userId = user.split("[\\(\\)]")[1];
+            assertTrue("Expected users to be sorted by user id, but found '"+previousUserId+"' and then '"+userId+"'",
+                        userId.compareTo(previousUserId) >= 0);
+            previousUserId = userId;
+        }
+    }
 
     /**
      * Check the security clearance page loads and contains an ordered list of users and clearances.
@@ -80,9 +97,7 @@ public class SecurityClearanceTest extends BaseTest
 
         // Check the displayed users are ordered alphabetically.
         List<String> displayedUsers = securityClearancePage.getDisplayedUsers();
-        List<String> expectedOrder = new ArrayList<>(displayedUsers);
-        expectedOrder.sort(String.CASE_INSENSITIVE_ORDER);
-        assertEquals("Displayed users are not sorted alphabetically.", expectedOrder, displayedUsers);
+        checkUserOrdering(displayedUsers);
 
         // Check each user has a valid clearance.
         for (String clearance : securityClearancePage.getUserClearances().values())
