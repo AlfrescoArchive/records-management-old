@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Collaboration site dashboard
- * 
+ *
  * @author Roy Wetherall
  */
 @Component
@@ -33,7 +33,7 @@ public class CollaborationSiteDashboard extends CollaborationSitePage
      */
     public String getPageURL(String ... context)
     {
-        throw new UnsupportedOperationException("This page does not have a direct access URL set.");
+        String siteId = context[0];
+        return "/page/site/" + siteId + "/dashboard";
     }
-
 }

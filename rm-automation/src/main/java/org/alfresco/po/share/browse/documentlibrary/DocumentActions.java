@@ -27,6 +27,8 @@ import org.alfresco.po.rm.browse.fileplan.Actions;
  */
 public interface DocumentActions extends Actions
 {
+    /** Lock the document for editing offline. */
+    static final String EDIT_OFFLINE = "document-edit-offline";
     /** Delete the document. */
     static final String DELETE = "document-delete";
     /** Classify the document. */

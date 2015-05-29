@@ -35,9 +35,17 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     @Autowired
     @RenderableChild
     private DocumentActionsPanel documentActionsPanel;
+    @Autowired
+    @RenderableChild
+    private SocialActions socialActions;
 
     public DocumentActionsPanel getDocumentActionsPanel()
     {
         return documentActionsPanel;
+    }
+
+    public SocialActions getSocialActions()
+    {
+        return socialActions;
     }
 }

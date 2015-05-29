@@ -19,6 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import org.alfresco.po.share.browse.documentlibrary.Document;
@@ -78,6 +79,35 @@ public class ClassifyDocument extends BaseTest
             .isActionClickable(DocumentActionsPanel.CLASSIFY));
     }
 
+    /**
+     * Check that the classify action is not available on the document in several cases.
+     *
+     * Given that content is either a working copy
+     * TODO Or content synced to the cloud
+     * Or content has been shared (via QuickShare)
+     * Or content that is already classified (covered by {@link ContentClassificationDialogTests#classifyDocument})
+     * When I view the available actions
+     * Then the classify content action will not be available
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Verify classify action is not available for various cases",
+        dependsOnGroups = { "integration-dataSetup-lockedDocument", "integration-dataSetup-sharedDocument" }
+    )
+    public void checkClassifyActionUnavailableInVariousCases()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+
+        Document sharedDocument = documentLibrary.getDocument(SHARED_DOCUMENT);
+        assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
+
+        // TODO Create test for document that has been synced to the cloud.
+
+        Document lockedDocument = documentLibrary.getDocument(LOCKED_DOCUMENT);
+        assertFalse(lockedDocument.isActionClickable(DocumentActions.CLASSIFY));
+    }
+
     /*
     RM-2078 Acceptance criteria currently without tests.
 
@@ -95,15 +125,6 @@ public class ClassifyDocument extends BaseTest
     When I view the unclassified content
     Then I can not set a classification
 
-    Action doesn't appear for working copies, synced content, shared content or classified content
-
-    Given that content is either a working copy
-    Or content synced to the cloud
-    Or content has been shared (via QuickShare)
-    Or content that is already classified
-    When I view the available actions
-    Then the classify content action will not be available
-
     Can't sync classified content to the cloud
 
     Given that content has been synced to the cloud
@@ -117,17 +138,4 @@ public class ClassifyDocument extends BaseTest
     When I view the available actions
     Then the classify action will be available
     */
-
-    /*
-    Acceptance criteria from RM-2017 which are not covered here.
-
-    Given that I am a user with the highest security clearance
-    When I classify content
-    Then all levels in the classification hierarchy are available to me
-
-    Given that I am a user with mid level security clearance
-    When I classify content
-    Then only classifications that match my security clearance and those below are available to me
-    And those above my security clearance level are not visible to me
-     */
 }

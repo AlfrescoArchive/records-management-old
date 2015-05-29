@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -16,32 +16,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.share.browse.documentlibrary;
+package org.alfresco.po.share.details.document;
 
-import org.alfresco.po.share.browse.BrowsePage;
-import org.alfresco.po.share.site.CollaborationSiteNavigation;
+import org.alfresco.po.common.renderable.Renderable;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Roy Wetherall
+ * The social actions available at the top of the document details page and underneath each document on the document
+ * library page.
+ *
+ * @author tpage
+ * @since 3.0
  */
 @Component
-public class DocumentLibrary extends BrowsePage<CollaborationSiteNavigation, DocumentLibraryList, DocumentLibraryToolbar>
+public class SocialActions extends Renderable
 {
-    /**
-     * Helper method to get the named record from the list
-     */
-    public Document getDocument(String documentName)
-    {
-        return getList().getByPartialName(documentName, Document.class);
-    }
+    //@FindBy(css = ".node-social a[title='Share document']")
+    @FindBy(css = ".node-social a.quickshare-action")
+    private WebElement shareDocumentLink;
 
-    /**
-     * Get the URL of the page
-     */
-    public String getPageURL(String ... context)
+    /** Share the document. */
+    public SocialActions clickShareDocument()
     {
-        String siteId = context[0];
-        return "/page/site/" + siteId + "/documentlibrary";
+        shareDocumentLink.click();
+        return this;
     }
 }

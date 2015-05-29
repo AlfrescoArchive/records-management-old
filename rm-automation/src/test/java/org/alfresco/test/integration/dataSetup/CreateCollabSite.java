@@ -22,6 +22,8 @@ package org.alfresco.test.integration.dataSetup;
 import static org.junit.Assert.assertFalse;
 
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
+import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
+import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
@@ -36,24 +38,18 @@ import org.testng.annotations.Test;
  */
 public class CreateCollabSite extends BaseTest
 {
-
-    /**
-     * collab site dashboard
-     */
+    /** collab site dashboard */
     @Autowired
     private CollaborationSiteDashboard siteDashboard;
-
-    /**
-     * user trashcan
-     */
+    /** user trashcan */
     @Autowired
     private UserTrashcanPage userTrashcan;
-
-    /**
-     * my sites dashlet
-     */
+    /** my sites dashlet */
     @Autowired
     private MySitesDashlet mySitesDashlet;
+    /** The document library page. */
+    @Autowired
+    private DocumentLibrary documentLibrary;
 
     /**
      * Regression test execution
@@ -68,15 +64,12 @@ public class CreateCollabSite extends BaseTest
         // create collaboration site
         openPage(userDashboardPage);
 
-        // create site if it doesn't exist
-        if (!mySitesDashlet.siteExists(COLLAB_SITE_ID))
-        {
-            mySitesDashlet.clickOnCreateSite()
-                .setSiteName(COLLAB_SITE_NAME)
-                .setSiteURL(COLLAB_SITE_ID)
-                .setSiteDescription(DESCRIPTION)
-                .clickOnOk();
-        }
+        // create site
+        mySitesDashlet.clickOnCreateSite()
+            .setSiteName(COLLAB_SITE_NAME)
+            .setSiteURL(COLLAB_SITE_ID)
+            .setSiteDescription(DESCRIPTION)
+            .clickOnOk();
 
         // upload document
         siteDashboard.getNavigation()
@@ -84,6 +77,52 @@ public class CreateCollabSite extends BaseTest
             .getToolbar()
             .clickOnFile()
             .uploadFile(DOCUMENT);
+    }
+
+    /** Create a document that is shared with "Quick Share". */
+    @Test
+    (
+        groups = { "integration-dataSetup", "integration-dataSetup-sharedDocument" },
+        description = "Create Collaboration Site",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void createSharedDocument()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        // upload document
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(SHARED_DOCUMENT);
+
+        // Share document
+        documentLibrary.getDocument(SHARED_DOCUMENT)
+            .clickOnLink()
+            .getSocialActions()
+            .clickShareDocument();
+    }
+
+    /** Create a document that is locked for editing. */
+    @Test
+    (
+        groups = { "integration-dataSetup", "integration-dataSetup-lockedDocument" },
+        description = "Create Collaboration Site",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void createLockedDocument()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        // upload document
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(LOCKED_DOCUMENT);
+
+        // Share document
+        documentLibrary.getDocument(LOCKED_DOCUMENT)
+            .clickOnLink()
+            .getDocumentActionsPanel()
+            .clickOnAction(DocumentActions.EDIT_OFFLINE);
     }
 
     /**

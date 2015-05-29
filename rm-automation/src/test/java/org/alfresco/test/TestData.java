@@ -65,6 +65,8 @@ public interface TestData
     public static final String DOCUMENT = "my-document";
     public static final String IN_PLACE_RECORD = "my-inplace-record";
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
+    public static final String SHARED_DOCUMENT = "shared-document";
+    public static final String LOCKED_DOCUMENT = "locked-document";
 
     /** standard property values */
     public static final String TITLE = "Title";
