@@ -26,11 +26,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.rm.dialog.MultiButtonDialog;
 import org.alfresco.po.share.console.ConsolePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
@@ -74,6 +76,9 @@ public class SecurityClearancePage extends ConsolePage
     @FindBy(css=".security-clearance-filter .control input[name=nameFilter]")
     private TextInput nameFilterTextInput;
 
+    @Autowired
+    private MultiButtonDialog changeClearanceDialog;
+
     @FindBy(css=".alfresco-lists-views-AlfListView")
     private WebElement clearanceTable;
 
@@ -109,6 +114,12 @@ public class SecurityClearancePage extends ConsolePage
      */
     public String getUserSecurityClearance(String filterTerm)
     {
+        return getSecurityClearanceElement(filterTerm).getText();
+    }
+
+    /** Gets the security clearance button (actually a {@code span}) for the specified user.
+     *  Note that the provided {@code filterTerm} must lead to a table with a single row. */
+    private WebElement getSecurityClearanceElement(String filterTerm) {
         filterTableToOneUser(filterTerm);
 
         final List<WebElement> secClearanceSpans = webDriver.findElements(SECURITY_CLEARANCE_SELECTOR);
@@ -119,8 +130,7 @@ public class SecurityClearancePage extends ConsolePage
                                                              filterTerm,
                                                              secClearanceSpans == null ? "null" : secClearanceSpans.size()));
         }
-
-        return secClearanceSpans.get(0).getText();
+        return secClearanceSpans.get(0);
     }
 
     private void filterTableToOneUser(String filterTerm)
@@ -140,7 +150,24 @@ public class SecurityClearancePage extends ConsolePage
         Utils.waitFor(driver -> driver.findElements(USER_NAME_SELECTOR).size() == 1);
 
         // TODO It would be nice here to be able to also wait for the appearance of "Could not find any users..."
-        //          But there is no css class on that div which makes it tricky.
+        //          But there is no css class on that div which makes it tricky. AKU-332.
+    }
+
+    public SecurityClearancePage clickOnSecurityClearance(String filterTerm)
+    {
+        getSecurityClearanceElement(filterTerm).click();
+        Utils.waitFor(driver -> driver.findElement(getSecurityClearanceDropDownSelector("No Clearance")));
+        return this;
+    }
+
+    public SecurityClearancePage selectClearanceLevel(String clearanceLevel)
+    {
+        final WebElement element = webDriver.findElement(getSecurityClearanceDropDownSelector(clearanceLevel));
+        element.click();
+
+        changeClearanceDialog.clickButton(0);
+
+        return this;
     }
 
     /**
@@ -207,7 +234,6 @@ public class SecurityClearancePage extends ConsolePage
     {
         return null;
     }
-
 
     // TODO Get available Security Clearance dropdown options.
 }

@@ -20,6 +20,7 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.page.SharePageNavigation;
 import org.alfresco.test.BaseTest;
+import org.openqa.selenium.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -36,7 +38,7 @@ import org.testng.annotations.Test;
  * @author tpage
  * @since 3.0
  */
-@Test(enabled=false) // TODO ENABLE THIS
+@Test
 public class SecurityClearanceTest extends BaseTest
 {
     private static final List<String> CONFIGURED_CLEARANCES = Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance");
@@ -122,14 +124,28 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
+        enabled = false, // Disabled as the admin user currently _does_ appear in searches.
         groups = { "integration" },
         description = "Check the admin user is not found by using the filter",
         dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
     public void adminIsNotShown()
     {
+        openPage(securityClearancePage);
 
+        try {
+            securityClearancePage.getUserSecurityClearance("admin");
+        }
+        catch (TimeoutException expected) {
+            // There should be no result for 'admin'. But we do not currently detect a clear 'no result' response
+            // and instead must rely on a TimeoutException as an indication of no result.
+            return;
+        }
+        fail("admin user unexpectedly present in results.");
     }
+
+    // TODO We should provide a filter term that produces no matched users and confirm that the table
+    //      contains a message that there are no matching users.
 
     /**
      * Give a user clearance and check the page reflects this. Note that this test has a side effect of providing the
@@ -154,6 +170,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
+        enabled=false,
         groups = { "integration", "user_1_has_secret_clearance" },
         description = "Give a user clearance, reload the page and then revoke it again",
         dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users" }
@@ -163,12 +180,13 @@ public class SecurityClearanceTest extends BaseTest
         String clearance = openPage(securityClearancePage).getUserSecurityClearance(USER1);
         assertEquals("No Clearance", clearance);
 
+        securityClearancePage.clickOnSecurityClearance(USER1);
+
         List<String> options = securityClearancePage.getClearanceOptions(USER1);
         assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance"), options);
 
         clearance = securityClearancePage
-                        .setClearance("Secret")
-                        .andConfirm()
+                        .selectClearanceLevel("Secret")
                         .getUserSecurityClearance(USER1);
         assertEquals("Secret", clearance);
     }
