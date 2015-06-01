@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Document library list item factory
- * 
+ *
  * @author Roy Wetherall
  */
 @Component
@@ -35,7 +35,7 @@ public class DocumentLibraryListItemFactory extends BrowseListItemFactory
 {
     /** is record indicator */
     private static By isRecordIndicatorSelector = By.cssSelector("img[alt='rm-is-record']");
-    
+
     /**
      * @see org.alfresco.po.share.browse.BrowseListItemFactory#getBeanName(org.openqa.selenium.WebElement)
      */
@@ -43,17 +43,17 @@ public class DocumentLibraryListItemFactory extends BrowseListItemFactory
     protected String getBeanName(WebElement row)
     {
         String result = "document";
-        
+
         String src = getImage(row).getAttribute("src");
         if (src.contains("folder"))
         {
             result = "folder";
         }
-        else if (elementExists(isRecordIndicatorSelector))
+        else if (elementExists(row, isRecordIndicatorSelector))
         {
             result = "inplaceRecord";
         }
-        
+
         return result;
     }
 
