@@ -25,6 +25,7 @@ import static org.testng.Assert.assertTrue;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
+import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.BaseTest;
@@ -120,7 +121,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-users" }
+        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-users-unclearedUser" }
     )
     public void checkUnclearedUserCannotClassify()
     {
@@ -128,6 +129,28 @@ public class ClassifyDocument extends BaseTest
 
         Document sharedDocument = documentLibrary.getDocument(DOCUMENT);
         assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
+    }
+
+    /**
+     * Check that the 'Classify' action exists for an in-place record.
+     *
+     * Given that content has been declared as a record
+     * And I have sufficient clearance to classify the record
+     * When I view the available actions
+     * Then the classify action will be available
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Check that the 'Classify' action exists for an in-place record",
+        dependsOnGroups = { "integration-dataSetup-inplaceRecord" }
+    )
+    public void checkInplaceRecordCanBeClassified()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        InplaceRecord inPlaceRecord = documentLibrary.getInplaceRecord(IN_PLACE_RECORD);
+        assertTrue(inPlaceRecord.isActionClickable(DocumentActions.CLASSIFY));
     }
 
     /*
@@ -145,12 +168,5 @@ public class ClassifyDocument extends BaseTest
     Given that content has been synced to the cloud
     When I view the available actions
     Then the classify action will not be available
-
-    Action appears for in-place record
-
-    Given that content has been declared as a record
-    And I have sufficient clearance to classify the record
-    When I view the available actions
-    Then the classify action will be available
     */
 }

@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  *
  * @author David Webster
  */
-public class CreateCollabSite extends BaseTest
+public class CreateCollabSite extends BaseTest implements DocumentActions
 {
     /** collab site dashboard */
     @Autowired
@@ -77,6 +77,29 @@ public class CreateCollabSite extends BaseTest
             .getToolbar()
             .clickOnFile()
             .uploadFile(DOCUMENT);
+    }
+
+    /** Create an in-place record. */
+    @Test
+    (
+        groups = { "integration-dataSetup", "integration-dataSetup-inplaceRecord" },
+        description = "Create In-Place Record",
+        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-rmSite" }
+    )
+    public void declareInplaceRecord()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        // upload document
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(IN_PLACE_RECORD);
+
+        // Declare as in-place record.
+        documentLibrary.getDocument(IN_PLACE_RECORD)
+            .clickOnLink()
+            .getDocumentActionsPanel()
+            .clickOnAction(ACTION_DECLARE_RECORD);
     }
 
     /** Create a document that is shared with "Quick Share". */

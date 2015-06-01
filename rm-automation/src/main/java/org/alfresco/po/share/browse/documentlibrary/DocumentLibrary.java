@@ -28,12 +28,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentLibrary extends BrowsePage<CollaborationSiteNavigation, DocumentLibraryList, DocumentLibraryToolbar>
 {
-    /**
-     * Helper method to get the named record from the list
-     */
+    /** Helper method to get the named document from the list. Will not return in-place records. */
     public Document getDocument(String documentName)
     {
         return getList().getByPartialName(documentName, Document.class);
+    }
+
+    /** Helper method to get the named in-place record from the list. */
+    public InplaceRecord getInplaceRecord(String inPlaceRecord)
+    {
+        return getList().getByPartialName(inPlaceRecord, InplaceRecord.class);
     }
 
     /**

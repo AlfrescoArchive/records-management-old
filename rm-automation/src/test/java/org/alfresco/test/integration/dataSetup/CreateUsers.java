@@ -35,12 +35,21 @@ public class CreateUsers extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup-rmSite", "integration-dataSetup", "integration-dataSetup-users" },
+        groups = { "integration-dataSetup", "integration-dataSetup-users" },
         description = "Create users"
     )
     public void createRMUsers()
     {
         createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
+    }
+
+    @Test
+    (
+        groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-unclearedUser" },
+        description = "Create users"
+    )
+    public void createUnclearedUser()
+    {
         createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 }

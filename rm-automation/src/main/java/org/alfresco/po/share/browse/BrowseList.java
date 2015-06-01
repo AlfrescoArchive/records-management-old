@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Generic browse list implementation
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class BrowseList<F extends BrowseListItemFactory> extends Renderable
@@ -112,16 +112,16 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
             {
                 // retry if exception found
                 retry++;
-                if (retry == RETRY_COUNT) 
-                { 
-                    throw new RuntimeException("Retries failed whilst rendering BrowseList", exception); 
+                if (retry == RETRY_COUNT)
+                {
+                    throw new RuntimeException("Retries failed whilst rendering BrowseList", exception);
                 }
             }
-        }        
-        
+        }
+
         return result;
     }
-    
+
     /**
      * Browse list size
      */
@@ -132,7 +132,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
 
     /**
      * Indicates whether the item list contains the named item
-     * 
+     *
      * @param name name of the item
      * @return boolean true if contained, false otherwise
      */
@@ -143,7 +143,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
 
     /**
      * Get list item
-     * 
+     *
      * @param name name of the item
      * @return ListItem list item, null if none
      */
@@ -154,7 +154,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
 
     /**
      * Get list item of specified type.
-     * 
+     *
      * @param name name of time
      * @param clazz expected type of item
      * @return
@@ -163,13 +163,16 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     public <T extends ListItem> T get(String name, Class<T> clazz)
     {
         ListItem item = itemMap.get(name);
-        if (item != null && !clazz.isInstance(item)) { throw new RuntimeException("Unexpexted list item type."); }
+        if (item != null && !clazz.isInstance(item))
+        {
+            throw new RuntimeException("Unexpected list item type. Got "+ item.getClass() + " expected " + clazz);
+        }
         return (T) item;
     }
 
     /**
      * Get list item by partial name
-     * 
+     *
      * @param name
      * @return
      */
@@ -193,7 +196,10 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
             if (entry.getKey().startsWith(name))
             {
                 ListItem item = entry.getValue();
-                if (!clazz.isInstance(item)) { throw new RuntimeException("Unexpexted list item type."); }
+                if (!clazz.isInstance(item))
+                {
+                    throw new RuntimeException("Unexpected list item type. Got "+ item.getClass() + " expected " + clazz);
+                }
                 result = (T) item;
 
                 break;
