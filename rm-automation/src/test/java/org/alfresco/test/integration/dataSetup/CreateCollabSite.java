@@ -145,7 +145,11 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         documentLibrary.getDocument(LOCKED_DOCUMENT)
             .clickOnLink()
             .getDocumentActionsPanel()
-            .clickOnAction(DocumentActions.EDIT_OFFLINE);
+            .clickOnActionAndDontRender(DocumentActions.EDIT_OFFLINE);
+
+        // Navigate away from the text file page to the collaboration site, just in case any test expects the Share
+        // header bar to be on the page.
+        openPage(documentLibrary, COLLAB_SITE_ID);
     }
 
     /**

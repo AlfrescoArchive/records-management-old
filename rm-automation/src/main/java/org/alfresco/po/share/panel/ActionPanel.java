@@ -29,7 +29,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
@@ -39,7 +38,7 @@ public abstract class ActionPanel extends Panel
 {
     @FindBy(css="div.action-set")
     private WebElement actionSet;
-    
+
     /** action selector */
     private static final String ACTION_SELECTOR_CSS = "div .{0} a";
 
@@ -54,14 +53,14 @@ public abstract class ActionPanel extends Panel
 
     /**
      * Helper method to check whether the specified actions are clickable
-     * 
+     *
      * @param actionNames   action names
      * @return boolean      true if all clickable, false otherwise
      */
     public boolean isActionsClickable(String ... actionNames)
     {
         boolean result = true;
-        
+
         // check each action
         for (String actionName : actionNames)
         {
@@ -71,7 +70,7 @@ public abstract class ActionPanel extends Panel
                 break;
             }
         }
-        
+
         return result;
     }
 
@@ -82,15 +81,15 @@ public abstract class ActionPanel extends Panel
     {
         return (getActionLink(actionName)!=null);
     }
-    
+
     /**
-     * Is action clickable 
+     * Is action clickable
      */
     public boolean isActionClickable(String actionName)
-    {         
+    {
         return getActionLink(actionName).isEnabled();
     }
-    
+
     /**
      * Click on action
      */
@@ -98,7 +97,15 @@ public abstract class ActionPanel extends Panel
     {
         return clickOnAction(actionName, SharePage.getLastRenderedPage(),true);
     }
-    
+
+    /**
+     * Click on action and don't try to return a rendered object.
+     */
+    public void clickOnActionAndDontRender(String actionName)
+    {
+        clickOnAction(actionName, null, true);
+    }
+
     /**
      * Click on action
      */
@@ -116,17 +123,21 @@ public abstract class ActionPanel extends Panel
         Link action = getActionLink(actionName);
         Utils.mouseOver(action);
         action.click();
-        
+
         // wait for the action link to become stale
         if (waitForActionStaleness == true)
         {
             waitForStalenessOf(action);
         }
-        
+
+        if (renderable == null)
+        {
+            return null;
+        }
         // render the return page
         return renderable.render();
     }
-    
+
     /**
      * Helper method to get the action link
      */
@@ -144,7 +155,7 @@ public abstract class ActionPanel extends Panel
 
         return new Link(link);
     }
-    
+
     /**
      * Helper method to get the action selector
      */
