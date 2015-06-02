@@ -25,8 +25,10 @@ package org.alfresco.test;
  */
 public interface TestData
 {
-    /** A user who will be given "Secret" security clearance. */
+    /** A user used by the sanity tests. */
     public static final String USER1 = "userone";
+    /** A user who will be assigned the to the RM MANAGER role. */
+    public static final String RM_MANAGER = "rm_manager";
     /** A user who will have no security clearance. */
     public static final String UNCLEARED_USER = "uncleared_user";
 

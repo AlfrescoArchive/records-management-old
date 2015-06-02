@@ -36,12 +36,12 @@ public class CreateUsers extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-users" },
+        groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-rmManager" },
         description = "Create users"
     )
-    public void createRMUsers()
+    public void createRMManager()
     {
-        createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        createUser(RM_MANAGER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 
     @Test
@@ -53,12 +53,12 @@ public class CreateUsers extends BaseTest
     {
         createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
-    
+
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
     protected void deleteUsers()
     {
-        deleteUser(USER1);
+        deleteUser(RM_MANAGER);
         deleteUser(UNCLEARED_USER);
     }
 }

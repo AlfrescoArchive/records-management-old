@@ -94,12 +94,12 @@ public class SecurityClearanceTest extends BaseTest
        
         // check the user names on the page
         List<String> userNames = securityClearancePage.getUserNames();
-        assertTrue(userNames.contains(USER1));
+        assertTrue(userNames.contains(RM_MANAGER));
         assertTrue(userNames.contains(UNCLEARED_USER));
         checkUserOrdering(userNames);
         
         // check the individual users are displayes
-        securityClearancePage.isUserShown(USER1);
+        securityClearancePage.isUserShown(RM_MANAGER);
         securityClearancePage.isUserShown(UNCLEARED_USER);
         
         // Check each user has a valid clearance.
@@ -165,20 +165,20 @@ public class SecurityClearanceTest extends BaseTest
     (
         groups = { "integration", "security-clearance" },
         description = "Give a user clearance, reload the page and then revoke it again",
-        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users" }
+        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users-rmManager" }
     )
     public void giveUserClearance()
     {
-        String clearance = openPage(securityClearancePage).getUserSecurityClearance(USER1);
+        String clearance = openPage(securityClearancePage).getUserSecurityClearance(RM_MANAGER);
         assertEquals("No Clearance", clearance);
 
-        List<String> options = securityClearancePage.getClearanceOptions(USER1);
+        List<String> options = securityClearancePage.getClearanceOptions(RM_MANAGER);
         assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance"), options);
 
         clearance = securityClearancePage
-                        .setClearance(USER1, "Secret")
+                        .setClearance(RM_MANAGER, "Secret")
                         .clickOnConfirm(securityClearancePage)
-                        .getUserSecurityClearance(USER1);
+                        .getUserSecurityClearance(RM_MANAGER);
         assertEquals("Secret", clearance);
     }
 
