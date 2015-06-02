@@ -135,15 +135,13 @@ public class SecurityClearancePage extends ConsolePage
 
     /**
      * Get all the user names displayed on the page.
-     *
-     * @return The list of users.
      */
-    public List<String> getDisplayedUsers()
+    public List<String> getUserNames()
     {
         return clearanceTable
                     .findElements(USER_NAME_SELECTOR)
                     .stream()
-                    .map(webElement -> webElement.getText())
+                    .map(webElement -> webElement.getText().split("[\\(\\)]")[1])
                     .collect(Collectors.toList());
     }
 

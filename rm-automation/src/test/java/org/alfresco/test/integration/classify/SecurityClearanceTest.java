@@ -49,19 +49,15 @@ public class SecurityClearanceTest extends BaseTest
 
     /**
      * Check that the displayed users are sorted correctly.
-     *
-     * @param displayedUsers The list of user strings found on the page (in the format "First-name Surname (userid)").
-     * @throws AssertionError If the list is sorted incorrectly.
      */
-    protected void checkUserOrdering(List<String> displayedUsers)
+    protected void checkUserOrdering(List<String> userNames)
     {
-        String previousUserId = "";
-        for (String user : displayedUsers)
+        String previousUserName = "";
+        for (String userName : userNames)
         {
-            String userId = user.split("[\\(\\)]")[1];
-            assertTrue("Expected users to be sorted by user id, but found '"+previousUserId+"' and then '"+userId+"'",
-                        userId.toLowerCase().compareTo(previousUserId.toLowerCase()) >= 0);
-            previousUserId = userId;
+            assertTrue("Expected users to be sorted by user id, but found '"+previousUserName+"' and then '"+userName+"'",
+                        userName.toLowerCase().compareTo(previousUserName.toLowerCase()) >= 0);
+            previousUserName = userName;
         }
     }
 
@@ -95,11 +91,17 @@ public class SecurityClearanceTest extends BaseTest
     {
         sharePageNavigation.clickOnAdminTools().clickOnSecurityClearanceLink();
         assertEquals("Expected the filter to be initially empty.", "", securityClearancePage.getNameFilter());
-
-        // Check the displayed users are ordered alphabetically.
-        List<String> displayedUsers = securityClearancePage.getDisplayedUsers();
-        checkUserOrdering(displayedUsers);
-
+       
+        // check the user names on the page
+        List<String> userNames = securityClearancePage.getUserNames();
+        assertTrue(userNames.contains(USER1));
+        assertTrue(userNames.contains(UNCLEARED_USER));
+        checkUserOrdering(userNames);
+        
+        // check the individual users are displayes
+        securityClearancePage.isUserShown(USER1);
+        securityClearancePage.isUserShown(UNCLEARED_USER);
+        
         // Check each user has a valid clearance.
         for (String clearance : securityClearancePage.getUserClearances().values())
         {
