@@ -85,7 +85,7 @@ public class SecurityClearanceTest extends BaseTest
     (
         groups = { "integration", "security-clearance"},
         description = "Check the security clearance page loads and contains an ordered list of users and clearances",
-        dependsOnGroups = { "integration-dataSetup-rmSite" }
+        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users" }
     )
     public void loadSecurityClearancePage()
     {
