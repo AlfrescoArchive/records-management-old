@@ -20,20 +20,21 @@ package org.alfresco.po.share.console.users;
 
 import static org.alfresco.po.common.StreamHelper.zip;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.rm.dialog.MultiButtonDialog;
 import org.alfresco.po.share.console.ConsolePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -43,50 +44,31 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 @Component
 public class SecurityClearancePage extends ConsolePage
 {
+    /** selectors */
+    private static final By ROWS = By.cssSelector("tbody[id$='ITEMS'] tr[id*='Row']");    
+    private static final By SECURITY_CLEARANCE_SELECTOR = By.cssSelector(".control span[role=option]");
+    private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");    
+    private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
+    
+    /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
-
-    /** Selects the "User Name" text from within the table showing users and their clearances.
-     * Example value: "Alice Beecher (abeecher)".
-     * <p/>
-     * Note that this actually selects the span containing the value for user name.
-     * Note that this selector assumes that the table only has one row. Therefore the table
-     * must be restricted to one row by {@link #setNameFilter(String) adding some filter text}. */
-    private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
-
-    /** Selects the "Security Clearance" text from within the table showing users and their clearances.
-     * Example value: "No Clearance".
-     * <p/>
-     * Note that this actually selects the span containing the value for security clearance.
-     * A click on this span should cause the Security Clearance dropdown to appear.
-     */
-    private static final By SECURITY_CLEARANCE_SELECTOR =
-            By.cssSelector(".alfresco-lists-views-AlfListView tr.alfresco-lists-views-layouts-Row .control span[role=option]");
-
-    /** Selects the dropdown cell for the specified clearance level.
-     *  <p/>
-     *  Note that the provided clearance string must match the text in the UI e.g. "Top Secret".
-     *  A click on this element will select that clearance level.
-     */
-    private By getSecurityClearanceDropDownSelector(String clearance)
-    {
-        // The trailing space after the clearance (%s) is intentional here. It seems to be added by dojo/dijit.
-        return By.cssSelector(String.format("tr[aria-label='%s ']", clearance));
-    }
 
     @FindBy(css=".security-clearance-filter .control input[name=nameFilter]")
     private TextInput nameFilterTextInput;
 
-    @Autowired
-    private MultiButtonDialog changeClearanceDialog;
-
     @FindBy(css=".alfresco-lists-views-AlfListView")
     private WebElement clearanceTable;
+    
+    @Autowired
+    private ConfirmationPrompt conformationPrompt;
 
+    /**
+     * Page URL
+     */
     public String getPageURL(String ... context)
     {
         return PAGE_URL;
     }
-
 
     /** Sets text in the name filter input. */
     public SecurityClearancePage clearNameFilter()
@@ -107,67 +89,48 @@ public class SecurityClearancePage extends ConsolePage
     {
         return nameFilterTextInput.getText();
     }
-
-    /** Get the specified user's Security Clearance as a String.
-     *
-     *  @throws TimeoutException if the provided {@code filterTerm} does not match exactly one user.
+    
+    /**
+     * Indicates whether the given user is shown in the current page of results
      */
-    public String getUserSecurityClearance(String filterTerm)
+    public boolean isUserShown(String userName)
     {
-        return getSecurityClearanceElement(filterTerm).getText();
-    }
-
-    /** Gets the security clearance button (actually a {@code span}) for the specified user.
-     *  Note that the provided {@code filterTerm} must lead to a table with a single row. */
-    private WebElement getSecurityClearanceElement(String filterTerm) {
-        filterTableToOneUser(filterTerm);
-
-        final List<WebElement> secClearanceSpans = webDriver.findElements(SECURITY_CLEARANCE_SELECTOR);
-
-        if (secClearanceSpans == null || secClearanceSpans.size() != 1)
+        boolean result = false;
+        
+        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
+        for (WebElement row : rows)
         {
-            throw new IllegalArgumentException(String.format("Expected exactly 1 user for filterTerm '%s' but found %s",
-                                                             filterTerm,
-                                                             secClearanceSpans == null ? "null" : secClearanceSpans.size()));
+            WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
+            if (userNameControl.getText().contains(userName))
+            {
+                result = true;
+                break;
+            }
         }
-        return secClearanceSpans.get(0);
+        
+        return result;
     }
 
-    private void filterTableToOneUser(String filterTerm)
+    /** 
+     * Get the specified user's Security Clearance as a String
+     */
+    public String getUserSecurityClearance(String userName)
     {
-        // Reset the table to show all results. We must do this so that the waiting code below will work.
-        // If we don't reset the table, then there is the chance that the table has only one row in it
-        // before this search is performed, which would cause an error when we wait for its size to be 1.
-        this.clearNameFilter();
-
-        // Now wait for the table to be populated. Arbitrarily we need more than 1 user.
-        Utils.waitFor(driver -> driver.findElements(USER_NAME_SELECTOR).size() > 1);
-
-        // Restrict the table - hopefully to only a single row this time.
-        this.setNameFilter(filterTerm);
-
-        // We will wait for the table to have a single result row.
-        Utils.waitFor(driver -> driver.findElements(USER_NAME_SELECTOR).size() == 1);
-
-        // TODO It would be nice here to be able to also wait for the appearance of "Could not find any users..."
-        //          But there is no css class on that div which makes it tricky. AKU-332.
-    }
-
-    public SecurityClearancePage clickOnSecurityClearance(String filterTerm)
-    {
-        getSecurityClearanceElement(filterTerm).click();
-        Utils.waitFor(driver -> driver.findElement(getSecurityClearanceDropDownSelector("No Clearance")));
-        return this;
-    }
-
-    public SecurityClearancePage selectClearanceLevel(String clearanceLevel)
-    {
-        final WebElement element = webDriver.findElement(getSecurityClearanceDropDownSelector(clearanceLevel));
-        element.click();
-
-        changeClearanceDialog.clickButton(0);
-
-        return this;
+        String result = null;
+        
+        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
+        for (WebElement row : rows)
+        {
+            WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
+            if (userNameControl.getText().contains(userName))
+            {
+                WebElement securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
+                result = securityClearance.getText();
+                break;
+            }
+        }
+        
+        return result;
     }
 
     /**
@@ -209,31 +172,73 @@ public class SecurityClearancePage extends ConsolePage
         return zip(userStream, clearanceStream).collect(Collectors.toMap(pair -> pair.getLeft(), pair -> pair.getRight()));
     }
 
-
     /**
-     * TODO
+     * Set a users security clearance
      */
-    public SecurityClearancePage setClearance(String string)
+    public ConfirmationPrompt setClearance(String userName, String clearance)
     {
-        return this;
+        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
+        for (WebElement row : rows)
+        {
+            WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
+            if (userNameControl.getText().contains(userName))
+            {
+                WebElement securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
+                securityClearance.click();
+
+                WebElement visibleClearanceOptions = Utils.waitForVisibilityOf(VISIBLE_CLEARANCE_OPTIONS_SELECTOR);
+                
+                // get the options
+                List<WebElement> clearanceOptions = visibleClearanceOptions.findElements(By.cssSelector("tr[role='option']"));
+                for (WebElement clearanceOption : clearanceOptions)
+                {
+                    if (clearance.equals(clearanceOption.getAttribute("aria-label").trim()))
+                    {
+                        clearanceOption.click();
+                        break;
+                    }
+                }
+                
+                break;
+            }
+        }
+        
+        return conformationPrompt.render();
     }
 
     /**
-     * TODO
-     */
-    public SecurityClearancePage andConfirm()
-    {
-        return this;
-    }
-
-
-    /**
-     * TODO
+     * Get the list of clearance options for the given user
      */
     public List<String> getClearanceOptions(String userName)
     {
-        return null;
+        List<String> result = null;
+        
+        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
+        for (WebElement row : rows)
+        {
+            WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
+            if (userNameControl.getText().contains(userName))
+            {
+                WebElement securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
+                securityClearance.click();
+                
+                WebElement visibleClearanceOptions = Utils.waitForVisibilityOf(VISIBLE_CLEARANCE_OPTIONS_SELECTOR);
+                
+                // get the options
+                List<WebElement> clearanceOptions = visibleClearanceOptions.findElements(By.cssSelector("tr[role='option']"));
+                result = new ArrayList<String>(clearanceOptions.size());
+                for (WebElement clearanceOption : clearanceOptions)
+                {
+                    result.add(clearanceOption.getAttribute("aria-label").trim());
+                }
+                
+                securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
+                securityClearance.click();
+                
+                break;
+            }
+        }
+        
+        return result;
     }
-
-    // TODO Get available Security Clearance dropdown options.
 }

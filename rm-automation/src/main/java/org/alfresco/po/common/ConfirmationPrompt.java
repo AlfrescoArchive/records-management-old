@@ -34,7 +34,7 @@ public class ConfirmationPrompt extends Renderable
                             implements StandardButtons
 {
     /** confirmation prompt button set */
-    @FindBy(css="span.button-group")
+    @FindBy(css="span.button-group,.dijitDialog .footer")
     private ConfirmationPromptButtonSet buttons;
 
     /**

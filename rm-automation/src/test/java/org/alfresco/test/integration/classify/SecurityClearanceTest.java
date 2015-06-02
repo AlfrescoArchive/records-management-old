@@ -19,8 +19,8 @@
 package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.testng.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,6 @@ import java.util.List;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.page.SharePageNavigation;
 import org.alfresco.test.BaseTest;
-import org.openqa.selenium.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -61,7 +60,7 @@ public class SecurityClearanceTest extends BaseTest
         {
             String userId = user.split("[\\(\\)]")[1];
             assertTrue("Expected users to be sorted by user id, but found '"+previousUserId+"' and then '"+userId+"'",
-                        userId.compareTo(previousUserId) >= 0);
+                        userId.toLowerCase().compareTo(previousUserId.toLowerCase()) >= 0);
             previousUserId = userId;
         }
     }
@@ -88,7 +87,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "security-clearance"},
         description = "Check the security clearance page loads and contains an ordered list of users and clearances",
         dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
@@ -124,24 +123,16 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        enabled = false, // Disabled as the admin user currently _does_ appear in searches.
-        groups = { "integration" },
+        groups = { "integration", "security-clearance"},
         description = "Check the admin user is not found by using the filter",
         dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
     public void adminIsNotShown()
     {
         openPage(securityClearancePage);
-
-        try {
-            securityClearancePage.getUserSecurityClearance("admin");
-        }
-        catch (TimeoutException expected) {
-            // There should be no result for 'admin'. But we do not currently detect a clear 'no result' response
-            // and instead must rely on a TimeoutException as an indication of no result.
-            return;
-        }
-        fail("admin user unexpectedly present in results.");
+        assertFalse(
+           "Admin user unexpectedly present in results.", 
+           securityClearancePage.isUserShown("admin"));        
     }
 
     // TODO We should provide a filter term that produces no matched users and confirm that the table
@@ -170,8 +161,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        enabled=false,
-        groups = { "integration", "user_1_has_secret_clearance" },
+        groups = { "integration", "security-clearance" },
         description = "Give a user clearance, reload the page and then revoke it again",
         dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users" }
     )
@@ -180,13 +170,12 @@ public class SecurityClearanceTest extends BaseTest
         String clearance = openPage(securityClearancePage).getUserSecurityClearance(USER1);
         assertEquals("No Clearance", clearance);
 
-        securityClearancePage.clickOnSecurityClearance(USER1);
-
         List<String> options = securityClearancePage.getClearanceOptions(USER1);
         assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "No Clearance"), options);
 
         clearance = securityClearancePage
-                        .selectClearanceLevel("Secret")
+                        .setClearance(USER1, "Secret")
+                        .clickOnConfirm(securityClearancePage)
                         .getUserSecurityClearance(USER1);
         assertEquals("Secret", clearance);
     }

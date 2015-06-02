@@ -30,10 +30,10 @@ import ru.yandex.qatools.htmlelements.element.Button;
 public class ConfirmationPromptButtonSet extends ButtonSet 
 {
     /** confirmation button */
-	@FindBy(css=".button-group button")
+	@FindBy(css=".button-group button,#OK")
 	private Button confirm;
 	
 	/** cancel button */
-	@FindBy(css=".button-group .default button")
+	@FindBy(css=".button-group .default button,#CANCEL")
 	private Button cancel;
 }

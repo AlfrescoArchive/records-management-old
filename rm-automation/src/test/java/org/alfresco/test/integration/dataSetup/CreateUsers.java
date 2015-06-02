@@ -20,6 +20,7 @@ package org.alfresco.test.integration.dataSetup;
 
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.test.BaseTest;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 /**
@@ -51,5 +52,13 @@ public class CreateUsers extends BaseTest
     public void createUnclearedUser()
     {
         createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+    }
+    
+    /** delete users on test teardown */
+    @AfterSuite(alwaysRun = true)
+    protected void deleteUsers()
+    {
+        deleteUser(USER1);
+        deleteUser(UNCLEARED_USER);
     }
 }

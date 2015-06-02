@@ -174,9 +174,9 @@ public final class Utils implements ApplicationContextAware
      * Helper method to wait for the visibility of element located
      * by selector
      */
-    public static void waitForVisibilityOf(By locator)
+    public static WebElement waitForVisibilityOf(By locator)
     {
-        webDriverWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return webDriverWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     /**
