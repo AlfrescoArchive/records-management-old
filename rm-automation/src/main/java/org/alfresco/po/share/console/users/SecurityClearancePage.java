@@ -20,7 +20,6 @@ package org.alfresco.po.share.console.users;
 
 import static org.alfresco.po.common.StreamHelper.zip;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,7 +33,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -45,11 +43,11 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 public class SecurityClearancePage extends ConsolePage
 {
     /** selectors */
-    private static final By ROWS = By.cssSelector("tbody[id$='ITEMS'] tr[id*='Row']");    
+    private static final By ROWS = By.cssSelector("tbody[id$='ITEMS'] tr[id*='Row']");
     private static final By SECURITY_CLEARANCE_SELECTOR = By.cssSelector(".control span[role=option]");
-    private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");    
+    private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
-    
+
     /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
 
@@ -58,7 +56,7 @@ public class SecurityClearancePage extends ConsolePage
 
     @FindBy(css=".alfresco-lists-views-AlfListView")
     private WebElement clearanceTable;
-    
+
     @Autowired
     private ConfirmationPrompt conformationPrompt;
 
@@ -89,14 +87,14 @@ public class SecurityClearancePage extends ConsolePage
     {
         return nameFilterTextInput.getText();
     }
-    
+
     /**
      * Indicates whether the given user is shown in the current page of results
      */
     public boolean isUserShown(String userName)
     {
         boolean result = false;
-        
+
         List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
         for (WebElement row : rows)
         {
@@ -107,17 +105,17 @@ public class SecurityClearancePage extends ConsolePage
                 break;
             }
         }
-        
+
         return result;
     }
 
-    /** 
+    /**
      * Get the specified user's Security Clearance as a String
      */
     public String getUserSecurityClearance(String userName)
     {
         String result = null;
-        
+
         List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
         for (WebElement row : rows)
         {
@@ -129,7 +127,7 @@ public class SecurityClearancePage extends ConsolePage
                 break;
             }
         }
-        
+
         return result;
     }
 
@@ -185,7 +183,7 @@ public class SecurityClearancePage extends ConsolePage
                 securityClearance.click();
 
                 WebElement visibleClearanceOptions = Utils.waitForVisibilityOf(VISIBLE_CLEARANCE_OPTIONS_SELECTOR);
-                
+
                 // get the options
                 List<WebElement> clearanceOptions = visibleClearanceOptions.findElements(By.cssSelector("tr[role='option']"));
                 for (WebElement clearanceOption : clearanceOptions)
@@ -196,11 +194,11 @@ public class SecurityClearancePage extends ConsolePage
                         break;
                     }
                 }
-                
+
                 break;
             }
         }
-        
+
         return conformationPrompt.render();
     }
 
@@ -210,33 +208,25 @@ public class SecurityClearancePage extends ConsolePage
     public List<String> getClearanceOptions(String userName)
     {
         List<String> result = null;
-        
+
         List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
-        for (WebElement row : rows)
-        {
-            WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
-            if (userNameControl.getText().contains(userName))
-            {
-                WebElement securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
-                securityClearance.click();
-                
-                WebElement visibleClearanceOptions = Utils.waitForVisibilityOf(VISIBLE_CLEARANCE_OPTIONS_SELECTOR);
-                
-                // get the options
-                List<WebElement> clearanceOptions = visibleClearanceOptions.findElements(By.cssSelector("tr[role='option']"));
-                result = new ArrayList<String>(clearanceOptions.size());
-                for (WebElement clearanceOption : clearanceOptions)
-                {
-                    result.add(clearanceOption.getAttribute("aria-label").trim());
-                }
-                
-                securityClearance = row.findElement(SECURITY_CLEARANCE_SELECTOR);
-                securityClearance.click();
-                
-                break;
-            }
-        }
-        
+        WebElement userRow = rows.stream()
+                                 .filter(row -> row.findElement(USER_NAME_SELECTOR).getText().contains(userName))
+                                 .findFirst().get();
+
+        WebElement securityClearance = userRow.findElement(SECURITY_CLEARANCE_SELECTOR);
+        securityClearance.click();
+
+        WebElement visibleClearanceOptions = Utils.waitForVisibilityOf(VISIBLE_CLEARANCE_OPTIONS_SELECTOR);
+
+        // get the options
+        List<WebElement> clearanceOptions = visibleClearanceOptions.findElements(By.cssSelector("tr[role='option']"));
+        result = clearanceOptions.stream().map(option -> option.getAttribute("aria-label").trim())
+                    .collect(Collectors.toList());
+
+        securityClearance = userRow.findElement(SECURITY_CLEARANCE_SELECTOR);
+        securityClearance.click();
+
         return result;
     }
 }

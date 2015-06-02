@@ -38,8 +38,10 @@
     <test name="classification">
         <groups>
             <run>
+                <!-- TODO Change this over to just rely on "integration". -->
                 <include name="integration-dataSetup"/>
                 <include name="classification"/>
+                <include name="security-clearance"/>
             </run>
         </groups>
         <packages>

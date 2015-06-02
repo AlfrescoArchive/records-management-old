@@ -37,7 +37,8 @@ public class CreateUsers extends BaseTest
     @Test
     (
         groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-rmManager" },
-        description = "Create users"
+        description = "Create users",
+        dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
     public void createRMManager()
     {
@@ -47,7 +48,8 @@ public class CreateUsers extends BaseTest
     @Test
     (
         groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-unclearedUser" },
-        description = "Create users"
+        description = "Create users",
+        dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
     public void createUnclearedUser()
     {

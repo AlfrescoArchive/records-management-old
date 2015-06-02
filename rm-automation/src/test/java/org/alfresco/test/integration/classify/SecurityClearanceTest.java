@@ -91,17 +91,17 @@ public class SecurityClearanceTest extends BaseTest
     {
         sharePageNavigation.clickOnAdminTools().clickOnSecurityClearanceLink();
         assertEquals("Expected the filter to be initially empty.", "", securityClearancePage.getNameFilter());
-       
+
         // check the user names on the page
         List<String> userNames = securityClearancePage.getUserNames();
         assertTrue(userNames.contains(RM_MANAGER));
         assertTrue(userNames.contains(UNCLEARED_USER));
         checkUserOrdering(userNames);
-        
+
         // check the individual users are displayes
         securityClearancePage.isUserShown(RM_MANAGER);
         securityClearancePage.isUserShown(UNCLEARED_USER);
-        
+
         // Check each user has a valid clearance.
         for (String clearance : securityClearancePage.getUserClearances().values())
         {
@@ -133,8 +133,8 @@ public class SecurityClearanceTest extends BaseTest
     {
         openPage(securityClearancePage);
         assertFalse(
-           "Admin user unexpectedly present in results.", 
-           securityClearancePage.isUserShown("admin"));        
+           "Admin user unexpectedly present in results.",
+           securityClearancePage.isUserShown("admin"));
     }
 
     // TODO We should provide a filter term that produces no matched users and confirm that the table
@@ -142,7 +142,7 @@ public class SecurityClearanceTest extends BaseTest
 
     /**
      * Give a user clearance and check the page reflects this. Note that this test has a side effect of providing the
-     * user with "Secret" clearance, and is used as a dependency of other tests.
+     * RM_MANAGER with "Secret" clearance, and is used as a dependency of other tests.
      *
      * <pre>
      * Given that there is no filter set
@@ -163,7 +163,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "security-clearance" },
+        groups = { "integration", "security-clearance", "rmManagerHasSecretClearance" },
         description = "Give a user clearance, reload the page and then revoke it again",
         dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users-rmManager" }
     )
