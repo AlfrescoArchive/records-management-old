@@ -58,7 +58,7 @@ public class SecurityClearancePage extends ConsolePage
     private WebElement clearanceTable;
 
     @Autowired
-    private ConfirmationPrompt conformationPrompt;
+    private ConfirmationPrompt confirmationPrompt;
 
     /**
      * Page URL
@@ -199,7 +199,7 @@ public class SecurityClearancePage extends ConsolePage
             }
         }
 
-        return conformationPrompt.render();
+        return confirmationPrompt.render();
     }
 
     /**
