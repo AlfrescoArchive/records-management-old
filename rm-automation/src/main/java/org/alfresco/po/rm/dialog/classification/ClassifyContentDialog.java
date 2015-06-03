@@ -91,14 +91,7 @@ public class ClassifyContentDialog extends Dialog
         final String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
 
         // retry since wait seems unreliable
-        WebElement level = Utils.retry(new Retry<WebElement>()
-        {
-            @Override
-            public WebElement execute()
-            {
-                return levelsMenu.findElement(By.cssSelector(selector));
-            }
-        }, 5);
+        WebElement level = Utils.retry(() -> levelsMenu.findElement(By.cssSelector(selector)), 5);
 
         // select the right level
         level.click();
@@ -124,14 +117,7 @@ public class ClassifyContentDialog extends Dialog
         final String selector = "td[class$='dijitMenuItemLabel']";
 
         // retry since wait seems unreliable
-        List<WebElement> levels = Utils.retry(new Retry<List<WebElement>>()
-        {
-            @Override
-            public List<WebElement> execute()
-            {
-                return levelsMenu.findElements(By.cssSelector(selector));
-            }
-        }, 5);
+        List<WebElement> levels = Utils.retry(() -> levelsMenu.findElements(By.cssSelector(selector)), 5);
 
         return levels.stream()
                      .map(webElement -> webElement.getText())
