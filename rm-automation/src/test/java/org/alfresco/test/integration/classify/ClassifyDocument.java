@@ -29,6 +29,7 @@ import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.BaseTest;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -153,6 +154,34 @@ public class ClassifyDocument extends BaseTest
         assertTrue(inPlaceRecord.isActionClickable(DocumentActions.CLASSIFY));
     }
 
+    /**
+     * Check that I can't sync classified content to the cloud
+     *
+     * Given that content has been classified
+     * When I view the available options
+     * Then I am unable to sync the content
+    */
+    @Test
+        (
+            groups = {"integrations", "classification"},
+            description = "Check that we can't sync classified content",
+            dependsOnGroups = {"integration-dataSetup-classifiedDocument"}
+        )
+    public void checkWeCannotSyncClassifiedContent()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        // On Document Library Page
+        assertFalse(documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
+            .isShareDocumentAvailable());
+
+        // On Document Details Page
+        assertFalse(documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
+            .clickOnLink()
+            .getSocialActions()
+            .isShareDocumentAvailable());
+    }
+
     /*
     RM-2078 Acceptance criteria currently without tests.
 
@@ -162,11 +191,5 @@ public class ClassifyDocument extends BaseTest
     And may have a security clearance level above 'No Clearance'
     When I view the unclassified content
     Then I am unable to set a classification
-
-    Can't sync classified content to the cloud
-
-    Given that content has been synced to the cloud
-    When I view the available actions
-    Then the classify action will not be available
     */
 }

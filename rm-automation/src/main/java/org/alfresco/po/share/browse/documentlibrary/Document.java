@@ -18,9 +18,13 @@
  */
 package org.alfresco.po.share.browse.documentlibrary;
 
+import org.alfresco.po.common.annotations.RenderableChild;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.share.browse.ListItem;
 import org.alfresco.po.share.details.document.DocumentDetails;
+import org.alfresco.po.share.details.document.SocialActions;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,6 +43,10 @@ public class Document extends ListItem implements DocumentActions
     
     @Autowired
     private DeleteConfirmationDialog deleteConfirmationDialog;
+
+    @Autowired
+    @RenderableChild
+    private SocialActions socialActions;
 
     /**
      * Click on declare as record action
@@ -63,6 +71,14 @@ public class Document extends ListItem implements DocumentActions
     public DeleteConfirmationDialog clickOnDelete()
     {
     	return (DeleteConfirmationDialog)clickOnAction(DELETE, deleteConfirmationDialog);
+    }
+
+    /**
+     * Return the social actions for a Document
+     */
+    public boolean isShareDocumentAvailable()
+    {
+        return Utils.elementExists(this.getRow(), By.cssSelector("a.quickshare-action"));
     }
 
 }
