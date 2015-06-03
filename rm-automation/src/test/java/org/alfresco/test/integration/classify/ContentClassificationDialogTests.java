@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
@@ -82,7 +83,7 @@ public class ContentClassificationDialogTests extends BaseTest
     public void classifyDocument()
     {
         // Open collaboration site document library and click on the "Classify" action.
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getDocument(DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -136,7 +137,7 @@ public class ContentClassificationDialogTests extends BaseTest
     public void cancelClassifyDialog()
     {
         // Open Collab site DocumentLibrary.
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
         Document document = documentLibrary.getDocument(DOCUMENT);
         // Open the classify document dialog
         document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
@@ -184,7 +185,7 @@ public class ContentClassificationDialogTests extends BaseTest
     public void classifyAsUnclassified()
     {
         // Open the document preview page.
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getDocument(DOCUMENT).clickOnLink();
 
         // Classify the document with a level of "No Clearance".
@@ -206,6 +207,67 @@ public class ContentClassificationDialogTests extends BaseTest
     }
 
     /**
+     * Check that a user with 'Top Secret' clearance sees all the levels.
+     *
+     * <pre>
+     * Given that I am a user with the highest security clearance
+     * When I classify content
+     * Then all levels in the classification hierarchy are available to me
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Check that a user with 'Top Secret' clearance sees all the levels.",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void clearedUserSeesAllLevels()
+    {
+        // Open Collab site DocumentLibrary.
+        openPage(documentLibrary, COLLAB_SITE_ID);
+        Document document = documentLibrary.getDocument(DOCUMENT);
+        // Open the classify document dialog
+        document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        List<String> availableLevels = classifyContentDialog.getAvailableLevels();
+        assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "Unclassified"), availableLevels);
+
+        // Click the cancel button.
+        classifyContentDialog.cancelDialog();
+    }
+
+    /**
+     * Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.
+     *
+     * <pre>
+     * Given that I am a user with mid level security clearance
+     * When I classify content
+     * Then only classifications that match my security clearance and those below are available to me
+     * And those above my security clearance level are not visible to me
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "classification" },
+        description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
+        dependsOnGroups = { "integration-dataSetup-collab", "rmManagerHasSecretClearance" }
+    )
+    public void secretUserSeesSomeLevels()
+    {
+        // Open Collab site DocumentLibrary.
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
+        Document document = documentLibrary.getDocument(DOCUMENT);
+        // Open the classify document dialog
+        document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        List<String> availableLevels = classifyContentDialog.getAvailableLevels();
+        assertEquals(Arrays.asList("Secret", "Confidential", "Unclassified"), availableLevels);
+
+        // Click the cancel button.
+        classifyContentDialog.cancelDialog();
+    }
+
+    /**
      * Delete and re-upload a document. This is used to allow resetting after classifying a document. TODO: Implement
      * removal of classification and use that instead.
      */
@@ -216,22 +278,9 @@ public class ContentClassificationDialogTests extends BaseTest
             .clickOnDelete()
             .confirmDelete();
 
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
             .uploadFile(DOCUMENT);
     }
-
-    /*
-    Acceptance criteria from RM-2017 which are not covered here.
-
-    Given that I am a user with the highest security clearance
-    When I classify content
-    Then all levels in the classification hierarchy are available to me
-
-    Given that I am a user with mid level security clearance
-    When I classify content
-    Then only classifications that match my security clearance and those below are available to me
-    And those above my security clearance level are not visible to me
-     */
 }

@@ -22,6 +22,7 @@ import static org.alfresco.po.common.util.Utils.clearAndType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
@@ -33,7 +34,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -86,20 +86,20 @@ public class ClassifyContentDialog extends Dialog
     {
         // Open the dropdown menu.
         levelSelectButton.click();
-        
+
         // Choose the appropriate option by the label.
         final String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
-        
+
         // retry since wait seems unreliable
         WebElement level = Utils.retry(new Retry<WebElement>()
         {
-			@Override
-			public WebElement execute() 
-			{
-				return levelsMenu.findElement(By.cssSelector(selector));
-			}
-		}, 5);
-         
+            @Override
+            public WebElement execute()
+            {
+                return levelsMenu.findElement(By.cssSelector(selector));
+            }
+        }, 5);
+
         // select the right level
         level.click();
         return this;
@@ -108,6 +108,34 @@ public class ClassifyContentDialog extends Dialog
     public String getLevel()
     {
         return selectedLevel.getText();
+    }
+
+    /**
+     * Open the levels dropdown to find the potential options available to the current user.
+     *
+     * @return The list of levels in the order they were found on the page.
+     */
+    public List<String> getAvailableLevels()
+    {
+        // Open the dropdown menu.
+        levelSelectButton.click();
+
+        // Selector for all the options.
+        final String selector = "td[class$='dijitMenuItemLabel']";
+
+        // retry since wait seems unreliable
+        List<WebElement> levels = Utils.retry(new Retry<List<WebElement>>()
+        {
+            @Override
+            public List<WebElement> execute()
+            {
+                return levelsMenu.findElements(By.cssSelector(selector));
+            }
+        }, 5);
+
+        return levels.stream()
+                     .map(webElement -> webElement.getText())
+                     .collect(Collectors.toList());
     }
 
     public ClassifyContentDialog setAuthority(String authority)
