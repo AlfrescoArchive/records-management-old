@@ -19,7 +19,8 @@
 package org.alfresco.po.share.details.document;
 
 import org.alfresco.po.common.renderable.Renderable;
-import org.openqa.selenium.NoSuchElementException;
+import org.alfresco.po.common.util.Utils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,9 @@ import org.springframework.stereotype.Component;
 public class SocialActions extends Renderable
 {
     //@FindBy(css = ".node-social a[title='Share document']")
-    @FindBy(css = ".node-social a.quickshare-action")
+    private static final String QUICKSHARE_ACTION_SELECTOR = ".node-social a.quickshare-action";
+
+    @FindBy(css = QUICKSHARE_ACTION_SELECTOR)
     private WebElement shareDocumentLink;
 
     /** Share the document. */
@@ -45,18 +48,8 @@ public class SocialActions extends Renderable
         return this;
     }
 
-    // FIXME: CLean up this code. Replace FindBy with a By and a private method to resolve it, with a call to Utils.elementExists
     public boolean isShareDocumentAvailable()
     {
-        boolean isAvailable = false;
-        try {
-            isAvailable = shareDocumentLink.isDisplayed();
-        }
-        catch (NoSuchElementException e)
-        {
-            // Ignore the expected exception
-        }
-
-        return isAvailable;
+        return Utils.elementExists(By.cssSelector(QUICKSHARE_ACTION_SELECTOR));
     }
 }
