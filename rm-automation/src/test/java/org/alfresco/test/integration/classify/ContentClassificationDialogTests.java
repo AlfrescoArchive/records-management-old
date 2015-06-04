@@ -57,7 +57,8 @@ public class ContentClassificationDialogTests extends BaseTest
 
     /**
      * Opening the classify content dialog and classifying a document. This test covers the following two (very related)
-     * acceptance criteria.
+     * acceptance criteria. This test has the side effect of creating and classifying the document CLASSIFIED_DOCUMENT,
+     * which is used by other tests.
      *
      * <pre>
      * Given that I have clicked the classify content action
@@ -76,15 +77,18 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification", "content-classification-dialog" },
+        groups = { "integration", "classification", "content-classification-dialog", GROUP_CLASSIFIED_DOCUMENT_EXISTS },
         description = "Use the classify content dialog to classify a document.",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
     public void classifyDocument()
     {
-        // Open collaboration site document library and click on the "Classify" action.
+        // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
-        documentLibrary.getDocument(DOCUMENT)
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(CLASSIFIED_DOCUMENT);
+        documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         // Verify that a classify document dialog has appeared.
@@ -109,12 +113,9 @@ public class ContentClassificationDialogTests extends BaseTest
         classifyContentDialog.submitDialog();
 
         // Check that the classify content action is no longer available.
-        String[] clickableActions = documentLibrary.getDocument(DOCUMENT).getClickableActions();
+        String[] clickableActions = documentLibrary.getDocument(CLASSIFIED_DOCUMENT).getClickableActions();
         assertFalse("The classify action should no longer be available.",
                     Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
-
-        // Delete the document and recreate it again.
-        recreateDocument();
     }
 
     /**
@@ -132,7 +133,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that cancelling the classification dialog works.",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
     public void cancelClassifyDialog()
     {
@@ -180,7 +181,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that content can be classified with a level of Unclassified.",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
     public void classifyAsUnclassified()
     {
@@ -219,7 +220,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that a user with 'Top Secret' clearance sees all the levels.",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
     public void clearedUserSeesAllLevels()
     {
@@ -250,7 +251,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
-        dependsOnGroups = { "integration-dataSetup-collab", "rmManagerHasSecretClearance" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE }
     )
     public void secretUserSeesSomeLevels()
     {

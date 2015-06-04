@@ -19,9 +19,9 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
@@ -43,10 +43,9 @@ import org.testng.annotations.Test;
 (
     groups = { "integration", "classification", "classify-record" },
     description = "Verify classify record action exists",
-    dependsOnGroups = 
-    { 
-    		"integration-dataSetup-rmSite", 
-    		"integration-dataSetup-collab",	
+    dependsOnGroups =
+    {
+            "integration-dataSetup-rmSite",
             "integration-dataSetup-fileplan",
             "integration-dataSetup-holds"
     }
@@ -109,7 +108,7 @@ public class ClassifyRecord extends BaseTest
         assertTrue(recordDetails.getRecordActionsPanel()
             .isActionsClickable(RecordActionsPanel.CLASSIFY));
     }
-    
+
     /**
      * Given that a record is held
      * And unclassified
@@ -119,32 +118,32 @@ public class ClassifyRecord extends BaseTest
     @Test
     public void cantClassifyHeldRecord()
     {
-    	// open record folder one
+        // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
-        
+
         // show that the classify action is available
         assertFalse(filePlan.getRecord(RECORD).isHeld());
         assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
-        
+
         // add record to hold
         filePlan
-        	.getRecord(RECORD)
-        	.clickOnAddToHold()
-        	.selectHold(HOLD1)
-        	.clickOnOk();
-    	
+            .getRecord(RECORD)
+            .clickOnAddToHold()
+            .selectHold(HOLD1)
+            .clickOnOk();
+
         // show that classify action is not available
         assertTrue(filePlan.getRecord(RECORD).isHeld());
         assertFalse(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
-        
+
         // remove record from hold
         filePlan
-        	.getRecord(RECORD)
-        	.clickOnRemoveFromHold()
-        	.selectHold(HOLD1)
-        	.clickOnOk();
-        
+            .getRecord(RECORD)
+            .clickOnRemoveFromHold()
+            .selectHold(HOLD1)
+            .clickOnOk();
+
         // show that the classify action is now available
         assertFalse(filePlan.getRecord(RECORD).isHeld());
         assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));

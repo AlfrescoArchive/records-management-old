@@ -25,17 +25,29 @@ package org.alfresco.test;
  */
 public interface TestData
 {
+    /* Users */
+
     /** A user used by the sanity tests. */
     public static final String USER1 = "userone";
-    /** A user who will be assigned the to the RM MANAGER role. */
+
+    /** A user who will be assigned the to the RM MANAGER role and then given 'Secret' clearance. */
     public static final String RM_MANAGER = "rm_manager";
+    /** The RM_MANAGER has been created. */
+    public static final String GROUP_RM_MANAGER_EXISTS = "integration-dataSetup-users-rmManager";
+    /** The RM_MANAGER has been given 'Secret' clearance. */
+    public static final String GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE = "rmManagerHasSecretClearance";
+
     /** A user who will have no security clearance. */
     public static final String UNCLEARED_USER = "uncleared_user";
+    /** The UNCLEARED_USER has been created. */
+    public static final String GROUP_UNCLEARED_USER_EXISTS = "integration-dataSetup-users-unclearedUser";
 
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";
 
+
     /* site identifiers */
+
     /** The id of the RM site. */
     public static final String RM_SITE_ID = "rm";
     /** An id for the collaboration site used by the UI integration tests. */
@@ -62,13 +74,32 @@ public interface TestData
     /** record category/folder identifier */
     public static final String RECORD_IDENTIFIER = "id-";
 
-    /** collaboration site data */
+
+    /* collaboration site data */
+
     public static final String COLLAB_SITE_NAME = "My Site";
+
+    /** A document within the collaboration site. */
     public static final String DOCUMENT = "my-document";
+    /** The DOCUMENT has been created. */
+    public static final String GROUP_DOCUMENT_EXISTS = "integration-dataSetup-document";
+
+    /** A document that is declared an in-place record. */
     public static final String IN_PLACE_RECORD = "my-inplace-record";
+    /** The IN_PLACE_RECORD has been created. */
+    public static final String GROUP_IN_PLACE_RECORD_EXISTS = "integration-dataSetup-inplaceRecord";
+
     public static final String DOCUMENT_LIBRARY = "documentLibrary";
+
+    /** A document that is shared. */
     public static final String SHARED_DOCUMENT = "shared-document";
+    /** The SHARED_DOCUMENT has been created. */
+    public static final String GROUP_SHARED_DOCUMENT_EXISTS = "integration-dataSetup-sharedDocument";
+
+    /** A document that is locked for editing. */
     public static final String LOCKED_DOCUMENT = "locked-document";
+    /** The LOCKED_DOCUMENT has been created. */
+    public static final String GROUP_LOCKED_DOCUMENT_EXISTS = "integration-dataSetup-lockedDocument";
 
     /** standard property values */
     public static final String TITLE = "Title";
@@ -112,8 +143,14 @@ public interface TestData
     public static final String NO_LONGER_NEEDED = "No longer needed";
     public static final String CASE_CLOSED = "Case Closed";
 
+
     /* Classification data. */
+
+    /** A classified document at the level 'Secret'. */
     public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
+    /** The CLASSIFIED_DOCUMENT has been created. */
+    public static final String GROUP_CLASSIFIED_DOCUMENT_EXISTS = "classifiedDocumentIsClassified";
+
     public static final String CLASSIFIED_RECORD = "classified-record";
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "Secret";

@@ -29,7 +29,6 @@ import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.BaseTest;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -62,12 +61,12 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Verify classify action is available",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
     public void checkClassifyActionAvailable()
     {
         // Open Collab site DocumentLibrary.
-        openPage(documentLibrary, COLLAB_SITE_ID, "documentlibrary");
+        openPage(documentLibrary, COLLAB_SITE_ID);
         Document document = documentLibrary.getDocument(DOCUMENT);
 
         // verify document actions
@@ -95,7 +94,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Verify classify action is not available for various cases",
-        dependsOnGroups = { "integration-dataSetup-lockedDocument", "integration-dataSetup-sharedDocument" }
+        dependsOnGroups = { GROUP_LOCKED_DOCUMENT_EXISTS, GROUP_SHARED_DOCUMENT_EXISTS }
     )
     public void checkClassifyActionUnavailableInVariousCases()
     {
@@ -122,7 +121,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-users-unclearedUser" }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
     )
     public void checkUnclearedUserCannotClassify()
     {
@@ -144,7 +143,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration", "classification" },
         description = "Check that the 'Classify' action exists for an in-place record",
-        dependsOnGroups = { "integration-dataSetup-inplaceRecord" }
+        dependsOnGroups = { GROUP_IN_PLACE_RECORD_EXISTS }
     )
     public void checkInplaceRecordCanBeClassified()
     {
@@ -163,9 +162,9 @@ public class ClassifyDocument extends BaseTest
     */
     @Test
         (
-            groups = {"integrations", "classification"},
+            groups = {"integration", "classification"},
             description = "Check that we can't sync classified content",
-            dependsOnGroups = {"integration-dataSetup-classifiedDocument"}
+            dependsOnGroups = {GROUP_CLASSIFIED_DOCUMENT_EXISTS}
         )
     public void checkWeCannotSyncClassifiedContent()
     {

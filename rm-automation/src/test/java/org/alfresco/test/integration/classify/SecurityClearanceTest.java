@@ -163,9 +163,9 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "security-clearance", "rmManagerHasSecretClearance" },
+        groups = { "integration", "security-clearance", GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE },
         description = "Give a user clearance, reload the page and then revoke it again",
-        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-users-rmManager" }
+        dependsOnGroups = { "integration-dataSetup-rmSite", GROUP_RM_MANAGER_EXISTS }
     )
     public void giveUserClearance()
     {

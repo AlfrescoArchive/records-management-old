@@ -36,7 +36,7 @@ public class CreateUsers extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-rmManager" },
+        groups = { "integration-dataSetup", "integration-dataSetup-users", GROUP_RM_MANAGER_EXISTS },
         description = "Create users",
         dependsOnGroups = { "integration-dataSetup-rmSite" }
     )
@@ -47,7 +47,7 @@ public class CreateUsers extends BaseTest
 
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-users", "integration-dataSetup-users-unclearedUser" },
+        groups = { "integration-dataSetup", "integration-dataSetup-users", GROUP_UNCLEARED_USER_EXISTS },
         description = "Create users",
         dependsOnGroups = { "integration-dataSetup-rmSite" }
     )

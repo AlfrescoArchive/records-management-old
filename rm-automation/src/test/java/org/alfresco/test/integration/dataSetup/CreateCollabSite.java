@@ -19,15 +19,12 @@
 
 package org.alfresco.test.integration.dataSetup;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
@@ -76,11 +73,20 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
             .setSiteURL(COLLAB_SITE_ID)
             .setSiteDescription(DESCRIPTION)
             .clickOnOk();
+    }
 
-        // upload document
-        siteDashboard.getNavigation()
-            .clickOnDocumentLibrary()
-            .getToolbar()
+    /** Create a document. */
+    @Test
+    (
+        groups = { "integration-dataSetup", GROUP_DOCUMENT_EXISTS },
+        description = "Create In-Place Record",
+        dependsOnGroups = { "integration-dataSetup-collab" }
+    )
+    public void createDocument()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        documentLibrary.getToolbar()
             .clickOnFile()
             .uploadFile(DOCUMENT);
     }
@@ -88,7 +94,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create an in-place record. */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-inplaceRecord" },
+        groups = { "integration-dataSetup", GROUP_IN_PLACE_RECORD_EXISTS },
         description = "Create In-Place Record",
         dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-rmSite" }
     )
@@ -111,7 +117,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is shared with "Quick Share". */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-sharedDocument" },
+        groups = { "integration-dataSetup", GROUP_SHARED_DOCUMENT_EXISTS },
         description = "Create Collaboration Site",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
@@ -134,7 +140,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is locked for editing. */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-lockedDocument" },
+        groups = { "integration-dataSetup", GROUP_LOCKED_DOCUMENT_EXISTS },
         description = "Create Collaboration Site",
         dependsOnGroups = { "integration-dataSetup-collab" }
     )
@@ -158,31 +164,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         openPage(documentLibrary, COLLAB_SITE_ID);
     }
 
-    /** Create a classified Document in a collaboration site **/
-    @Test
-        (
-            groups = {"integration-dataSetup", "integration-dataSetup-classifiedDocument"},
-            description = "Create Classified Document",
-            dependsOnGroups = {"integration-dataSetup-collab"}
-        )
-    public void createClassifiedDocument()
-    {
-        openPage(documentLibrary, COLLAB_SITE_ID);
-        documentLibrary.getToolbar()
-            .clickOnFile()
-            .uploadFile(CLASSIFIED_DOCUMENT);
-
-        documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
-            .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
-
-        // Fill in the classification details.
-        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
-            .addReason(CLASSIFICATION_REASON);
-
-        // Classify the content.
-        classifyContentDialog.submitDialog();
-    }
     /**
      * delete collaboration site
      */

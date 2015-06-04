@@ -47,8 +47,7 @@ public class ClassifiedRecordIndicator extends BaseTest
     (
         groups = { "integration" },
         description = "Verify Classify Record behaviour",
-        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-collab",
-            "integration-dataSetup-fileplan"
+        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-fileplan"
             // FIXME: Add dataSetup method here, once work for RM-2051 is complete (e.g. req. classify content dialog PO)
             //    , "integration-dataSetup-fileplan-classified"
         }
