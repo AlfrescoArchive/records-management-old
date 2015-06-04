@@ -37,7 +37,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class SharePage extends Page
 {
-    protected static ThreadLocal<String> currentLoggedInUser = new ThreadLocal<>();
+    /** A lock used when accessing the {@link #currentLoggedInUser}. */
+    public static final String CURRENT_LOGGED_IN_USER_LOCK = new String("CURRENT_LOGGED_IN_USER_LOCK");
+    /**
+     * The currently logged-in user. This is only suitable for testing against a single client, if we want to support
+     * testing against a Selenium grid then we need to add some code to track which user is logged in on which client.
+     */
+    protected static String currentLoggedInUser;
 
     /** page footer */
     @WaitFor(status=WaitForStatus.VISIBLE)
@@ -96,26 +102,30 @@ public abstract class SharePage extends Page
         // get the page URL
         String url = server + getPageURL(context);
 
-        // Logout if previously logged in as someone else.
-        String previousUser = currentLoggedInUser.get();
-        if (previousUser != null && !userName.equals(previousUser))
+        // This addresses the race condition of two threads logging out/in at the same time. It's a little bit pointless
+        // as we only support testing against a single client anyway.
+        synchronized(CURRENT_LOGGED_IN_USER_LOCK)
         {
-            sharePageNavigation.openUserDropdownMenu().logout();
-        }
+            // Logout if previously logged in as someone else.
+            if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
+            {
+                sharePageNavigation.openUserDropdownMenu().logout();
+            }
 
-        // open the page
-        webDriver.get(url);
+            // open the page
+            webDriver.get(url);
 
-        // if redirected to the login page
-        if (webDriver.getTitle().contains("Login"))
-        {
-            // login
-            loginPage.render();
-            loginPage
-                .setUsername(userName)
-                .setPassword(password)
-                .clickOnLoginButton();
-            currentLoggedInUser.set(userName);
+            // if redirected to the login page
+            if (webDriver.getTitle().contains("Login"))
+            {
+                // login
+                loginPage.render();
+                loginPage
+                    .setUsername(userName)
+                    .setPassword(password)
+                    .clickOnLoginButton();
+                currentLoggedInUser = userName;
+            }
         }
 
         return this.render();
