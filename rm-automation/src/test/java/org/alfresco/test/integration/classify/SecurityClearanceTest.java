@@ -98,7 +98,7 @@ public class SecurityClearanceTest extends BaseTest
         assertTrue(userNames.contains(UNCLEARED_USER));
         checkUserOrdering(userNames);
 
-        // check the individual users are displayes
+        // check the individual users are displayed
         securityClearancePage.isUserShown(RM_MANAGER);
         securityClearancePage.isUserShown(UNCLEARED_USER);
 
