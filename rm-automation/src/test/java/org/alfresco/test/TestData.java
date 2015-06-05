@@ -50,24 +50,47 @@ public interface TestData
 
     /** The id of the RM site. */
     public static final String RM_SITE_ID = "rm";
+    /** The RM site has been created. */
+    public static final String GROUP_RM_SITE_EXISTS = "GROUP_RM_SITE_EXISTS";
+
     /** An id for the collaboration site used by the UI integration tests. */
     public static final String COLLAB_SITE_ID = "my-site" + System.currentTimeMillis();
+    /** The collaboration site has been created. */
+    public static final String GROUP_COLLABORATION_SITE_EXISTS = "GROUP_COLLABORATION_SITE_EXISTS";
+
     /** An id for the collaboration site used by the sanity tests. */
     public static final String SANITY_COLLAB_SITE_ID = "my-site-sanity" + System.currentTimeMillis();
 
-    /** file plan test data */
+
+    /* file plan test data */
+
     public static final String RECORD_CATEGORY_NAME = "record-category";
     public static final String RECORD_CATEGORY_ONE = "record-category-one";
     public static final String RECORD_CATEGORY_TWO = "record-category-two";
     public static final String SUB_RECORD_CATEGORY_NAME = "sub-record-category";
     public static final String RECORD_FOLDER_ONE = "record-folder-one";
     public static final String RECORD_FOLDER_TWO = "record-folder-two";
+    /** The file plan structure exists. */
+    public static final String GROUP_FILE_PLAN_EXISTS = "GROUP_FILE_PLAN_EXISTS";
+
+    /** A non-electronic record. */
     public static final String NON_ELECTRONIC_RECORD = "non-electronic-record";
+    /** The NON_ELECTRONIC_RECORD has been created in RECORD_FOLDER_ONE. */
+    public static final String GROUP_NON_ELECTRONIC_RECORD_EXISTS = "GROUP_NON_ELECTRONIC_RECORD_EXISTS";
+
+    /** An electronic record. */
     public static final String RECORD = "record";
+    /** The RECORD has been created in RECORD_FOLDER_ONE. */
+    public static final String GROUP_ELECTRONIC_RECORD_EXISTS = "GROUP_ELECTRONIC_RECORD_EXISTS";
+
     public static final String FOLDER = "folder";
     public static final String UNFILED_RECORD_FOLDER = "unfiled-record-folder";
+
     public static final String HOLD1 = "hold-1";
-    public static final String HOLD2 = "hold2";
+    public static final String HOLD2 = "hold-2";
+    /** The holds have been created. */
+    public static final String GROUP_HOLDS_EXIST = "GROUP_HOLDS_EXIST";
+
     public static final String CATEGORY_FOLDER_DISPOSITION = "category-disp-folder";
     public static final String CATEGORY_RECORD_DISPOSITION = "category-disp-record";
 
@@ -151,7 +174,11 @@ public interface TestData
     /** The CLASSIFIED_DOCUMENT has been created. */
     public static final String GROUP_CLASSIFIED_DOCUMENT_EXISTS = "classifiedDocumentIsClassified";
 
+    /** A record classified at the level 'Secret'. */
     public static final String CLASSIFIED_RECORD = "classified-record";
+    /** The CLASSIFIED_RECORD has been created. */
+    public static final String GROUP_CLASSIFIED_RECORD_EXISTS = "classifiedRecordIsClassified";
+
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "Secret";
     public static final String CLASSIFICATION_LEVEL_TEXT = "Secret";

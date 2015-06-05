@@ -38,35 +38,35 @@ public class CreateHolds extends BaseTest
 
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-holds" },
+        groups = { "integration", GROUP_HOLDS_EXIST },
         description = "Create File Plan",
-        dependsOnGroups = { "integration-dataSetup-fileplan" }
+        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
     )
 
     public void createHolds()
     {
-    	// open the RM site and navigate to holds page
+        // open the RM site and navigate to holds page
         openPage(userDashboardPage).getMySitesDashlet()
             .clickOnRMSite(RM_SITE_ID)
             .getNavigation()
             .clickOnFilePlan()
-        	.getFilterPanel()
-        	.clickOnHolds();
-        
+            .getFilterPanel()
+            .clickOnHolds();
+
         // create hold1
         holds.getToolbar()
-        	.clickOnNewHold()
-        	.setReason(REASON)
-        	.setName(HOLD1)
-        	.setDescription(DESCRIPTION)
-        	.clickOnSave();
-        
+            .clickOnNewHold()
+            .setReason(REASON)
+            .setName(HOLD1)
+            .setDescription(DESCRIPTION)
+            .clickOnSave();
+
         // create hold2
         holds.getToolbar()
-        	.clickOnNewHold()
-        	.setReason(REASON)
-        	.setName(HOLD2)
-        	.setDescription(DESCRIPTION)
-        	.clickOnSave();
+            .clickOnNewHold()
+            .setReason(REASON)
+            .setName(HOLD2)
+            .setDescription(DESCRIPTION)
+            .clickOnSave();
     }
 }

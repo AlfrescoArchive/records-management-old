@@ -47,45 +47,25 @@ import org.testng.annotations.Test;
  */
 public class CreateFilePlan extends BaseTest
 {
-    /**
-     * file plan browse view
-     */
+    /** file plan browse view */
     @Autowired
     private FilePlan filePlan;
-
-    /**
-     * document library browse view
-     */
+    /** document library browse view */
     @Autowired
     private DocumentLibrary documentLibrary;
-
-    /**
-     * unfiled records browse view
-     */
+    /** unfiled records browse view */
     @Autowired
     private UnfiledRecords unfiledRecords;
-
-    /**
-     * holds browse view
-     */
+    /** holds browse view */
     @Autowired
     private Holds holds;
-
-    /**
-     * collab site dashboard
-     */
+    /** collab site dashboard */
     @Autowired
     private CollaborationSiteDashboard siteDashboard;
-
-    /**
-     * user trashcan
-     */
+    /** user trashcan */
     @Autowired
     private UserTrashcanPage userTrashcan;
-
-    /**
-     * my sites dashlet
-     */
+    /** my sites dashlet */
     @Autowired
     private MySitesDashlet mySitesDashlet;
 
@@ -94,11 +74,10 @@ public class CreateFilePlan extends BaseTest
      */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-fileplan" },
+        groups = { "integration", GROUP_FILE_PLAN_EXISTS },
         description = "Create File Plan",
-        dependsOnGroups = { "integration-dataSetup-rmSite" }
+        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
     )
-
     public void createFilePlan()
     {
         // open the RM site and navigate to file plan
@@ -119,6 +98,20 @@ public class CreateFilePlan extends BaseTest
 
         // create folder 1
         createRecordFolderAndClickOnLink(RECORD_FOLDER_ONE, true);
+    }
+
+    /** Create electronic record. */
+    @Test
+    (
+        groups = { "integration", GROUP_NON_ELECTRONIC_RECORD_EXISTS },
+        description = "Create File Plan",
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
+    )
+    public void createNonElectronicRecord()
+    {
+        // "http://localhost:8081/share/page/site/rm/documentlibrary#filter=path|%2Frecord-category-one%2Fsub-record-category%2Frecord-folder-one"
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // create non electronic record in folder 1
         filePlan.getToolbar()
@@ -131,6 +124,19 @@ public class CreateFilePlan extends BaseTest
         // check that the record has been created
         Record nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertNotNull(nonElectronicRecord);
+    }
+
+    /** Create electronic record. */
+    @Test
+    (
+        groups = { "integration", GROUP_ELECTRONIC_RECORD_EXISTS },
+        description = "Create File Plan",
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
+    )
+    public void createElectronicRecord()
+    {
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // create electronic record in folder 1
         filePlan.getToolbar()
@@ -141,27 +147,6 @@ public class CreateFilePlan extends BaseTest
         // check that the record has been created
         Record record = filePlan.getRecord(RECORD);
         assertNotNull(record);
-
-        // declare in-place record
-        /* TODO: test dependency fails to include createCollabSite first, so can't do this here until that is fixed.
-        // declareInplaceRecord();
-
-        // create unfiled record folder
-        unfiledRecords
-            .getToolbar().clickOnNewUnfiledRecordFolder()
-            .setName(UNFILED_RECORD_FOLDER)
-            .setTitle(TITLE)
-            .clickOnSave();
-
-        // check that the unfiled record folder has been created
-        UnfiledRecordFolder unfiledRecordFolder = unfiledRecords.getList().get(UNFILED_RECORD_FOLDER, UnfiledRecordFolder.class);
-        assertNotNull(unfiledRecordFolder);
-
-        // create holds
-        unfiledRecords.getFilterPanel().clickOnHolds();
-        createHold(HOLD1);
-        createHold(HOLD2);
-        */
     }
 
     /**
@@ -227,75 +212,4 @@ public class CreateFilePlan extends BaseTest
             recordFolder.clickOnLink();
         }
     }
-
-    /**
-     * Declare inplace record
-     */
-    /*
-    private void declareInplaceRecord()
-    {
-        // navigate to the collaboration site
-        openPage(userDashboardPage).getMySitesDashlet()
-            .clickOnCollaborationSite(COLLAB_SITE_ID);
-
-        // Upload document to turn into in place record
-        siteDashboard.getNavigation()
-            .clickOnDocumentLibrary()
-            .getToolbar()
-            .clickOnFile()
-            .uploadFile(IN_PLACE_RECORD);
-
-        // get document
-        Document document = siteDashboard.getNavigation()
-            .clickOnDocumentLibrary()
-            .getList()
-            .getByPartialName(IN_PLACE_RECORD, Document.class);
-
-        assertNotNull(document);
-        String originalName = document.getName();
-
-        // declare the document as a record
-        document.clickOnDeclareAsRecord();
-
-        // refresh the document item
-        InplaceRecord inplaceRecord = documentLibrary.getList()
-            .getByPartialName(IN_PLACE_RECORD, InplaceRecord.class);
-
-        // check that the document name has changed
-        String recordName = inplaceRecord.getName();
-        assertFalse(recordName.equals(originalName));
-
-        // naviagate to the unfiled records
-        openPage(userDashboardPage).getMySitesDashlet()
-            .clickOnRMSite(RM_SITE_ID)
-            .getNavigation()
-            .clickOnFilePlan()
-            .getFilterPanel()
-            .clickOnUnfiledRecords();
-
-        Record record = unfiledRecords.getList()
-            .get(recordName, Record.class);
-        assertNotNull("Unfiled record not found.", record);
-    }
-    */
-
-    /**
-     * Create hold
-     *
-     * @param holdName hold name
-     */
-    /*
-    private void createHold(String holdName)
-    {
-        holds.getToolbar()
-            .clickOnNewHold()
-            .setName(holdName)
-            .setReason(REASON)
-            .clickOnSave();
-
-        Hold hold = holds.getList()
-            .get(holdName, Hold.class);
-        assertNotNull(hold);
-    }
-    */
 }

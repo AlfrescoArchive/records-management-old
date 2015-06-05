@@ -77,9 +77,9 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification", "content-classification-dialog", GROUP_CLASSIFIED_DOCUMENT_EXISTS },
+        groups = { "integration", GROUP_CLASSIFIED_DOCUMENT_EXISTS },
         description = "Use the classify content dialog to classify a document.",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
     public void classifyDocument()
     {
@@ -131,7 +131,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that cancelling the classification dialog works.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
@@ -179,7 +179,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that content can be classified with a level of Unclassified.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
@@ -218,7 +218,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that a user with 'Top Secret' clearance sees all the levels.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
@@ -249,7 +249,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE }
     )

@@ -42,7 +42,7 @@ public class ClassifiedDocumentIndicator extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Verify Classify Document behaviour",
         dependsOnGroups = { GROUP_CLASSIFIED_DOCUMENT_EXISTS }
     )

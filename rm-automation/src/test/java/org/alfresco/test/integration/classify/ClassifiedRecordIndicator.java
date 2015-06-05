@@ -40,6 +40,7 @@ public class ClassifiedRecordIndicator extends BaseTest
      */
     @Autowired
     private FilePlan filePlan;
+
     /**
      * Main test execution
      */
@@ -47,26 +48,16 @@ public class ClassifiedRecordIndicator extends BaseTest
     (
         groups = { "integration" },
         description = "Verify Classify Record behaviour",
-        dependsOnGroups = { "integration-dataSetup-rmSite", "integration-dataSetup-fileplan"
-            // FIXME: Add dataSetup method here, once work for RM-2051 is complete (e.g. req. classify content dialog PO)
-            //    , "integration-dataSetup-fileplan-classified"
-        }
+        dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
     )
-
     public void classifiedRecordIndicator()
     {
-
         // open record folder one
-        openPage(filePlan, RM_SITE_ID, "documentlibrary").navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME,
-            RECORD_FOLDER_ONE);
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // Is the indicator available on the classified record
         assertTrue(filePlan.getRecord(CLASSIFIED_RECORD)
             .hasIndicator(RecordIndicators.CLASSIFIED));
-
-        // Is the indicator available on the classified non electronic record
-        assertTrue(filePlan.getRecord(CLASSIFIED_NON_ELECTRONIC_RECORD)
-            .hasIndicator(RecordIndicators.CLASSIFIED));
-
     }
 }

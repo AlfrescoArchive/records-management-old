@@ -19,14 +19,14 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Classify document integration test
@@ -36,28 +36,22 @@ import static org.junit.Assert.assertTrue;
  */
 public class ClassifiedDocumentProperties extends BaseTest
 {
-    /**
-     * Doc Lib
-     */
     @Autowired
     private DocumentLibrary documentLibrary;
-
     @Autowired
     private ClassifiedDocumentDetails classifiedDocumentDetails;
-
     @Autowired
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
+
     /**
      * Main test execution
      */
-    @Test(
+    @Test
+    (
         groups = { "integration" },
-        description = "Verify Classified Document Properties behaviour"
-        // FIXME: Add dataSetup method here, once work for RM-2051 is complete (e.g. req. classify content dialog PO)
-        // ,
-        // dependsOnGroups = { "integration-dataSetup-collab-classified" }
+        description = "Verify Classified Document Properties behaviour",
+        dependsOnGroups = { GROUP_CLASSIFIED_DOCUMENT_EXISTS }
     )
-
     public void classifyDocumentProperties()
     {
         // Open Collab site DocumentLibrary.

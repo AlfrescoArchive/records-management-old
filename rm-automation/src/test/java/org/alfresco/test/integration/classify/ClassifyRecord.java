@@ -39,17 +39,6 @@ import org.testng.annotations.Test;
  * @author David Webster
  * @since 3.0
  */
-@Test
-(
-    groups = { "integration", "classification", "classify-record" },
-    description = "Verify classify record action exists",
-    dependsOnGroups =
-    {
-            "integration-dataSetup-rmSite",
-            "integration-dataSetup-fileplan",
-            "integration-dataSetup-holds"
-    }
-)
 public class ClassifyRecord extends BaseTest
 {
     /**
@@ -74,11 +63,16 @@ public class ClassifyRecord extends BaseTest
      * Note that there is no explicit acceptance criteria for this, but it is clearly required.
      */
     @Test
+    (
+        groups = { "integration" },
+        description = "Verify classify record action exists",
+        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_NON_ELECTRONIC_RECORD_EXISTS }
+    )
     public void checkClassifyActionExists()
     {
         // open record folder one
-        openPage(filePlan, RM_SITE_ID, "documentlibrary")
-            .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
         Record electronicRecord = filePlan.getRecord(RECORD);
 
         // Verify that "Classify" is an available action.
@@ -109,6 +103,32 @@ public class ClassifyRecord extends BaseTest
             .isActionsClickable(RecordActionsPanel.CLASSIFY));
     }
 
+    /** Check a record can be classified.  The classified record is used by other tests. */
+    @Test
+    (
+        groups = { "integration", GROUP_CLASSIFIED_RECORD_EXISTS },
+        description = "Verify classify record action exists",
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
+    )
+    public void classifyRecord()
+    {
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
+
+        filePlan.getToolbar()
+            .clickOnFile()
+            .clickOnElectronic()
+            .uploadFile(CLASSIFIED_RECORD);
+        Record record = filePlan.getRecord(CLASSIFIED_RECORD);
+
+        record.clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON)
+            .submitDialog();
+    }
+
+
     /**
      * Given that a record is held
      * And unclassified
@@ -116,11 +136,16 @@ public class ClassifyRecord extends BaseTest
      * Then classify is not available
      */
     @Test
+    (
+        groups = { "integration" },
+        description = "Verify classify record action exists",
+        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_HOLDS_EXIST }
+    )
     public void cantClassifyHeldRecord()
     {
         // open record folder one
-        openPage(filePlan, RM_SITE_ID, "documentlibrary")
-            .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // show that the classify action is available
         assertFalse(filePlan.getRecord(RECORD).isHeld());

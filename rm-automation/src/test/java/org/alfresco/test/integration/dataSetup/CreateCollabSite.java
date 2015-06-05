@@ -59,7 +59,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
      */
     @Test
     (
-        groups = { "integration-dataSetup", "integration-dataSetup-collab" },
+        groups = { "integration", GROUP_COLLABORATION_SITE_EXISTS },
         description = "Create Collaboration Site"
     )
     public void createCollabSite()
@@ -78,9 +78,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document. */
     @Test
     (
-        groups = { "integration-dataSetup", GROUP_DOCUMENT_EXISTS },
+        groups = { "integration", GROUP_DOCUMENT_EXISTS },
         description = "Create In-Place Record",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
     public void createDocument()
     {
@@ -94,9 +94,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create an in-place record. */
     @Test
     (
-        groups = { "integration-dataSetup", GROUP_IN_PLACE_RECORD_EXISTS },
+        groups = { "integration", GROUP_IN_PLACE_RECORD_EXISTS },
         description = "Create In-Place Record",
-        dependsOnGroups = { "integration-dataSetup-collab", "integration-dataSetup-rmSite" }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_RM_SITE_EXISTS }
     )
     public void declareInplaceRecord()
     {
@@ -117,9 +117,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is shared with "Quick Share". */
     @Test
     (
-        groups = { "integration-dataSetup", GROUP_SHARED_DOCUMENT_EXISTS },
+        groups = { "integration", GROUP_SHARED_DOCUMENT_EXISTS },
         description = "Create Collaboration Site",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
     public void createSharedDocument()
     {
@@ -140,9 +140,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is locked for editing. */
     @Test
     (
-        groups = { "integration-dataSetup", GROUP_LOCKED_DOCUMENT_EXISTS },
+        groups = { "integration", GROUP_LOCKED_DOCUMENT_EXISTS },
         description = "Create Collaboration Site",
-        dependsOnGroups = { "integration-dataSetup-collab" }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
     public void createLockedDocument()
     {

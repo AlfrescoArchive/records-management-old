@@ -19,12 +19,12 @@
 
 package org.alfresco.po.rm.details.record;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ClassifiedPropertiesPanel extends PropertiesPanel
@@ -32,7 +32,11 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
     @FindBy(css="div.document-metadata-header h2")
     private WebElement classifiedTitle;
 
-    private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.cssSelector("div.document-details-panel .set-panel .viewmode-value");
+    /**
+     * XPath selector that depends on the language being English to find the "Classification" panel. There doesn't seem
+     * to be a more reasonable way to identify these fields.
+     */
+    private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.xpath("//div[contains(@class, 'set-panel-heading')][.='Classification']/..//span[contains(@class, 'viewmode-value')]");
 
     public static final Integer ORIGINAL_CLASSIFICATION = 0;
     public static final Integer CURRENT_CLASSIFICATION = 1;

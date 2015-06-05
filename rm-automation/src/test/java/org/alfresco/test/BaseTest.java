@@ -116,6 +116,24 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     }
 
     /**
+     * Create a path from a page and folder structure.
+     *
+     * @param page The page that acts as the root folder.
+     * @param pathComponents The folders in the order they should be navigated.
+     * @return The path that can be used as part of the URL when opening a page.
+     */
+    protected String createPathFrom(String page, String... pathComponents)
+    {
+        StringBuilder path = new StringBuilder(page + "#filter=path|%2F");
+        for (String pathComponent : pathComponents)
+        {
+            path.append("%2F" + pathComponent);
+        }
+        path.append("|");
+        return path.toString();
+    }
+
+    /**
      * Helper to open page
      */
     protected <P extends SharePage> P openPage(P page)

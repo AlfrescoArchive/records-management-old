@@ -19,7 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
@@ -36,46 +36,40 @@ import org.testng.annotations.Test;
  */
 public class ClassifiedRecordProperties extends BaseTest
 {
-    /**
-     * Doc Lib
-     */
     @Autowired
     private FilePlan filePlan;
-
     @Autowired
     private ClassifiedRecordDetails classifiedRecordDetails;
-
     @Autowired
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
+
     /**
      * Main test execution
      */
-    @Test(
+    @Test
+    (
         groups = { "integration" },
-        description = "Verify Classified Record Properties behaviour"
-        // FIXME: Add dataSetup method here, once work for RM-2051 is complete (e.g. req. classify content dialog PO)
-        // ,
-        // dependsOnGroups = { "integration-dataSetup-fileplan-classified" }
+        description = "Verify Classified Record Properties behaviour",
+        dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
     )
-
     public void classifyRecordProperties()
     {
         // Open Collab site DocumentLibrary.
-        openPage(filePlan, RM_SITE_ID, "documentlibrary").navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME,
-            RECORD_FOLDER_ONE);
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // navigate to the document details page
         filePlan.getRecord(CLASSIFIED_RECORD)
             .clickOnLink(classifiedRecordDetails);
 
         // verify that classification is as expected.
-        assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION)
-            .equals(CLASSIFICATION_LEVEL_ABBREVIATION));
+        assertEquals(CLASSIFICATION_LEVEL_ABBREVIATION,
+                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
 
-        assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY)
-            .equals(CLASSIFICATION_AUTHORITY));
+        assertEquals(CLASSIFICATION_AUTHORITY,
+                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY));
 
-        assertTrue(classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON)
-            .equals(CLASSIFICATION_REASON));
+        assertEquals(CLASSIFICATION_REASON,
+                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
     }
 }

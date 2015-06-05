@@ -59,7 +59,7 @@ public class ClassifyDocument extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Verify classify action is available",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
@@ -92,7 +92,7 @@ public class ClassifyDocument extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Verify classify action is not available for various cases",
         dependsOnGroups = { GROUP_LOCKED_DOCUMENT_EXISTS, GROUP_SHARED_DOCUMENT_EXISTS }
     )
@@ -119,7 +119,7 @@ public class ClassifyDocument extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
     )
@@ -141,7 +141,7 @@ public class ClassifyDocument extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "classification" },
+        groups = { "integration" },
         description = "Check that the 'Classify' action exists for an in-place record",
         dependsOnGroups = { GROUP_IN_PLACE_RECORD_EXISTS }
     )
@@ -161,11 +161,11 @@ public class ClassifyDocument extends BaseTest
      * Then I am unable to sync the content
     */
     @Test
-        (
-            groups = {"integration", "classification"},
-            description = "Check that we can't sync classified content",
-            dependsOnGroups = {GROUP_CLASSIFIED_DOCUMENT_EXISTS}
-        )
+    (
+        groups = {"integration"},
+        description = "Check that we can't sync classified content",
+        dependsOnGroups = {GROUP_CLASSIFIED_DOCUMENT_EXISTS}
+    )
     public void checkWeCannotSyncClassifiedContent()
     {
         openPage(documentLibrary, COLLAB_SITE_ID);
