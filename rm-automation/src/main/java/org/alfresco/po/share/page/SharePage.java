@@ -109,6 +109,8 @@ public abstract class SharePage extends Page
             // Logout if previously logged in as someone else.
             if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
             {
+                // Render the navigation bar by rendering the current page.
+                this.render();
                 sharePageNavigation.openUserDropdownMenu().logout();
             }
 
