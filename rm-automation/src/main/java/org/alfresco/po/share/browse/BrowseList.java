@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -25,7 +25,9 @@ import java.util.Map;
 import org.alfresco.po.common.annotations.WaitFor;
 import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,60 +68,43 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     @Override
     public <T extends Renderable> T render()
     {
-        T result = null;
-        int retry = 0;
-        while (retry < RETRY_COUNT)
+        return Utils.retry(() ->
         {
-            try
+            T result = super.render();
+
+            // figure out how many items are on the page
+            String text = current.getText();
+            String[] values = text.split(" ");
+            int count = Integer.parseInt(values[2]);
+
+            List<WebElement> rows = webDriver.findElements(rowsSelector);
+
+            if (rows.size() == count)
             {
-                result = super.render();
+                // clear the current item map
+                itemMap = new HashMap<>(rows.size());
 
-                // figure out how many items are on the page
-                String text = current.getText();
-                String[] values = text.split(" ");
-                int count = Integer.parseInt(values[2]);
-
-                List<WebElement> rows = webDriver.findElements(rowsSelector);
-
-                if (rows.size() == count)
+                // build the new item map
+                for (WebElement row : rows)
                 {
-                    // clear the current item map
-                    itemMap = new HashMap<String, ListItem>(rows.size());
-
-                    // build the new item map
-                    for (WebElement row : rows)
+                    // check for staleness of row
+                    if (row.isDisplayed())
                     {
-                        // check for staleness of row
-                        if (row.isDisplayed())
-                        {
-                            ListItem item = listItemFactory.getItem(row);
-                            itemMap.put(item.getName(), item);
-                        }
-                        else
-                        {
-                            throw new RuntimeException("browse list row is not visible");
-                        }
+                        ListItem item = listItemFactory.getItem(row);
+                        itemMap.put(item.getName(), item);
+                    }
+                    else
+                    {
+                        throw new RuntimeException("browse list row is not visible");
                     }
                 }
-                else
-                {
-                    throw new RuntimeException("Expected " + count + " rows and found " + rows.size());
-                }
-
-                break;
             }
-            catch (Exception exception)
+            else
             {
-                // retry if exception found
-                retry++;
-                if (retry == RETRY_COUNT)
-                {
-                    throw new RuntimeException("Retries failed whilst rendering BrowseList", exception);
-                }
+                throw new RuntimeException("Expected " + count + " rows and found " + rows.size());
             }
-        }
-
-        return result;
+            return result;
+        }, RETRY_COUNT, WebDriverException.class);
     }
 
     /**

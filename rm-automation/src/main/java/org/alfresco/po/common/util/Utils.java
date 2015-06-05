@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.common.util;
 
+import static java.util.Arrays.asList;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -35,6 +37,8 @@ import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -51,6 +55,8 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 @Component
 public final class Utils implements ApplicationContextAware
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
+
     /** application context */
     private static ApplicationContext applicationContext;
 
@@ -329,9 +335,8 @@ public final class Utils implements ApplicationContextAware
     }
 
     /**
-     * Helper method to retry the provided {@link Retry code block}, ignoring failures until either
+     * Helper method to retry the provided {@link Retry code block}, ignoring any {@code Exception}s until either
      * the code block completes successfully or the maximum number of retries has been reached.
-     * are used up
      *
      * @param <T>       the return type from the code block.
      * @param retry     a code block to execute.
@@ -339,6 +344,21 @@ public final class Utils implements ApplicationContextAware
      * @return          result of the code block.
      */
     public static final <T> T retry(Retry<T> retry, int count)
+    {
+        return (T)retry(retry, count, new Class[] { Exception.class });
+    }
+
+    /**
+     * Helper method to retry the provided {@link Retry code block}, ignoring the specified exception types until either
+     * the code block completes successfully or the maximum number of retries has been reached.
+     *
+     * @param <T>       the return type from the code block.
+     * @param retry     a code block to execute.
+     * @param count     maximum number of retries.
+     * @param retryExceptions a sequence of exception types any one of which will start a retry.
+     * @return          result of the code block.
+     */
+    public static final <T> T retry(Retry<T> retry, int count, Class<? extends Exception>... retryExceptions)
     {
         int attempt = 0;
 
@@ -351,14 +371,26 @@ public final class Utils implements ApplicationContextAware
             }
             catch (Exception exception)
             {
-                attempt++;
-                // if we have used up all our retries throw the exception
-                if (attempt >= count)
+                LOGGER.debug("Exception ignored on attempt {}: {}", attempt, exception);
+
+                // Is the caught exception a type that requires a retry?
+                if (asList(retryExceptions)
+                        .stream()
+                        .anyMatch(e -> e.isAssignableFrom(exception.getClass())))
+                {
+                    attempt++;
+                    // if we have used up all our retries throw the exception
+                    if (attempt >= count)
+                    {
+                        throw exception;
+                    }
+
+                    // otherwise do nothing and try again
+                }
+                else
                 {
                     throw exception;
                 }
-
-                // otherwise do nothing and try again
             }
         }
     }
