@@ -218,7 +218,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored" }, // TODO Re-enable when we've decided logging out/in doesn't break tests on Bamboo.
+        groups = { "integration" },
         description = "Check that a user with 'Top Secret' clearance sees all the levels.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
