@@ -169,10 +169,20 @@ public interface TestData
 
     /* Classification data. */
 
+    /** A classified document at the level 'Top Secret'. */
+    public static final String TOP_SECRET_DOCUMENT = "classified-top-secret-document";
+    /** The TOP_SECRET_DOCUMENT has been created. */
+    public static final String GROUP_TOP_SECRET_DOCUMENT_EXISTS = "GROUP_TOP_SECRET_DOCUMENT_EXISTS";
+
     /** A classified document at the level 'Secret'. */
-    public static final String CLASSIFIED_DOCUMENT = "my-classified-document";
-    /** The CLASSIFIED_DOCUMENT has been created. */
-    public static final String GROUP_CLASSIFIED_DOCUMENT_EXISTS = "classifiedDocumentIsClassified";
+    public static final String SECRET_DOCUMENT = "classified-secret-document";
+    /** The SECRET_DOCUMENT has been created. */
+    public static final String GROUP_SECRET_DOCUMENT_EXISTS = "GROUP_SECRET_DOCUMENT_EXISTS";
+
+    /** A document explicitly classified at the level 'Unclassified'. */
+    public static final String UNCLASSIFIED_DOCUMENT = "unclassified-document";
+    /** The UNCLASSIFIED_DOCUMENT has been created. */
+    public static final String GROUP_UNCLASSIFIED_DOCUMENT_EXISTS = "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS";
 
     /** A record classified at the level 'Secret'. */
     public static final String CLASSIFIED_RECORD = "classified-record";
@@ -180,9 +190,9 @@ public interface TestData
     public static final String GROUP_CLASSIFIED_RECORD_EXISTS = "classifiedRecordIsClassified";
 
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
-    public static final String CLASSIFICATION_LEVEL_ABBREVIATION = "Secret";
-    public static final String CLASSIFICATION_LEVEL_TEXT = "Secret";
-    public static final String UNCLASSIFIED_TEXT = "Unclassified";
+    public static final String TOP_SECRET_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
+    public static final String SECRET_CLASSIFICATION_LEVEL_TEXT = "Secret";
+    public static final String UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT = "Unclassified";
     public static final String DEFAULT_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String CLASSIFICATION_AUTHORITY = "ClassificationAuthority";
     public static final String CLASSIFICATION_REASON = "1.4(c)";

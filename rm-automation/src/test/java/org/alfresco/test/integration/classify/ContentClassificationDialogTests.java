@@ -77,7 +77,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_CLASSIFIED_DOCUMENT_EXISTS },
+        groups = { "integration", GROUP_SECRET_DOCUMENT_EXISTS },
         description = "Use the classify content dialog to classify a document.",
         dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
@@ -87,8 +87,8 @@ public class ContentClassificationDialogTests extends BaseTest
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(CLASSIFIED_DOCUMENT);
-        documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
+            .uploadFile(SECRET_DOCUMENT);
+        documentLibrary.getDocument(SECRET_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         // Verify that a classify document dialog has appeared.
@@ -102,7 +102,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertFalse("Create button should not initially be enabled.", classifyContentDialog.isCreateButtonEnabled());
 
         // Fill in the classification details.
-        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+        classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON);
 
@@ -113,7 +113,7 @@ public class ContentClassificationDialogTests extends BaseTest
         classifyContentDialog.submitDialog();
 
         // Check that the classify content action is no longer available.
-        String[] clickableActions = documentLibrary.getDocument(CLASSIFIED_DOCUMENT).getClickableActions();
+        String[] clickableActions = documentLibrary.getDocument(SECRET_DOCUMENT).getClickableActions();
         assertFalse("The classify action should no longer be available.",
                     Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
     }
@@ -144,7 +144,7 @@ public class ContentClassificationDialogTests extends BaseTest
         document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         // Fill in the classification details.
-        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+        classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON);
 
@@ -179,32 +179,31 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", GROUP_UNCLASSIFIED_DOCUMENT_EXISTS },
         description = "Check that content can be classified with a level of Unclassified.",
-        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
     )
     public void classifyAsUnclassified()
     {
-        // Open the document preview page.
+        // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
-        documentLibrary.getDocument(DOCUMENT).clickOnLink();
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(UNCLASSIFIED_DOCUMENT);
+        documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
+            .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
-        // Classify the document with a level of "No Clearance".
-        DocumentActionsPanel documentActionsPanel = documentDetails.getDocumentActionsPanel();
-        documentActionsPanel.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
-        classifyContentDialog.setLevel(UNCLASSIFIED_TEXT)
+        classifyContentDialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
 
         // Check that the document is classified and has level "Unclassified".
+        documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
+            .clickOnLink(documentDetails);
         assertNotNull("Classified properties not found.", classifiedPropertiesPanel);
         String level = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION);
-        assertEquals("Unexpected current classification.", UNCLASSIFIED_TEXT, level);
-
-        // Delete the document and recreate it again.
-        documentDetails.navigateUp();
-        recreateDocument();
+        assertEquals("Unexpected current classification.", UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT, level);
     }
 
     /**
@@ -269,19 +268,27 @@ public class ContentClassificationDialogTests extends BaseTest
     }
 
     /**
-     * Delete and re-upload a document. This is used to allow resetting after classifying a document. TODO: Implement
-     * removal of classification and use that instead.
+     * Check that content can be classified as 'Top Secret'.
      */
-    private void recreateDocument()
+    @Test
+    (
+        groups = { "integration", GROUP_TOP_SECRET_DOCUMENT_EXISTS },
+        description = "Check that content can be classified as 'Top Secret'.",
+        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+    )
+    public void createTopSecretDocument()
     {
-        documentLibrary
-            .getDocument(DOCUMENT)
-            .clickOnDelete()
-            .confirmDelete();
-
+        // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(DOCUMENT);
+            .uploadFile(TOP_SECRET_DOCUMENT);
+        documentLibrary.getDocument(TOP_SECRET_DOCUMENT)
+            .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        classifyContentDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON)
+            .submitDialog();
     }
 }

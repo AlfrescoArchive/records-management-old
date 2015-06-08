@@ -122,7 +122,7 @@ public class ClassifyRecord extends BaseTest
         Record record = filePlan.getRecord(CLASSIFIED_RECORD);
 
         record.clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
-        classifyContentDialog.setLevel(CLASSIFICATION_LEVEL_TEXT)
+        classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setAuthority(CLASSIFICATION_AUTHORITY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();

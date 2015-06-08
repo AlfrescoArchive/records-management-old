@@ -63,7 +63,7 @@ public class ClassifiedRecordProperties extends BaseTest
             .clickOnLink(classifiedRecordDetails);
 
         // verify that classification is as expected.
-        assertEquals(CLASSIFICATION_LEVEL_ABBREVIATION,
+        assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
 
         assertEquals(CLASSIFICATION_AUTHORITY,

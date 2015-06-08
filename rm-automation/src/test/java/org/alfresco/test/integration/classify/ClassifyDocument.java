@@ -164,18 +164,18 @@ public class ClassifyDocument extends BaseTest
     (
         groups = {"integration"},
         description = "Check that we can't sync classified content",
-        dependsOnGroups = {GROUP_CLASSIFIED_DOCUMENT_EXISTS}
+        dependsOnGroups = {GROUP_SECRET_DOCUMENT_EXISTS}
     )
     public void checkWeCannotSyncClassifiedContent()
     {
         openPage(documentLibrary, COLLAB_SITE_ID);
 
         // On Document Library Page
-        assertFalse(documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
+        assertFalse(documentLibrary.getDocument(SECRET_DOCUMENT)
             .isShareDocumentAvailable());
 
         // On Document Details Page
-        assertFalse(documentLibrary.getDocument(CLASSIFIED_DOCUMENT)
+        assertFalse(documentLibrary.getDocument(SECRET_DOCUMENT)
             .clickOnLink()
             .getSocialActions()
             .isShareDocumentAvailable());
