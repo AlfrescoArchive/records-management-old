@@ -21,6 +21,7 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNull;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
@@ -112,6 +113,57 @@ public class BrowseClassifiedDocuments extends BaseTest
         // Check that we can access the documents by viewing their names.
         assertTrue(documentLibrary.getDocument(TOP_SECRET_DOCUMENT).getName().startsWith(TOP_SECRET_DOCUMENT));
         assertTrue(documentLibrary.getDocument(SECRET_DOCUMENT).getName().startsWith(SECRET_DOCUMENT));
+        assertTrue(documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT).getName().startsWith(UNCLASSIFIED_DOCUMENT));
+    }
+
+    /**
+     * User with 'secret' clearance can view all documents classified with level at most 'secret'.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2133">RM-2133</a><pre>
+     * Given that I am a user with mid-level security clearance
+     * When I browse the document library
+     * Then I can see all unclassified documents
+     * And I can see all classified documents with a classification less than or equal to my clearance level
+     * And I can't see any classified documents with a classification greater than my clearance level
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "ignored" }, // TODO Can un-ignore when we have fixed issue with changing user in UI tests. We also need to get feature working before test will pass.
+        description = "User with 'secret' clearance can view all documents classified with level at most 'secret'.",
+        dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+    )
+    public void secretClearanceUserCanViewUpToSecret()
+    {
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
+        assertNull("Should not have been able to find the top secret document.", documentLibrary.getDocument(TOP_SECRET_DOCUMENT));
+        // Check that we can access the documents by viewing their names.
+        assertTrue(documentLibrary.getDocument(SECRET_DOCUMENT).getName().startsWith(SECRET_DOCUMENT));
+        assertTrue(documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT).getName().startsWith(UNCLASSIFIED_DOCUMENT));
+    }
+
+    /**
+     * User with no clearance can only view unclassified documents.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2132">RM-2132</a><pre>
+     * Given that I am a user with no security clearance
+     * When I browse the document library
+     * Then I can see all unclassified documents
+     * And I cannot see any classified documents
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "ignored" }, // TODO Can un-ignore when we have fixed issue with changing user in UI tests. We also need to get feature working before test will pass.
+        description = "User with no clearance can only view unclassified documents.",
+        dependsOnGroups = { GROUP_UNCLEARED_USER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+    )
+    public void noClearanceUserCantViewClassifiedDocuments()
+    {
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
+        assertNull("Should not have been able to find the top secret document.", documentLibrary.getDocument(TOP_SECRET_DOCUMENT));
+        assertNull("Should not have been able to find the secret document.", documentLibrary.getDocument(SECRET_DOCUMENT));
+        // Check that we can access this document by viewing the name.
         assertTrue(documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT).getName().startsWith(UNCLASSIFIED_DOCUMENT));
     }
 }
