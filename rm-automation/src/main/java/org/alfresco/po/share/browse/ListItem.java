@@ -27,16 +27,16 @@ import java.util.List;
 
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
  * List item
- * 
+ *
  * @author Roy Wetherall
  */
 public abstract class ListItem
@@ -74,7 +74,7 @@ public abstract class ListItem
     {
         return row;
     }
-    
+
     /**
      * Helper method to get link
      */
@@ -109,7 +109,7 @@ public abstract class ListItem
 
         // mouse over the link
         Utils.mouseOver(link);
-        
+
         // click on the link
         link.click();
 
@@ -126,14 +126,14 @@ public abstract class ListItem
     private void clickOnMoreActions()
     {
         // click on the ...more link
-        Utils.mouseOver(row);    
+        Utils.mouseOver(row);
         if (Utils.elementExists(row, moreActionsSelector))
         {
             // find the element, mouse over and click
             WebElement moreAction = row.findElement(moreActionsSelector);
             Utils.mouseOver(moreAction);
             moreAction.click();
-            
+
             // wait for the actions to show
             waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
         }
@@ -141,7 +141,7 @@ public abstract class ListItem
 
     /**
      * Helper method to check whether the specified actions are clickable
-     * 
+     *
      * @param actionNames action names
      * @return boolean true if all clickable, false otherwise
      */
@@ -161,19 +161,19 @@ public abstract class ListItem
                 if (result == null)
                 {
                     result = new ArrayList<String>();
-                }                
+                }
                 result.add(actionName);
             }
         }
 
         return result;
     }
-    
+
     public String[] getClickableActions()
     {
         // click on more actions
         clickOnMoreActions();
-        
+
         List<WebElement> actions = row.findElements(ACTIONS_SELECTOR);
         List<String> result = new ArrayList<String>();
         for (WebElement action : actions)
@@ -185,7 +185,7 @@ public abstract class ListItem
                 result.add(actionName);
             }
         }
-        
+
         return result.toArray(new String[result.size()]);
     }
 
@@ -195,10 +195,10 @@ public abstract class ListItem
     public boolean isActionClickable(String actionName)
     {
         boolean result = false;
-        
+
         // click on more actions
         clickOnMoreActions();
-        
+
         // get the link and check it's enabled
         Link link = getActionLink(actionName);
         if (link != null && link.isEnabled())
@@ -223,7 +223,7 @@ public abstract class ListItem
     {
         return clickOnAction(actionName, renderable, false);
     }
-    
+
     /**
      * Click on action
      */
@@ -236,13 +236,13 @@ public abstract class ListItem
         Link action = getActionLink(actionName);
         if (action == null || !action.isEnabled())
             throw new RuntimeException("The action " + actionName + " could not be found for list item " + getName());
-        
+
         // mouse over and click
         //Utils.mouseOver(action);
         action.click();
 
         if (waitForActionStaleness == true)
-        {            
+        {
             waitForStalenessOf(action);
         }
 
@@ -336,4 +336,15 @@ public abstract class ListItem
         return result;
     }
 
+    /**
+     * Get the text on a banner.
+     *
+     * @param The type of banner to look for.
+     * @return The text from the first banner of the specified type.
+     * @throws NoSuchElementException If no such banner can be found.
+     */
+    public String getBannerText(ContentBanner banner) throws NoSuchElementException
+    {
+        return row.findElement(banner.getSelector()).getText();
+    }
 }

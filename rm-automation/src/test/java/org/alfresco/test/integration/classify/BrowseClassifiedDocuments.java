@@ -24,6 +24,8 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
+import org.alfresco.po.share.browse.documentlibrary.Document;
+import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
@@ -47,7 +49,21 @@ public class BrowseClassifiedDocuments extends BaseTest
     @Autowired
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
 
-    /** Check the classified document indicator. */
+    /**
+     * Check the classified document indicator.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2001">RM-2001</a><pre>
+     * Given that there is some classified content in the folder I am viewing in the document library
+     * And that my security clearance is sufficient that I can see the classified content
+     * When the classified content is presented in the list view
+     * Then I can see a visual indicator that tells me it's classified
+     * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2245">RM-2245</a><pre>
+     * Given that a document has been classified
+     * When I browse the document library
+     * Then the classification level of the document is clearly visible
+     * </pre>
+     */
     @Test
     (
         groups = { "integration" },
@@ -56,12 +72,15 @@ public class BrowseClassifiedDocuments extends BaseTest
     )
     public void classifyDocumentIndicator()
     {
-        // Open Collab site DocumentLibrary.
         openPage(documentLibrary, COLLAB_SITE_ID);
 
-        // verify document actions
-        assertTrue(documentLibrary.getDocument(SECRET_DOCUMENT)
-            .hasIndicator(DocumentIndicators.CLASSIFIED));
+        Document document = documentLibrary.getDocument(SECRET_DOCUMENT);
+        assertTrue("Expected classified document icon to be visible.",
+                    document.hasIndicator(DocumentIndicators.CLASSIFIED));
+
+        assertEquals("Expected 'Secret' classification banner to be visible.",
+                     "Classification: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                     document.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
     /** Verify document details page displays classification properties. */
