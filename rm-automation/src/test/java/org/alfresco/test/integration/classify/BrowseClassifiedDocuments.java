@@ -20,16 +20,18 @@
 package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
-import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
+import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.BaseTest;
+import org.openqa.selenium.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -184,5 +186,38 @@ public class BrowseClassifiedDocuments extends BaseTest
         assertNull("Should not have been able to find the secret document.", documentLibrary.getDocument(SECRET_DOCUMENT));
         // Check that we can access this document by viewing the name.
         assertTrue(documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT).getName().startsWith(UNCLASSIFIED_DOCUMENT));
+    }
+
+    /**
+     * Check how a document explicitly marked 'Unclassified' is presented.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2279">RM-2279</a><pre>
+     * Given that a document has been marked as unclassified
+     * When I browse the document library
+     * Then no classification banner is shown for the document
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration" },
+        description = "Check how a document explicitly marked 'Unclassified' is presented.",
+        dependsOnGroups = { GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+    )
+    public void unclassifiedDocumentPresentation()
+    {
+        openPage(documentLibrary, COLLAB_SITE_ID);
+
+        Document document = documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT);
+        // TODO Use ExceptionUtils when it's moved somewhere accessible to rm-automation
+        try
+        {
+            document.getBannerText(ContentBanner.CLASSIFICATION);
+            fail("The unclassified document should not have a classification banner.");
+        }
+        catch(NoSuchElementException e)
+        {
+            // NOOP - This is expected. Nb. Don't move the expected exception to cover the whole test as many places
+            // throw NoSuchElementException.
+        }
     }
 }
