@@ -26,14 +26,16 @@ import org.alfresco.po.common.site.SiteNavigation;
 import org.alfresco.po.common.site.SitePage;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.browse.BrowsePage;
+import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 /**
  * Details page
- * 
+ *
  * @author Roy Wetherall
  */
 public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
@@ -42,13 +44,13 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
     @FindBy(css="div.node-path")
     @WaitFor
     private WebElement path;
-    
+
     /** breadcrumb link selector */
     private By breadcrumbSelector = By.cssSelector("div.node-path a");
-    
+
     /** browse page to return to */
     private Renderable browsePage;
-    
+
     /**
      * @see org.alfresco.po.share.page.SharePage#render()
      */
@@ -62,7 +64,7 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
         }
         return super.render();
     }
-    
+
     /**
      * Get the URL of the page
      */
@@ -104,5 +106,17 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
 
         // render the browse page
         return browsePage.render();
+    }
+
+    /**
+     * Get the text on a banner.
+     *
+     * @param The type of banner to look for.
+     * @return The text from the first banner of the specified type.
+     * @throws NoSuchElementException If no such banner can be found.
+     */
+    public String getBannerText(ContentBanner banner) throws NoSuchElementException
+    {
+        return Utils.getWebDriver().findElement(banner.getSelector()).getText();
     }
 }

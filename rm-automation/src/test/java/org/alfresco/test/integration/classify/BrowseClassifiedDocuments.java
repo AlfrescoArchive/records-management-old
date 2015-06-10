@@ -85,11 +85,28 @@ public class BrowseClassifiedDocuments extends BaseTest
                      document.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
-    /** Verify document details page displays classification properties. */
+    /**
+     * Verify document details page displays classification information.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2002">RM-2002</a><pre>
+     * Given that I have the appropriate security clearance to see a classified document
+     * When I view the document details
+     * Then I see information about the classification including:
+     * * Initial classification
+     * * Current classification
+     * * Classification authority
+     * * Classification reasons
+     * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2282">RM-2282</a><pre>
+     * Given that a document has been classified
+     * When I view the document details page
+     * Then the classification level of the document is clearly visible
+     * </pre>
+     */
     @Test
     (
         groups = { "integration" },
-        description = "Verify document details page displays classification properties",
+        description = "Verify document details page displays classification information.",
         dependsOnGroups = { GROUP_SECRET_DOCUMENT_EXISTS }
     )
     public void classifyDocumentProperties()
@@ -110,6 +127,10 @@ public class BrowseClassifiedDocuments extends BaseTest
 
         assertEquals(CLASSIFICATION_REASON,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
+
+        assertEquals("Expected 'Secret' classification banner to be visible.",
+                    "Classification: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                    classifiedDocumentDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
     /**

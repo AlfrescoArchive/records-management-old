@@ -83,12 +83,27 @@ public class BrowseClassifiedRecords extends BaseTest
     }
 
     /**
-     * Main test execution
+     * Verify record details page displays classification information.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2083">RM-2083</a><pre>
+     * Given that I have the appropriate security clearance to see a classified record
+     * When I view the record details
+     * Then I see information about the classification including:
+     * * Initial classification
+     * * Current classification
+     * * Classification authority
+     * * Classification reasons
+     * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2282">RM-2282</a><pre>
+     * Given that a record has been classified
+     * When I view the record details page
+     * Then the classification level of the record is clearly visible
+     * </pre>
      */
     @Test
     (
         groups = { "integration" },
-        description = "Verify Classified Record Properties behaviour",
+        description = "Verify record details page displays classification information.",
         dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
     )
     public void classifyRecordProperties()
@@ -110,5 +125,9 @@ public class BrowseClassifiedRecords extends BaseTest
 
         assertEquals(CLASSIFICATION_REASON,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
+
+        assertEquals("Expected 'Secret' classification banner to be visible.",
+                    "Classification: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                    classifiedRecordDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 }
