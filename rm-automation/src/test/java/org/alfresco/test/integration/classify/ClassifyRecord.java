@@ -187,7 +187,7 @@ public class ClassifyRecord extends BaseTest
     @Test
     (
         groups = { "integration", GROUP_COMPLETE_RECORD_IS_CLASSIFIED },
-        description = "Check that the classify action is not available on a completed record.",
+        description = "Check that a completed record can be classified.",
         dependsOnGroups = { GROUP_COMPLETE_RECORD_EXISTS }
     )
     public void checkCanClassifyCompleteRecord()
