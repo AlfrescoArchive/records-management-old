@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
@@ -172,6 +173,35 @@ public class ClassifyRecord extends BaseTest
         // show that the classify action is now available
         assertFalse(filePlan.getRecord(RECORD).isHeld());
         assertTrue(filePlan.getRecord(RECORD).isActionClickable(RecordActions.CLASSIFY));
+    }
+
+    /**
+     * Check that a completed record can be classified.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2186">RM-2186</a><pre>
+     * Given that a record is complete
+     * When I classify the record
+     * Then the record is marked as classified.
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", GROUP_COMPLETE_RECORD_IS_CLASSIFIED },
+        description = "Check that the classify action is not available on a completed record.",
+        dependsOnGroups = { GROUP_COMPLETE_RECORD_EXISTS }
+    )
+    public void checkCanClassifyCompleteRecord()
+    {
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
+        filePlan.getRecord(COMPLETE_RECORD)
+            .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .addReason(CLASSIFICATION_REASON)
+            .submitDialog();
+        filePlan.getRecord(COMPLETE_RECORD)
+            .hasIndicator(RecordIndicators.CLASSIFIED);
     }
 
     /*

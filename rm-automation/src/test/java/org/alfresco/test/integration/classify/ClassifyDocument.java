@@ -127,8 +127,8 @@ public class ClassifyDocument extends BaseTest
     {
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
 
-        Document sharedDocument = documentLibrary.getDocument(DOCUMENT);
-        assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
+        Document document = documentLibrary.getDocument(DOCUMENT);
+        assertFalse(document.isActionClickable(DocumentActions.CLASSIFY));
     }
 
     /**

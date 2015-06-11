@@ -100,16 +100,15 @@ public class CreateFilePlan extends BaseTest
         createRecordFolderAndClickOnLink(RECORD_FOLDER_ONE, true);
     }
 
-    /** Create electronic record. */
+    /** Create non-electronic record. */
     @Test
     (
         groups = { "integration", GROUP_NON_ELECTRONIC_RECORD_EXISTS },
-        description = "Create File Plan",
+        description = "Create non-electronic record.",
         dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void createNonElectronicRecord()
     {
-        // "http://localhost:8081/share/page/site/rm/documentlibrary#filter=path|%2Frecord-category-one%2Fsub-record-category%2Frecord-folder-one"
         openPage(filePlan, RM_SITE_ID,
                     createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
@@ -130,7 +129,7 @@ public class CreateFilePlan extends BaseTest
     @Test
     (
         groups = { "integration", GROUP_ELECTRONIC_RECORD_EXISTS },
-        description = "Create File Plan",
+        description = "Create electronic record.",
         dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void createElectronicRecord()
@@ -147,6 +146,27 @@ public class CreateFilePlan extends BaseTest
         // check that the record has been created
         Record record = filePlan.getRecord(RECORD);
         assertNotNull(record);
+    }
+
+    /** Create complete record. */
+    @Test
+    (
+        groups = { "integration", GROUP_COMPLETE_RECORD_EXISTS },
+        description = "Create complete record",
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
+    )
+    public void createCompleteRecord()
+    {
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
+
+        filePlan.getToolbar()
+            .clickOnFile()
+            .clickOnElectronic()
+            .uploadFile(COMPLETE_RECORD);
+
+        filePlan.getRecord(COMPLETE_RECORD)
+            .clickOnCompleteRecord();
     }
 
     /**

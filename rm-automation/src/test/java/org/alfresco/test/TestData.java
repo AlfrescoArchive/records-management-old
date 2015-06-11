@@ -83,6 +83,13 @@ public interface TestData
     /** The RECORD has been created in RECORD_FOLDER_ONE. */
     public static final String GROUP_ELECTRONIC_RECORD_EXISTS = "GROUP_ELECTRONIC_RECORD_EXISTS";
 
+    /** A complete record. */
+    public static final String COMPLETE_RECORD = "complete-record";
+    /** The COMPLETE_RECORD has been created in RECORD_FOLDER_ONE. */
+    public static final String GROUP_COMPLETE_RECORD_EXISTS = "GROUP_COMPLETE_RECORD_EXISTS";
+    /** The COMPLETE_RECORD has been classified as secret. */
+    public static final String GROUP_COMPLETE_RECORD_IS_CLASSIFIED = "GROUP_COMPLETE_RECORD_IS_CLASSIFIED";
+
     public static final String FOLDER = "folder";
     public static final String UNFILED_RECORD_FOLDER = "unfiled-record-folder";
 
