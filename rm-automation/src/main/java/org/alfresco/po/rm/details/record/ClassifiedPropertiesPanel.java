@@ -36,7 +36,7 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
      * XPath selector that depends on the language being English to find the "Classification" panel. There doesn't seem
      * to be a more reasonable way to identify these fields.
      */
-    private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.xpath("//span[contains(@id,'classificationReasons')]/../../div/div/span[@class='viewmode-value']");
+    private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.xpath("//span[contains(@id,'classificationReasons')]/../../div//span[@class='viewmode-value']");
 
     public static final Integer ORIGINAL_CLASSIFICATION = 0;
     public static final Integer CURRENT_CLASSIFICATION = 1;
