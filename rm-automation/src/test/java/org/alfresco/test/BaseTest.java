@@ -18,8 +18,12 @@
  */
 package org.alfresco.test;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.junit.Assert.assertArrayEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -31,7 +35,10 @@ import org.alfresco.po.share.console.users.UsersPage;
 import org.alfresco.po.share.page.SharePage;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
 import org.apache.commons.lang.ArrayUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -46,7 +53,7 @@ import org.testng.annotations.Listeners;
  * @version 1.0
  */
 @ContextConfiguration(locations = {"classpath:rm-po-testContext.xml"})
-@Listeners(ResourceTeardown.class)
+@Listeners({ResourceTeardown.class, ScreenshotListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests implements TestData
 {
     /** user dashboard page */
@@ -272,5 +279,24 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 "Expected " + Arrays.toString(expected) + ", but actual is " + Arrays.toString(actual),
                 expected,
                 actual);
+    }
+
+    /**
+     * Helper method to take screenshots
+     *
+     * @param screenshotName The name of the screenshot
+     * @throws IOException if the source or destination is invalid or if an IO error occurs during copying
+     */
+    protected void takeScreenshot(String screenshotName) throws IOException
+    {
+        if (isBlank(screenshotName))
+        {
+            throw new IllegalArgumentException("Screenshot name cannot be blank.");
+        }
+
+        WebDriver augmentedDriver = new Augmenter().augment(webDriver);
+        File screenshot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
+        File destination = new File("target/screenshots/" + screenshotName + ".png");
+        copyFile(screenshot, destination);
     }
 }
