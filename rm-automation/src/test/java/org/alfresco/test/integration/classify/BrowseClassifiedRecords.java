@@ -78,7 +78,7 @@ public class BrowseClassifiedRecords extends BaseTest
         assertTrue("Expected record to have classified indicator.", record.hasIndicator(RecordIndicators.CLASSIFIED));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
-                    "Classification: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                    "Classified: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
                     record.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
@@ -127,7 +127,7 @@ public class BrowseClassifiedRecords extends BaseTest
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
-                    "Classification: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                    "Classified: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
                     classifiedRecordDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 }
