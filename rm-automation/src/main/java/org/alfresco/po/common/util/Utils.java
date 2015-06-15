@@ -20,12 +20,6 @@ package org.alfresco.po.common.util;
 
 import static java.util.Arrays.asList;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.Collection;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -44,6 +38,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * Utility class containing helpful methods.
@@ -393,5 +394,27 @@ public final class Utils implements ApplicationContextAware
                 }
             }
         }
+    }
+
+    /**
+     * Helper method to retry the provided {@link Retry code block} until the {@code predicate} block returns
+     * {@code true} or the maximum number of retries has been reached.
+     * Note that any exceptions thrown within the {@link Retry} will not be caught internally and will be thrown
+     * immediately.
+     *
+     * @param retry     the code block to retry.
+     * @param predicate a predicate code block which determines when the {@link Retry} is successfully completed.
+     * @param count     the maximum number of retries.
+     * @param <T>       the return type of the {@link Retry} block.
+     * @return          the value returned by the {@link Retry} block.
+     */
+    public static final <T> T retryUntil(Retry<T> retry, Supplier<Boolean> predicate, int count)
+    {
+        for (int attempt = 0; attempt < count; attempt++)
+        {
+            T result = retry.execute();
+            if (predicate.get()) return result;
+        }
+        throw new RuntimeException("Tried " + count + " times without successful completion.");
     }
 }

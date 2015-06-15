@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
@@ -206,14 +207,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
 
             // verify that user has been created
             // keep trying until SOLR has updated it's index!
-            // TODO limit the retry
-            usersPage.setSearch(userName).clickOnSearch();
-            while(!usersPage.isUserFound(userName))
-            {
-                usersPage
-                    .setSearch(userName)
-                    .clickOnSearch();
-            }
+            //
+            // We use a rather arbitrary retry maximum here just to ensure that the retry doesn't run forever.
+            Utils.retryUntil(() -> usersPage.setSearch(userName)
+                                            .clickOnSearch(),
+                             () -> usersPage.isUserFound(userName), 25);
 
             // if a role is provided
             if (role != null)
