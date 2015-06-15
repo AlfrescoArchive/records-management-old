@@ -63,8 +63,8 @@ public class UserProfilePageUnitTest extends BaseTest
         // create a user
         createUser("temp");
         // TODO remove this
-        try{Thread.sleep(500);}catch(Exception e){};
-        
+        try{Thread.sleep(500);}catch(Exception e){}
+
         // delete user
         openPage(userProfilePage, "temp")
             .clickOnDeleteUser()

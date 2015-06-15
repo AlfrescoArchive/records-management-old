@@ -109,7 +109,7 @@ public abstract class Renderable
         ExpectedCondition<Boolean> pageLoadCondition =
                 driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
         webDriverWait().until(pageLoadCondition);
-    };
+    }
 
     /**
      * Wait for the annotated html elements on this renderable item

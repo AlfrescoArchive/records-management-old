@@ -99,7 +99,7 @@ public abstract class BrowsePage<N extends SiteNavigation, L extends BrowseList<
             }
             
             // click on the list item
-            browsePage = (BrowsePage<?,?,?>)listItem.clickOnLink(this);
+            browsePage = listItem.clickOnLink(this);
         }        
         return browsePage;
     }

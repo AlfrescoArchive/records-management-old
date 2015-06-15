@@ -68,14 +68,7 @@ public class AuthoritySelectDialog extends Renderable implements StandardButtons
             public Boolean apply(WebDriver arg0)
             {
                 WebElement message = getResultsWebElement.findElement(MESSAGE_SELECTOR);
-                if (message.isDisplayed() && message.getText().contains("Searching"))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return !(message.isDisplayed() && message.getText().contains("Searching"));
             }
         };
     }

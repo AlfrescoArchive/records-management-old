@@ -346,7 +346,7 @@ public final class Utils implements ApplicationContextAware
      */
     public static final <T> T retry(Retry<T> retry, int count)
     {
-        return (T)retry(retry, count, new Class[] { Exception.class });
+        return retry(retry, count, Exception.class);
     }
 
     /**

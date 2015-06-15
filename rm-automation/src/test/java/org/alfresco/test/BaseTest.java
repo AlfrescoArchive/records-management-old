@@ -227,7 +227,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 while(addAuthorityDialog.isResultsEmpty())
                 {
                     // wait and try again
-                    try{Thread.sleep(1000);}catch(Exception exception){};
+                    try{Thread.sleep(1000);}catch(Exception exception){}
                     addAuthorityDialog.clickOnSearch();
                 }
 

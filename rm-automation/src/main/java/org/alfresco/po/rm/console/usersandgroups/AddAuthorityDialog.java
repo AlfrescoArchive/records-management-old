@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -154,14 +154,7 @@ public abstract class AddAuthorityDialog extends Dialog
     private boolean isSearchingMessageVisible()
     {
         WebElement message = getResultsWebElement().findElement(MESSAGE_SELECTOR);
-        if (message.isDisplayed() && message.getText().contains("Searching"))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }        
+        return !(message.isDisplayed() && message.getText().contains("Searching"));
     }
 
     /**

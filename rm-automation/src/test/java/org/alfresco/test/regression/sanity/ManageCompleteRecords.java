@@ -210,7 +210,7 @@ public class ManageCompleteRecords extends BaseTest
         assertFalse(filePlan.getRecord(RECORD).isIncomplete());
 
         //delete electronic record in folder two
-        filePlan.getRecord(RECORD).clickOnDelete().clickOnConfirm();;
+        filePlan.getRecord(RECORD).clickOnDelete().clickOnConfirm();
         assertEquals("Electronic record has not been deleted from folder two", 1, filePlan.getList().size());
 
         // navigate to record folder one

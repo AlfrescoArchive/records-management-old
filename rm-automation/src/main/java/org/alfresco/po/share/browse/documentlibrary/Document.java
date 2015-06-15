@@ -70,7 +70,7 @@ public class Document extends ListItem implements DocumentActions
      */
     public DeleteConfirmationDialog clickOnDelete()
     {
-    	return (DeleteConfirmationDialog)clickOnAction(DELETE, deleteConfirmationDialog);
+    	return clickOnAction(DELETE, deleteConfirmationDialog);
     }
 
     /**

@@ -157,7 +157,7 @@ public class UsersPage extends ConsolePage
     public boolean isUserFound(String userName)
     {
         boolean result = false;
-        try{Thread.sleep(1000);}catch(Exception exception){};
+        try{Thread.sleep(1000);}catch(Exception exception){}
         List<WebElement> users = datatable.findElements(USER_NAME_SELECTOR);
         
             users = datatable.findElements(USER_NAME_SELECTOR);
