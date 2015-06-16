@@ -171,7 +171,7 @@ public class BrowseClassifiedDocuments extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored" }, // TODO Can un-ignore when we have fixed issue with changing user in UI tests. We also need to get feature working before test will pass.
+        groups = { "integration" },
         description = "User with 'secret' clearance can view all documents classified with level at most 'secret'.",
         dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
     )
@@ -196,7 +196,7 @@ public class BrowseClassifiedDocuments extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored", "changeUser" }, // TODO Can un-ignore when we have fixed issue with changing user in UI tests. We also need to get feature working before test will pass.
+        groups = { "integration" },
         description = "User with no clearance can only view unclassified documents.",
         dependsOnGroups = { GROUP_UNCLEARED_USER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
     )
