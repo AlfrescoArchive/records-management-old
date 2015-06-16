@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.share.page;
 
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
+
 import org.alfresco.po.common.renderable.Renderable;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -41,6 +43,7 @@ public class UserDropdown extends Renderable
     public UserDropdown revealDropdown()
     {
         dropdownButton.click();
+        waitForVisibilityOf(logoutButton);
         return this;
     }
 
