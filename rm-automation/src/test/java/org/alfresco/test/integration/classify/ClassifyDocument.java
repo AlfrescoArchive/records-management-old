@@ -119,7 +119,7 @@ public class ClassifyDocument extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored" }, // TODO Re-enable when we've decided logging out/in doesn't break tests on Bamboo.
+        groups = { "integration" }, // TODO Re-enable when we've decided logging out/in doesn't break tests on Bamboo.
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
     )
