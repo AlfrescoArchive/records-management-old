@@ -14,4 +14,26 @@
         </packages>
     </test>
 
+    <test name="changeUser">
+        <groups>
+            <run>
+                <include name="changeUser"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="org.alfresco.test.integration.*"/>
+        </packages>
+    </test>
+
+    <test name="checkChangeUserWorked">
+        <groups>
+            <run>
+                <include name="checkChangeUserWorked"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="org.alfresco.test.integration.*"/>
+        </packages>
+    </test>
+
 </suite>

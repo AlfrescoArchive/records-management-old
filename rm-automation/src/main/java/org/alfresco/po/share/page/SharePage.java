@@ -110,6 +110,7 @@ public abstract class SharePage extends Page
             if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
             {
                 sharePageNavigation.openUserDropdownMenu().logout();
+                currentLoggedInUser = null;
             }
 
             // open the page

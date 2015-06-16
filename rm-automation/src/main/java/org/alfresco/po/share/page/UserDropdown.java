@@ -21,8 +21,9 @@ package org.alfresco.po.share.page;
 import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,21 +35,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserDropdown extends Renderable
 {
-    @FindBy(css = "#HEADER_USER_MENU_POPUP")
-    private WebElement dropdownButton;
+    private static final By HEADER_MENU_SELECTOR = By.cssSelector("#HEADER_USER_MENU_POPUP");
+    private static final By LOGOUT_SELECTOR = By.cssSelector("#HEADER_USER_MENU_LOGOUT_text");
 
-    @FindBy(css = "#HEADER_USER_MENU_LOGOUT_text")
-    private WebElement logoutButton;
-
+    /**
+     * Reveal the user dropdown menu.
+     *
+     * @return The user dropdown menu.
+     * @throws IllegalStateException If the dropdown menu cannot be found.
+     */
     public UserDropdown revealDropdown()
     {
+        if (!Utils.elementExists(HEADER_MENU_SELECTOR))
+        {
+            throw new IllegalStateException("Header menu not found - is a user logged in?");
+        }
+        WebElement dropdownButton = Utils.getWebDriver().findElement(HEADER_MENU_SELECTOR);
         dropdownButton.click();
-        waitForVisibilityOf(logoutButton);
+        waitForVisibilityOf(LOGOUT_SELECTOR);
         return this;
     }
 
     public void logout()
     {
+        WebElement logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
         logoutButton.click();
     }
 }
