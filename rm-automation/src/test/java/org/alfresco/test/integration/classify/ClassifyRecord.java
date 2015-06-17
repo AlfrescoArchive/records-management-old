@@ -107,7 +107,7 @@ public class ClassifyRecord extends BaseTest
     /** Check a record can be classified.  The classified record is used by other tests. */
     @Test
     (
-        groups = { "integration", GROUP_CLASSIFIED_RECORD_EXISTS, "ignored" },
+        groups = { "integration", GROUP_CLASSIFIED_RECORD_EXISTS },
         description = "Verify classify record action exists",
         dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )

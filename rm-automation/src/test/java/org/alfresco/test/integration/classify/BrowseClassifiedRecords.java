@@ -65,7 +65,7 @@ public class BrowseClassifiedRecords extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored" },
+        groups = { "integration" },
         description = "Verify Classify Record behaviour",
         dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
     )
@@ -102,7 +102,7 @@ public class BrowseClassifiedRecords extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "ignored" },
+        groups = { "integration" },
         description = "Verify record details page displays classification information.",
         dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
     )

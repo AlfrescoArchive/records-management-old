@@ -27,6 +27,7 @@ import org.alfresco.po.share.login.LoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.Reporter;
 
 /**
  * Share page implementation
@@ -106,19 +107,26 @@ public abstract class SharePage extends Page
         // as we only support testing against a single client anyway.
         synchronized(CURRENT_LOGGED_IN_USER_LOCK)
         {
+            Reporter.log("Request to open page as "+userName+ " ("+password+"), previously "+currentLoggedInUser);
             // Logout if previously logged in as someone else.
             if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
             {
                 sharePageNavigation.openUserDropdownMenu().logout();
                 currentLoggedInUser = null;
+                Reporter.log("Successfully logged out");
             }
+
+            Reporter.log("Opening "+url);
 
             // open the page
             webDriver.get(url);
 
+            Reporter.log("Opened "+url+ ". Title is '"+webDriver.getTitle()+"'");
+
             // if redirected to the login page
             if (webDriver.getTitle().contains("Login"))
             {
+                Reporter.log("Logging in as "+userName);
                 // login
                 loginPage.render();
                 loginPage
@@ -126,8 +134,10 @@ public abstract class SharePage extends Page
                     .setPassword(password)
                     .clickOnLoginButton();
                 currentLoggedInUser = userName;
+                Reporter.log("Logged in as "+userName+". New title is '"+webDriver.getTitle()+"'");
             }
         }
+        Reporter.log("About to render page (currentlyLoggedInUser is now "+currentLoggedInUser+")");
 
         return this.render();
     }
