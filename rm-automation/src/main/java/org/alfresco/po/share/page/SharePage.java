@@ -23,9 +23,11 @@ import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.annotations.WaitFor;
 import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.login.LoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Reporter;
 
@@ -113,6 +115,7 @@ public abstract class SharePage extends Page
             {
                 sharePageNavigation.openUserDropdownMenu().logout();
                 currentLoggedInUser = null;
+                Utils.waitFor(ExpectedConditions.titleContains("Login"));
                 Reporter.log("Successfully logged out");
             }
 
