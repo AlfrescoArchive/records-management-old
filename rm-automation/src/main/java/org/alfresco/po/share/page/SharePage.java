@@ -113,7 +113,14 @@ public abstract class SharePage extends Page
             // Logout if previously logged in as someone else.
             if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
             {
-                sharePageNavigation.openUserDropdownMenu().logout();
+                try
+                {
+                    sharePageNavigation.openUserDropdownMenu().logout();
+                }
+                catch(IllegalStateException e)
+                {
+                    Reporter.log("Failed to logout - assuming already logged out. Exception message: " + e.getMessage());
+                }
                 currentLoggedInUser = null;
                 Utils.waitFor(ExpectedConditions.titleContains("Login"));
                 Reporter.log("Successfully logged out");
