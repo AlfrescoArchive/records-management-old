@@ -101,8 +101,10 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
         WebElement parentLink = breadcrumb.get(breadcrumb.size() - index);
         parentLink.click();
 
-        // wait for it to become stale
+        // Wait for the parent link to become stale.
         Utils.waitForStalenessOf(parentLink);
+        // Wait for the browse page to have loaded (by waiting for the breadcrumbs to appear).
+        Utils.waitForVisibilityOf(By.cssSelector("div.crumb a"));
 
         // render the browse page
         return browsePage.render();
