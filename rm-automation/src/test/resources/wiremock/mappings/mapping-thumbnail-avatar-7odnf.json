@@ -1,0 +1,23 @@
+{
+  "request" : {
+    "urlPattern" : "/alfresco/s/slingshot/profile/avatar/uncleared_user/thumbnail/avatar\\?alf_ticket=TICKET_126e1653f0b25f38e2ad41da440a0dee8e264aee",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-thumbnail-avatar-7odnf.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "Accept-Ranges" : "bytes",
+      "Content-Range" : "bytes 0-847/848",
+      "Cache-Control" : "max-age=0,  must-revalidate",
+      "ETag" : "\"1427827174000\"",
+      "Last-Modified" : "Tue, 31 Mar 2015 18:39:34 GMT",
+      "Content-Type" : "image/png;charset=UTF-8",
+      "Content-Length" : "848",
+      "Date" : "Fri, 12 Jun 2015 17:07:24 GMT"
+    }
+  },
+  "scenarioName" : "Recorded",
+  "requiredScenarioState" : "5a47e9e6-08f1-4812-9c1e-64ed7f2e92eb"
+}

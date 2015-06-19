@@ -1,0 +1,60 @@
+{
+	"url": "\/alfresco\/s\/api\/people\/admin",
+	"userName": "admin",
+	"enabled": true,
+	"firstName": "Administrator",
+	"lastName": "",
+	"jobtitle": null,
+	"organization": null,
+	"organizationId": "", 
+	"location": null,
+	"telephone": null,
+	"mobile": null,
+	"email": "admin@alfresco.com",
+	"companyaddress1": null,
+	"companyaddress2": null,
+	"companyaddress3": null,
+	"companypostcode": null,
+	"companytelephone": null,
+	"companyfax": null,
+	"companyemail": null,
+	"skype": null,
+	"instantmsg": null,
+	"userStatus": null,
+	"userStatusTime": null,
+	"googleusername": null,
+	"quota": -1,
+	"sizeCurrent": 0,
+	"emailFeedDisabled": false,
+	"persondescription": null
+,
+	"capabilities":
+	{
+		"isAdmin":
+		true
+				,"isMutable":
+		true
+				,"isGuest":
+		false
+			},
+	"groups": [
+	{
+		"itemName": "GROUP_ALFRESCO_ADMINISTRATORS",
+		"displayName": "ALFRESCO_ADMINISTRATORS"
+	},	{
+		"itemName": "GROUP_ALFRESCO_SEARCH_ADMINISTRATORS",
+		"displayName": "ALFRESCO_SEARCH_ADMINISTRATORS"
+	},	{
+		"itemName": "GROUP_EMAIL_CONTRIBUTORS",
+		"displayName": "EMAIL_CONTRIBUTORS"
+	},	{
+		"itemName": "GROUP_RECORD_CONTRIBUTORS",
+		"displayName": "RECORD_CONTRIBUTORS"
+	},	{
+		"itemName": "GROUP_SITE_ADMINISTRATORS",
+		"displayName": "SITE_ADMINISTRATORS"
+	}],
+	"immutability":
+	{
+	}
+}

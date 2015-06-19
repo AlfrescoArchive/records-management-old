@@ -1,0 +1,94 @@
+{
+	"code": "OK"
+
+	,
+	"data": {
+	"isContainer": false
+	,
+	"isDocument": false
+	,
+	"url": "\/n\/browse\/workspace\/SpacesStore\/2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+	,
+	"downloadUrl": ""
+	,
+	"size": "0"
+	,
+	"displayPath": "\/dc4ef3d7-2f85-4c2e-8028-010290515542\/297e5642-7339-4ae2-b58b-2ad8568198ae"
+	,
+	"qnamePath": "\/sys:system\/sys:people\/cm:admin"
+	,
+	"icon16": "\/images\/icons\/space-icon-default-16.gif"
+	,
+	"icon32": "\/images\/icons\/space-icon-default.gif"
+	,
+	"isLocked": false
+	,
+	"id": "2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+	,
+	"nodeRef": "workspace://SpacesStore/2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+	,
+	"name": "2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+	,
+	"type": "{http://www.alfresco.org/model/content/1.0}person"
+	,
+	"isCategory": false
+	,
+	"properties":
+	{
+		"{http:\/\/www.alfresco.org\/model\/content\/1.0}userName":
+		"admin"
+		,"{http:\/\/www.alfresco.org\/model\/system\/1.0}store-protocol":
+		"workspace"
+		,"{http:\/\/www.alfresco.org\/model\/system\/1.0}node-dbid":
+		30
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}name":
+		"2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}owner":
+		"admin"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}homeFolderProvider":
+		"bootstrapHomeFolderProvider"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}homeFolder":
+		"workspace://SpacesStore/30d2a459-2c97-4a19-ade2-094a91f82a96"
+				,"{http:\/\/www.alfresco.org\/model\/system\/1.0}store-identifier":
+		"SpacesStore"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}sizeCurrent":
+		0
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}organizationId":
+		""
+		,"{http:\/\/www.alfresco.org\/model\/system\/1.0}locale":
+		"en_US"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}email":
+		"admin@alfresco.com"
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}lastName":
+		""
+		,"{http:\/\/www.alfresco.org\/model\/content\/1.0}preferenceValues":
+		"{\"org.alfresco.share.sites.recent._0\":\"rm\",\"org.alfresco.ext.sites.favourites.rm.createdAt\":\"2015-06-11T15:25:47.286Z\",\"org.alfresco.share.sites.favourites.rm\":true,\"org.alfresco.share.searchList.viewRendererName\":\"detailed\"}"
+				,"{http:\/\/www.alfresco.org\/model\/content\/1.0}firstName":
+		"Administrator"
+		,"{http:\/\/www.alfresco.org\/model\/system\/1.0}node-uuid":
+		"2dcf2ef2-3908-4579-8be5-a4fe638d567a"
+		,"{http:\/\/www.alfresco.org\/model\/classifiedcontent\/1.0}clearanceLevel":
+		"TS"
+	}
+
+	,
+	"children": []
+
+
+	,
+	"capabilities":
+	{
+		"isAdmin":
+		true
+				,"isMutable":
+		true
+				,"isGuest":
+		false
+			}
+	,
+	"immutableProperties":
+	{
+	}
+	}
+}
+

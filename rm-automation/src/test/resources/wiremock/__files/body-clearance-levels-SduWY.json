@@ -1,0 +1,24 @@
+{
+   "data":
+   {
+      "items":
+      [
+                  {
+            "id": "TS",
+            "displayLabel": "Top Secret"
+         },
+         {
+            "id": "S",
+            "displayLabel": "Secret"
+         },
+         {
+            "id": "C",
+            "displayLabel": "Confidential"
+         },
+         {
+            "id": "Unclassified",
+            "displayLabel": "No Clearance"
+         }
+      ]
+   }
+}

@@ -1,0 +1,17 @@
+{
+  "request" : {
+    "url" : "/alfresco/s/remoteadm/has/alfresco/site-data/configurations/slingshot.site.configuration.xml?s=sitestore",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-configurations-slingshot.site.configuration.xml-aoh38.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "Content-Length" : "5",
+      "Date" : "Fri, 12 Jun 2015 17:06:53 GMT"
+    }
+  },
+  "scenarioName" : "Recorded",
+  "requiredScenarioState" : "Started"
+}

@@ -1,0 +1,17 @@
+{
+  "request" : {
+    "url" : "/alfresco/s/remoteadm/has/alfresco/site-data/chrome/default-sub-component-chrome.xml?s=sitestore",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-chrome-default-sub-component-chrome.xml-ZqPBP.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "Content-Length" : "5",
+      "Date" : "Fri, 12 Jun 2015 17:06:55 GMT"
+    }
+  },
+  "scenarioName" : "Recorded",
+  "requiredScenarioState" : "Started"
+}

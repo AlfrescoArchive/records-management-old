@@ -1,0 +1,26 @@
+{
+  "request" : {
+    "url" : "/alfresco/s/api/login",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"username\": \"admin\", \"password\": \"admin\"}",
+      "jsonCompareMode" : "LENIENT"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-api-login-AwbOh.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "Cache-Control" : "no-cache",
+      "Expires" : "Thu, 01 Jan 1970 00:00:00 GMT",
+      "Pragma" : "no-cache",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Transfer-Encoding" : "chunked",
+      "Date" : "Fri, 12 Jun 2015 17:06:58 GMT"
+    }
+  },
+  "scenarioName" : "Recorded",
+  "requiredScenarioState" : "Started",
+  "newScenarioState" : "5a47e9e6-08f1-4812-9c1e-64ed7f2e92eb"
+}
