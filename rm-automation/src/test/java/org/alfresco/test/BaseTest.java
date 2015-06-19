@@ -21,13 +21,19 @@ package org.alfresco.test;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.junit.Assert.assertArrayEquals;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import com.github.tomakehurst.wiremock.common.FatalStartupException;
 import org.alfresco.po.common.util.Utils;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
@@ -43,7 +49,9 @@ import org.openqa.selenium.remote.Augmenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
 /**
@@ -60,6 +68,13 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     /** user dashboard page */
     @Autowired
     protected UserDashboardPage userDashboardPage;
+
+    /** Is WireMock enabled? */
+    private static final Boolean wireMockEnabled = false;
+
+    /** Has WireMock been started? */
+    public Boolean wireMockStarted;
+    private String WIREMOCK_PATH = "wiremock";
 
     @Autowired
     private WebDriver webDriver;
@@ -83,6 +98,11 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     /** users and groups page */
     @Autowired
     private UsersAndGroupsPage usersAndGroupsPage;
+
+    /** Wiremock **/
+    // TODO: @autowire these?
+    private WireMockServer wireMockServer;
+    private WireMock wireMock;
 
     /**
      * Gets the module properties so that properties can be used in the classes
@@ -297,4 +317,46 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
         File destination = new File("target/screenshots/" + screenshotName + ".png");
         copyFile(screenshot, destination);
     }
+
+    /**
+     * WireMock config:
+     */
+    @BeforeSuite
+    public void setupWiremock()
+    {
+        if (wireMockEnabled)
+        {
+            try
+            {
+                WireMockServer wireMockServer = new WireMockServer(wireMockConfig().usingFilesUnderClasspath(WIREMOCK_PATH));
+                wireMockServer.start();
+                wireMockStarted = true;
+            }
+            catch (FatalStartupException fatalStartupException)
+            {
+                // BindException is thrown if the address is already in use. i.e. if a repo is running.
+                // Assume that BindExceptions are caused by already having a repo running.
+                // If the repo is running, we'll use that.
+                Throwable exception = fatalStartupException;
+                while (exception.getCause() != null)
+                {
+                    exception = exception.getCause();
+                    if (exception instanceof BindException) {
+                        wireMockStarted = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @AfterSuite
+    public void teardownWiremock() throws InterruptedException
+    {
+        if (wireMockStarted)
+        {
+            wireMockServer.stop();
+        }
+    }
+
 }
