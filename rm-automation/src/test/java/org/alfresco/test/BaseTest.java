@@ -18,10 +18,10 @@
  */
 package org.alfresco.test;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.junit.Assert.assertArrayEquals;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +29,10 @@ import java.net.BindException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import com.github.tomakehurst.wiremock.common.FatalStartupException;
-import org.alfresco.po.common.util.Utils;
-
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.common.FatalStartupException;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
@@ -70,10 +69,10 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     protected UserDashboardPage userDashboardPage;
 
     /** Is WireMock enabled? */
-    private static final Boolean wireMockEnabled = false;
+    private static final boolean wireMockEnabled = false;
 
     /** Has WireMock been started? */
-    public Boolean wireMockStarted;
+    public boolean wireMockStarted = false;
     private String WIREMOCK_PATH = "wiremock";
 
     @Autowired
@@ -338,13 +337,19 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 // Assume that BindExceptions are caused by already having a repo running.
                 // If the repo is running, we'll use that.
                 Throwable exception = fatalStartupException;
+                boolean rethrow = true;
                 while (exception.getCause() != null)
                 {
                     exception = exception.getCause();
-                    if (exception instanceof BindException) {
-                        wireMockStarted = false;
+                    if (exception instanceof BindException)
+                    {
+                        rethrow = false;
                         break;
                     }
+                }
+                if (rethrow)
+                {
+                    throw fatalStartupException;
                 }
             }
         }
