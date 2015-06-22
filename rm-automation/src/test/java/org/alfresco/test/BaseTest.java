@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.common.FatalStartupException;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
@@ -69,11 +68,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     protected UserDashboardPage userDashboardPage;
 
     /** Is WireMock enabled? */
-    private static final boolean wireMockEnabled = false;
-
-    /** Has WireMock been started? */
-    public boolean wireMockStarted = false;
-    private String WIREMOCK_PATH = "wiremock";
+    private static final boolean WIREMOCK_ENABLED = false;
+    private static final String WIREMOCK_PATH = "wiremock";
 
     @Autowired
     private WebDriver webDriver;
@@ -101,7 +97,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     /** Wiremock **/
     // TODO: @autowire these?
     private WireMockServer wireMockServer;
-    private WireMock wireMock;
 
     /**
      * Gets the module properties so that properties can be used in the classes
@@ -321,15 +316,14 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
      * WireMock config:
      */
     @BeforeSuite
-    public void setupWiremock()
+    public void setUpWiremock()
     {
-        if (wireMockEnabled)
+        if (WIREMOCK_ENABLED)
         {
             try
             {
-                WireMockServer wireMockServer = new WireMockServer(wireMockConfig().usingFilesUnderClasspath(WIREMOCK_PATH));
+                wireMockServer = new WireMockServer(wireMockConfig().usingFilesUnderClasspath(WIREMOCK_PATH));
                 wireMockServer.start();
-                wireMockStarted = true;
             }
             catch (FatalStartupException fatalStartupException)
             {
@@ -356,9 +350,9 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     }
 
     @AfterSuite
-    public void teardownWiremock() throws InterruptedException
+    public void tearDownWiremock() throws InterruptedException
     {
-        if (wireMockStarted)
+        if (wireMockServer != null && wireMockServer.isRunning())
         {
             wireMockServer.stop();
         }
