@@ -134,7 +134,9 @@ public abstract class SharePage extends Page
             Reporter.log("Opened "+url+ ". Title is '"+webDriver.getTitle()+"'");
 
             // if redirected to the login page
-            if (webDriver.getTitle().contains("Login"))
+            // TODO Replace this with a helper method like Utils.retryWhile().
+            int numberOfRetries = 0;
+            while (webDriver.getTitle().contains("Login") && numberOfRetries < 3)
             {
                 Reporter.log("Logging in as "+userName);
                 // login
@@ -143,8 +145,19 @@ public abstract class SharePage extends Page
                     .setUsername(userName)
                     .setPassword(password)
                     .clickOnLoginButton();
-                currentLoggedInUser = userName;
-                Reporter.log("Logged in as "+userName+". New title is '"+webDriver.getTitle()+"'");
+
+                String newTitle = webDriver.getTitle();
+                if (newTitle.contains("Login"))
+                {
+                    numberOfRetries += 1;
+                    Reporter.log("Failed to log in as " + userName + ". Attempt number " + numberOfRetries
+                                + ". New title is '" + newTitle + "'");
+                }
+                else
+                {
+                    currentLoggedInUser = userName;
+                    Reporter.log("Logged in as " + userName + ". New title is '" + newTitle + "'");
+                }
             }
         }
         Reporter.log("About to render page (currentlyLoggedInUser is now "+currentLoggedInUser+")");
