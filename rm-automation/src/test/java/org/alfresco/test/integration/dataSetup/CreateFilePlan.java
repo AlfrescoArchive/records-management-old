@@ -85,54 +85,19 @@ public class CreateFilePlan extends BaseTest
             .clickOnRMSite(RM_SITE_ID)
             .getNavigation()
             .clickOnFilePlan();
-    }
 
-    @Test
-    (
-        groups = { "integration", GROUP_CATEGORY_ONE_EXISTS },
-        description = "Create File Plan",
-        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
-    )
-    public void createCategoryOne()
-    {
-        openPage(filePlan, RM_SITE_ID, "documentlibrary");
-        createCategory(RECORD_CATEGORY_ONE);
-    }
+        // TODO: Only do this is the data doesn't already exist
+        // create root category
+        createCategoryAndClickOnLink(RECORD_CATEGORY_ONE, true);
 
-    @Test
-    (
-        groups = { "integration", GROUP_SUB_CATEGORY_EXISTS },
-        description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
-    )
-    public void createSubCategory()
-    {
-        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
-        createCategory(SUB_RECORD_CATEGORY_NAME);
-    }
+        // create sub-category
+        createCategoryAndClickOnLink(SUB_RECORD_CATEGORY_NAME, true);
 
-    @Test
-    (
-        groups = { "integration", GROUP_RECORD_FOLDER_ONE_EXISTS },
-        description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
-    )
-    public void createRecordFolderOne()
-    {
-        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
-        createRecordFolder(RECORD_FOLDER_ONE);
-    }
+        // create folder 2
+        createRecordFolderAndClickOnLink(RECORD_FOLDER_TWO, false);
 
-    @Test
-    (
-        groups = { "integration", GROUP_RECORD_FOLDER_TWO_EXISTS },
-        description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
-    )
-    public void createRecordFolderTwo()
-    {
-        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
-        createRecordFolder(RECORD_FOLDER_TWO);
+        // create folder 1
+        createRecordFolderAndClickOnLink(RECORD_FOLDER_ONE, true);
     }
 
     /** Create non-electronic record. */
@@ -140,12 +105,12 @@ public class CreateFilePlan extends BaseTest
     (
         groups = { "integration", GROUP_NON_ELECTRONIC_RECORD_EXISTS },
         description = "Create non-electronic record.",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void createNonElectronicRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // create non electronic record in folder 1
         filePlan.getToolbar()
@@ -165,12 +130,12 @@ public class CreateFilePlan extends BaseTest
     (
         groups = { "integration", GROUP_ELECTRONIC_RECORD_EXISTS },
         description = "Create electronic record.",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void createElectronicRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // create electronic record in folder 1
         filePlan.getToolbar()
@@ -188,12 +153,12 @@ public class CreateFilePlan extends BaseTest
     (
         groups = { "integration", GROUP_COMPLETE_RECORD_EXISTS },
         description = "Create complete record",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void createCompleteRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         filePlan.getToolbar()
             .clickOnFile()
@@ -202,16 +167,6 @@ public class CreateFilePlan extends BaseTest
 
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnCompleteRecord();
-    }
-
-    /**
-     * Create a category
-     *
-     * @param categoryName category name
-     */
-    private void createCategory(String categoryName)
-    {
-        createCategoryAndClickOnLink(categoryName, false);
     }
 
     /**
@@ -243,16 +198,6 @@ public class CreateFilePlan extends BaseTest
             // click on link
             recordCategory.clickOnLink();
         }
-    }
-
-    /**
-     * Create record folder
-     *
-     * @param folderName  folder name
-     */
-    private void createRecordFolder(String folderName)
-    {
-        createRecordFolderAndClickOnLink(folderName, false);
     }
 
     /**

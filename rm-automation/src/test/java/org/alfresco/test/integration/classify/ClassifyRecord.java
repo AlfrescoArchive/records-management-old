@@ -73,7 +73,7 @@ public class ClassifyRecord extends BaseTest
     {
         // open record folder one
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
         Record electronicRecord = filePlan.getRecord(RECORD);
 
         // Verify that "Classify" is an available action.
@@ -109,12 +109,12 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration", GROUP_CLASSIFIED_RECORD_EXISTS },
         description = "Verify classify record action exists",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
     )
     public void classifyRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         filePlan.getToolbar()
             .clickOnFile()
@@ -146,7 +146,7 @@ public class ClassifyRecord extends BaseTest
     {
         // open record folder one
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
 
         // show that the classify action is available
         assertFalse(filePlan.getRecord(RECORD).isHeld());
@@ -193,7 +193,7 @@ public class ClassifyRecord extends BaseTest
     public void checkCanClassifyCompleteRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
