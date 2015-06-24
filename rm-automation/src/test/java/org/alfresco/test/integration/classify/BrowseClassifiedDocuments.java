@@ -173,7 +173,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "User with 'secret' clearance can view all documents classified with level at most 'secret'.",
-        dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+        dependsOnGroups = { GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
     )
     public void secretClearanceUserCanViewUpToSecret()
     {
