@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -16,32 +16,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.common.site;
+package org.alfresco.po.rm.site.tasks;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Link;
+import org.springframework.stereotype.Component;
 
 /**
- * Site navigation base implementation
+ * A task panel containing an invitation to join a site.
  *
- * @author Roy Wetherall
+ * @author tpage
+ * @since 3.0
  */
-public abstract class SiteNavigation extends Renderable
+@Component
+public class SiteInvitationTaskPanel extends Renderable implements TaskPanel
 {
-    /** dashboard link */
-    @FindBy(css="div[id='HEADER_SITE_DASHBOARD'] a")
-    protected Link dashboard;
+    @FindBy(css = "#page_x002e_data-form_x002e_task-edit_x0023_default_prop_inwf_inviteOutcome-accept-button")
+    WebElement acceptButton;
 
-    /** document library link */
-    @FindBy(css="div[id='HEADER_SITE_DOCUMENTLIBRARY'] a")
-    protected Link documentLibrary;
-
-    /** site members link */
-    @FindBy(css="div[id='HEADER_SITE_MEMBERS'] a")
-    protected Link siteMembers;
-
-    /** Invite users link. */
-    @FindBy(css="div#HEADER_SITE_INVITE a")
-    protected Link inviteUsers;
+    public void acceptInvitation()
+    {
+        acceptButton.click();
+    }
 }
