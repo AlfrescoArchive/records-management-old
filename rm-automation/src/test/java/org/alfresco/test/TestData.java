@@ -65,11 +65,29 @@ public interface TestData
     /* file plan test data */
 
     public static final String RECORD_CATEGORY_NAME = "record-category";
+
+    /** An RM category. */
     public static final String RECORD_CATEGORY_ONE = "record-category-one";
+    /** CATEGORY_ONE has been created in the root of the fileplan. */
+    public static final String GROUP_CATEGORY_ONE_EXISTS = "GROUP_CATEGORY_ONE_EXISTS";
+
     public static final String RECORD_CATEGORY_TWO = "record-category-two";
+
+    /** An RM category. */
     public static final String SUB_RECORD_CATEGORY_NAME = "sub-record-category";
+    /** SUB_RECORD_CATEGORY_NAME has been created inside CATEGORY_ONE. */
+    public static final String GROUP_SUB_CATEGORY_EXISTS = "GROUP_SUB_CATEGORY_EXISTS";
+
+    /** A folder in the fileplan. */
     public static final String RECORD_FOLDER_ONE = "record-folder-one";
+    /** RECORD_FOLDER_ONE has been created in CATEGORY_ONE. */
+    public static final String GROUP_RECORD_FOLDER_ONE_EXISTS = "GROUP_RECORD_FOLDER_ONE_EXISTS";
+
+    /** A folder in the fileplan. */
     public static final String RECORD_FOLDER_TWO = "record-folder-two";
+    /** RECORD_FOLDER_TWO has been created in CATEGORY_ONE. */
+    public static final String GROUP_RECORD_FOLDER_TWO_EXISTS = "GROUP_RECORD_FOLDER_TWO_EXISTS";
+
     /** The file plan structure exists. */
     public static final String GROUP_FILE_PLAN_EXISTS = "GROUP_FILE_PLAN_EXISTS";
 

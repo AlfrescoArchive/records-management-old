@@ -72,7 +72,7 @@ public class BrowseClassifiedRecords extends BaseTest
     public void classifiedRecordIndicator()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
 
         Record record = filePlan.getRecord(CLASSIFIED_RECORD);
         assertTrue("Expected record to have classified indicator.", record.hasIndicator(RecordIndicators.CLASSIFIED));
@@ -110,7 +110,7 @@ public class BrowseClassifiedRecords extends BaseTest
     {
         // Open Collab site DocumentLibrary.
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE));
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
 
         // navigate to the document details page
         filePlan.getRecord(CLASSIFIED_RECORD)
