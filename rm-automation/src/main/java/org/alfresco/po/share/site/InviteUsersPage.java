@@ -63,6 +63,7 @@ public class InviteUsersPage extends SharePage
         Utils.clearAndType(userSearchBox, user);
         userSearchButton.click();
         By addButtonSelector = By.cssSelector("#template_x002e_people-finder_x002e_invite_x0023_default-action-" + user + " button");
+        Utils.waitForVisibilityOf(addButtonSelector);
         WebElement addButton = userSearchResultList.findElement(addButtonSelector);
         addButton.click();
         // This will only work if we invite one user at a time.
