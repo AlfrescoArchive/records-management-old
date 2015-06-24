@@ -20,11 +20,12 @@ package org.alfresco.po.common.site;
 
 import org.alfresco.po.common.renderable.Renderable;
 import org.openqa.selenium.support.FindBy;
+
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
  * Site navigation base implementation
- *
+ * 
  * @author Roy Wetherall
  */
 public abstract class SiteNavigation extends Renderable
@@ -32,16 +33,12 @@ public abstract class SiteNavigation extends Renderable
     /** dashboard link */
     @FindBy(css="div[id='HEADER_SITE_DASHBOARD'] a")
     protected Link dashboard;
-
+    
     /** document library link */
-    @FindBy(css="div[id='HEADER_SITE_DOCUMENTLIBRARY'] a")
+    @FindBy(css="div[id='HEADER_SITE_DOCUMENTLIBRARY'] a")    
     protected Link documentLibrary;
-
+    
     /** site members link */
-    @FindBy(css="div[id='HEADER_SITE_MEMBERS'] a")
+    @FindBy(css="div[id='HEADER_SITE_MEMBERS'] a")    
     protected Link siteMembers;
-
-    /** Invite users link. */
-    @FindBy(css="div#HEADER_SITE_INVITE a")
-    protected Link inviteUsers;
 }

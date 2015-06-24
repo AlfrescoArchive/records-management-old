@@ -22,8 +22,6 @@ package org.alfresco.test.integration.classify;
 import static org.junit.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import java.util.UUID;
-
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -123,20 +121,14 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { GROUP_UNCLEARED_USER_IN_COLLAB_SITE }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
     )
     public void checkUnclearedUserCannotClassify()
     {
-        String documentName = UUID.randomUUID().toString();
-
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
-        documentLibrary.getToolbar()
-            .clickOnFile()
-            .uploadFile(documentName);
 
-        Document document = documentLibrary.getDocument(documentName);
-        assertFalse("Classify action should not be shown to uncleared user.",
-                    document.isActionClickable(DocumentActions.CLASSIFY));
+        Document document = documentLibrary.getDocument(DOCUMENT);
+        assertFalse(document.isActionClickable(DocumentActions.CLASSIFY));
     }
 
     /**

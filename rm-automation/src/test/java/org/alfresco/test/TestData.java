@@ -36,15 +36,11 @@ public interface TestData
     public static final String GROUP_RM_MANAGER_EXISTS = "integration-dataSetup-users-rmManager";
     /** The RM_MANAGER has been given 'Secret' clearance. */
     public static final String GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE = "rmManagerHasSecretClearance";
-    /** The RM_MANAGER is a manager of the COLLAB_SITE. */
-    public static final String GROUP_RM_MANAGER_IN_COLLAB_SITE = "GROUP_RM_MANAGER_IN_COLLAB_SITE";
 
     /** A user who will have no security clearance. */
     public static final String UNCLEARED_USER = "uncleared_user";
     /** The UNCLEARED_USER has been created. */
     public static final String GROUP_UNCLEARED_USER_EXISTS = "integration-dataSetup-users-unclearedUser";
-    /** The UNCLEARED_USER is a manager of the COLLAB_SITE. */
-    public static final String GROUP_UNCLEARED_USER_IN_COLLAB_SITE = "GROUP_UNCLEARED_USER_IN_COLLAB_SITE";
 
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";

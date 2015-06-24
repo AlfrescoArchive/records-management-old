@@ -26,7 +26,6 @@ import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
-import org.alfresco.po.share.site.InviteUsersPage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +53,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     private DocumentLibrary documentLibrary;
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
-    @Autowired
-    private InviteUsersPage inviteUsersPage;
 
     /**
      * Regression test execution
@@ -165,36 +162,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         // Navigate away from the text file page to the collaboration site, just in case any test expects the Share
         // header bar to be on the page.
         openPage(documentLibrary, COLLAB_SITE_ID);
-    }
-
-    /** Add the RM_MANAGER to the collaboration site. */
-    @Test
-    (
-        groups = { "integration", GROUP_RM_MANAGER_IN_COLLAB_SITE },
-        description = "Add the RM_MANAGER to the collaboration site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_RM_MANAGER_EXISTS }
-    )
-    public void addRMManagerToCollabSite()
-    {
-        openPage(inviteUsersPage, COLLAB_SITE_ID);
-        inviteUsersPage.addUser(RM_MANAGER, "Manager");
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, userDashboardPage);
-        userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
-    }
-
-    /** Add the UNCLEARED_USER to the collaboration site. */
-    @Test
-    (
-        groups = { "integration", GROUP_UNCLEARED_USER_IN_COLLAB_SITE },
-        description = "Add the RM_MANAGER to the collaboration site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
-    )
-    public void addUnclearedUserToCollabSite()
-    {
-        openPage(inviteUsersPage, COLLAB_SITE_ID);
-        inviteUsersPage.addUser(UNCLEARED_USER, "Manager");
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, userDashboardPage);
-        userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
     }
 
     /**

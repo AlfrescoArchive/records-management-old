@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
@@ -251,19 +250,13 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
-        dependsOnGroups = { GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE, GROUP_RM_MANAGER_IN_COLLAB_SITE }
+        dependsOnGroups = { GROUP_DOCUMENT_EXISTS, GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE }
     )
     public void secretUserSeesSomeLevels()
     {
-        String documentName = UUID.randomUUID().toString();
-
         // Open Collab site DocumentLibrary.
         openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
-        documentLibrary.getToolbar()
-            .clickOnFile()
-            .uploadFile(documentName);
-
-        Document document = documentLibrary.getDocument(documentName);
+        Document document = documentLibrary.getDocument(DOCUMENT);
         // Open the classify document dialog
         document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
