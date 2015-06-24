@@ -23,8 +23,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.UUID;
-
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
@@ -206,61 +204,19 @@ public class ClassifyRecord extends BaseTest
             .hasIndicator(RecordIndicators.CLASSIFIED);
     }
 
-    /**
-     * Check that a user with no security clearance can't classify a record.
-     * <p>
-     * <a href="https://issues.alfresco.com/jira/browse/RM-2078">RM-2078</a><pre>
-     * Given that I have a security clearance level of 'No Clearance'
-     * And have 'read & file' permission on the unclassified record
-     * When I view the unclassified record
-     * Then I cannot set a classification
-     * </pre>
+    /*
+    RM-2052 Acceptance criteria currently without tests.
+        - Records user with no 'read & file' permission on and unclassified record can not set the content classification
+            Given that I do not have 'read & file' permissions on the unclassified record
+            And have a security clearance level above 'No Clearance'
+            When I view the unclassified record
+            Then I am unable to set a classification
+                TODO: non admin user with security clearance, but without read & file permissions
+        - User with no security clearance can't set record classification
+            Given that I have a security clearance level of 'No Clearance'
+            And have 'read & file' permission on the unclassified record
+            When I view the unclassified record
+            Then I can not set a classification
+                TODO: non admin user with read & file permissions, but without security clearance
      */
-    @Test
-    (
-        groups = { "integration" },
-        description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS, GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE }
-    )
-    public void checkUnclearedUserCannotClassifyRecord()
-    {
-        String recordName = UUID.randomUUID().toString();
-
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
-        filePlan.getToolbar()
-            .clickOnFile()
-            .clickOnElectronic()
-            .uploadFile(recordName);
-
-        Record record = filePlan.getRecord(recordName);
-        assertFalse("Classify action should not be shown to uncleared user.",
-                    record.isActionClickable(RecordActions.CLASSIFY));
-    }
-
-    /**
-     * Check that a user with 'Secret' clearance can't classify a record owned by someone else.
-     * <p>
-     * <a href="https://issues.alfresco.com/jira/browse/RM-2078">RM-2078</a><pre>
-     * Given that I do not have 'read & file' permissions on the unclassified record
-     * And have a security clearance level above 'No Clearance'
-     * When I view the unclassified record
-     * Then I am unable to set a classification
-     * </pre>
-     */
-    @Test
-    (
-        groups = { "integration" },
-        description = "Check that a user with 'Secret' clearance can't classify a record owned by someone else.",
-        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_RM_MANAGER_READ_CATEGORY_ONE, GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE }
-    )
-    public void cantClassifyAnotherUsersRecord()
-    {
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
-        // This record is owned by admin.
-        Record record = filePlan.getRecord(RECORD);
-        assertFalse("Classify action should not be shown to user who doesn't own the document.",
-                    record.isActionClickable(RecordActions.CLASSIFY));
-    }
 }

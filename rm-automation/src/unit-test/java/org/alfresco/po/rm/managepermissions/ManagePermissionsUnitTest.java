@@ -18,12 +18,10 @@ package org.alfresco.po.rm.managepermissions;
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
+import static org.junit.Assert.assertTrue;
 // import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
-
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
@@ -208,25 +206,25 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
 
         //get the authority permission type
         //actualPermissionsName = managePermissions.getPermission(testUserName);
-        actualPermissionsName = managePermissions.getPermission("admin", "Administrator");
+        actualPermissionsName = managePermissions.getPermission("Administrator");
 
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
-
+        
        //set the authority permission type
         expectedPermissionName = "Read and File";
         managePermissions.setPermissions("Administrator", expectedPermissionName);
 
         expectedPermissionName = "Read Only";
-        // get the test authority permission type and assert the results
-        actualPermissionsName = managePermissions.getPermission(testUser);
+        // get the test authority permission type and assert ther results
+        actualPermissionsName = managePermissions.getPermission(testUserName);
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
 
         // set the authority permission type
         expectedPermissionName = "Read and File";
-        managePermissions.setPermissions(testUser, expectedPermissionName);
+        managePermissions.setPermissions(testUserName, expectedPermissionName);
 
-        // get the test authority permission type and assert the results
-        actualPermissionsName = managePermissions.getPermission(testUser);
+        // get the test authority permission type and assert ther results
+        actualPermissionsName = managePermissions.getPermission(testUserName);
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
     }
 
@@ -235,7 +233,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
 
         // delete the user from locallysetRoles
-        managePermissions.deleteAuthority(testUser);
+        managePermissions.deleteAuthority(testUserName);
 
         // verify the delete user from above method do not exist anymore
         List<String> localRoleList = managePermissions.getLocalRoles();

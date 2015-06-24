@@ -48,10 +48,10 @@ import org.testng.annotations.Test;
 
 /**
  * Manage incomplete records regression test
- *
+ * 
  * @author Roy Wetherall
  */
-public class ManageIncompleteRecords extends BaseTest
+public class ManageIncompleteRecords extends BaseTest                                    
 {
     /** file plan */
     @Autowired
@@ -60,7 +60,7 @@ public class ManageIncompleteRecords extends BaseTest
     /** record details */
     @Autowired
     private RecordDetails recordDetails;
-
+    
     /** edit non electronic record */
     @Autowired
     private EditNonElectronicRecordPage editNonElectronicRecordPage;
@@ -75,11 +75,11 @@ public class ManageIncompleteRecords extends BaseTest
     /**Manage permissions*/
     @Autowired
     private ManagePermissions managePermissions;
-
+    
     /**Select dialog*/
     @Autowired
-    private AuthoritySelectDialog authoritySelectDialog;
-
+    private AuthoritySelectDialog authoritySelectDialog;    
+    
     private static String userName = "user1";
 
     /**
@@ -87,8 +87,8 @@ public class ManageIncompleteRecords extends BaseTest
      */
     @Test
     (
-        groups = { "RMA-2666", "sanity" },
-        description = "Manage Incomplete Records",
+        groups = { "RMA-2666", "sanity" }, 
+        description = "Manage Incomplete Records", 
         dependsOnGroups = { "RMA-2665" }
     )
     public void manageIncompleteRecords()
@@ -98,12 +98,12 @@ public class ManageIncompleteRecords extends BaseTest
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
 
-        // verify electronic record actions
+        // verify electronic record actions        
         compareArrays(RecordActions.INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD, filePlan.getRecord(RECORD).getClickableActions());
 
         // navigate to the electronic details page
         filePlan.getRecord(RECORD).clickOnLink();
-
+        
         // verify that all the expected actions are available
         assertTrue(recordDetails.getRecordActionsPanel().isActionsClickable(
                 RecordActionsPanel.EDIT_METADATA,
@@ -127,7 +127,7 @@ public class ManageIncompleteRecords extends BaseTest
         Record nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertNotNull(nonElectronicRecord);
         compareArrays(RecordActions.INCOMPLETE_RECORD_ACTIONS, nonElectronicRecord.getClickableActions());
-
+                
         //remember the non-electronic record name (before editing) and identifier to verify it on Audit log page
         String nameBefore = nonElectronicRecord.getName();
         String identifier = nonElectronicRecord.getIdentifier();
@@ -159,10 +159,10 @@ public class ManageIncompleteRecords extends BaseTest
         editNonElectronicRecordPage.clickOnSave();
 
         // TODO verify entered values are displayed on details page
-
+        
         // close record details page
         recordDetails.navigateUp();
-
+                
         // copy non-electronic record to folder2
         filePlan
            .getRecord(NON_ELECTRONIC_RECORD)
@@ -189,13 +189,13 @@ public class ManageIncompleteRecords extends BaseTest
             .clickOnOk();
         nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertTrue(nonElectronicRecord.isHeld());
-
+        
         // check the correct actions for a held record are being shown
         assertNull(nonElectronicRecord.isActionsClickable(
                 Record.ADD_TO_HOLD,
                 Record.REMOVE_FROM_HOLD,
-                Record.VIEW_AUDIT));
-
+                Record.VIEW_AUDIT)); 
+        
         // remove from hold
         nonElectronicRecord
             .clickOnRemoveFromHold()
@@ -203,7 +203,7 @@ public class ManageIncompleteRecords extends BaseTest
             .clickOnOk();
         nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertFalse(nonElectronicRecord.isHeld());
-
+        
         // delete non-electronic record
         filePlan
             .getRecord(NON_ELECTRONIC_RECORD)
@@ -215,15 +215,15 @@ public class ManageIncompleteRecords extends BaseTest
         // open folder 2
         filePlan
             .navigateUp()
-            .navigateTo(RECORD_FOLDER_TWO);
+            .navigateTo(RECORD_FOLDER_TWO);        
         assertEquals("Copied non-electronic record is not present in folder two", 1, filePlan.getList().size());
-
-        // move non-electronic record in folder2 back to folder 1
+        
+        // move non-electronic record in folder2 back to folder 1      
         filePlan
             .getRecord(NON_ELECTRONIC_RECORD)
             .clickOnMoveTo()
             .select(RECORD_FOLDER_ONE)
-            .clickOnMove();
+            .clickOnMove();        
         assertEquals("Non-electronic record was not moved to record folder one from folder two", 0, filePlan.getList().size());
 
         // open folder 1
@@ -231,7 +231,7 @@ public class ManageIncompleteRecords extends BaseTest
             .navigateUp()
             .navigateTo(RECORD_FOLDER_ONE);
         assertEquals("Both records should be in record folder one ready for completion", 2, filePlan.getList().size());
-
+        
         // link non-electronic record to folder
         nonElectronicRecord = filePlan.getRecord(NON_ELECTRONIC_RECORD);
         assertFalse("Non-electronic record should not yet be linked", nonElectronicRecord.isLinked());
@@ -251,54 +251,54 @@ public class ManageIncompleteRecords extends BaseTest
         Record electronicRecord = filePlan.getRecord(RECORD);
         requestInformationDialog = electronicRecord.clickOnRequestInformation();
         String name =  electronicRecord.getName();
-
+        
         //verify the name of the record (the information is requested for) is correct
         assertEquals(name, requestInformationDialog.getRecordName());
-
+        
         //add Administrator to 'Request information from' select
         requestInformationDialog.clickOnSelectUsersAndGroups().search("Administrator").clickAddIcon().clickOnOk();
-
+        
         // fill in Requested information
         requestInformationDialog.setRequestedInfoArea("What is that?");
-
+        
         // click Request Information
         requestInformationDialog.clickRequestInformation(filePlan);
-
+        
         // verify the information requested indicator is displayed
         electronicRecord = filePlan.getRecord(RECORD);
         assertTrue("Information should be requested for electronic record", electronicRecord.isInformationRequested());
 
         //manage permissions
         managePermissions = electronicRecord.clickOnManagePermission();
-        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
+        authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();        
         // add test authority
-        String testUserName = "user1";
+        String testUserName = "user1 user1";
         authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
-        managePermissions.clickOnOK();
-
+        managePermissions.clickOnOK();        
+       
         //Manage permissions for user1
         String actualPermissionsName;
         String expectedPermissionName = "Read Only";
-        electronicRecord = filePlan.getRecord(RECORD);
+        electronicRecord = filePlan.getRecord(RECORD);        
         //open manage permissions for electronic record
         managePermissions = electronicRecord.clickOnManagePermission();
         //get default permission set for test user
-        actualPermissionsName = managePermissions.getPermission(testUserName);
+        actualPermissionsName = managePermissions.getPermission(testUserName);        
         //verify the default settings
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         //change the permission to read and file
         expectedPermissionName = "Read and File";
         //set the authority permission type
-        managePermissions.setPermissions(testUserName, expectedPermissionName);
+        managePermissions.setPermissions(testUserName, expectedPermissionName);        
         //get the test authority permission type and assert ther results
         actualPermissionsName = managePermissions.getPermission(testUserName);
         //verify the permissions set
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         managePermissions.clickOnOK();
-
+        
         // complete electronic record
-        filePlan.getRecordFolder(RECORD_FOLDER_ONE);
-        electronicRecord = filePlan.getRecord(RECORD);
+        filePlan.getRecordFolder(RECORD_FOLDER_ONE);        
+        electronicRecord = filePlan.getRecord(RECORD);   
         assertTrue(electronicRecord.isIncomplete());
         electronicRecord.clickOnCompleteRecord();
         assertFalse(filePlan.getRecord(RECORD).isIncomplete());
@@ -318,7 +318,7 @@ public class ManageIncompleteRecords extends BaseTest
         assertTrue(auditLogPage.isFileAsRecordButtonEnabled());
 
         //TODO specify all values as static elements
-
+        
         Utils.retry(new Retry<Void>()
         {
             public Void execute()
@@ -329,7 +329,7 @@ public class ManageIncompleteRecords extends BaseTest
                 return null;
             }
         }, 5);
-
+        
         /** Verify the first 3 audit entries*/
         AuditEntry auditEntry;
         for (int i=0; i<5 - 2; i++)
@@ -351,7 +351,7 @@ public class ManageIncompleteRecords extends BaseTest
                             + nameBefore,
                     auditEntry.getAuditEntryLocation());
         }
-
+        
         /** Verify the last 2 entries*/
         for (int i=5 - 2; i<5; i++)
         {
