@@ -25,27 +25,34 @@ import org.springframework.stereotype.Component;
 
 /**
  * RM Site Navigation
- * 
+ *
  * @author Roy Wetherall
  */
 @Component
-public class CollaborationSiteNavigation extends SiteNavigation 
+public class CollaborationSiteNavigation extends SiteNavigation
 {
     @Autowired
     private CollaborationSiteDashboard collaborationSiteDashboard;
-    
-    @Autowired 
+    @Autowired
     private DocumentLibrary documentLibraryPO;
-    
+    @Autowired
+    private InviteUsersPage inviteUsersPage;
+
     public CollaborationSiteDashboard clickOnDashboard()
     {
         dashboard.click();
         return collaborationSiteDashboard.render();
     }
-    
+
     public DocumentLibrary clickOnDocumentLibrary()
     {
         documentLibrary.click();
         return documentLibraryPO.render();
+    }
+
+    public InviteUsersPage clickOnInviteUsers()
+    {
+        inviteUsers.click();
+        return inviteUsersPage.render();
     }
 }
