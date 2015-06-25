@@ -96,7 +96,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertTrue("Classify content dialog is not visible.", classifyContentDialog.isDisplayed());
 
         // Check all the fields start blank (except the classification level).
-        assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
+        assertEquals("Agency should be initially blank.", "", classifyContentDialog.getAgency());
         assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
 
         // Check the "Create" button is disabled.
@@ -104,7 +104,7 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON);
 
         // Check the "Create" button is now enabled.
@@ -146,7 +146,7 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON);
 
         // Click the cancel button.
@@ -163,7 +163,7 @@ public class ContentClassificationDialogTests extends BaseTest
         document.clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
         assertEquals("The level should be back to the default.", DEFAULT_CLASSIFICATION_LEVEL_TEXT,
                     classifyContentDialog.getLevel());
-        assertEquals("Authority should be initially blank.", "", classifyContentDialog.getAuthority());
+        assertEquals("Agency should be initially blank.", "", classifyContentDialog.getAgency());
         assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
     }
 
@@ -195,7 +195,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         classifyContentDialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
 
@@ -294,7 +294,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         classifyContentDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
     }

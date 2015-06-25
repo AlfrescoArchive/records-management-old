@@ -126,7 +126,7 @@ public class ClassifyRecord extends BaseTest
 
         record.clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
     }
@@ -199,7 +199,7 @@ public class ClassifyRecord extends BaseTest
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
-            .setAuthority(CLASSIFICATION_AUTHORITY)
+            .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
         filePlan.getRecord(COMPLETE_RECORD)

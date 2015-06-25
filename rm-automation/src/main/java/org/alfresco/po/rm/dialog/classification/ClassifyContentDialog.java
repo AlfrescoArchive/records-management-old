@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
@@ -56,8 +55,8 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#LEVELS_CONTROL_menu")
     private WebElement levelsMenu;
 
-    @FindBy(css="#AUTHORITY .dijitInputContainer input")
-    private TextInput authorityTextInput;
+    @FindBy(css="#AGENCY .dijitInputContainer input")
+    private TextInput agencyTextInput;
 
     @FindBy(css="#REASONS_CONTROL .alfresco-forms-controls-MultiSelect__container")
     private WebElement reasonsContainer;
@@ -124,9 +123,9 @@ public class ClassifyContentDialog extends Dialog
                      .collect(Collectors.toList());
     }
 
-    public ClassifyContentDialog setAuthority(String authority)
+    public ClassifyContentDialog setAgency(String agency)
     {
-        clearAndType(authorityTextInput, authority);
+        clearAndType(agencyTextInput, agency);
         return this;
     }
 
@@ -199,10 +198,10 @@ public class ClassifyContentDialog extends Dialog
         return (disabledAttribute == null || disabledAttribute.toLowerCase().equals("false"));
     }
 
-    /** @return The classification authority entered. */
-    public String getAuthority()
+    /** @return The classification agency entered. */
+    public String getAgency()
     {
-        return authorityTextInput.getText();
+        return agencyTextInput.getText();
     }
 
     /** @return The list of selected classification reasons. */

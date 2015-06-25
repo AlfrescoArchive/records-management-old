@@ -91,7 +91,7 @@ public class BrowseClassifiedRecords extends BaseTest
      * Then I see information about the classification including:
      * * Initial classification
      * * Current classification
-     * * Classification authority
+     * * Classification agency
      * * Classification reasons
      * </pre>
      * <a href="https://issues.alfresco.com/jira/browse/RM-2282">RM-2282</a><pre>
@@ -120,8 +120,8 @@ public class BrowseClassifiedRecords extends BaseTest
         assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
 
-        assertEquals(CLASSIFICATION_AUTHORITY,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AUTHORITY));
+        assertEquals(CLASSIFICATION_AGENCY,
+                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AGENCY));
 
         assertEquals(CLASSIFICATION_REASON,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));

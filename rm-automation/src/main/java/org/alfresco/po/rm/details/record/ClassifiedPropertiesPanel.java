@@ -40,7 +40,7 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
 
     public static final Integer ORIGINAL_CLASSIFICATION = 0;
     public static final Integer CURRENT_CLASSIFICATION = 1;
-    public static final Integer CLASSIFICATION_AUTHORITY = 2;
+    public static final Integer CLASSIFICATION_AGENCY = 2;
     public static final Integer CLASSIFICATION_REASON = 3;
 
     public String getClassifiedProperty(Integer property)
