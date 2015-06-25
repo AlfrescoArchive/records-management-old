@@ -26,12 +26,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.Button;
 
 /**
  * Manage permissions Page.
- * 
+ *
  * @author hamara
  * @since  2.3
  */
@@ -81,7 +80,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * click on inerit permissions button
-     * 
+     *
      * @return ConfirmationPrompt confirmation prompt
      */
     public ConfirmationPrompt clickOnInheritPermissionButton()
@@ -92,7 +91,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * click on add user and groups button
-     * 
+     *
      * @return SelectDialog selectdialog
      */
     public AuthoritySelectDialog clickOnSelectUsersAndGroups()
@@ -103,7 +102,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * check is Manage Permissions title is displayed
-     * 
+     *
      * @return boolean: true if title is displayed, false otherwise
      */
     public boolean isManagePermissionsTitleVisible()
@@ -113,7 +112,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * check is inheritpermissions button is enabled
-     * 
+     *
      * @return boolean: true if enabled, false otherwise
      */
     public boolean isInheritPermissionsEnabled()
@@ -123,7 +122,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * check is add user/group button is enabled
-     * 
+     *
      * @return boolean: true if enabled, false otherwise
      */
     public boolean isAddUserGroupEnabled()
@@ -143,7 +142,7 @@ public class ManagePermissions extends FormPage
 
     /**
      * get users and groups
-     * 
+     *
      * @return list&ltString&gt
      */
     public List<String> getLocalRoles()
@@ -152,8 +151,8 @@ public class ManagePermissions extends FormPage
     }
 
     /**
-     * Get list of values in Local permissions/Inheirtted permissions
-     * 
+     * Get list of values in Local permissions/Inherited permissions
+     *
      * @param webElement
      * @return list&ltString&gt
      */
@@ -170,14 +169,26 @@ public class ManagePermissions extends FormPage
     }
 
     /**
-     * Deletes the given authority from the lsit of users and groups
-     * 
-     * @param name
+     * Delete the permissions for specific user assuming that the user was created by
+     * {@link org.alfresco.test.BaseTest#createUser(String, String)} and so has a first name and last name set to the
+     * username.
+     *
+     * @param username The username.
      */
-
-    public void deleteAuthority(String name)
+    public void deleteAuthority(String username)
     {
+        deleteAuthority(username, username);
+    }
 
+    /**
+     * Deletes the given authority from the list of users and groups.
+     *
+     * @param firstName The first name of the user.
+     * @param lastName The last name of the user.
+     */
+    public void deleteAuthority(String firstName, String lastName)
+    {
+        String name = firstName + " " + lastName;
         List<WebElement> userElements = userPermissionsData.findElements(userListSelector);
         WebElement userName;
         WebElement deleteButton;
@@ -200,53 +211,83 @@ public class ManagePermissions extends FormPage
     }
 
     /**
-     * get the petmissions set for the given user name
-     * 
-     * @param name
-     * @return permission type
+     * Get the permissions of a specific user assuming that the user was created by
+     * {@link org.alfresco.test.BaseTest#createUser(String, String)} and so has a first name and last name set to the
+     * username.
+     *
+     * @param username The username.
+     * @return The user's permission.
      */
-
-    public String getPermission(String name)
+    public String getPermission(String username)
     {
+        return getPermission(username, username + " " + username);
+    }
 
+    /**
+     * Get the permissions set for the given user name.
+     *
+     * @param username The user's unique username.
+     * @param fullName The first name and last name of the user, as displayed in the UI.
+     * @return permission type or {@code null} if no permission was found.
+     */
+    public String getPermission(String username, String fullName)
+    {
         List<WebElement> userElements = userPermissionsData.findElements(userListSelector);
-        WebElement userName;
-        WebElement permissionElement;
-        String PermissionName = null;
+        String permissionName = null;
 
         for (WebElement userElement : userElements)
         {
-            userName = userElement.findElement(userNameSelector);
-            if (userName.getText().equals(name))
+            String foundName = userElement.findElement(userNameSelector).getText();
+            if (foundName.equals(fullName))
             {
-                permissionElement = userElement.findElement(premissionElementSelector);
-                PermissionName = permissionElement.getText();
+                WebElement permissionElement = userElement.findElement(premissionElementSelector);
+                permissionName = permissionElement.getText();
                 break;
             }
         }
-        return PermissionName;
+        return permissionName;
+    }
+
+
+    /**
+     * Set the permissions for specific user assuming that the user was created by
+     * {@link org.alfresco.test.BaseTest#createUser(String, String)} and so has a first name and last name set to the
+     * username.
+     *
+     * @param username The username.
+     * @param permissionName The permission to give the user.
+     */
+    public void setPermissions(String username, String permissionName)
+    {
+        setPermissions(username, username + " " + username, permissionName);
     }
 
     /**
      * set the permissions for specific user
-     * 
-     * @param uname
-     * @param permissionName
+     *
+     * @param username The user's unique username.
+     * @param fullName The first name and last name of the user, as displayed in the UI.
+     * @param permissionName The permission to give the user.
      */
-
-    public void setPermissions(String name, String permissionName)
+    public void setPermissions(String username, String fullName, String permissionName)
     {
-        List<WebElement> userElements = userPermissionsData.findElements(userListSelector);
-        WebElement userName;
-        WebElement permissionElement;
-
-        for (WebElement userElement : userElements)
+        String currentPermission = getPermission(username, fullName);
+        if (currentPermission == null)
         {
-            userName = userElement.findElement(userNameSelector);
+            clickOnSelectUsersAndGroups().authoritySearch(username).clickAddButton();
+        }
+        else if (currentPermission.equals(permissionName))
+        {
+            return;
+        }
 
-            if (userName.getText().equals(name))
+        for (WebElement userElement : userPermissionsData.findElements(userListSelector))
+        {
+            String foundName = userElement.findElement(userNameSelector).getText();
+
+            if (foundName.equals(fullName))
             {
-                permissionElement = userElement.findElement(premissionElementSelector);
+                WebElement permissionElement = userElement.findElement(premissionElementSelector);
                 permissionElement.click();
                 List<WebElement> permissionTypes = userElement.findElements(permissionTypeSelector);
                 for (WebElement permissionType : permissionTypes)
@@ -255,13 +296,9 @@ public class ManagePermissions extends FormPage
                     {
                         permissionType.click();
                         break;
-
                     }
                 }
-
             }
-
         }
-
     }
 }
