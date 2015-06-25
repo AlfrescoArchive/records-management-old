@@ -81,7 +81,7 @@ public class BrowseClassifiedDocuments extends BaseTest
                     document.hasIndicator(DocumentIndicators.CLASSIFIED));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
-                     "Classified: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                      document.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
@@ -129,7 +129,7 @@ public class BrowseClassifiedDocuments extends BaseTest
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
-                    "Classified: " + SECRET_CLASSIFICATION_LEVEL_TEXT,
+                    SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                     classifiedDocumentDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
