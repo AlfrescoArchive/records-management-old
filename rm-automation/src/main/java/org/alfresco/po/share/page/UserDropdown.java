@@ -23,6 +23,7 @@ import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
@@ -46,12 +47,15 @@ public class UserDropdown extends Renderable
      */
     public UserDropdown revealDropdown()
     {
-        if (!Utils.elementExists(HEADER_MENU_SELECTOR))
+        try
         {
-            throw new IllegalStateException("Header menu not found - is a user logged in?");
+            WebElement dropdownButton = Utils.getWebDriver().findElement(HEADER_MENU_SELECTOR);
+            dropdownButton.click();
         }
-        WebElement dropdownButton = Utils.getWebDriver().findElement(HEADER_MENU_SELECTOR);
-        dropdownButton.click();
+        catch (NoSuchElementException e)
+        {
+            throw new IllegalStateException("Header menu not found - is a user logged in?", e);
+        }
         waitForVisibilityOf(LOGOUT_SELECTOR);
         return this;
     }

@@ -119,13 +119,19 @@ public abstract class SharePage extends Page
                                 try
                                 {
                                     sharePageNavigation.openUserDropdownMenu().logout();
+                                    Reporter.log("Log out attempt complete.");
                                 }
                                 catch (IllegalStateException e)
                                 {
                                     Reporter.log("Failed to logout - assuming already logged out. Exception message: "
                                                 + e.getMessage());
                                 }
-                                return 2;
+                                catch (Exception e)
+                                {
+                                    Reporter.log("Failed to logout with exception message: " + e.getMessage());
+                                    throw e;
+                                }
+                                return null;
                             },
                             () ->
                             {
