@@ -95,16 +95,16 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
                     }
                     else
                     {
-                        throw new RuntimeException("browse list row is not visible");
+                        throw new IllegalStateException("browse list row is not visible");
                     }
                 }
             }
             else
             {
-                throw new RuntimeException("Expected " + count + " rows and found " + rows.size());
+                throw new IllegalStateException("Expected " + count + " rows and found " + rows.size());
             }
             return result;
-        }, RETRY_COUNT, WebDriverException.class);
+        }, RETRY_COUNT, WebDriverException.class, IllegalStateException.class);
     }
 
     /**
