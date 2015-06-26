@@ -27,7 +27,6 @@ import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.login.LoginPage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Reporter;
 
@@ -113,17 +112,40 @@ public abstract class SharePage extends Page
             // Logout if previously logged in as someone else.
             if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
             {
-                try
+                Utils.retryUntil(
+                            () ->
+                            {
+                                Reporter.log("Attempting to log out");
+                                try
+                                {
+                                    sharePageNavigation.openUserDropdownMenu().logout();
+                                }
+                                catch (IllegalStateException e)
+                                {
+                                    Reporter.log("Failed to logout - assuming already logged out. Exception message: "
+                                                + e.getMessage());
+                                }
+                                return 2;
+                            },
+                            () ->
+                            {
+                                String title = webDriver.getTitle();
+                                Reporter.log("Title is now '" + title + "'");
+                                return title.contains("Login");
+                            },
+                            3);
+
+                String title = webDriver.getTitle();
+                if (title.contains("Login"))
                 {
-                    sharePageNavigation.openUserDropdownMenu().logout();
+                    currentLoggedInUser = null;
+                    Reporter.log("Successfully logged out");
                 }
-                catch(IllegalStateException e)
+                else
                 {
-                    Reporter.log("Failed to logout - assuming already logged out. Exception message: " + e.getMessage());
+                    Reporter.log("Failed to log out - title is now '" + title
+                                + "'.  Assuming currentlyLoggedInUser is still " + currentLoggedInUser);
                 }
-                currentLoggedInUser = null;
-                Utils.waitFor(ExpectedConditions.titleContains("Login"));
-                Reporter.log("Successfully logged out");
             }
 
             Reporter.log("Opening "+url);
