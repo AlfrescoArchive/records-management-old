@@ -25,8 +25,10 @@ import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.login.LoginPage;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Reporter;
 
@@ -135,6 +137,15 @@ public abstract class SharePage extends Page
                             },
                             () ->
                             {
+                                // Make sure we give the "Login" page a chance to load.
+                                try
+                                {
+                                    Utils.waitFor(ExpectedConditions.titleContains("Login"));
+                                }
+                                catch (TimeoutException e)
+                                {
+                                    Reporter.log("Timed out waiting for title to contain 'Login'.");
+                                }
                                 String title = webDriver.getTitle();
                                 Reporter.log("Title is now '" + title + "'");
                                 return title.contains("Login");
