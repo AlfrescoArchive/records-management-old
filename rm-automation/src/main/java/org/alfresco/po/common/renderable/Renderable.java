@@ -20,6 +20,20 @@ package org.alfresco.po.common.renderable;
 
 import static org.alfresco.po.common.util.Utils.checkMandatoryParam;
 import static org.alfresco.po.common.util.Utils.webDriverWait;
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
+import static org.openqa.selenium.support.ui.ExpectedConditions.not;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
+
+import org.alfresco.po.common.annotations.RenderableChild;
+import org.alfresco.po.common.annotations.WaitFor;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,18 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.alfresco.po.common.annotations.RenderableChild;
-import org.alfresco.po.common.annotations.WaitFor;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 
 /**
  * Abstract base class for all renderable items
@@ -118,26 +120,22 @@ public abstract class Renderable
     {
         for (Map.Entry<WrapsElement, WaitFor> entry : getWaitForHTMLElements().entrySet())
         {
-            WrapsElement element = entry.getKey();
+            final WebElement wrappedElement = entry.getKey().getWrappedElement();
             switch (entry.getValue().status())
             {
                 case VISIBLE:
                 {
-                    webDriverWait().until(
-                            ExpectedConditions.visibilityOf(element.getWrappedElement()));
+                    webDriverWait().until(visibilityOf(wrappedElement));
                     break;
                 }
                 case HIDDEN:
                 {
-                    webDriverWait().until(
-                            ExpectedConditions.not(
-                                    ExpectedConditions.visibilityOf(element.getWrappedElement())));
+                    webDriverWait().until(not(visibilityOf(wrappedElement)));
                     break;
                 }
                 case CLICKABLE:
                 {
-                    webDriverWait().until(
-                            ExpectedConditions.elementToBeClickable(element.getWrappedElement()));
+                    webDriverWait().until(elementToBeClickable(wrappedElement));
                     break;
                 }
             }
@@ -153,7 +151,7 @@ public abstract class Renderable
     {
         if (waitForHtmlElements == null)
         {
-            waitForHtmlElements = getAnnotatedFileds(WrapsElement.class, WaitFor.class);
+            waitForHtmlElements = getAnnotatedFields(WrapsElement.class, WaitFor.class);
         }
 
         return waitForHtmlElements;
@@ -178,7 +176,7 @@ public abstract class Renderable
     {
     	if (renderableChildren == null)
     	{
-    		renderableChildren = getAnnotatedFileds(Renderable.class, RenderableChild.class).keySet();
+    		renderableChildren = getAnnotatedFields(Renderable.class, RenderableChild.class).keySet();
     	}
     	return renderableChildren;
     }
@@ -191,7 +189,7 @@ public abstract class Renderable
      * @return  List<T>             list of field values
      */
     @SuppressWarnings("unchecked")
-    private <T extends Object, A extends Annotation> Map<T, A> getAnnotatedFileds(Class<T> fieldClass, Class<A> annotationClass)
+    private <T extends Object, A extends Annotation> Map<T, A> getAnnotatedFields(Class<T> fieldClass, Class<A> annotationClass)
     {
         Map<T, A> result = new HashMap<>();
 

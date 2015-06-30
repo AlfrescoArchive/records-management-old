@@ -18,6 +18,7 @@
  */
 package org.alfresco.test;
 
+import static org.alfresco.po.common.util.Utils.retryUntil;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -31,7 +32,6 @@ import java.util.UUID;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.common.FatalStartupException;
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
@@ -220,12 +220,12 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                 .clickOnCreateUser();
 
             // verify that user has been created
-            // keep trying until SOLR has updated it's index!
+            // keep trying until SOLR has updated its index!
             //
             // We use a rather arbitrary retry maximum here just to ensure that the retry doesn't run forever.
-            Utils.retryUntil(() -> usersPage.setSearch(userName)
-                                            .clickOnSearch(),
-                             () -> usersPage.isUserFound(userName), 25);
+            retryUntil(() -> usersPage.setSearch(userName)
+                                      .clickOnSearch(),
+                       () -> usersPage.isUserFound(userName), 25);
 
             // if a role is provided
             if (role != null)
@@ -237,13 +237,8 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
                     .setSearch(userName);
 
                 // we may need to keep trying this until the SOLR index catches up
-                addAuthorityDialog.clickOnSearch();
-                while(addAuthorityDialog.isResultsEmpty())
-                {
-                    // wait and try again
-                    try{Thread.sleep(1000);}catch(Exception exception){}
-                    addAuthorityDialog.clickOnSearch();
-                }
+                retryUntil(() -> addAuthorityDialog.clickOnSearch(),
+                           () -> !addAuthorityDialog.isResultsEmpty(), 25);
 
                 // add the new user
                 addAuthorityDialog.clickOnAdd(userName);
@@ -357,5 +352,4 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
             wireMockServer.stop();
         }
     }
-
 }

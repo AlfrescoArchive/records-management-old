@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
  * This file is part of Alfresco
  *
@@ -19,11 +19,12 @@
 package org.alfresco.po.share.page;
 
 import static org.alfresco.po.common.util.Utils.webDriverWait;
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import org.alfresco.po.common.renderable.Renderable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,15 +39,17 @@ public class Message extends Renderable
     private static final By MESSAGE_SELECTOR = By.cssSelector("div.bd");
     
     /**
-     * Wait for message to be hidden
+     * Waits for message to be hidden.
+     * If this message is initially visible this method will wait until either it is invisible or until a timeout occurs.
+     *
+     * @return upon invisibility of this message or upon expiry of timeout.
      */
     public void waitUntillHidden()
     {
         boolean shown = false;
         try
         {
-            webDriverWait(1).until(
-               ExpectedConditions.visibilityOfElementLocated(MESSAGE_SELECTOR));
+            webDriverWait(1).until(visibilityOfElementLocated(MESSAGE_SELECTOR));
             shown = true;
         }
         catch (TimeoutException exception)
@@ -54,12 +57,11 @@ public class Message extends Renderable
             // do nothing and carry on           
         }
         
-        if (shown == true)
+        if (shown)
         {
             try
             {
-                webDriverWait(5).until(
-                       ExpectedConditions.invisibilityOfElementLocated(MESSAGE_SELECTOR));            
+                webDriverWait(5).until(invisibilityOfElementLocated(MESSAGE_SELECTOR));
             }
             catch (TimeoutException exception)
             {
@@ -69,14 +71,15 @@ public class Message extends Renderable
     }
     
     /**
-     * Wait for the message to appear
+     * Wait for the message to appear or for a timeout to occur.
+     *
+     * @return upon visibility of this message or upon expiry of timeout.
      */
     public void waitUntillVisible()
     {
         try
         {
-            webDriverWait().until(
-               ExpectedConditions.visibilityOfElementLocated(MESSAGE_SELECTOR));
+            webDriverWait().until(visibilityOfElementLocated(MESSAGE_SELECTOR));
         }
         catch (TimeoutException exception)
         {
