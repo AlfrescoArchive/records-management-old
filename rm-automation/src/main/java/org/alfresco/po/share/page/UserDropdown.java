@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.share.page;
 
+import java.util.concurrent.TimeUnit;
+import static junit.framework.Assert.fail;
 import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
 
 import org.alfresco.po.common.renderable.Renderable;
@@ -56,13 +58,30 @@ public class UserDropdown extends Renderable
         {
             throw new IllegalStateException("Header menu not found - is a user logged in?", e);
         }
-        waitForVisibilityOf(LOGOUT_SELECTOR);
         return this;
     }
 
     public void logout()
     {
-        WebElement logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
-        logoutButton.click();
+        WebElement logoutButton;
+        int attempts = 0;
+        
+        while(attempts < 3){
+        try {
+         logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
+         if (logoutButton != null) {
+            logoutButton.click();
+            return;
+        }      
+        } catch (NoSuchElementException e) {
+         
+            Utils.getWebDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+            revealDropdown();
+            attempts = attempts + 1;
+            if(attempts ==  3){
+            fail("The logout did not take place due to the fact that the drop down did not open or wasn't found.");
+            }
+        }
+        } 
     }
 }
