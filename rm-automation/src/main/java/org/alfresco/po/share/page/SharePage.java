@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.share.page;
 
+import java.util.concurrent.TimeUnit;
+
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.annotations.WaitFor;
@@ -180,6 +182,16 @@ public abstract class SharePage extends Page
             {
                 Reporter.log("Logging in as "+userName);
                 // login
+                loginPage.render();
+                // Wait for the FADEIN to finish (0.25 seconds).
+                try
+                {
+                    TimeUnit.MILLISECONDS.sleep(250);
+                }
+                catch (InterruptedException e)
+                {
+                    throw new RuntimeException(e);
+                }
                 loginPage.render();
                 loginPage
                     .setUsername(userName)
