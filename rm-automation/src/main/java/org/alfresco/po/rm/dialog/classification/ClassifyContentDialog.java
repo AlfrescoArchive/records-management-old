@@ -18,15 +18,17 @@
  */
 package org.alfresco.po.rm.dialog.classification;
 
-import static org.alfresco.po.common.util.Utils.clearAndType;
+import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
+import static org.alfresco.po.common.util.Utils.clearAndType;
+import static org.alfresco.po.common.util.Utils.retry;
+import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -54,6 +56,9 @@ public class ClassifyContentDialog extends Dialog
 
     @FindBy(css="#LEVELS_CONTROL_menu")
     private WebElement levelsMenu;
+
+    @FindBy(css="#BY .dijitInputContainer input")
+    private TextInput classifiedByTextInput;
 
     @FindBy(css="#AGENCY .dijitInputContainer input")
     private TextInput agencyTextInput;
@@ -90,7 +95,7 @@ public class ClassifyContentDialog extends Dialog
         final String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
 
         // retry since wait seems unreliable
-        WebElement level = Utils.retry(() -> levelsMenu.findElement(By.cssSelector(selector)), 5);
+        WebElement level = retry(() -> levelsMenu.findElement(By.cssSelector(selector)), 5);
 
         // select the right level
         level.click();
@@ -100,6 +105,11 @@ public class ClassifyContentDialog extends Dialog
     public String getLevel()
     {
         return selectedLevel.getText();
+    }
+
+    public String getClassifiedBy()
+    {
+        return classifiedByTextInput.getText();
     }
 
     /**
@@ -116,16 +126,22 @@ public class ClassifyContentDialog extends Dialog
         final String selector = "td[class$='dijitMenuItemLabel']";
 
         // retry since wait seems unreliable
-        List<WebElement> levels = Utils.retry(() -> levelsMenu.findElements(By.cssSelector(selector)), 5);
+        List<WebElement> levels = retry(() -> levelsMenu.findElements(By.cssSelector(selector)), 5);
 
         return levels.stream()
                      .map(webElement -> webElement.getText())
-                     .collect(Collectors.toList());
+                     .collect(toList());
     }
 
     public ClassifyContentDialog setAgency(String agency)
     {
         clearAndType(agencyTextInput, agency);
+        return this;
+    }
+
+    public ClassifyContentDialog setClassifiedBy(String classifiedBy)
+    {
+        clearAndType(classifiedByTextInput, classifiedBy);
         return this;
     }
 
@@ -140,7 +156,7 @@ public class ClassifyContentDialog extends Dialog
         // Clearing the search box activates the drop-down. Assume that the classification reason is on the first page of results.
         reasonTextInput.getWrappedElement().clear();
         String selector = "#REASONS_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
-        Utils.waitForVisibilityOf(By.cssSelector(selector));
+        waitForVisibilityOf(By.cssSelector(selector));
         WebElement reason = reasonsResultsContainer.findElement(By.cssSelector(selector));
         reason.click();
         return this;
@@ -170,14 +186,14 @@ public class ClassifyContentDialog extends Dialog
     public Renderable cancelDialog()
     {
         cancelButton.click();
-        Utils.waitForInvisibilityOf(cancelButton);
+        waitForInvisibilityOf(cancelButton);
         return SharePage.getLastRenderedPage().render();
     }
 
     public Renderable closeDialog()
     {
         closeButton.click();
-        Utils.waitForInvisibilityOf(closeButton);
+        waitForInvisibilityOf(closeButton);
         return SharePage.getLastRenderedPage().render();
     }
 
@@ -209,12 +225,9 @@ public class ClassifyContentDialog extends Dialog
     {
         List<WebElement> reasons = reasonsContainer.findElements(By
                     .cssSelector(".alfresco-forms-controls-MultiSelect__choice__content"));
-        List<String> reasonIds = new ArrayList<String>();
-        for (WebElement reason : reasons)
-        {
-            String reasonId = reason.getAttribute("data-aikau-value");
-            reasonIds.add(reasonId);
-        }
-        return reasonIds;
+
+        return reasons.stream()
+                      .map(reason -> reason.getAttribute("data-aikau-value"))
+                      .collect(toList());
     }
 }

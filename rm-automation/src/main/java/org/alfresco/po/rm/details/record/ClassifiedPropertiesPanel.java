@@ -39,9 +39,10 @@ public class ClassifiedPropertiesPanel extends PropertiesPanel
     private static final By CLASSIFIED_PROPERTIES_SELECTOR = By.xpath("//span[contains(@id,'classificationReasons')]/../../div//span[@class='viewmode-value']");
 
     public static final Integer ORIGINAL_CLASSIFICATION = 0;
-    public static final Integer CURRENT_CLASSIFICATION = 1;
-    public static final Integer CLASSIFICATION_AGENCY = 2;
-    public static final Integer CLASSIFICATION_REASON = 3;
+    public static final Integer CURRENT_CLASSIFICATION  = 1;
+    public static final Integer CLASSIFIED_BY           = 2;
+    public static final Integer CLASSIFICATION_AGENCY   = 3;
+    public static final Integer CLASSIFICATION_REASON   = 4;
 
     public String getClassifiedProperty(Integer property)
     {

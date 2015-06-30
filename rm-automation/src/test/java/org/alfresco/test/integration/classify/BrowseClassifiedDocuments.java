@@ -122,8 +122,11 @@ public class BrowseClassifiedDocuments extends BaseTest
         assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
 
+        assertEquals(CLASSIFIED_BY,
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFIED_BY));
+
         assertEquals(CLASSIFICATION_AGENCY,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AGENCY));
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AGENCY));
 
         assertEquals(CLASSIFICATION_REASON,
                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));

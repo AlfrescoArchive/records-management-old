@@ -19,6 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -116,7 +117,7 @@ public class ClassifyRecord extends BaseTest
     public void classifyRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
 
         filePlan.getToolbar()
             .clickOnFile()
@@ -125,7 +126,14 @@ public class ClassifyRecord extends BaseTest
         Record record = filePlan.getRecord(CLASSIFIED_RECORD);
 
         record.clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+
+//        // TODO Uncomment when we have the user's full name in the UI.
+//        final String currentUserFullName = getAdminName() + " " + getAdminName();
+//        assertEquals("'Classified By' field should be preset to current user's full name",
+//                     currentUserFullName, classifyContentDialog.getClassifiedBy());
+
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
@@ -199,6 +207,7 @@ public class ClassifyRecord extends BaseTest
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();

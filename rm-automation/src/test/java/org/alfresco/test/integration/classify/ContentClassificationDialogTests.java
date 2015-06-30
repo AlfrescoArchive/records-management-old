@@ -104,6 +104,7 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON);
 
@@ -146,6 +147,7 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON);
 
@@ -195,6 +197,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         classifyContentDialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
@@ -294,6 +297,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
         classifyContentDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .submitDialog();
