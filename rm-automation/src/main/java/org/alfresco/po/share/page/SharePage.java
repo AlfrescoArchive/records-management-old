@@ -119,7 +119,7 @@ public abstract class SharePage extends Page
             {
                 String title = webDriver.getTitle();
                 String currentUrl = webDriver.getCurrentUrl();
-                Reporter.log("Currently at '" + currentUrl + "', with title '" + title + "' and current user " + currentLoggedInUser);
+                Reporter.log("Time " + System.currentTimeMillis() + ": Currently at '" + currentUrl + "', with title '" + title + "' and current user " + currentLoggedInUser + "<br>");
 
                 if (title.contains("Login"))
                 {
