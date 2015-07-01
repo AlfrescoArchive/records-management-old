@@ -22,6 +22,7 @@ import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.share.page.SharePage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.po.share.userdashboard.dashlet.MyTasks;
+import org.alfresco.test.ModuleProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -38,9 +39,6 @@ import org.springframework.stereotype.Component;
 @Lazy
 public class UserDashboardPage extends SharePage
 {
-    /** page url */
-    private static final String PAGE_URL = "/page/user/admin/dashboard";
-
     /** my sites dashlet */
     @Autowired
     @RenderableChild
@@ -48,13 +46,21 @@ public class UserDashboardPage extends SharePage
     @Autowired
     @RenderableChild
     private MyTasks myTasks;
+    @Autowired
+    private ModuleProperties moduleProperties;
 
     /**
      * Get the URL of the page
      */
     public String getPageURL(String ... context)
     {
-        return PAGE_URL;
+        // By default the user is admin.
+        String user = moduleProperties.getAdminName();
+        if (context.length > 0)
+        {
+            user = context[0];
+        }
+        return "/page/user/" + user + "/dashboard";
     }
 
     /**

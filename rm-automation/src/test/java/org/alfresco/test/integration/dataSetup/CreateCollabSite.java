@@ -178,7 +178,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     {
         openPage(inviteUsersPage, COLLAB_SITE_ID);
         inviteUsersPage.addUser(RM_MANAGER, "Manager");
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, userDashboardPage);
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, userDashboardPage, RM_MANAGER);
         userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
     }
 
@@ -193,7 +193,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     {
         openPage(inviteUsersPage, COLLAB_SITE_ID);
         inviteUsersPage.addUser(UNCLEARED_USER, "Manager");
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, userDashboardPage);
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, userDashboardPage, UNCLEARED_USER);
         userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
     }
 

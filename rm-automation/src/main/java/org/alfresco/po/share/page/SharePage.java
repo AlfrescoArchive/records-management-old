@@ -18,8 +18,6 @@
  */
 package org.alfresco.po.share.page;
 
-import java.util.concurrent.TimeUnit;
-
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.annotations.WaitFor;
@@ -27,7 +25,6 @@ import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.login.LoginPage;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,12 +41,14 @@ import org.testng.Reporter;
 public abstract class SharePage extends Page
 {
     /** A lock used when accessing the {@link #currentLoggedInUser}. */
-    public static final String CURRENT_LOGGED_IN_USER_LOCK = new String("CURRENT_LOGGED_IN_USER_LOCK");
+    private static final String CURRENT_LOGGED_IN_USER_LOCK = new String("CURRENT_LOGGED_IN_USER_LOCK");
+    /** This restricts the amount of effort that can be spent trying to access a URL. */
+    private static final int MAXIMUM_URL_LOOP_RETRIES = 20;
     /**
      * The currently logged-in user. This is only suitable for testing against a single client, if we want to support
      * testing against a Selenium grid then we need to add some code to track which user is logged in on which client.
      */
-    protected static String currentLoggedInUser;
+    private static String currentLoggedInUser;
 
     /** page footer */
     @WaitFor(status=WaitForStatus.VISIBLE)
@@ -107,113 +106,116 @@ public abstract class SharePage extends Page
     {
         // get the page URL
         String url = server + getPageURL(context);
+        // Try the naive method of getting to the given URL.
+        navigateToUrl(url);
 
         // This addresses the race condition of two threads logging out/in at the same time. It's a little bit pointless
         // as we only support testing against a single client anyway.
         synchronized(CURRENT_LOGGED_IN_USER_LOCK)
         {
-            Reporter.log("Request to open page as "+userName+ " ("+password+"), previously "+currentLoggedInUser);
-            // Logout if previously logged in as someone else.
-            if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
+            int iteration = 0;
+            boolean navigationComplete = false;
+            while (!navigationComplete && iteration < MAXIMUM_URL_LOOP_RETRIES)
             {
-                Utils.retryUntil(
-                            () ->
-                            {
-                                Reporter.log("Attempting to log out");
-                                try
-                                {
-                                    sharePageNavigation.openUserDropdownMenu().logout();
-                                    Reporter.log("Log out attempt complete.");
-                                }
-                                catch (IllegalStateException e)
-                                {
-                                    Reporter.log("Failed to logout - assuming already logged out. Exception message: "
-                                                + e.getMessage());
-                                }
-                                catch (Exception e)
-                                {
-                                    Reporter.log("Failed to logout with exception message: " + e.getMessage());
-                                    throw e;
-                                }
-                                return null;
-                            },
-                            () ->
-                            {
-                                // Make sure we give the "Login" page a chance to load.
-                                try
-                                {
-                                    Utils.waitFor(ExpectedConditions.titleContains("Login"));
-                                }
-                                catch (TimeoutException e)
-                                {
-                                    Reporter.log("Timed out waiting for title to contain 'Login'.");
-                                }
-                                String title = webDriver.getTitle();
-                                Reporter.log("Title is now '" + title + "'");
-                                return title.contains("Login");
-                            },
-                            3);
-
                 String title = webDriver.getTitle();
+                String currentUrl = webDriver.getCurrentUrl();
+                Reporter.log("Currently at '" + currentUrl + "', with title '" + title + "' and current user " + currentLoggedInUser);
+
                 if (title.contains("Login"))
                 {
-                    currentLoggedInUser = null;
-                    Reporter.log("Successfully logged out");
+                    boolean success = login(userName, password);
+                    if (success)
+                    {
+                        currentLoggedInUser = userName;
+                    }
+                }
+                else if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
+                {
+                    boolean success = logout();
+                    if (success)
+                    {
+                        currentLoggedInUser = null;
+                    }
+                }
+                else if (!url.equals(currentUrl))
+                {
+                    navigateToUrl(url);
                 }
                 else
                 {
-                    Reporter.log("Failed to log out - title is now '" + title
-                                + "'.  Assuming currentlyLoggedInUser is still " + currentLoggedInUser);
+                    navigationComplete = true;
                 }
+                iteration++;
             }
 
-            Reporter.log("Opening "+url);
-
-            // open the page
-            webDriver.get(url);
-
-            String title = webDriver.getTitle();
-            Reporter.log("Opened "+url+ ". Title is '"+title+"'");
-
-            // if redirected to the login page
-            // TODO Replace this with a helper method like Utils.retryWhile().
-            int numberOfRetries = 0;
-            while (title.contains("Login") && numberOfRetries < 3)
+            if (!navigationComplete)
             {
-                Reporter.log("Logging in as "+userName);
-                // login
-                loginPage.render();
-                // Wait for the FADEIN to finish (0.25 seconds).
-                try
-                {
-                    TimeUnit.MILLISECONDS.sleep(250);
-                }
-                catch (InterruptedException e)
-                {
-                    throw new RuntimeException(e);
-                }
-                loginPage.render();
-                loginPage
-                    .setUsername(userName)
-                    .setPassword(password)
-                    .clickOnLoginButton();
-
-                title = webDriver.getTitle();
-                if (title.contains("Login"))
-                {
-                    numberOfRetries += 1;
-                    Reporter.log("Failed to log in as " + userName + ". Attempt number " + numberOfRetries
-                                + ". New title is '" + title + "'");
-                }
-                else
-                {
-                    currentLoggedInUser = userName;
-                    Reporter.log("Logged in as " + userName + ". New title is '" + title + "'");
-                }
+                throw new RuntimeException("Failed to access " + url + " after " + iteration + " loops");
             }
         }
-        Reporter.log("About to render page (currentlyLoggedInUser is now "+currentLoggedInUser+")");
+
 
         return this.render();
+    }
+
+    /**
+     * Try to logout.
+     *
+     * @return {@code true} ii the user was logged out successfully.
+     */
+    private boolean logout()
+    {
+        Reporter.log("Attempting to log out");
+        try
+        {
+            sharePageNavigation.openUserDropdownMenu().logout();
+            Utils.waitFor(ExpectedConditions.titleContains("Login"));
+        }
+        catch (Exception e)
+        {
+            Reporter.log("Failed to logout with exception message: " + e.getMessage());
+            return false;
+        }
+        Reporter.log("Log out attempt complete, title is " + webDriver.getTitle());
+        return true;
+    }
+
+    /**
+     * Try to login.
+     *
+     * @param userName The user to log in as.
+     * @param password The password to use.
+     * @return {@code true} if the user was logged in successfully.
+     */
+    private boolean login(String userName, String password)
+    {
+        Reporter.log("Logging in as " + userName + " (" + password + ")");
+        try
+        {
+            loginPage.render();
+            loginPage
+                .setUsername(userName)
+                .setPassword(password)
+                .clickOnLoginButton();
+        }
+        catch (Exception e)
+        {
+            Reporter.log("Failed to log in - exception was " + e.getMessage());
+            return false;
+        }
+        Reporter.log("Logged in as " + userName);
+        return true;
+    }
+
+    /**
+     * Navigate to the specified URL.
+     *
+     * @param url The URL to access.
+     */
+    private void navigateToUrl(String url)
+    {
+        Reporter.log("Opening " + url);
+        webDriver.get(url);
+        Reporter.log("Opened " + url);
     }
 }
