@@ -22,7 +22,6 @@ import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.share.page.SharePage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.po.share.userdashboard.dashlet.MyTasks;
-import org.alfresco.test.ModuleProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -46,8 +45,6 @@ public class UserDashboardPage extends SharePage
     @Autowired
     @RenderableChild
     private MyTasks myTasks;
-    @Autowired
-    private ModuleProperties moduleProperties;
 
     /**
      * Get the URL of the page
