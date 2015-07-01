@@ -55,7 +55,7 @@ public class UserDashboardPage extends SharePage
     public String getPageURL(String ... context)
     {
         // By default the user is admin.
-        String user = moduleProperties.getAdminName();
+        String user = "admin";
         if (context.length > 0)
         {
             user = context[0];
