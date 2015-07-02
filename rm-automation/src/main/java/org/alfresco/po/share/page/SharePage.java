@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.share.page;
 
+import java.util.concurrent.TimeUnit;
+
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.annotations.WaitFor;
@@ -94,6 +96,30 @@ public abstract class SharePage extends Page
     protected abstract String getPageURL(String ... context);
 
     /**
+     * Wait for some length of time between iterations of the open URL loop. Don't wait at all for the first few loops,
+     * then increase the wait time by a second each loop.
+     *
+     * @param iteration The iteration number.
+     */
+    private void iterationWait(int iteration)
+    {
+        if (iteration < 3)
+        {
+            return;
+        }
+        try
+        {
+            int duration = iteration - 3;
+            Reporter.log("Waiting for " + duration + " seconds");
+            TimeUnit.SECONDS.sleep(duration);
+        }
+        catch (InterruptedException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Open this page, login to Share if required.
      *
      * @param server        base server URL
@@ -117,6 +143,8 @@ public abstract class SharePage extends Page
             boolean navigationComplete = false;
             while (!navigationComplete && iteration < MAXIMUM_URL_LOOP_RETRIES)
             {
+                iterationWait(iteration);
+
                 String title = webDriver.getTitle();
                 String currentUrl = webDriver.getCurrentUrl();
                 Reporter.log("Time " + System.currentTimeMillis() + ": Currently at '" + currentUrl + "', with title '" + title + "' and current user " + currentLoggedInUser + "<br>");
@@ -153,7 +181,6 @@ public abstract class SharePage extends Page
                 throw new RuntimeException("Failed to access " + url + " after " + iteration + " loops");
             }
         }
-
 
         return this.render();
     }
