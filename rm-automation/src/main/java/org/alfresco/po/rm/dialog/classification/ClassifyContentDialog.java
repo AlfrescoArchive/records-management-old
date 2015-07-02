@@ -57,7 +57,7 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#LEVELS_CONTROL_menu")
     private WebElement levelsMenu;
 
-    @FindBy(css="#BY .dijitInputContainer input")
+    @FindBy(css="#CLASSIFIED_BY .dijitInputContainer input")
     private TextInput classifiedByTextInput;
 
     @FindBy(css="#AGENCY .dijitInputContainer input")
