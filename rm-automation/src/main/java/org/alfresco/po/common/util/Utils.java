@@ -37,6 +37,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 import java.io.File;
@@ -344,6 +345,7 @@ public final class Utils implements ApplicationContextAware
      * @param count     maximum number of retries.
      * @return          result of the code block.
      */
+    @SuppressWarnings("unchecked")
     public static final <T> T retry(Retry<T> retry, int count)
     {
         return retry(retry, count, Exception.class);
@@ -359,6 +361,7 @@ public final class Utils implements ApplicationContextAware
      * @param retryExceptions a sequence of exception types any one of which will start a retry.
      * @return          result of the code block.
      */
+    @SuppressWarnings("unchecked")
     public static final <T> T retry(Retry<T> retry, int count, Class<? extends Exception>... retryExceptions)
     {
         int attempt = 0;

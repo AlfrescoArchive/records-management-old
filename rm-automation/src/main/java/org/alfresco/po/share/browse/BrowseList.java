@@ -65,6 +65,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     /**
      * @see org.alfresco.po.common.renderable.Renderable#render()
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends Renderable> T render()
     {
