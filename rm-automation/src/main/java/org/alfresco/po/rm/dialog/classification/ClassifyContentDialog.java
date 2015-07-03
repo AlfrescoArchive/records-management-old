@@ -155,9 +155,19 @@ public class ClassifyContentDialog extends Dialog
     {
         // Clearing the search box activates the drop-down. Assume that the classification reason is on the first page of results.
         reasonTextInput.getWrappedElement().clear();
-        String selector = "#REASONS_CONTROL_RESULTS .alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
-        waitForVisibilityOf(By.cssSelector(selector));
+        waitForVisibilityOf(reasonsResultsContainer);
+       
+        // try and find the reason
+        String selector = ".alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
         WebElement reason = reasonsResultsContainer.findElement(By.cssSelector(selector));
+        
+        // couldn't find the reason
+        if (reason == null)
+        {
+            throw new RuntimeException("Unable to find the reason with the id " + id);
+        }
+        
+        // click on the reason
         reason.click();
         return this;
     }

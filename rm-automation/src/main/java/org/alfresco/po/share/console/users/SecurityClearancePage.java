@@ -47,6 +47,8 @@ public class SecurityClearancePage extends ConsolePage
     private static final By SECURITY_CLEARANCE_SELECTOR = By.cssSelector(".control span[role=option]");
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
+    private static final By LOADING_SELECTOR = By.cssSelector(":not([class*='share-hidden'])[data-dojo-attach-point='dataLoadingNode']");
+    private static final By NO_DATA = By.cssSelector("[data-dojo-attach-point='tableNode'] + div");
 
     /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
@@ -69,16 +71,10 @@ public class SecurityClearancePage extends ConsolePage
     }
 
     /** Sets text in the name filter input. */
-    public SecurityClearancePage clearNameFilter()
-    {
-        Utils.clear(nameFilterTextInput);
-        return this;
-    }
-
-    /** Sets text in the name filter input. */
     public SecurityClearancePage setNameFilter(String filter)
     {
         Utils.clearAndType(nameFilterTextInput, filter);
+        Utils.waitForInvisibilityOf(LOADING_SELECTOR);
         return this;
     }
 
@@ -88,6 +84,14 @@ public class SecurityClearancePage extends ConsolePage
         return nameFilterTextInput.getText();
     }
 
+    /**
+     * Indicates whether the result list is empty or not
+     */
+    public boolean isEmpty()
+    {
+        return Utils.elementExists(NO_DATA);
+    }
+    
     /**
      * Indicates whether the given user is shown in the current page of results
      */

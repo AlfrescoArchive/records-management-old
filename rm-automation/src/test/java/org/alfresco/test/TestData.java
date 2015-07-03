@@ -31,7 +31,7 @@ public interface TestData
     public static final String USER1 = "userone";
 
     /** A user who will be assigned the to the RM MANAGER role and then given 'Secret' clearance. */
-    public static final String RM_MANAGER = "rm_manager";
+    public static final String RM_MANAGER = "rm_manager_user";
     /** The RM_MANAGER has been created. */
     public static final String GROUP_RM_MANAGER_EXISTS = "integration-dataSetup-users-rmManager";
     /** The RM_MANAGER has been given 'Secret' clearance. */

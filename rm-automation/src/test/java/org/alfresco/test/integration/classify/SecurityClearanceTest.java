@@ -99,8 +99,8 @@ public class SecurityClearanceTest extends BaseTest
         checkUserOrdering(userNames);
 
         // check the individual users are displayed
-        securityClearancePage.isUserShown(RM_MANAGER);
-        securityClearancePage.isUserShown(UNCLEARED_USER);
+        assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
+        assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
 
         // Check each user has a valid clearance.
         for (String clearance : securityClearancePage.getUserClearances().values())
@@ -108,20 +108,10 @@ public class SecurityClearanceTest extends BaseTest
             assertTrue("Unrecognised security clearance: " + clearance, CONFIGURED_CLEARANCES.contains(clearance));
         }
     }
-
+    
     /**
-     * Check the admin user is not found by using the filter.
-     *
-     * <pre>
-     * Given that there is no filter set
-     * When I start to type a filter
-     * Then the users shown in the list automatically change to match the filter
-     *
-     * Given that there is not filter set
-     * When I enter a filter that has no results
-     * Then no results are shown in the list
-     * And a message is shown in the list indicating no results where found
-     * </pre>
+     * When I view the classification security clearances
+     * Then I am not able to see or edit the admins users security clearance
      */
     @Test
     (
@@ -135,11 +125,12 @@ public class SecurityClearanceTest extends BaseTest
         assertFalse(
            "Admin user unexpectedly present in results.",
            securityClearancePage.isUserShown("admin"));
+        
+        securityClearancePage.setNameFilter("admin");
+        assertTrue(securityClearancePage.isEmpty());
+        
     }
-
-    // TODO We should provide a filter term that produces no matched users and confirm that the table
-    //      contains a message that there are no matching users.
-
+    
     /**
      * Give a user clearance and check the page reflects this. Note that this test has a side effect of providing the
      * RM_MANAGER with "Secret" clearance, and is used as a dependency of other tests.
@@ -181,6 +172,58 @@ public class SecurityClearanceTest extends BaseTest
                         .getUserSecurityClearance(RM_MANAGER);
         assertEquals("Secret", clearance);
     }
+    
+
+    /**
+     * Check the admin user is not found by using the filter.
+     *
+     * <pre>
+     * Given that there is no filter set
+     * When I start to type a filter
+     * Then the users shown in the list automatically change to match the filter
+     *
+     * Given that there is not filter set
+     * When I enter a filter that has no results
+     * Then no results are shown in the list
+     * And a message is shown in the list indicating no results where found
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration", "security-clearance"},
+        description = "Check the admin user is not found by using the filter",
+        dependsOnGroups = { "integration-dataSetup-users-rmManager" }
+    )
+    public void userNameFilter()
+    {
+        openPage(securityClearancePage);
+        
+        // assert that the filter is empty
+        assertTrue(securityClearancePage.getNameFilter().isEmpty());
+        
+        // set filter 
+        securityClearancePage.setNameFilter(RM_MANAGER);
+        
+        // assert that the filter has been applied
+        assertFalse(securityClearancePage.getNameFilter().isEmpty());
+        assertEquals(1, securityClearancePage.getUserNames().size());
+        assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
+        assertFalse(securityClearancePage.isUserShown(UNCLEARED_USER));
+        
+        // partial filter
+        securityClearancePage.setNameFilter("_user");
+        
+        // assert that the filter has been cleared
+        assertFalse(securityClearancePage.getNameFilter().isEmpty());
+        assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
+        assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
+        
+        // invalid filter
+        securityClearancePage.setNameFilter("monkey");
+        
+        // assert that no results are shown
+        assertTrue(securityClearancePage.isEmpty());             
+    }
 
     /*
     Acceptance criteria from RM-1842 which are not covered here.
@@ -198,20 +241,5 @@ public class SecurityClearanceTest extends BaseTest
 
     When I change the order to descending
     Then they are reordered accordingly
-
-    Changing the filter
-
-    Given that there is a filter set
-    And results are shown
-    When I change the filter
-    Then the users and groups shown in the list automatically change to match the changed filter
-
-    Removing the filter
-
-    Given that there is a filter set
-    And results are shown
-    When I delete the filter
-    Then the first page of all results is shown
-    And the filter value prompts the user to enter a filter
-     */
+    */
 }
