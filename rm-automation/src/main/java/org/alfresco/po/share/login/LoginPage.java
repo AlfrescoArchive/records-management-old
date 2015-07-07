@@ -152,7 +152,7 @@ public class LoginPage extends Renderable
         {
             // TODO typed exception 
             // TODO get displayed message and add to exception details
-            throw new RuntimeException("Couldn't login to Share. Please check credentials.");
+            throw new RuntimeException("Couldn't login to Share as '" + userName + "'. Please check credentials.");
         }
         
         // else successful login 

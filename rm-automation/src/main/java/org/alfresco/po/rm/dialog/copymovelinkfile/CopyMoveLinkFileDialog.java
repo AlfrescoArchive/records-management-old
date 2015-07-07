@@ -21,7 +21,6 @@ package org.alfresco.po.rm.dialog.copymovelinkfile;
 import java.util.List;
 
 import org.alfresco.po.common.Dialog;
-import org.alfresco.po.common.annotations.WaitFor;
 import org.alfresco.po.common.buttonset.OkCancelButtonSet;
 import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
@@ -45,7 +44,6 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
 
     /** tree view */
     @FindBy(css = VISIBLE_DIALOG + " div.treeview")
-    @WaitFor
     private WebElement tree;
 
     /** selectors */

@@ -20,20 +20,6 @@ package org.alfresco.po.common.renderable;
 
 import static org.alfresco.po.common.util.Utils.checkMandatoryParam;
 import static org.alfresco.po.common.util.Utils.webDriverWait;
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
-import static org.openqa.selenium.support.ui.ExpectedConditions.not;
-import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
-
-import org.alfresco.po.common.annotations.RenderableChild;
-import org.alfresco.po.common.annotations.WaitFor;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -43,6 +29,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.alfresco.po.common.annotations.RenderableChild;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 
 /**
  * Abstract base class for all renderable items
@@ -62,9 +57,6 @@ public abstract class Renderable
 
 	/** renderable parent, null if none */
 	protected Renderable renderableParent;
-
-	/** elements to wait for during rendering */
-	private Map<WrapsElement, WaitFor> waitForHtmlElements;
 
 	/** last rendered */
 	private static Renderable lastRendered;
@@ -95,9 +87,6 @@ public abstract class Renderable
         // render children
         renderChildren();
 
-        // wait for control status
-        waitFor();
-
         // return this
         lastRendered = this;
         return (T)this;
@@ -111,50 +100,6 @@ public abstract class Renderable
         ExpectedCondition<Boolean> pageLoadCondition =
                 driver -> ((JavascriptExecutor)driver).executeScript("return document.readyState").equals("complete");
         webDriverWait().until(pageLoadCondition);
-    }
-
-    /**
-     * Wait for the annotated html elements on this renderable item
-     */
-    private void waitFor()
-    {
-        for (Map.Entry<WrapsElement, WaitFor> entry : getWaitForHTMLElements().entrySet())
-        {
-            final WebElement wrappedElement = entry.getKey().getWrappedElement();
-            switch (entry.getValue().status())
-            {
-                case VISIBLE:
-                {
-                    webDriverWait().until(visibilityOf(wrappedElement));
-                    break;
-                }
-                case HIDDEN:
-                {
-                    webDriverWait().until(not(visibilityOf(wrappedElement)));
-                    break;
-                }
-                case CLICKABLE:
-                {
-                    webDriverWait().until(elementToBeClickable(wrappedElement));
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Get all the html elements this renderable item has to wait for
-     *
-     * @return  List<WrapsElement>   list of html elements
-     */
-    private Map<WrapsElement, WaitFor> getWaitForHTMLElements()
-    {
-        if (waitForHtmlElements == null)
-        {
-            waitForHtmlElements = getAnnotatedFields(WrapsElement.class, WaitFor.class);
-        }
-
-        return waitForHtmlElements;
     }
 
     /**

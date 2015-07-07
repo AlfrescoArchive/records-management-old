@@ -20,7 +20,6 @@ package org.alfresco.po.share.details;
 
 import java.util.List;
 
-import org.alfresco.po.common.annotations.WaitFor;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.site.SiteNavigation;
 import org.alfresco.po.common.site.SitePage;
@@ -42,7 +41,6 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
 {
     /** node path element */
     @FindBy(css="div.node-path")
-    @WaitFor
     private WebElement path;
 
     /** breadcrumb link selector */

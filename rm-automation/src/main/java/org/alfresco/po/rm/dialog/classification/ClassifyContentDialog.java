@@ -19,7 +19,6 @@
 package org.alfresco.po.rm.dialog.classification;
 
 import static java.util.stream.Collectors.toList;
-
 import static org.alfresco.po.common.util.Utils.clearAndType;
 import static org.alfresco.po.common.util.Utils.retry;
 import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
@@ -32,9 +31,13 @@ import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -157,17 +160,15 @@ public class ClassifyContentDialog extends Dialog
         waitForVisibilityOf(reasonsResultsContainer);
        
         // try and find the reason
-        String selector = ".alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
-        WebElement reason = reasonsResultsContainer.findElement(By.cssSelector(selector));
+        String selectorValue = ".alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
+        By selector = By.cssSelector(selectorValue);
         
-        // couldn't find the reason
-        if (reason == null)
-        {
-            throw new RuntimeException("Unable to find the reason with the id " + id);
-        }
+        // wait for the element to show
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver);
+        wait.until(webDriver -> webDriver.findElement(selector));
         
         // click on the reason
-        reason.click();
+        webDriver.findElement(selector).click();
         return this;
     }
 

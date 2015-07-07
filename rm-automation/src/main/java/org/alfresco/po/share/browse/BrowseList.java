@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.alfresco.po.common.annotations.WaitFor;
-import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
@@ -47,12 +45,10 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     private F listItemFactory;
 
     /** current page information, wait to be visible */
-    @WaitFor(status = WaitForStatus.VISIBLE)
     @FindBy(css = "div[id$='paginatorBottom'] span[class$='current']")
     private WebElement current;
 
     /** data list element */
-    @WaitFor(status = WaitForStatus.VISIBLE)
     @FindBy(css = "div[id$='default-documents']")
     private WebElement dataList;
 
