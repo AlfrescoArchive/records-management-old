@@ -20,11 +20,8 @@ package org.alfresco.po.share.page;
 
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.annotations.RenderableChild;
-import org.alfresco.po.common.annotations.WaitFor;
-import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.login.LoginPage;
-import org.alfresco.test.ModuleProperties;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +51,6 @@ public abstract class SharePage extends Page
 
     @Autowired
     private Message message;
-    
-    @Autowired
-    private ModuleProperties moduleProperties;
 
     /**
      * Get share page navigation
