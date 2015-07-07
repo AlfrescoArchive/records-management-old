@@ -153,8 +153,7 @@ public class ClassifyContentDialog extends Dialog
      */
     public ClassifyContentDialog addReason(String id)
     {
-        // Clearing the search box activates the drop-down. Assume that the classification reason is on the first page of results.
-        reasonTextInput.getWrappedElement().clear();
+        clearAndType(reasonTextInput, id);
         waitForVisibilityOf(reasonsResultsContainer);
        
         // try and find the reason

@@ -18,7 +18,10 @@
  */
 package org.alfresco.po.share.userdashboard.dashlet;
 
+import java.text.MessageFormat;
+
 import org.alfresco.po.common.Dashlet;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.site.tasks.EditTaskPage;
 import org.alfresco.po.rm.site.tasks.SiteInvitationTaskPanel;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
@@ -37,10 +40,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyTasks extends Dashlet
 {
+    /** XPath to find (first) invitation to site */
+    private static final String INVITE = "//a[contains(@href, \"task-edit\")][contains(., \"{0}\")]";
+    
+    /** edit task page */
     @Autowired
     EditTaskPage editTaskPage;
+    
+    /** collaboration site dashboard */
     @Autowired
     CollaborationSiteDashboard siteDashboard;
+    
+    /** my tasks container */
     @FindBy(css = ".my-tasks")
     WebElement myTasksContainer;
 
@@ -52,12 +63,32 @@ public class MyTasks extends Dashlet
      */
     public CollaborationSiteDashboard acceptInvitation(String siteName)
     {
-        WebElement invitationLink = myTasksContainer.findElement(By.xpath("//a[@title='Edit Task'][.='Invitation to join " + siteName + " site']"));
+        // get the invitation selector
+        By invitationSelector = getInvitationSelector(siteName);
+        
+        // wait for invitation to becomes available
+        Utils.waitForVisibilityOf(invitationSelector);
+        
+        // get the invitation link and click
+        WebElement invitationLink = myTasksContainer.findElement(invitationSelector);
         invitationLink.click();
+        
+        // accept the invitation
         editTaskPage.render();
         SiteInvitationTaskPanel siteInvitePanel = (SiteInvitationTaskPanel) editTaskPage.getTaskPanel();
         siteInvitePanel.acceptInvitation();
+        
+        // return the site dashboard
         siteDashboard.render();
         return siteDashboard;
+    }
+    
+    /**
+     * Get the site invitation selector
+     */
+    private By getInvitationSelector(String siteName)
+    {
+        String invitationXPath = MessageFormat.format(INVITE, siteName);
+        return By.xpath(invitationXPath);
     }
 }

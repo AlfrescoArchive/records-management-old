@@ -56,6 +56,18 @@ public class UploadDialog extends Dialog
     }
     
     /**
+     * Upload file with given name
+     * 
+     * @param name          file name
+     * @param renderable    resulting renderable page
+     * @return T            rendered return page
+     */
+    public <T extends Renderable> T uploadFile(String name, T renderable)
+    {
+        return uploadFile(createTempFile(name), renderable);
+    }
+    
+    /**
      * Upload file
      * 
      * @param  file                 file
@@ -63,13 +75,25 @@ public class UploadDialog extends Dialog
      */
     public Renderable uploadFile(File file)
     {
+        return uploadFile(file, SharePage.getLastRenderedPage());
+    }
+    
+    /**
+     * Upload file
+     * 
+     * @param  file                 file
+     * @param  renderable           resulting renderable page
+     * @return T                    rendered return page
+     */
+    public <T extends Renderable> T uploadFile(File file, T renderable)
+    {
         try
         {
             // set the file to upload
             fileInput.setFileToUpload(file.getCanonicalPath());
             
             // render and return last page
-            return SharePage.getLastRenderedPage().render();
+            return renderable.render();
         }
         catch (IOException e)
         {

@@ -18,18 +18,15 @@
  */
 package org.alfresco.po.share.page;
 
-import java.util.concurrent.TimeUnit;
-
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.annotations.WaitFor;
 import org.alfresco.po.common.annotations.WaitForStatus;
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.login.LoginPage;
+import org.alfresco.test.ModuleProperties;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Reporter;
 
@@ -42,18 +39,7 @@ import org.testng.Reporter;
  */
 public abstract class SharePage extends Page
 {
-    /** A lock used when accessing the {@link #currentLoggedInUser}. */
-    private static final String CURRENT_LOGGED_IN_USER_LOCK = new String("CURRENT_LOGGED_IN_USER_LOCK");
-    /** This restricts the amount of effort that can be spent trying to access a URL. */
-    private static final int MAXIMUM_URL_LOOP_RETRIES = 20;
-    /**
-     * The currently logged-in user. This is only suitable for testing against a single client, if we want to support
-     * testing against a Selenium grid then we need to add some code to track which user is logged in on which client.
-     */
-    private static String currentLoggedInUser;
-
     /** page footer */
-    @WaitFor(status=WaitForStatus.VISIBLE)
     @FindBy(css="div.sticky-footer")
     private WebElement footer;
 
@@ -68,6 +54,9 @@ public abstract class SharePage extends Page
 
     @Autowired
     private Message message;
+    
+    @Autowired
+    private ModuleProperties moduleProperties;
 
     /**
      * Get share page navigation
@@ -96,30 +85,6 @@ public abstract class SharePage extends Page
     protected abstract String getPageURL(String ... context);
 
     /**
-     * Wait for some length of time between iterations of the open URL loop. Don't wait at all for the first few loops,
-     * then increase the wait time by a second each loop.
-     *
-     * @param iteration The iteration number.
-     */
-    private void iterationWait(int iteration)
-    {
-        if (iteration < 3)
-        {
-            return;
-        }
-        try
-        {
-            int duration = iteration - 3;
-            Reporter.log("Waiting for " + duration + " seconds");
-            TimeUnit.SECONDS.sleep(duration);
-        }
-        catch (InterruptedException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Open this page, login to Share if required.
      *
      * @param server        base server URL
@@ -128,111 +93,33 @@ public abstract class SharePage extends Page
      * @param context       context
      * @return {@link SharePage} rendered page
      */
-    public SharePage open(String server, String userName, String password, String ... context)
+    public synchronized SharePage open(String server, String userName, String password, String ... context)
     {
         // get the page URL
         String url = server + getPageURL(context);
+        
+        // check whether we need to log out or not
+        if (loginPage.isUserLoggedIn() && !userName.equals(loginPage.getCurrentUser()))
+        {
+            // logout
+            sharePageNavigation.openUserDropdownMenu().logout();
+            
+            // login
+            loginPage.login(userName, password);  
+        }
+        
         // Try the naive method of getting to the given URL.
         navigateToUrl(url);
 
-        // This addresses the race condition of two threads logging out/in at the same time. It's a little bit pointless
-        // as we only support testing against a single client anyway.
-        synchronized(CURRENT_LOGGED_IN_USER_LOCK)
+        // determine whether the login form is shown or not
+        if (!loginPage.isUserLoggedIn() || loginPage.isShown())
         {
-            int iteration = 0;
-            boolean navigationComplete = false;
-            while (!navigationComplete && iteration < MAXIMUM_URL_LOOP_RETRIES)
-            {
-                iterationWait(iteration);
-
-                String title = webDriver.getTitle();
-                String currentUrl = webDriver.getCurrentUrl();
-                Reporter.log("Time " + System.currentTimeMillis() + ": Currently at '" + currentUrl + "', with title '" + title + "' and current user " + currentLoggedInUser + "<br>");
-
-                if (title.contains("Login"))
-                {
-                    boolean success = login(userName, password);
-                    if (success)
-                    {
-                        currentLoggedInUser = userName;
-                    }
-                }
-                else if (currentLoggedInUser != null && !userName.equals(currentLoggedInUser))
-                {
-                    boolean success = logout();
-                    if (success)
-                    {
-                        currentLoggedInUser = null;
-                    }
-                }
-                else if (!url.equals(currentUrl))
-                {
-                    navigateToUrl(url);
-                }
-                else
-                {
-                    navigationComplete = true;
-                }
-                iteration++;
-            }
-
-            if (!navigationComplete)
-            {
-                throw new RuntimeException("Failed to access " + url + " after " + iteration + " loops");
-            }
+            // login specifying destination renderable (ie this) to save an unnecessary render of the user dashboard
+            loginPage.login(userName, password, this);            
         }
-
+        
         return this.render();
-    }
-
-    /**
-     * Try to logout.
-     *
-     * @return {@code true} ii the user was logged out successfully.
-     */
-    private boolean logout()
-    {
-        Reporter.log("Attempting to log out");
-        try
-        {
-            sharePageNavigation.openUserDropdownMenu().logout();
-            Utils.waitFor(ExpectedConditions.titleContains("Login"));
-        }
-        catch (Exception e)
-        {
-            Reporter.log("Failed to logout with exception message: " + e.getMessage());
-            return false;
-        }
-        Reporter.log("Log out attempt complete, title is " + webDriver.getTitle());
-        return true;
-    }
-
-    /**
-     * Try to login.
-     *
-     * @param userName The user to log in as.
-     * @param password The password to use.
-     * @return {@code true} if the user was logged in successfully.
-     */
-    private boolean login(String userName, String password)
-    {
-        Reporter.log("Logging in as " + userName + " (" + password + ")");
-        try
-        {
-            loginPage.render();
-            loginPage
-                .setUsername(userName)
-                .setPassword(password)
-                .clickOnLoginButton();
-        }
-        catch (Exception e)
-        {
-            Reporter.log("Failed to log in - exception was " + e.getMessage());
-            return false;
-        }
-        Reporter.log("Logged in as " + userName);
-        return true;
-    }
+    }  
 
     /**
      * Navigate to the specified URL.

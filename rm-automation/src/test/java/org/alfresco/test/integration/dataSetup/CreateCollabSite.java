@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  * Create Collaboration Site for Integration tests
  *
  * @author David Webster
- */
+ */   
 public class CreateCollabSite extends BaseTest implements DocumentActions
 {
     /** collab site dashboard */

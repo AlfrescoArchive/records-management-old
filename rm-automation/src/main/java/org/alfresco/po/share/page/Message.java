@@ -54,7 +54,7 @@ public class Message extends Renderable
         }
         catch (TimeoutException exception)
         {
-            // do nothing and carry on           
+            // do nothing and carry on          
         }
         
         if (shown)

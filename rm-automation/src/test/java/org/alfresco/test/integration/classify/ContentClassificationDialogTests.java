@@ -88,7 +88,7 @@ public class ContentClassificationDialogTests extends BaseTest
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(SECRET_DOCUMENT);
+            .uploadFile(SECRET_DOCUMENT, documentLibrary);
         documentLibrary.getDocument(SECRET_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -192,7 +192,7 @@ public class ContentClassificationDialogTests extends BaseTest
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(UNCLASSIFIED_DOCUMENT);
+            .uploadFile(UNCLASSIFIED_DOCUMENT, documentLibrary);
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -221,7 +221,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "clearedUserSeesAllLevels" },
         description = "Check that a user with 'Top Secret' clearance sees all the levels.",
         dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
     )
@@ -252,7 +252,7 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "secretUserSeesSomeLevels" },
         description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
         dependsOnGroups = { GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE, GROUP_RM_MANAGER_IN_COLLAB_SITE }
     )
@@ -262,9 +262,10 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Open Collab site DocumentLibrary.
         openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
+        
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(documentName);
+            .uploadFile(documentName, documentLibrary);
 
         Document document = documentLibrary.getDocument(documentName);
         // Open the classify document dialog
@@ -292,7 +293,7 @@ public class ContentClassificationDialogTests extends BaseTest
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnFile()
-            .uploadFile(TOP_SECRET_DOCUMENT);
+            .uploadFile(TOP_SECRET_DOCUMENT, documentLibrary);
         documentLibrary.getDocument(TOP_SECRET_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
