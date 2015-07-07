@@ -12,11 +12,15 @@
           
    <bean id="factoryPage" class="org.alfresco.po.common.util.FactoryPage"/>   
    <bean id="poProperties" class="org.alfresco.po.common.util.POProperties"/>
-   <import resource="webdrone-context.xml"/>
+   <import resource="classpath:webdriver-context.xml"/>
 
    <context:annotation-config/>
    <context:component-scan base-package="org.alfresco"/>
    
-   <bean id="webDriver" factory-bean="&amp;webDroneFactoryBean" factory-method="getInstance" /> 
-
+   <!--                  -->
+   <!-- WebDriver        -->
+   <!--                  -->
+   <bean id="webDriver" factory-bean="&amp;webDriverFactoryBean" factory-method="getObject"  destroy-method="quit" lazy-init="true" scope="prototype">
+       <constructor-arg value="RemoteFireFox"/>
+   </bean>
 </beans>

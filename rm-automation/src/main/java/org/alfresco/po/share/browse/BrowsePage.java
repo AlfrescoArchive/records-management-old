@@ -29,7 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Roy Wetherall
  */
-public abstract class BrowsePage<N extends SiteNavigation, L extends BrowseList<?>, S extends Toolbar> extends SitePage<N>
+public abstract class BrowsePage<N extends SiteNavigation,
+L extends BrowseList<?>,
+S extends Toolbar> extends SitePage<N>
 {
     /** list view */
     @RenderableChild
