@@ -100,7 +100,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertEquals("There should be no reasons selected initially.", 0, classifyContentDialog.getReasons().size());
 
         // Check the "Create" button is disabled.
-        assertFalse("Create button should not initially be enabled.", classifyContentDialog.isCreateButtonEnabled());
+        assertFalse("Create button should not initially be enabled.", classifyContentDialog.isClassifyButtonEnabled());
 
         // Fill in the classification details.
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
@@ -109,10 +109,10 @@ public class ContentClassificationDialogTests extends BaseTest
             .addReason(CLASSIFICATION_REASON);
 
         // Check the "Create" button is now enabled.
-        assertTrue("Create button should be enabled now form is filled.", classifyContentDialog.isCreateButtonEnabled());
+        assertTrue("Create button should be enabled now form is filled.", classifyContentDialog.isClassifyButtonEnabled());
 
         // Classify the content.
-        classifyContentDialog.submitDialog();
+        classifyContentDialog.clickOnClassify();
 
         // Check that the classify content action is no longer available.
         String[] clickableActions = documentLibrary.getDocument(SECRET_DOCUMENT).getClickableActions();
@@ -152,7 +152,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .addReason(CLASSIFICATION_REASON);
 
         // Click the cancel button.
-        classifyContentDialog.cancelDialog();
+        classifyContentDialog.clickOnCancel();
 
         // Check the classify document dialog has closed.
         assertFalse("Classify content dialog should have closed.", classifyContentDialog.isDisplayed());
@@ -193,6 +193,7 @@ public class ContentClassificationDialogTests extends BaseTest
         documentLibrary.getToolbar()
             .clickOnFile()
             .uploadFile(UNCLASSIFIED_DOCUMENT, documentLibrary);
+        
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -200,7 +201,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
-            .submitDialog();
+            .clickOnClassify();
 
         // Check that the document is classified and has level "Unclassified".
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
@@ -237,7 +238,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertEquals(Arrays.asList("Top Secret", "Secret", "Confidential", "Unclassified"), availableLevels);
 
         // Click the cancel button.
-        classifyContentDialog.cancelDialog();
+        classifyContentDialog.clickOnCancel();
     }
 
     /**
@@ -275,7 +276,7 @@ public class ContentClassificationDialogTests extends BaseTest
         assertEquals(Arrays.asList("Secret", "Confidential", "Unclassified"), availableLevels);
 
         // Click the cancel button.
-        classifyContentDialog.cancelDialog();
+        classifyContentDialog.clickOnCancel();
     }
 
     /**
@@ -301,6 +302,6 @@ public class ContentClassificationDialogTests extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
-            .submitDialog();
+            .clickOnClassify();
     }
 }

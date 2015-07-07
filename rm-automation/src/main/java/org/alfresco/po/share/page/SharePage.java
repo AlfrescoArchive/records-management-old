@@ -87,7 +87,7 @@ public abstract class SharePage extends Page
      * @param context       context
      * @return {@link SharePage} rendered page
      */
-    public synchronized SharePage open(String server, String userName, String password, String ... context)
+    public SharePage open(String server, String userName, String password, String ... context)
     {
         // get the page URL
         String url = server + getPageURL(context);
@@ -102,7 +102,7 @@ public abstract class SharePage extends Page
             loginPage.login(userName, password);  
         }
         
-        // Try the naive method of getting to the given URL.
+        // navigate to the URL
         navigateToUrl(url);
 
         // determine whether the login form is shown or not

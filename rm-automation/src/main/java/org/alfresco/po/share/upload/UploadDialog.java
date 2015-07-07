@@ -25,8 +25,12 @@ import java.io.IOException;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.FileInput;
@@ -91,6 +95,11 @@ public class UploadDialog extends Dialog
         {
             // set the file to upload
             fileInput.setFileToUpload(file.getCanonicalPath());
+            
+            // wait for the file to be visible
+            String fileName = file.getName().split("\\.")[0];
+            By selector = By.xpath("//a[contains(., 'a" + fileName + "')]");            
+            try { Utils.webDriverWait(2).until(ExpectedConditions.visibilityOfElementLocated(selector)); } catch (TimeoutException exception) { /*ignore and carry on */ }
             
             // render and return last page
             return renderable.render();

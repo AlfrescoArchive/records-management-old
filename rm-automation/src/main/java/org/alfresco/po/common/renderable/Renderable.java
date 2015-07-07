@@ -78,14 +78,17 @@ public abstract class Renderable
     	// check the web driver
     	checkMandatoryParam("webDriver", webDriver);
 
-    	// wait for page to load
-    	waitForPageLoad();
+    	if (renderableParent == null)
+    	{
+    	    // wait for page to load
+    	    waitForPageLoad();
+    	}
 
-    	// init elements
+        // init elements
         PageFactory.initElements(new HtmlElementDecorator(webDriver), this);
 
         // render children
-        renderChildren();
+        renderChildren();   
 
         // return this
         lastRendered = this;

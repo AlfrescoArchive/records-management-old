@@ -136,12 +136,18 @@ public class ClassifyContentDialog extends Dialog
                      .collect(toList());
     }
 
+    /**
+     * Set classification agency
+     */
     public ClassifyContentDialog setAgency(String agency)
     {
         clearAndType(agencyTextInput, agency);
         return this;
     }
 
+    /**
+     * Set classified by
+     */
     public ClassifyContentDialog setClassifiedBy(String classifiedBy)
     {
         clearAndType(classifiedByTextInput, classifiedBy);
@@ -187,19 +193,29 @@ public class ClassifyContentDialog extends Dialog
         return this;
     }
 
-    public Renderable submitDialog()
+    /**
+     * Click on classify
+     */
+    public Renderable clickOnClassify()
     {
         createButton.click();
+        waitForInvisibilityOf(createButton);
         return SharePage.getLastRenderedPage().render();
     }
 
-    public Renderable cancelDialog()
+    /**
+     * Click on cancel
+     */
+    public Renderable clickOnCancel()
     {
         cancelButton.click();
         waitForInvisibilityOf(cancelButton);
         return SharePage.getLastRenderedPage().render();
     }
 
+    /**
+     * Close dialog
+     */
     public Renderable closeDialog()
     {
         closeButton.click();
@@ -213,8 +229,8 @@ public class ClassifyContentDialog extends Dialog
         return (createButton != null && createButton.isDisplayed());
     }
 
-    /** @return <code>true</code> if the create button is visible and enabled. */
-    public boolean isCreateButtonEnabled()
+    /** @return <code>true</code> if the classify button is visible and enabled. */
+    public boolean isClassifyButtonEnabled()
     {
         if (createButton == null || !createButton.isDisplayed())
         {

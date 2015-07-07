@@ -135,7 +135,7 @@ public class ClassifyRecord extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
-            .submitDialog();
+            .clickOnClassify();
     }
 
 
@@ -209,7 +209,7 @@ public class ClassifyRecord extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
-            .submitDialog();
+            .clickOnClassify();
         filePlan.getRecord(COMPLETE_RECORD)
             .hasIndicator(RecordIndicators.CLASSIFIED);
     }
