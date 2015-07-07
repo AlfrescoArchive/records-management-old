@@ -64,6 +64,9 @@ public final class Utils implements ApplicationContextAware
 
     /** default wait 10 seconds */
     private static final int DEFAULT_WAIT = 10;
+    
+    /** default retry 5 times */
+    public static final int DEFAULT_RETRY = 5;
 
     /**
      * @see org.springframework.context.ApplicationContextAware#setApplicationContext(org.springframework.context.ApplicationContext)

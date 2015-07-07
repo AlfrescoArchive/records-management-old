@@ -32,6 +32,7 @@ import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
@@ -131,9 +132,14 @@ public abstract class ListItem
         {
             // find the element, mouse over and click
             WebElement moreAction = row.findElement(moreActionsSelector);
+            
+            // wait for the moreAction to be visible
+            waitForVisibilityOf(moreAction);
+            
+            // mouse over and click
             Utils.mouseOver(moreAction);
-            moreAction.click();
-
+            moreAction.click();                
+            
             // wait for the actions to show
             waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
         }
