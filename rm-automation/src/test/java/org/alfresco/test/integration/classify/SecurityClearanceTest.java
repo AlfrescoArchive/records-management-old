@@ -190,9 +190,9 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "security-clearance"},
+        groups = { "integration"},
         description = "Check the admin user is not found by using the filter",
-        dependsOnGroups = { "integration-dataSetup-users-rmManager" }
+        dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
     )
     public void userNameFilter()
     {
