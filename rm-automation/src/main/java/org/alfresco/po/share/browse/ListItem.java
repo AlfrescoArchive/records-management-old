@@ -131,19 +131,34 @@ public abstract class ListItem
         // click on the ...more link
         Utils.mouseOver(row);
         
-        Wait<WebElement> wait = new FluentWait<WebElement>(row);
-        WebElement moreAction = wait.until((webElement) -> webElement.findElement(moreActionsSelector));
-                    
-        // wait for the moreAction to be visible
-        waitForVisibilityOf(moreAction);
-        
-        // mouse over and click
-        Utils.mouseOver(moreAction);
-        moreAction.click();                
-        
-        // wait for the actions to show
-        waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
+        WebElement moreAction = getMoreActionLink(row);
+        if (moreAction != null)
+        {
+            // mouse over and click
+            Utils.mouseOver(moreAction);
+            moreAction.click();                
+            
+            // wait for the actions to show
+            waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
+        }
     }
+
+  
+    private WebElement getMoreActionLink(WebElement row)
+    {
+        WebElement moreAction = null;
+        Wait<WebElement> wait = new FluentWait<WebElement>(row);
+        try
+        {
+            moreAction = wait.until((webElement) -> webElement.findElement(moreActionsSelector));
+        }
+        catch (NoSuchElementException noSuchElementException)
+        {
+            // do nothing, return null
+        }
+        return moreAction;
+    }
+        
 
     /**
      * Helper method to check whether the specified actions are clickable
