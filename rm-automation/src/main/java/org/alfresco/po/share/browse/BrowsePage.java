@@ -20,8 +20,11 @@ package org.alfresco.po.share.browse;
 
 import org.alfresco.po.common.Toolbar;
 import org.alfresco.po.common.annotations.RenderableChild;
+import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.site.SiteNavigation;
 import org.alfresco.po.common.site.SitePage;
+import org.alfresco.po.common.util.Utils;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -30,8 +33,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Roy Wetherall
  */
 public abstract class BrowsePage<N extends SiteNavigation,
-L extends BrowseList<?>,
-S extends Toolbar> extends SitePage<N>
+                                 L extends BrowseList<?>,
+                                 S extends Toolbar> extends SitePage<N>
 {
     /** list view */
     @RenderableChild
@@ -57,6 +60,17 @@ S extends Toolbar> extends SitePage<N>
     public S getToolbar()
     {
         return toolbar;
+    }
+    
+    @Override
+    public <T extends Renderable> T render()
+    {
+        T result = super.render();
+        
+        // ensure that the "no items" banner has been removed
+        Utils.waitForInvisibilityOf(By.cssSelector("div[id$='no-items-template']"));
+        
+        return result;
     }
     
     /**
