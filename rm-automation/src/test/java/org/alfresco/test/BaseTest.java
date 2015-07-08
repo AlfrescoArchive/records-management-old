@@ -225,7 +225,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
             // We use a rather arbitrary retry maximum here just to ensure that the retry doesn't run forever.
             retryUntil(() -> usersPage.setSearch(userName)
                                       .clickOnSearch(),
-                       () -> usersPage.isUserFound(userName), 25);
+                       () -> usersPage.isUserFound(userName), 50);
 
             // if a role is provided
             if (role != null)
@@ -238,7 +238,7 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
 
                 // we may need to keep trying this until the SOLR index catches up
                 retryUntil(() -> addAuthorityDialog.clickOnSearch(),
-                           () -> !addAuthorityDialog.isResultsEmpty(), 25);
+                           () -> !addAuthorityDialog.isResultsEmpty(), 50);
 
                 // add the new user
                 addAuthorityDialog.clickOnAdd(userName);
