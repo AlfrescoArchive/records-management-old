@@ -32,6 +32,8 @@ import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
 import ru.yandex.qatools.htmlelements.element.Link;
 
@@ -128,21 +130,19 @@ public abstract class ListItem
     {
         // click on the ...more link
         Utils.mouseOver(row);
-        if (Utils.elementExists(row, moreActionsSelector))
-        {
-            // find the element, mouse over and click
-            WebElement moreAction = row.findElement(moreActionsSelector);
-            
-            // wait for the moreAction to be visible
-            waitForVisibilityOf(moreAction);
-            
-            // mouse over and click
-            Utils.mouseOver(moreAction);
-            moreAction.click();                
-            
-            // wait for the actions to show
-            waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
-        }
+        
+        Wait<WebElement> wait = new FluentWait<WebElement>(row);
+        WebElement moreAction = wait.until((webElement) -> webElement.findElement(moreActionsSelector));
+                    
+        // wait for the moreAction to be visible
+        waitForVisibilityOf(moreAction);
+        
+        // mouse over and click
+        Utils.mouseOver(moreAction);
+        moreAction.click();                
+        
+        // wait for the actions to show
+        waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
     }
 
     /**
