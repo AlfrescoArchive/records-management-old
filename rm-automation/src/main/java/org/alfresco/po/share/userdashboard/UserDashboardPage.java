@@ -18,10 +18,14 @@
  */
 package org.alfresco.po.share.userdashboard;
 
+
+
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.share.page.SharePage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.po.share.userdashboard.dashlet.MyTasks;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -38,10 +42,15 @@ import org.springframework.stereotype.Component;
 @Lazy
 public class UserDashboardPage extends SharePage
 {
+    @FindBy(css = "div.dynamic-welcome")
+    private WebElement welcomePanel;
+    
     /** my sites dashlet */
     @Autowired
     @RenderableChild
     private MySitesDashlet mySitesDashlet;
+    
+    /** my tasks dashlet */
     @Autowired
     @RenderableChild
     private MyTasks myTasks;

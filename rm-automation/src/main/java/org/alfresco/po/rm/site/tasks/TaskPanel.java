@@ -18,13 +18,15 @@
  */
 package org.alfresco.po.rm.site.tasks;
 
+import org.alfresco.po.common.renderable.Renderable;
+
 /**
  * A panel containing a task on the "Edit Task" page.
  *
  * @author tpage
  * @since 3.0
  */
-public interface TaskPanel
+public abstract class TaskPanel extends Renderable
 {
 
 }

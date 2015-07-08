@@ -30,11 +30,11 @@ import org.springframework.stereotype.Component;
  * @since 3.0
  */
 @Component
-public class EditTaskPage extends SharePage
+public class EditTaskPage<P extends TaskPanel> extends SharePage
 {
     @Autowired
     @RenderableChild
-    private TaskPanel taskPanel;
+    private P taskPanel;
 
     @Override
     protected String getPageURL(String... context)
@@ -43,7 +43,7 @@ public class EditTaskPage extends SharePage
         return "/page/task-edit?taskId=" + taskId;
     }
 
-    public TaskPanel getTaskPanel()
+    public P getTaskPanel()
     {
         return taskPanel;
     }

@@ -28,6 +28,8 @@ import java.util.Map;
 import org.alfresco.po.common.Page;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
@@ -99,24 +101,23 @@ public abstract class ButtonSet extends HtmlElement
         if (getButtonMap().containsKey(name))
         {
             Button button = getButtonMap().get(name);
-            if (button.isEnabled())
+            
+            try
             {
+                Utils.waitFor(ExpectedConditions.elementToBeClickable(button.getWrappedElement()));
+                
                 // mouse over the button
                 Utils.mouseOver(button);
-                
+                    
                 // click the button
                 button.click();  
-                
-                // TODO check for error message (dialog only?)
-                
-                
-                
+                    
                 // render
                 return renderable.render();
             }
-            else
+            catch (TimeoutException exception)
             {
-                throw new RuntimeException("Can't click button " + name + ", because it isn't enabled.");
+                throw new RuntimeException("Can't click button " + name + ", because it isn't enabled.", exception);
             }
         }
         else
