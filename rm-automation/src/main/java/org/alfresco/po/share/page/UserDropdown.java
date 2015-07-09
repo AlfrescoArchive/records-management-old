@@ -57,36 +57,4 @@ public class UserDropdown extends Renderable
         
         return loginPage.render();
     }
-
-//    /**
-//     * logout
-//     */
-//    public void logout()
-//    {
-//        WebElement logoutButton;
-//        int attempts = 0;
-//
-//        while(attempts < 3)
-//        {
-//            try 
-//            {
-//                logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
-//                if (logoutButton != null) 
-//                {
-//                    logoutButton.click();
-//                    return;
-//                }
-//            } 
-//            catch (NoSuchElementException e) 
-//            {
-//                Utils.getWebDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-//                revealDropdown();
-//                attempts = attempts + 1;
-//                if(attempts ==  3)
-//                {
-//                    throw new IllegalStateException("The logout did not take place due to the fact that the drop down did not open or wasn't found.");
-//                }
-//            }
-//        }
-//    }
 }

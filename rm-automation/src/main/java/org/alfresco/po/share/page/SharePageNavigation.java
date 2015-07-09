@@ -66,7 +66,9 @@ public class SharePageNavigation extends Renderable
         return adminToolsNavigation.render();
     }
 
-
+    /**
+     * logout current user
+     */
     public LoginPage logout()
     {
         return userDropdown.logout();

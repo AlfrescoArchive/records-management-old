@@ -98,8 +98,8 @@ public class UploadDialog extends Dialog
             
             // wait for the file to be visible
             String fileName = file.getName().split("\\.")[0];
-            By selector = By.xpath("//a[contains(., 'a" + fileName + "')]");            
-            try { Utils.webDriverWait(2).until(ExpectedConditions.visibilityOfElementLocated(selector)); } catch (TimeoutException exception) { /*ignore and carry on */ }
+            By selector = By.xpath("//a[contains(., '" + fileName + "')]");            
+            try { Utils.waitFor(ExpectedConditions.visibilityOfElementLocated(selector)); } catch (TimeoutException exception) { /*ignore and carry on */ }
             
             // render and return last page
             return renderable.render();
