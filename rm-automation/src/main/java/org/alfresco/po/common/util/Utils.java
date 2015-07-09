@@ -20,6 +20,14 @@ package org.alfresco.po.common.util;
 
 import static java.util.Arrays.asList;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -30,6 +38,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,13 +49,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.function.Supplier;
 
 /**
  * Utility class containing helpful methods.
@@ -112,9 +115,11 @@ public final class Utils implements ApplicationContextAware
      */
     public static boolean elementExists(By selector)
     {
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver())
+                                        .withTimeout(1, TimeUnit.SECONDS);
         try
         {
-            getWebDriver().findElement(selector);
+            wait.until((webDriver) -> webDriver.findElement(selector));
             return true;
         }
         catch (NoSuchElementException exception)
@@ -147,6 +152,27 @@ public final class Utils implements ApplicationContextAware
     public static <T> void waitFor(ExpectedCondition<T> condition)
     {
         webDriverWait().until(condition);
+    }
+    
+    /**
+     * Waits for a web element to be found.
+     * <p>
+     * Throws NoSuchElementException if element is not found.
+     * 
+     * @param  selector             selector
+     * @return {@link WebElement}   web element
+     * @throws NoSuchElementException
+     */
+    public static WebElement waitForFind(By selector)
+    {
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver());
+        return wait.until((webDriver) -> webDriver.findElement(selector));
+    }
+    
+    public static WebElement waitForFind(WebElement webElement, By selector)
+    {
+        Wait<WebElement> wait = new FluentWait<WebElement>(webElement);
+        return wait.until((w) -> w.findElement(selector));
     }
 
     /**
@@ -248,9 +274,12 @@ public final class Utils implements ApplicationContextAware
     public static <T extends WebElement> T clearAndType(T field, String text)
     {
         clear(field);
-
         checkMandatoryParam("text", text);
         field.sendKeys(text);
+        
+        // brief pause to allow the UI to process all the characters entered
+        try{Thread.sleep(250);}catch(Exception e){};
+        
         return field;
     }
 

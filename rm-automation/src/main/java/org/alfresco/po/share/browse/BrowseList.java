@@ -25,9 +25,9 @@ import java.util.Map;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -37,9 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class BrowseList<F extends BrowseListItemFactory> extends Renderable
 {
-    /** render retry count */
-    private static final int RETRY_COUNT = 5;
-
     /** list item factory */
     @Autowired
     private F listItemFactory;
@@ -55,20 +52,42 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     /** row selector */
     private By rowsSelector = By.cssSelector("div[id$='default-documents'] tbody[class$='data'] tr");
 
+    /** item count */
+    private int itemCount = 0;
+    
     /** item map indexed by name */
     private Map<String, ListItem> itemMap;
 
     /**
      * @see org.alfresco.po.common.renderable.Renderable#render()
      */
-    @SuppressWarnings("unchecked")
     @Override
     public <T extends Renderable> T render()
     {
-        return Utils.retry(() ->
+        T result = super.render();     
+        
+        itemMap = null;
+     
+        // figure out how many items are on the page
+        String text = current.getText();
+        String[] values = text.split(" ");
+        itemCount = Integer.parseInt(values[2]);        
+        
+        if (itemCount != 0)
         {
-            T result = super.render();
+            Utils.waitFor(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsSelector));
+        }
+        
+        return result;
+    }
 
+    /**
+     * get the item map
+     */
+    private Map<String, ListItem> getItemMap()
+    {
+        if (itemMap == null)
+        {
             // figure out how many items are on the page
             String text = current.getText();
             String[] values = text.split(" ");
@@ -99,17 +118,18 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
             else
             {
                 throw new IllegalStateException("Expected " + count + " rows and found " + rows.size());
-            }
-            return result;
-        }, RETRY_COUNT, WebDriverException.class, IllegalStateException.class);
+            }            
+        }
+        
+        return itemMap;
     }
-
+    
     /**
      * Browse list size
      */
     public int size()
     {
-        return itemMap.size();
+        return getItemMap().size();
     }
 
     /**
@@ -120,7 +140,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
      */
     public boolean contains(String name)
     {
-        return itemMap.containsKey(name);
+        return getItemMap().containsKey(name);
     }
 
     /**
@@ -131,7 +151,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
      */
     public ListItem get(String name)
     {
-        return itemMap.get(name);
+        return getItemMap().get(name);
     }
 
     /**
@@ -144,7 +164,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     @SuppressWarnings("unchecked")
     public <T extends ListItem> T get(String name, Class<T> clazz)
     {
-        ListItem item = itemMap.get(name);
+        ListItem item = getItemMap().get(name);
         if (item != null && !clazz.isInstance(item))
         {
             throw new RuntimeException("Unexpected list item type. Got "+ item.getClass() + " expected " + clazz);
@@ -173,7 +193,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     {
         T result = null;
 
-        for (Map.Entry<String, ListItem> entry : itemMap.entrySet())
+        for (Map.Entry<String, ListItem> entry : getItemMap().entrySet())
         {
             if (entry.getKey().startsWith(name))
             {

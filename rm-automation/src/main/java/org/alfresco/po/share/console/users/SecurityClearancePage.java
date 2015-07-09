@@ -29,10 +29,13 @@ import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.console.ConsolePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -48,7 +51,7 @@ public class SecurityClearancePage extends ConsolePage
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
     private static final By LOADING_SELECTOR = By.cssSelector(":not([class*='share-hidden'])[data-dojo-attach-point='dataLoadingNode']");
-    private static final By NO_DATA = By.cssSelector("[data-dojo-attach-point='tableNode'] + div");
+    private static final By NO_DATA = By.cssSelector("div[class$='no-data']");
 
     /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
@@ -99,14 +102,22 @@ public class SecurityClearancePage extends ConsolePage
     {
         boolean result = false;
 
+        Utils.waitFor(ExpectedConditions.presenceOfAllElementsLocatedBy(ROWS));
         List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
         for (WebElement row : rows)
         {
             WebElement userNameControl = row.findElement(USER_NAME_SELECTOR);
-            if (userNameControl.getText().contains(userName))
+            try
             {
-                result = true;
-                break;
+                if (userNameControl.getText().contains(userName))
+                {
+                    result = true;
+                    break;
+                }
+            }
+            catch (StaleElementReferenceException exception)
+            {
+                // do nothing
             }
         }
 

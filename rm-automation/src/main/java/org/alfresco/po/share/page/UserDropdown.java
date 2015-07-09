@@ -18,15 +18,13 @@
  */
 package org.alfresco.po.share.page;
 
-import static junit.framework.Assert.fail;
-
-import java.util.concurrent.TimeUnit;
-
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.login.LoginPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -38,50 +36,57 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserDropdown extends Renderable
 {
+    /** selectors */
     private static final By HEADER_MENU_SELECTOR = By.cssSelector("#HEADER_USER_MENU_POPUP");
     private static final By LOGOUT_SELECTOR = By.cssSelector("#HEADER_USER_MENU_LOGOUT_text");
-
+    
+    @Autowired
+    private LoginPage loginPage;
+    
     /**
-     * Reveal the user dropdown menu.
-     *
-     * @return The user dropdown menu.
-     * @throws IllegalStateException If the dropdown menu cannot be found.
+     * logout user
      */
-    public UserDropdown revealDropdown()
+    public LoginPage logout()
     {
-        try
-        {
-            WebElement dropdownButton = Utils.getWebDriver().findElement(HEADER_MENU_SELECTOR);
-            dropdownButton.click();
-        }
-        catch (NoSuchElementException e)
-        {
-            throw new IllegalStateException("Header menu not found - is a user logged in?", e);
-        }
-        return this;
+        WebElement dropdownButton = Utils.waitForFind(HEADER_MENU_SELECTOR);
+        Utils.mouseOver(dropdownButton);
+        dropdownButton.click();
+        
+        Utils.waitFor(ExpectedConditions.elementToBeClickable(LOGOUT_SELECTOR));
+        Utils.waitForFind(LOGOUT_SELECTOR).click();
+        
+        return loginPage.render();
     }
 
-    public void logout()
-    {
-        WebElement logoutButton;
-        int attempts = 0;
-
-        while(attempts < 3){
-        try {
-         logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
-         if (logoutButton != null) {
-            logoutButton.click();
-            return;
-        }
-        } catch (NoSuchElementException e) {
-
-            Utils.getWebDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-            revealDropdown();
-            attempts = attempts + 1;
-            if(attempts ==  3){
-            fail("The logout did not take place due to the fact that the drop down did not open or wasn't found.");
-            }
-        }
-        }
-    }
+//    /**
+//     * logout
+//     */
+//    public void logout()
+//    {
+//        WebElement logoutButton;
+//        int attempts = 0;
+//
+//        while(attempts < 3)
+//        {
+//            try 
+//            {
+//                logoutButton = Utils.getWebDriver().findElement(LOGOUT_SELECTOR);
+//                if (logoutButton != null) 
+//                {
+//                    logoutButton.click();
+//                    return;
+//                }
+//            } 
+//            catch (NoSuchElementException e) 
+//            {
+//                Utils.getWebDriver().manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+//                revealDropdown();
+//                attempts = attempts + 1;
+//                if(attempts ==  3)
+//                {
+//                    throw new IllegalStateException("The logout did not take place due to the fact that the drop down did not open or wasn't found.");
+//                }
+//            }
+//        }
+//    }
 }

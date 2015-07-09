@@ -18,7 +18,6 @@
  */
 package org.alfresco.test;
 
-import static org.alfresco.po.common.util.Utils.retryUntil;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -30,9 +29,6 @@ import java.net.BindException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.common.FatalStartupException;
-import org.alfresco.po.rm.console.usersandgroups.AddAuthorityDialog;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.NewUsersPage;
 import org.alfresco.po.share.console.users.UserProfilePage;
@@ -52,6 +48,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.FatalStartupException;
+
 /**
  * Base class for all test classes. Each test class must extend this class.
  *
@@ -62,7 +61,7 @@ import org.testng.annotations.Listeners;
 @ContextConfiguration(locations = {"classpath:rm-po-testContext.xml"})
 @Listeners({ResourceTeardown.class, ScreenshotListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests implements TestData
-{
+{   
     /** user dashboard page */
     @Autowired
     protected UserDashboardPage userDashboardPage;
@@ -186,92 +185,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     protected String generateText()
     {
         return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Helper method to create new users
-     *
-     * @param userName user name
-     */
-    protected void createUser(String userName)
-    {
-        createUser(userName, null);
-    }
-
-    /**
-     * Helper method to create a new user with a specific RM role
-     *
-     * @param userName  user name
-     * @param role      RM role
-     */
-    protected void createUser(String userName, String role)
-    {
-        // check that the user doesn't already exist
-        if (!existsUser(userName))
-        {
-            // create the user
-            openPage(newUsersPage)
-                .setFirstName(userName)
-                .setLastName(userName)
-                .setEmail(userName + "@alfresco.com")
-                .setUserName(userName)
-                .setPassword(DEFAULT_PASSWORD)
-                .setVerifyPassword(DEFAULT_PASSWORD)
-                .clickOnCreateUser();
-
-            // verify that user has been created
-            // keep trying until SOLR has updated its index!
-            //
-            // We use a rather arbitrary retry maximum here just to ensure that the retry doesn't run forever.
-            retryUntil(() -> usersPage.setSearch(userName)
-                                      .clickOnSearch(),
-                       () -> usersPage.isUserFound(userName), 50);
-
-            // if a role is provided
-            if (role != null)
-            {
-                // add user to role
-                AddAuthorityDialog addAuthorityDialog = openPage(usersAndGroupsPage)
-                    .selectRole(role)
-                    .clickOnAddUser()
-                    .setSearch(userName);
-
-                // we may need to keep trying this until the SOLR index catches up
-                retryUntil(() -> addAuthorityDialog.clickOnSearch(),
-                           () -> !addAuthorityDialog.isResultsEmpty(), 50);
-
-                // add the new user
-                addAuthorityDialog.clickOnAdd(userName);
-            }
-        }
-    }
-
-    /**
-     * Helper method to determine whether the user already exists or not
-     */
-    protected boolean existsUser(String userName)
-    {
-        return openPage(usersPage)
-            .setSearch(userName)
-            .clickOnSearch()
-            .isUserFound(userName);
-    }
-
-    /**
-     * Helper method to delete a user
-     *
-     * @param userName  user name
-     */
-    protected void deleteUser(String userName)
-    {
-        // check that user exists
-        if (existsUser(userName))
-        {
-            // delete the user
-            openPage(userProfilePage, userName)
-                .clickOnDeleteUser()
-                .clickOnConfirm();
-        }
     }
 
     /**

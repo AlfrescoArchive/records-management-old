@@ -20,6 +20,7 @@ package org.alfresco.test.integration.dataSetup;
 
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.test.BaseTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
@@ -31,6 +32,9 @@ import org.testng.annotations.Test;
  */
 public class CreateUsers extends BaseTest
 {
+    @Autowired
+    protected DataBootstrap dataBootstrap;
+    
     /**
      * Create users for use in tests.
      */
@@ -42,7 +46,7 @@ public class CreateUsers extends BaseTest
     )
     public void createRMManager()
     {
-        createUser(RM_MANAGER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        dataBootstrap.createUser(RM_MANAGER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 
     @Test
@@ -53,14 +57,14 @@ public class CreateUsers extends BaseTest
     )
     public void createUnclearedUser()
     {
-        createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        dataBootstrap.createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
     protected void deleteUsers()
     {
-        deleteUser(RM_MANAGER);
-        deleteUser(UNCLEARED_USER);
+        dataBootstrap.deleteUser(RM_MANAGER);
+        dataBootstrap.deleteUser(UNCLEARED_USER);
     }
 }

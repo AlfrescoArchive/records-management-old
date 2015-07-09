@@ -256,7 +256,9 @@ public abstract class ListItem
         // get action link
         Link action = getActionLink(actionName);
         if (action == null || !action.isEnabled())
+        {
             throw new RuntimeException("The action " + actionName + " could not be found for list item " + getName());
+        }
 
         // mouse over and click
         //Utils.mouseOver(action);
@@ -279,7 +281,7 @@ public abstract class ListItem
         Link result = null;
         try
         {
-            WebElement link = row.findElement(getActionSelector(actionName));
+            WebElement link = Utils.waitForFind(row, getActionSelector(actionName));
             result = new Link(link);
         }
         catch (NoSuchElementException e)

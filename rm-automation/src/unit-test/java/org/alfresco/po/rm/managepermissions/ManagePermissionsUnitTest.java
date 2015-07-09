@@ -32,6 +32,7 @@ import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseRmUnitTest;
+import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterClass;
@@ -72,6 +73,10 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     /** record folder */
     @Autowired
     private RecordFolder recordFolder;
+    
+    /** data bootstrap */
+    @Autowired
+    private DataBootstrap dataBootstrap;
 
     private static String actualPermissionsName;
     private static String testUserName = "user1 user1";
@@ -86,7 +91,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
         // create RM site
         createRMSite();
-        createUser(testUser);
+        dataBootstrap.createUser(testUser);
 
     }
 
@@ -249,6 +254,6 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     public void afterClass()
     {
         deleteRMSite();
-        deleteUser(testUser);
+        dataBootstrap.deleteUser(testUser);
     }
 }

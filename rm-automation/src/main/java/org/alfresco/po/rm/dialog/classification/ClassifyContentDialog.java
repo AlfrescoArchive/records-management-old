@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -97,8 +98,8 @@ public class ClassifyContentDialog extends Dialog
         // Choose the appropriate option by the label.
         final String selector = "tr[aria-label='" + levelId + " '] td[class$='dijitMenuItemLabel']";
 
-        // retry since wait seems unreliable
-        WebElement level = retry(() -> levelsMenu.findElement(By.cssSelector(selector)), 5);
+        // get the classification level
+        WebElement level = Utils.waitForFind(levelsMenu, By.cssSelector(selector));
 
         // select the right level
         level.click();

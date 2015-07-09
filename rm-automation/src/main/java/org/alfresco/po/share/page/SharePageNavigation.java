@@ -21,10 +21,12 @@ package org.alfresco.po.share.page;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.share.admin.AdminToolsNavigation;
+import org.alfresco.po.share.login.LoginPage;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
@@ -43,13 +45,9 @@ public class SharePageNavigation extends Renderable
     @FindBy(css="a[title='Admin Tools']")
     private Link adminToolsLink;
 
-    @Autowired
-    private UserDashboardPage userDashboardPage;
-    @Autowired
-    private AdminToolsNavigation adminToolsNavigation;
-    @Autowired
-    @RenderableChild
-    private UserDropdown userDropdown;
+    private @Autowired UserDashboardPage userDashboardPage;
+    private @Autowired AdminToolsNavigation adminToolsNavigation;
+    private @Autowired @RenderableChild UserDropdown userDropdown;
 
     public UserDashboardPage clickOnHome()
     {
@@ -68,9 +66,9 @@ public class SharePageNavigation extends Renderable
         return adminToolsNavigation.render();
     }
 
-    /** Open the user menu. */
-    public UserDropdown openUserDropdownMenu()
+
+    public LoginPage logout()
     {
-        return userDropdown.revealDropdown();
+        return userDropdown.logout();
     }
 }

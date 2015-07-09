@@ -37,6 +37,7 @@ import org.alfresco.po.rm.details.folder.FolderDetailsPage;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.VitalReviewPeriod;
 import org.alfresco.test.BaseTest;
+import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
@@ -63,6 +64,10 @@ public class ManageFolders extends BaseTest
     /** audit log page*/
     @Autowired
     private AuditLogPage auditLogPage;
+    
+    /** data bootstrap */
+    @Autowired
+    private DataBootstrap dataBootstrap;
 
     /**
      * Main regression test execution
@@ -76,7 +81,7 @@ public class ManageFolders extends BaseTest
     public void manageFolders()
     {
         // create user
-        createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        dataBootstrap.createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
         
         // TODO @Hema give user1 read-only permissions on Category1
         
@@ -325,6 +330,6 @@ public class ManageFolders extends BaseTest
     protected void deleteTestUser()
     {
         // delete user
-        deleteUser(USER1);
+        dataBootstrap.deleteUser(USER1);
     }
 }

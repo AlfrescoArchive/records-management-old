@@ -43,7 +43,9 @@ import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
 import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.alfresco.test.BaseTest;
+import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 /**
@@ -79,8 +81,12 @@ public class ManageIncompleteRecords extends BaseTest
     /**Select dialog*/
     @Autowired
     private AuthoritySelectDialog authoritySelectDialog;
+    
+    /** data bootstrap */
+    @Autowired
+    private DataBootstrap dataBootstrap;
 
-    private static String userName = "user1";
+    private static String USER_NAME = "user1";
 
     /**
      * Main regression test execution
@@ -93,7 +99,7 @@ public class ManageIncompleteRecords extends BaseTest
     )
     public void manageIncompleteRecords()
     {
-        createUser(userName);
+        dataBootstrap.createUser(USER_NAME);
         // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
@@ -371,5 +377,15 @@ public class ManageIncompleteRecords extends BaseTest
                             + nameAfter,
                     auditEntry.getAuditEntryLocation());
         }
+    }
+    
+    /**
+     * Delete user when suit is finished
+     */
+    @AfterSuite
+    protected void deleteTestUser()
+    {
+        // delete user
+        dataBootstrap.deleteUser(USER_NAME);
     }
 }
