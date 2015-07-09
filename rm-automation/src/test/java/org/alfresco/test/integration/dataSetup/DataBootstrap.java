@@ -96,4 +96,23 @@ public class DataBootstrap implements TestData
             throw new RuntimeException("Unable to assign user to role.  Error status " + response.getStatus() + " - " + response.getContentAsString());
         }
     }    
+    
+    public void addSiteMembership(String siteId, String userName, String role)
+    {
+        JSONObject obj = new JSONObject();
+        try
+        {
+            obj.put("role", role);                
+            JSONObject person = new JSONObject();
+            person.put("userName", userName);
+            obj.put("person", person);            
+        }
+       catch (JSONException e)
+       {
+           throw new RuntimeException(e);
+       }        
+        
+       System.out.println(obj.toString()); 
+       httpClient.sendPostRequest("/service/api/sites/{0}/memberships", obj.toString(), siteId);
+    }
 }

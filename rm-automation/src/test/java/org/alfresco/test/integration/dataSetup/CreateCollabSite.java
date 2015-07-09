@@ -56,6 +56,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     private ClassifyContentDialog classifyContentDialog;
     @Autowired
     private InviteUsersPage inviteUsersPage;
+    
+    @Autowired
+    private DataBootstrap dataBootstrap;
 
     /**
      * Regression test execution
@@ -176,10 +179,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     )
     public void addRMManagerToCollabSite()
     {
-        openPage(inviteUsersPage, COLLAB_SITE_ID);
-        inviteUsersPage.addUser(RM_MANAGER, "Manager");
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, userDashboardPage, RM_MANAGER);
-        userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
+        dataBootstrap.addSiteMembership(COLLAB_SITE_ID, RM_MANAGER, "SiteManager");
     }
 
     /** Add the UNCLEARED_USER to the collaboration site. */
@@ -191,10 +191,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     )
     public void addUnclearedUserToCollabSite()
     {
-        openPage(inviteUsersPage, COLLAB_SITE_ID);
-        inviteUsersPage.addUser(UNCLEARED_USER, "Manager");
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, userDashboardPage, UNCLEARED_USER);
-        userDashboardPage.getMyTasks().acceptInvitation(COLLAB_SITE_NAME);
+        dataBootstrap.addSiteMembership(COLLAB_SITE_ID, UNCLEARED_USER, "SiteManager");
     }
 
     /**
