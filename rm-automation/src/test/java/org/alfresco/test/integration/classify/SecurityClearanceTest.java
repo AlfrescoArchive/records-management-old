@@ -211,6 +211,7 @@ public class SecurityClearanceTest extends BaseTest
         assertFalse(securityClearancePage.isUserShown(UNCLEARED_USER));
         
         // partial filter
+        securityClearancePage.clearNameFilter();
         securityClearancePage.setNameFilter("_user");
         
         // assert that the filter has been cleared
@@ -219,6 +220,7 @@ public class SecurityClearanceTest extends BaseTest
         assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
         
         // invalid filter
+        securityClearancePage.clearNameFilter();
         securityClearancePage.setNameFilter("monkey");
         
         // assert that no results are shown

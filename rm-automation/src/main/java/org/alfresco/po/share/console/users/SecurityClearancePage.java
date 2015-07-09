@@ -72,6 +72,14 @@ public class SecurityClearancePage extends ConsolePage
     {
         return PAGE_URL;
     }
+    
+    /** Clears the name filter */
+    public SecurityClearancePage clearNameFilter()
+    {
+        Utils.clear(nameFilterTextInput);
+        Utils.waitForInvisibilityOf(LOADING_SELECTOR);
+        return this;
+    }
 
     /** Sets text in the name filter input. */
     public SecurityClearancePage setNameFilter(String filter)
