@@ -78,9 +78,9 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_SECRET_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_SECRET_DOCUMENT_EXISTS" },
         description = "Use the classify content dialog to classify a document.",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void classifyDocument()
     {
@@ -135,7 +135,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration" },
         description = "Check that cancelling the classification dialog works.",
-        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_DOCUMENT_EXISTS" }
     )
     public void cancelClassifyDialog()
     {
@@ -182,9 +182,9 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_UNCLASSIFIED_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS" },
         description = "Check that content can be classified with a level of Unclassified.",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void classifyAsUnclassified()
     {
@@ -224,7 +224,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "clearedUserSeesAllLevels" },
         description = "Check that a user with 'Top Secret' clearance sees all the levels.",
-        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_DOCUMENT_EXISTS" }
     )
     public void clearedUserSeesAllLevels()
     {
@@ -255,7 +255,7 @@ public class ContentClassificationDialogTests extends BaseTest
     (
         groups = { "integration", "secretUserSeesSomeLevels" },
         description = "Check that a user with 'Secret' clearance sees only the levels up to 'Secret'.",
-        dependsOnGroups = { GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE, GROUP_RM_MANAGER_IN_COLLAB_SITE }
+        dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_IN_COLLAB_SITE" }
     )
     public void secretUserSeesSomeLevels()
     {
@@ -284,9 +284,9 @@ public class ContentClassificationDialogTests extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_TOP_SECRET_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_TOP_SECRET_DOCUMENT_EXISTS" },
         description = "Check that content can be classified as 'Top Secret'.",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void createTopSecretDocument()
     {

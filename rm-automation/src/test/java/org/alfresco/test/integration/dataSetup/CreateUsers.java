@@ -40,9 +40,9 @@ public class CreateUsers extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_RM_MANAGER_EXISTS },
+        groups = { "integration", "GROUP_RM_MANAGER_EXISTS" },
         description = "Create users",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
     public void createRMManager()
     {
@@ -51,9 +51,9 @@ public class CreateUsers extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_UNCLEARED_USER_EXISTS },
+        groups = { "integration", "GROUP_UNCLEARED_USER_EXISTS" },
         description = "Create users",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
     public void createUnclearedUser()
     {

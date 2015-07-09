@@ -63,7 +63,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Verify classify action is available",
-        dependsOnGroups = { GROUP_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_DOCUMENT_EXISTS" }
     )
     public void checkClassifyActionAvailable()
     {
@@ -96,7 +96,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Verify classify action is not available for various cases",
-        dependsOnGroups = { GROUP_LOCKED_DOCUMENT_EXISTS, GROUP_SHARED_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_LOCKED_DOCUMENT_EXISTS", "GROUP_SHARED_DOCUMENT_EXISTS" }
     )
     public void checkClassifyActionUnavailableInVariousCases()
     {
@@ -123,7 +123,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { GROUP_UNCLEARED_USER_IN_COLLAB_SITE }
+        dependsOnGroups = { "GROUP_UNCLEARED_USER_IN_COLLAB_SITE" }
     )
     public void checkUnclearedUserCannotClassify()
     {
@@ -151,7 +151,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Check that the 'Classify' action exists for an in-place record",
-        dependsOnGroups = { GROUP_IN_PLACE_RECORD_EXISTS }
+        dependsOnGroups = { "GROUP_IN_PLACE_RECORD_EXISTS" }
     )
     public void checkInplaceRecordCanBeClassified()
     {
@@ -172,7 +172,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = {"integration"},
         description = "Check that we can't sync classified content",
-        dependsOnGroups = {GROUP_SECRET_DOCUMENT_EXISTS}
+        dependsOnGroups = {"GROUP_SECRET_DOCUMENT_EXISTS"}
     )
     public void checkWeCannotSyncClassifiedContent()
     {

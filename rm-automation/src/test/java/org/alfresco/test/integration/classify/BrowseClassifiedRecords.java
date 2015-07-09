@@ -67,7 +67,7 @@ public class BrowseClassifiedRecords extends BaseTest
     (
         groups = { "integration" },
         description = "Verify Classify Record behaviour",
-        dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
+        dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS" }
     )
     public void classifiedRecordIndicator()
     {
@@ -104,7 +104,7 @@ public class BrowseClassifiedRecords extends BaseTest
     (
         groups = { "integration" },
         description = "Verify record details page displays classification information.",
-        dependsOnGroups = { GROUP_CLASSIFIED_RECORD_EXISTS }
+        dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS" }
     )
     public void classifyRecordProperties()
     {

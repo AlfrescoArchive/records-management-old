@@ -85,7 +85,7 @@ public class SecurityClearanceTest extends BaseTest
     (
         groups = { "integration" },
         description = "Check the security clearance page loads and contains an ordered list of users and clearances",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS, GROUP_RM_MANAGER_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS", "GROUP_UNCLEARED_USER_EXISTS" }
     )
     public void loadSecurityClearancePage()
     {
@@ -117,7 +117,7 @@ public class SecurityClearanceTest extends BaseTest
     (
         groups = { "integration" },
         description = "Check the admin user is not found by using the filter",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
     public void adminIsNotShown()
     {
@@ -154,9 +154,9 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE },
+        groups = { "integration", "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" },
         description = "Give a user clearance, reload the page and then revoke it again",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS, GROUP_RM_MANAGER_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS" }
     )
     public void giveUserClearance()
     {
@@ -192,7 +192,7 @@ public class SecurityClearanceTest extends BaseTest
     (
         groups = { "integration"},
         description = "Check the admin user is not found by using the filter",
-        dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
+        dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_UNCLEARED_USER_EXISTS" }
     )
     public void userNameFilter()
     {

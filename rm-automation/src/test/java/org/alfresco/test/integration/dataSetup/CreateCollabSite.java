@@ -65,7 +65,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
      */
     @Test
     (
-        groups = { "integration", GROUP_COLLABORATION_SITE_EXISTS },
+        groups = { "integration", "GROUP_COLLABORATION_SITE_EXISTS" },
         description = "Create Collaboration Site"
     )
     public void createCollabSite()
@@ -84,9 +84,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document. */
     @Test
     (
-        groups = { "integration", GROUP_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_DOCUMENT_EXISTS" },
         description = "Create In-Place Record",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void createDocument()
     {
@@ -100,9 +100,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create an in-place record. */
     @Test
     (
-        groups = { "integration", GROUP_IN_PLACE_RECORD_EXISTS },
+        groups = { "integration", "GROUP_IN_PLACE_RECORD_EXISTS" },
         description = "Create In-Place Record",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_RM_SITE_EXISTS" }
     )
     public void declareInplaceRecord()
     {
@@ -123,9 +123,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is shared with "Quick Share". */
     @Test
     (
-        groups = { "integration", GROUP_SHARED_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_SHARED_DOCUMENT_EXISTS" },
         description = "Create Collaboration Site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void createSharedDocument()
     {
@@ -146,9 +146,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Create a document that is locked for editing. */
     @Test
     (
-        groups = { "integration", GROUP_LOCKED_DOCUMENT_EXISTS },
+        groups = { "integration", "GROUP_LOCKED_DOCUMENT_EXISTS" },
         description = "Create Collaboration Site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
     public void createLockedDocument()
     {
@@ -173,9 +173,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Add the RM_MANAGER to the collaboration site. */
     @Test
     (
-        groups = { "integration", GROUP_RM_MANAGER_IN_COLLAB_SITE },
+        groups = { "integration", "GROUP_RM_MANAGER_IN_COLLAB_SITE" },
         description = "Add the RM_MANAGER to the collaboration site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_RM_MANAGER_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS" }
     )
     public void addRMManagerToCollabSite()
     {
@@ -185,9 +185,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** Add the UNCLEARED_USER to the collaboration site. */
     @Test
     (
-        groups = { "integration", GROUP_UNCLEARED_USER_IN_COLLAB_SITE },
+        groups = { "integration", "GROUP_UNCLEARED_USER_IN_COLLAB_SITE" },
         description = "Add the RM_MANAGER to the collaboration site",
-        dependsOnGroups = { GROUP_COLLABORATION_SITE_EXISTS, GROUP_UNCLEARED_USER_EXISTS }
+        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_UNCLEARED_USER_EXISTS" }
     )
     public void addUnclearedUserToCollabSite()
     {

@@ -74,9 +74,9 @@ public class CreateFilePlan extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_FILE_PLAN_EXISTS },
+        groups = { "integration", "GROUP_FILE_PLAN_EXISTS" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
     public void createFilePlan()
     {
@@ -89,9 +89,9 @@ public class CreateFilePlan extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_CATEGORY_ONE_EXISTS },
+        groups = { "integration", "GROUP_CATEGORY_ONE_EXISTS" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_FILE_PLAN_EXISTS }
+        dependsOnGroups = { "GROUP_FILE_PLAN_EXISTS" }
     )
     public void createCategoryOne()
     {
@@ -101,9 +101,9 @@ public class CreateFilePlan extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_SUB_CATEGORY_EXISTS },
+        groups = { "integration", "GROUP_SUB_CATEGORY_EXISTS" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_CATEGORY_ONE_EXISTS" }
     )
     public void createSubCategory()
     {
@@ -113,9 +113,9 @@ public class CreateFilePlan extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_RECORD_FOLDER_ONE_EXISTS },
+        groups = { "integration", "GROUP_RECORD_FOLDER_ONE_EXISTS" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_CATEGORY_ONE_EXISTS" }
     )
     public void createRecordFolderOne()
     {
@@ -125,9 +125,9 @@ public class CreateFilePlan extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_RECORD_FOLDER_TWO_EXISTS },
+        groups = { "integration", "GROUP_RECORD_FOLDER_TWO_EXISTS" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_CATEGORY_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_CATEGORY_ONE_EXISTS" }
     )
     public void createRecordFolderTwo()
     {
@@ -138,9 +138,9 @@ public class CreateFilePlan extends BaseTest
     /** Create non-electronic record. */
     @Test
     (
-        groups = { "integration", GROUP_NON_ELECTRONIC_RECORD_EXISTS },
+        groups = { "integration", "GROUP_NON_ELECTRONIC_RECORD_EXISTS" },
         description = "Create non-electronic record.",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS" }
     )
     public void createNonElectronicRecord()
     {
@@ -163,9 +163,9 @@ public class CreateFilePlan extends BaseTest
     /** Create electronic record. */
     @Test
     (
-        groups = { "integration", GROUP_ELECTRONIC_RECORD_EXISTS },
+        groups = { "integration", "GROUP_ELECTRONIC_RECORD_EXISTS" },
         description = "Create electronic record.",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS" }
     )
     public void createElectronicRecord()
     {
@@ -186,9 +186,9 @@ public class CreateFilePlan extends BaseTest
     /** Create complete record. */
     @Test
     (
-        groups = { "integration", GROUP_COMPLETE_RECORD_EXISTS },
+        groups = { "integration", "GROUP_COMPLETE_RECORD_EXISTS" },
         description = "Create complete record",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS" }
     )
     public void createCompleteRecord()
     {

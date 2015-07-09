@@ -69,7 +69,7 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration" },
         description = "Verify classify record action exists",
-        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_NON_ELECTRONIC_RECORD_EXISTS }
+        dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_NON_ELECTRONIC_RECORD_EXISTS" }
     )
     public void checkClassifyActionExists()
     {
@@ -109,9 +109,9 @@ public class ClassifyRecord extends BaseTest
     /** Check a record can be classified.  The classified record is used by other tests. */
     @Test
     (
-        groups = { "integration", GROUP_CLASSIFIED_RECORD_EXISTS },
+        groups = { "integration", "GROUP_CLASSIFIED_RECORD_EXISTS" },
         description = "Verify classify record action exists",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS" }
     )
     public void classifyRecord()
     {
@@ -149,7 +149,7 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration" },
         description = "Verify classify record action exists",
-        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_HOLDS_EXIST }
+        dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_HOLDS_EXIST" }
     )
     public void cantClassifyHeldRecord()
     {
@@ -195,9 +195,9 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_COMPLETE_RECORD_IS_CLASSIFIED },
+        groups = { "integration", "GROUP_COMPLETE_RECORD_IS_CLASSIFIED" },
         description = "Check that a completed record can be classified.",
-        dependsOnGroups = { GROUP_COMPLETE_RECORD_EXISTS }
+        dependsOnGroups = { "GROUP_COMPLETE_RECORD_EXISTS" }
     )
     public void checkCanClassifyCompleteRecord()
     {
@@ -228,7 +228,7 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
-        dependsOnGroups = { GROUP_RECORD_FOLDER_ONE_EXISTS, GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE }
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS", "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE" }
     )
     public void checkUnclearedUserCannotClassifyRecord()
     {
@@ -260,7 +260,7 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with 'Secret' clearance can't classify a record owned by someone else.",
-        dependsOnGroups = { GROUP_ELECTRONIC_RECORD_EXISTS, GROUP_RM_MANAGER_READ_CATEGORY_ONE, GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE }
+        dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" }
     )
     public void cantClassifyAnotherUsersRecord()
     {

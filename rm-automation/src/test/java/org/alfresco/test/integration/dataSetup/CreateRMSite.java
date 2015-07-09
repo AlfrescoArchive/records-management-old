@@ -46,7 +46,7 @@ public class CreateRMSite extends BaseTest
      */
     @Test
     (
-        groups = { "integration", GROUP_RM_SITE_EXISTS },
+        groups = { "integration", "GROUP_RM_SITE_EXISTS" },
         description = "Create RM Site"
     )
     public void createRMSite()

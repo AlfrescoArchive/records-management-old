@@ -42,9 +42,9 @@ public class SetPermissions extends BaseTest
     /** Give RM_MANAGER permission to read records in CATEGORY_ONE. */
     @Test
     (
-        groups = { "integration", GROUP_RM_MANAGER_READ_CATEGORY_ONE },
+        groups = { "integration", "GROUP_RM_MANAGER_READ_CATEGORY_ONE" },
         description = "Give RM_MANAGER permission to read records in CATEGORY_ONE.",
-        dependsOnGroups = { GROUP_RM_MANAGER_EXISTS, GROUP_CATEGORY_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_CATEGORY_ONE_EXISTS" }
     )
     public void rmManagerCanReadCategoryOne()
     {
@@ -58,9 +58,9 @@ public class SetPermissions extends BaseTest
     /** Give UNCLEARED_USER permission to file records in CATEGORY_ONE. */
     @Test
     (
-        groups = { "integration", GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE },
+        groups = { "integration", "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE" },
         description = "Give UNCLEARED_USER permission to file records in CATEGORY_ONE.",
-        dependsOnGroups = { GROUP_UNCLEARED_USER_EXISTS, GROUP_CATEGORY_ONE_EXISTS }
+        dependsOnGroups = { "GROUP_UNCLEARED_USER_EXISTS", "GROUP_CATEGORY_ONE_EXISTS" }
     )
     public void unclearedUserCanFileInCategoryOne()
     {

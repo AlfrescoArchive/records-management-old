@@ -38,9 +38,9 @@ public class CreateHolds extends BaseTest
 
     @Test
     (
-        groups = { "integration", GROUP_HOLDS_EXIST },
+        groups = { "integration", "GROUP_HOLDS_EXIST" },
         description = "Create File Plan",
-        dependsOnGroups = { GROUP_RM_SITE_EXISTS }
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
 
     public void createHolds()

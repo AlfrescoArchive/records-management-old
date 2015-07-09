@@ -70,7 +70,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "Verify Classify Document behaviour",
-        dependsOnGroups = { GROUP_SECRET_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_SECRET_DOCUMENT_EXISTS" }
     )
     public void classifyDocumentIndicator()
     {
@@ -107,7 +107,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "Verify document details page displays classification information.",
-        dependsOnGroups = { GROUP_SECRET_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_SECRET_DOCUMENT_EXISTS" }
     )
     public void classifyDocumentProperties()
     {
@@ -150,7 +150,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "User with highest clearance can view all documents.",
-        dependsOnGroups = { GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_TOP_SECRET_DOCUMENT_EXISTS", "GROUP_SECRET_DOCUMENT_EXISTS", "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS" }
     )
     public void highestClearanceUserCanViewEverything()
     {
@@ -176,7 +176,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "User with 'secret' clearance can view all documents classified with level at most 'secret'.",
-        dependsOnGroups = { GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_TOP_SECRET_DOCUMENT_EXISTS", "GROUP_SECRET_DOCUMENT_EXISTS", "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS" }
     )
     public void secretClearanceUserCanViewUpToSecret()
     {
@@ -201,7 +201,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "User with no clearance can only view unclassified documents.",
-        dependsOnGroups = { GROUP_UNCLEARED_USER_EXISTS, GROUP_TOP_SECRET_DOCUMENT_EXISTS, GROUP_SECRET_DOCUMENT_EXISTS, GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_UNCLEARED_USER_EXISTS", "GROUP_TOP_SECRET_DOCUMENT_EXISTS", "GROUP_SECRET_DOCUMENT_EXISTS", "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS" }
     )
     public void noClearanceUserCantViewClassifiedDocuments()
     {
@@ -225,7 +225,7 @@ public class BrowseClassifiedDocuments extends BaseTest
     (
         groups = { "integration" },
         description = "Check how a document explicitly marked 'Unclassified' is presented.",
-        dependsOnGroups = { GROUP_UNCLASSIFIED_DOCUMENT_EXISTS }
+        dependsOnGroups = { "GROUP_UNCLASSIFIED_DOCUMENT_EXISTS" }
     )
     public void unclassifiedDocumentPresentation()
     {
