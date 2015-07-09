@@ -344,7 +344,7 @@ public abstract class ListItem
 
         try
         {
-            indicatorElement = row.findElement(getIndicatorSelector(indicator));
+            indicatorElement = Utils.waitForFind(row, getIndicatorSelector(indicator));
         }
         catch (NoSuchElementException e)
         {
@@ -368,6 +368,6 @@ public abstract class ListItem
      */
     public String getBannerText(ContentBanner banner) throws NoSuchElementException
     {
-        return row.findElement(banner.getSelector()).getText();
+        return Utils.waitForFind(row, banner.getSelector()).getText();
     }
 }

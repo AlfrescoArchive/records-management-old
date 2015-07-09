@@ -19,7 +19,6 @@
 package org.alfresco.test.integration.dataSetup.http;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
@@ -51,7 +50,7 @@ public class Response
         }
     }
 
-    public String getContentAsString() throws UnsupportedEncodingException
+    public String getContentAsString()
     {
         try
         {

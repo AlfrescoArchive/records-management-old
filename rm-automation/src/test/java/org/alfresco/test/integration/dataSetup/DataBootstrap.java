@@ -3,11 +3,9 @@
  */
 package org.alfresco.test.integration.dataSetup;
 
-import java.text.MessageFormat;
-
 import org.alfresco.test.TestData;
 import org.alfresco.test.integration.dataSetup.http.HttpClient;
-import org.alfresco.test.integration.dataSetup.http.Request;
+import org.alfresco.test.integration.dataSetup.http.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,15 +89,11 @@ public class DataBootstrap implements TestData
      */
     public void assignUserToRole(String userName, String role)
     {
-        try
+        Response response = httpClient.sendPostRequest("/service/api/rm/roles/{0}/authorities/{1}", "", role, userName);
+        
+        if (response.getStatus() != 200)
         {
-            String uri = MessageFormat.format("/api/rm/roles/{0}/authorities/{1}", userName, role);            
-            Request request = new Request.PostRequest(uri, "", Request.APPLICATION_JSON);            
-            httpClient.sendRequest(request);
-        }
-        catch (Exception exception)
-        {
-            throw new RuntimeException("Unable to assign user to role.", exception);
+            throw new RuntimeException("Unable to assign user to role.  Error status " + response.getStatus() + " - " + response.getContentAsString());
         }
     }    
 }

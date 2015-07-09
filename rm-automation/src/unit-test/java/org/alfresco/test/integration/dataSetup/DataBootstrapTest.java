@@ -3,6 +3,7 @@
  */
 package org.alfresco.test.integration.dataSetup;
 
+import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.console.users.UsersPage;
 import org.alfresco.test.BaseTest;
 import org.junit.Assert;
@@ -22,6 +23,9 @@ public class DataBootstrapTest extends BaseTest
     
     @Autowired
     private UsersPage usersPage;
+    
+    @Autowired
+    private UsersAndGroupsPage usersAndGroupsPage;
     
     @Test
     public void testUserBootstap()
@@ -48,5 +52,31 @@ public class DataBootstrapTest extends BaseTest
                     .setSearch(TEST_USER)
                     .clickOnSearch()
                     .isUserFound(TEST_USER));
+    }
+    
+    @Test
+    public void testRoleAssignment()
+    {
+        dataBootstrap.createUser(TEST_USER);        
+        try
+        {
+            Assert.assertFalse(
+               openPage(usersAndGroupsPage)
+                 .selectRole(UsersAndGroupsPage.ROLE_RM_MANAGER)
+                 .getRoleUsers()
+                 .contains(TEST_USER));
+            
+            dataBootstrap.assignUserToRole(TEST_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+            
+            Assert.assertTrue(
+                openPage(usersAndGroupsPage)
+                  .selectRole(UsersAndGroupsPage.ROLE_RM_MANAGER)
+                  .getRoleUsers()
+                  .contains(TEST_USER));
+        }
+        finally
+        {   
+            dataBootstrap.deleteUser(TEST_USER);
+        }
     }
 }

@@ -86,16 +86,11 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
      */
     private Map<String, ListItem> getItemMap()
     {
-        if (itemMap == null)
-        {
-            // figure out how many items are on the page
-            String text = current.getText();
-            String[] values = text.split(" ");
-            int count = Integer.parseInt(values[2]);
-
+        //if (itemMap == null)
+        //{
             List<WebElement> rows = webDriver.findElements(rowsSelector);
 
-            if (rows.size() == count)
+            if (rows.size() == itemCount)
             {
                 // clear the current item map
                 itemMap = new HashMap<>(rows.size());
@@ -117,9 +112,9 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
             }
             else
             {
-                throw new IllegalStateException("Expected " + count + " rows and found " + rows.size());
+                throw new IllegalStateException("Expected " + itemCount + " rows and found " + rows.size());
             }            
-        }
+        //}
         
         return itemMap;
     }

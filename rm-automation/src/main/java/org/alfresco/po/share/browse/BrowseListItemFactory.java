@@ -44,7 +44,7 @@ public abstract class BrowseListItemFactory
     protected WebElement getImage(WebElement row)
     {
         Utils.checkMandatoryParam("row", row);
-        return row.findElement(imageSelector);
+        return Utils.waitForFind(row, imageSelector);
     }
         
     /**
