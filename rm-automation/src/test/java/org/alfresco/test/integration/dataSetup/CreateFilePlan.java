@@ -27,13 +27,7 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
-import org.alfresco.po.rm.browse.holds.Holds;
-import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
-import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
-import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.site.CollaborationSiteDashboard;
-import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -50,24 +44,6 @@ public class CreateFilePlan extends BaseTest
     /** file plan browse view */
     @Autowired
     private FilePlan filePlan;
-    /** document library browse view */
-    @Autowired
-    private DocumentLibrary documentLibrary;
-    /** unfiled records browse view */
-    @Autowired
-    private UnfiledRecords unfiledRecords;
-    /** holds browse view */
-    @Autowired
-    private Holds holds;
-    /** collab site dashboard */
-    @Autowired
-    private CollaborationSiteDashboard siteDashboard;
-    /** user trashcan */
-    @Autowired
-    private UserTrashcanPage userTrashcan;
-    /** my sites dashlet */
-    @Autowired
-    private MySitesDashlet mySitesDashlet;
 
     /**
      * Integration test execution

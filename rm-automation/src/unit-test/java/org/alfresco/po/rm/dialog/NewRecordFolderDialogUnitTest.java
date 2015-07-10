@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.dialog.create.NewRecordCategoryDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseRmUnitTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,8 @@ import org.testng.annotations.Test;
 public class NewRecordFolderDialogUnitTest extends BaseRmUnitTest
 {
     @Autowired
-    private NewRecordCategoryDialog newRecordCategoryDialog;
-
-    @Autowired
     private NewRecordFolderDialog newRecordFolderDialog;
-    
+
     /** file plan */
     @Autowired
     private FilePlan filePlan;
@@ -45,10 +41,10 @@ public class NewRecordFolderDialogUnitTest extends BaseRmUnitTest
     {
         // open record category dialog
         openPage(filePlan, RM_SITE_ID, "documentlibrary");
-        
+
         // create record category if it doesn't exist
         if (filePlan.getRecordCategory(RECORD_CATEGORY_NAME) == null)
-        {         
+        {
             filePlan
                 .getToolbar()
                 .clickOnNewCategory()
@@ -56,13 +52,13 @@ public class NewRecordFolderDialogUnitTest extends BaseRmUnitTest
                 .setTitle(TITLE)
                 .clickOnSave();
         }
-        
+
         // navigate to the record category
         filePlan
             .getList()
             .get(RECORD_CATEGORY_NAME)
             .clickOnLink();
-        
+
         // open the new record folder dialog
         filePlan.getToolbar().clickOnNewRecordFolder();
     }

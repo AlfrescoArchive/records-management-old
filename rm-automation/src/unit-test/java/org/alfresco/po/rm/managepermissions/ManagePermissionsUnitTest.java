@@ -24,11 +24,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
-import org.alfresco.po.rm.browse.fileplan.RecordFolder;
-import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseRmUnitTest;
@@ -50,10 +47,6 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     @Autowired
     private ManagePermissions managePermissions;
 
-    /** confirmation Prompt */
-    @Autowired
-    private ConfirmationPrompt confirmationPrompt;
-
     /** select Dialog */
     @Autowired
     private AuthoritySelectDialog authoritySelectDialog;
@@ -62,18 +55,6 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     @Autowired
     private FilePlan filePlan;
 
-    /** record details */
-    @Autowired
-    private RecordDetails recordDetails;
-
-    /** record Category */
-    @Autowired
-    private RecordCategory recordCategtory;
-
-    /** record folder */
-    @Autowired
-    private RecordFolder recordFolder;
-    
     /** data bootstrap */
     @Autowired
     private DataBootstrap dataBootstrap;

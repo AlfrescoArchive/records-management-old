@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
-import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -53,8 +52,6 @@ public class ContentClassificationDialogTests extends BaseTest
     private ClassifiedPropertiesPanel classifiedPropertiesPanel;
     @Autowired
     private DocumentDetails documentDetails;
-    @Autowired
-    private DeleteConfirmationDialog deleteConfirmationDialog;
 
     /**
      * Opening the classify content dialog and classifying a document. This test covers the following two (very related)
@@ -193,7 +190,7 @@ public class ContentClassificationDialogTests extends BaseTest
         documentLibrary.getToolbar()
             .clickOnFile()
             .uploadFile(UNCLASSIFIED_DOCUMENT, documentLibrary);
-        
+
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -263,7 +260,7 @@ public class ContentClassificationDialogTests extends BaseTest
 
         // Open Collab site DocumentLibrary.
         openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
-        
+
         documentLibrary.getToolbar()
             .clickOnFile()
             .uploadFile(documentName, documentLibrary);

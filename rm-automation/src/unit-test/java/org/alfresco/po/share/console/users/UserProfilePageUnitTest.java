@@ -27,38 +27,34 @@ import org.testng.annotations.Test;
 
 /**
  * User profile page unit test
- * 
+ *
  * @author Roy Wetherall
  */
 @Test (groups = {"unit-test"})
 public class UserProfilePageUnitTest extends BaseTest
 {
-    /** new users page */
-    @Autowired
-    private NewUsersPage newUsersPage;
-    
     /** user profile page */
     @Autowired
     private UserProfilePage userProfilePage;
-    
+
     /** data bootstrap */
     @Autowired
     private DataBootstrap dataBootstrap;
-    
+
     /**
      * Confirm that the expected elements of the page are present
      * when opened.
      */
     @Test
     public void confirmPageElements()
-    {   
+    {
         // open the users page
-        openPage(userProfilePage, "admin"); 
-        
+        openPage(userProfilePage, "admin");
+
         // check that the buttons are enabled
         assertTrue(userProfilePage.isEnabledDeleteUser());
     }
-    
+
     /**
      * Confirm user delete button works
      */
@@ -74,7 +70,7 @@ public class UserProfilePageUnitTest extends BaseTest
         openPage(userProfilePage, "temp")
             .clickOnDeleteUser()
             .clickOnConfirm();
-        
+
         // TODO sort out timing issues
         // assert user is delete
         //openPage(userProfilePage, "temp");

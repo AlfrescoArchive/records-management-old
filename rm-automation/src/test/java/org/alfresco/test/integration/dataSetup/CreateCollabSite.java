@@ -21,12 +21,9 @@ package org.alfresco.test.integration.dataSetup;
 
 import static org.testng.Assert.assertFalse;
 
-import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.site.CollaborationSiteDashboard;
-import org.alfresco.po.share.site.InviteUsersPage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +34,9 @@ import org.testng.annotations.Test;
  * Create Collaboration Site for Integration tests
  *
  * @author David Webster
- */   
+ */
 public class CreateCollabSite extends BaseTest implements DocumentActions
 {
-    /** collab site dashboard */
-    @Autowired
-    private CollaborationSiteDashboard siteDashboard;
     /** user trashcan */
     @Autowired
     private UserTrashcanPage userTrashcan;
@@ -52,10 +46,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** The document library page. */
     @Autowired
     private DocumentLibrary documentLibrary;
-    @Autowired
-    private ClassifyContentDialog classifyContentDialog;
-    @Autowired
-    private InviteUsersPage inviteUsersPage;
     @Autowired
     private DataBootstrap dataBootstrap;
 
@@ -211,5 +201,5 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
                 .clickOnConfirm(userTrashcan);
         }
     }
-     
+
 }

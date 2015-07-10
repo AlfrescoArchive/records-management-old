@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 /**
@@ -12,11 +11,7 @@ import org.testng.annotations.Test;
  */
 @Test (groups = {"unit-test"})
 public class UserDashboardPageUnitTest extends BaseTest
-
 {
-    @Autowired
-    private MySitesDashlet mySitesDashlet;
-
     @Test
     private void verifyUserDashBoard()
     {

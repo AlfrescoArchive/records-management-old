@@ -29,10 +29,6 @@ import java.net.BindException;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
-import org.alfresco.po.share.console.users.NewUsersPage;
-import org.alfresco.po.share.console.users.UserProfilePage;
-import org.alfresco.po.share.console.users.UsersPage;
 import org.alfresco.po.share.page.SharePage;
 import org.alfresco.po.share.userdashboard.UserDashboardPage;
 import org.apache.commons.lang.ArrayUtils;
@@ -61,7 +57,7 @@ import com.github.tomakehurst.wiremock.common.FatalStartupException;
 @ContextConfiguration(locations = {"classpath:rm-po-testContext.xml"})
 @Listeners({ResourceTeardown.class, ScreenshotListener.class})
 public class BaseTest extends AbstractTestNGSpringContextTests implements TestData
-{   
+{
     /** user dashboard page */
     @Autowired
     protected UserDashboardPage userDashboardPage;
@@ -76,22 +72,6 @@ public class BaseTest extends AbstractTestNGSpringContextTests implements TestDa
     /** Module Properties */
     @Autowired
     private ModuleProperties moduleProperties;
-
-    /** users page */
-    @Autowired
-    private UsersPage usersPage;
-
-    /** new users page */
-    @Autowired
-    private NewUsersPage newUsersPage;
-
-    /** users profile page */
-    @Autowired
-    private UserProfilePage userProfilePage;
-
-    /** users and groups page */
-    @Autowired
-    private UsersAndGroupsPage usersAndGroupsPage;
 
     /** Wiremock **/
     // TODO: @autowire these?

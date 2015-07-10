@@ -32,7 +32,6 @@ import org.alfresco.po.rm.browse.holds.Holds;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecordFolder;
 import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
-import org.alfresco.po.rm.site.RMSiteDashboard;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -51,10 +50,6 @@ import org.testng.annotations.Test;
  */
 public class CreateFilePlan extends BaseTest
 {
-    /** rm site dashboard */
-    @Autowired
-    private RMSiteDashboard rmSiteDashboard;
-
     /** file plan browse view*/
     @Autowired
     private FilePlan filePlan;

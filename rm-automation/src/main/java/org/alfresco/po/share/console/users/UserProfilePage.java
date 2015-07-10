@@ -31,11 +31,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 /**
  * User profile page
- * 
+ *
  * @author Roy Wetherall
  * @author David Webster
  */
@@ -69,7 +68,7 @@ public class UserProfilePage extends ConsolePage
             {
                 throw new RuntimeException("User id is empty in site page URL context.");
             }
-            
+
             return MessageFormat.format(PAGE_URL, userId);
         }
         else
@@ -77,7 +76,7 @@ public class UserProfilePage extends ConsolePage
             throw new RuntimeException("User id is expected context.");
         }
     }
-    
+
     /**
      * @return  true if the delete user button is enabled, false otherwise
      */
@@ -85,7 +84,7 @@ public class UserProfilePage extends ConsolePage
     {
         return deleteUserButton.isEnabled();
     }
-    
+
     /**
      * Click on delete user
      */
