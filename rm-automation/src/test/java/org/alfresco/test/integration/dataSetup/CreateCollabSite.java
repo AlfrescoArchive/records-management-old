@@ -196,7 +196,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
 
     /**
      * delete collaboration site
-     */
+     
     @AfterSuite
     protected void deleteCollaborationSite()
     {
@@ -212,4 +212,5 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
                 .clickOnConfirm(userTrashcan);
         }
     }
+     */
 }
