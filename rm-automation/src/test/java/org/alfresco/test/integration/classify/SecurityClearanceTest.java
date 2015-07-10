@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.alfresco.po.share.console.users.SecurityClearancePage;
+import org.alfresco.po.share.console.users.UserProfilePage;
 import org.alfresco.po.share.page.SharePageNavigation;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import org.testng.annotations.Test;
  * UI Integration tests for the Security Clearance admin page.
  *
  * @author tpage
+ * @author David Webster
  * @since 3.0
  */
 @Test
@@ -46,6 +48,8 @@ public class SecurityClearanceTest extends BaseTest
     private SecurityClearancePage securityClearancePage;
     @Autowired
     private SharePageNavigation sharePageNavigation;
+    @Autowired
+    private UserProfilePage userProfilePage;
 
     /**
      * Check that the displayed users are sorted correctly.
@@ -123,8 +127,8 @@ public class SecurityClearanceTest extends BaseTest
     {
         openPage(securityClearancePage);
         assertFalse(
-           "Admin user unexpectedly present in results.",
-           securityClearancePage.isUserShown("admin"));
+                "Admin user unexpectedly present in results.",
+                securityClearancePage.isUserShown("admin"));
         
         securityClearancePage.setNameFilter("admin");
         assertTrue(securityClearancePage.isEmpty());
@@ -244,4 +248,43 @@ public class SecurityClearanceTest extends BaseTest
     When I change the order to descending
     Then they are reordered accordingly
     */
+
+    /**
+     *
+     * Access user profile page
+     * Given that I am viewing the security clearance management page
+     * When I click on a user in the list (icon or name)
+     * Then the users profile page is displayed
+     *
+     * Closing the user profile page
+     * Given that I am viewing a users profile via the security clearance management page
+     * When I click on the "Go Back" button
+     * Then I am returned back to the security clearance management page where the user filter is in the same state as it was when we left the page for the users profile
+     */
+    @Test (
+            groups = {"integration"},
+            description = "Check access to the user profile page works as expected",
+            dependsOnGroups = {"GROUP_RM_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS"}
+    )
+    public void userProfileLink()
+    {
+        openPage(securityClearancePage);
+        // assert that the filter is empty
+        assertTrue(securityClearancePage.getNameFilter().isEmpty());
+
+        // Click on a user
+        securityClearancePage.setNameFilter(RM_MANAGER);
+        securityClearancePage.clickOnUser(RM_MANAGER);
+
+        // Check we're on the right profile page:
+        assertEquals(userProfilePage.getUserName(), RM_MANAGER);
+
+        // Go back and verify filter still applied.
+        userProfilePage.clickOnBack();
+
+        // FIXME: previous filter should be displayed, but won't due to an Aikau bug. See AKU-415.
+        // This temporary line checks the page has loaded replace with one below once AKU-415 is fixed.
+        assertTrue(securityClearancePage.getNameFilter().isEmpty());
+        // assertEquals(securityClearancePage.getNameFilter(), RM_MANAGER);
+    }
 }

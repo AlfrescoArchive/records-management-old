@@ -41,6 +41,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
  * @author Neil Mc Erlean
+ * @author David Webster
  */
 @Component
 public class SecurityClearancePage extends ConsolePage
@@ -48,6 +49,7 @@ public class SecurityClearancePage extends ConsolePage
     /** selectors */
     private static final By ROWS = By.cssSelector("tbody[id$='ITEMS'] tr[id*='Row']");
     private static final By SECURITY_CLEARANCE_SELECTOR = By.cssSelector(".control span[role=option]");
+    private static final By PROFILE_LINK_SELECTOR = By.cssSelector(".security-clearance-user-name .inner");
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
     private static final By LOADING_SELECTOR = By.cssSelector(":not([class*='share-hidden'])[data-dojo-attach-point='dataLoadingNode']");
@@ -232,10 +234,8 @@ public class SecurityClearancePage extends ConsolePage
     {
         List<String> result = null;
 
-        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
-        WebElement userRow = rows.stream()
-                                 .filter(row -> row.findElement(USER_NAME_SELECTOR).getText().contains(userName))
-                                 .findFirst().get();
+
+        WebElement userRow = getUserRow(userName);
 
         WebElement securityClearance = userRow.findElement(SECURITY_CLEARANCE_SELECTOR);
         securityClearance.click();
@@ -251,5 +251,23 @@ public class SecurityClearancePage extends ConsolePage
         securityClearance.click();
 
         return result;
+    }
+
+    public WebElement getUserRow(String userName)
+    {
+        List<WebElement> rows = Utils.getWebDriver().findElements(ROWS);
+        return rows.stream()
+                .filter(row -> row.findElement(USER_NAME_SELECTOR).getText().contains(userName))
+                .findFirst().get();
+    }
+
+    /**
+     * Click on the User
+     */
+    public void clickOnUser(String userName)
+    {
+        WebElement userRow = getUserRow(userName);
+        WebElement profileLink = userRow.findElement(PROFILE_LINK_SELECTOR);
+        profileLink.click();
     }
 }
