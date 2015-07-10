@@ -3,11 +3,11 @@
  */
 package org.alfresco.test.integration.dataSetup;
 
+import org.alfresco.dataprep.UserService;
+import org.alfresco.test.ModuleProperties;
 import org.alfresco.test.TestData;
 import org.alfresco.test.integration.dataSetup.http.HttpClient;
 import org.alfresco.test.integration.dataSetup.http.Response;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,10 @@ public class DataBootstrap implements TestData
 {
     @Autowired
     private HttpClient httpClient;
-    
+    @Autowired
+    UserService userService;
+    @Autowired
+    ModuleProperties moduleProperties;
     /**
      * exists user
      */
@@ -36,21 +39,7 @@ public class DataBootstrap implements TestData
     {
         if (!existsUser(userName))
         {
-            JSONObject obj = new JSONObject();
-            try
-            {
-                obj.put("userName", userName);    
-                obj.put("firstName", userName);
-                obj.put("lastName", userName);
-                obj.put("email", userName + "@alfresco.com");
-                obj.put("password", DEFAULT_PASSWORD);
-            }
-           catch (JSONException e)
-           {
-               throw new RuntimeException(e);
-           }
-        
-           httpClient.sendPostRequest("/service/api/people", obj.toString());
+            userService.create(moduleProperties.getAdminName(), moduleProperties.getAdminPassword(), userName, DEFAULT_PASSWORD, userName + "@alfresco.com");
         }
     }
     
@@ -80,7 +69,7 @@ public class DataBootstrap implements TestData
     {
         if (existsUser(userName))
         {
-            httpClient.sendDeleteRequest("/service/api/people/{0}", userName);
+            userService.delete(moduleProperties.getAdminName(), moduleProperties.getAdminPassword(), userName);
         }
     }
     
@@ -90,7 +79,6 @@ public class DataBootstrap implements TestData
     public void assignUserToRole(String userName, String role)
     {
         Response response = httpClient.sendPostRequest("/service/api/rm/roles/{0}/authorities/{1}", "", role, userName);
-        
         if (response.getStatus() != 200)
         {
             throw new RuntimeException("Unable to assign user to role.  Error status " + response.getStatus() + " - " + response.getContentAsString());
@@ -99,20 +87,6 @@ public class DataBootstrap implements TestData
     
     public void addSiteMembership(String siteId, String userName, String role)
     {
-        JSONObject obj = new JSONObject();
-        try
-        {
-            obj.put("role", role);                
-            JSONObject person = new JSONObject();
-            person.put("userName", userName);
-            obj.put("person", person);            
-        }
-       catch (JSONException e)
-       {
-           throw new RuntimeException(e);
-       }        
-        
-       System.out.println(obj.toString()); 
-       httpClient.sendPostRequest("/service/api/sites/{0}/memberships", obj.toString(), siteId);
+        userService.createSiteMember(moduleProperties.getAdminName(), moduleProperties.getAdminPassword(), userName, siteId, role);
     }
 }

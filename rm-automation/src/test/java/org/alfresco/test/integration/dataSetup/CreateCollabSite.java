@@ -19,7 +19,7 @@
 
 package org.alfresco.test.integration.dataSetup;
 
-import static org.junit.Assert.assertFalse;
+import static org.testng.Assert.assertFalse;
 
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
@@ -56,7 +56,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     private ClassifyContentDialog classifyContentDialog;
     @Autowired
     private InviteUsersPage inviteUsersPage;
-    
     @Autowired
     private DataBootstrap dataBootstrap;
 

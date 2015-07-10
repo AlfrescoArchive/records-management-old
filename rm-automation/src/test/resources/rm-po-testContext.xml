@@ -11,13 +11,24 @@
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
    
    <import resource="classpath:webdriver-context.xml"/>
+   <import resource="classpath:dataprep-context.xml"/>
    <context:annotation-config/>
    <context:component-scan base-package="org.alfresco"/>
-   
-   <!--                  -->
-   <!-- WebDriver        -->
-   <!--                  -->
-   <bean id="webDriver" factory-bean="&amp;webDriverFactoryBean" factory-method="getObject" lazy-init="default">
-       <constructor-arg value="${webdriver.browser}"/>
-   </bean>
+    <!--                     -->
+    <!--  Properties         -->
+    <!--                     -->
+    <bean id="rmTestProperties" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:module.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+    </bean>
+    <!--                  -->
+    <!-- WebDriver        -->
+    <!--                  -->
+    <bean id="webDriver" factory-bean="&amp;webDriverFactoryBean" factory-method="getObject" lazy-init="default">
+        <constructor-arg value="${webdriver.browser}"/>
+    </bean>
 </beans>
