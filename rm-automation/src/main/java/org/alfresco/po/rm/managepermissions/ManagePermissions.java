@@ -17,6 +17,7 @@ package org.alfresco.po.rm.managepermissions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
@@ -220,7 +221,7 @@ public class ManagePermissions extends FormPage
      */
     public String getPermission(String username)
     {
-        return getPermission(username, username + " " + username);
+        return getPermission(username, username + " " + UserService.DEFAULT_LAST_NAME);
     }
 
     /**
@@ -259,7 +260,7 @@ public class ManagePermissions extends FormPage
      */
     public void setPermissions(String username, String permissionName)
     {
-        setPermissions(username, username + " " + username, permissionName);
+        setPermissions(username, username + " " + UserService.DEFAULT_LAST_NAME, permissionName);
     }
 
     /**
