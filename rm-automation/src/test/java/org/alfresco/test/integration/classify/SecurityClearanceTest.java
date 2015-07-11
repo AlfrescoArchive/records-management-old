@@ -112,7 +112,7 @@ public class SecurityClearanceTest extends BaseTest
             assertTrue("Unrecognised security clearance: " + clearance, CONFIGURED_CLEARANCES.contains(clearance));
         }
     }
-    
+
     /**
      * When I view the classification security clearances
      * Then I am not able to see or edit the admins users security clearance
@@ -129,12 +129,12 @@ public class SecurityClearanceTest extends BaseTest
         assertFalse(
                 "Admin user unexpectedly present in results.",
                 securityClearancePage.isUserShown("admin"));
-        
+
         securityClearancePage.setNameFilter("admin");
         assertTrue(securityClearancePage.isEmpty());
-        
+
     }
-    
+
     /**
      * Give a user clearance and check the page reflects this. Note that this test has a side effect of providing the
      * RM_MANAGER with "Secret" clearance, and is used as a dependency of other tests.
@@ -176,7 +176,7 @@ public class SecurityClearanceTest extends BaseTest
                         .getUserSecurityClearance(RM_MANAGER);
         assertEquals("Secret", clearance);
     }
-    
+
 
     /**
      * Check the admin user is not found by using the filter.
@@ -201,34 +201,35 @@ public class SecurityClearanceTest extends BaseTest
     public void userNameFilter()
     {
         openPage(securityClearancePage);
-        
+
         // assert that the filter is empty
         assertTrue(securityClearancePage.getNameFilter().isEmpty());
-        
-        // set filter 
+
+        // set filter
         securityClearancePage.setNameFilter(RM_MANAGER);
-        
+
         // assert that the filter has been applied
         assertFalse(securityClearancePage.getNameFilter().isEmpty());
         assertEquals(1, securityClearancePage.getUserNames().size());
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
         assertFalse(securityClearancePage.isUserShown(UNCLEARED_USER));
-        
+
         // partial filter
         securityClearancePage.clearNameFilter();
         securityClearancePage.setNameFilter("_user");
-        
+
         // assert that the filter has been cleared
         assertFalse(securityClearancePage.getNameFilter().isEmpty());
+        assertEquals(2, securityClearancePage.getUserNames().size());
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
         assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
-        
+
         // invalid filter
         securityClearancePage.clearNameFilter();
         securityClearancePage.setNameFilter("monkey");
-        
+
         // assert that no results are shown
-        assertTrue(securityClearancePage.isEmpty());             
+        assertTrue(securityClearancePage.isEmpty());
     }
 
     /*
