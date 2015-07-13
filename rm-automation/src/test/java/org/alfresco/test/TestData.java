@@ -242,5 +242,8 @@ public interface TestData
     public static final String CLASSIFIED_BY = "ClassifiedByText";
     public static final String CLASSIFICATION_AGENCY = "ClassificationAgency";
     public static final String CLASSIFICATION_REASON = "1.4(c)";
+   
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
 
 }

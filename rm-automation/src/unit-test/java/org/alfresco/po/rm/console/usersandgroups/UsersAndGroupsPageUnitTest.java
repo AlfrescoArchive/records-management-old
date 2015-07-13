@@ -61,7 +61,7 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
         createRMSite();
         
         // create users
-        userService.create(getAdminName(), getAdminPassword(), USER, DEFAULT_PASSWORD, DEFAULT_PASSWORD);     
+        userService.create(getAdminName(), getAdminPassword(), USER, DEFAULT_PASSWORD, DEFAULT_PASSWORD, FIRST_NAME, LAST_NAME);
     }
     
     /**

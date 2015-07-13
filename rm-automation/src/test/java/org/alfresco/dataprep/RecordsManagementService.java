@@ -23,11 +23,19 @@ public class RecordsManagementService
 
     @Autowired private UserService userService;
 
-    public void createUserAndAssignToRole(String adminUser, String adminPassword, String userName, String password, String email, String role)
+    public void createUserAndAssignToRole(
+            String adminUser, 
+            String adminPassword,
+            String userName, 
+            String password, 
+            String email, 
+            String role, 
+            String firstName,
+            String lastName)
     {
         if (!userService.userExists(adminUser, adminPassword, userName))
         {
-            userService.create(adminUser, adminPassword, userName, password, email);
+            userService.create(adminUser, adminPassword, userName, password, email, firstName, lastName);
             assignUserToRole(adminUser, adminPassword, userName, role);
         }
     }

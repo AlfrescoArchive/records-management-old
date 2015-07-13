@@ -88,7 +88,9 @@ public class ManageFolders extends BaseTest
                     USER1, 
                     DEFAULT_PASSWORD, 
                     DEFAULT_EMAIL, 
-                    UsersAndGroupsPage.ROLE_RM_MANAGER);
+                    UsersAndGroupsPage.ROLE_RM_MANAGER,
+                    FIRST_NAME,
+                    LAST_NAME);
         
         // TODO @Hema give user1 read-only permissions on Category1
         

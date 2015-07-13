@@ -74,7 +74,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
         createRMSite();
         
         // create test user
-        userService.create(getAdminName(), getAdminPassword(), testUser, DEFAULT_PASSWORD, DEFAULT_EMAIL);
+        userService.create(getAdminName(), getAdminPassword(), testUser, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);
 
     }
 

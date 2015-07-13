@@ -107,7 +107,9 @@ public class ManageIncompleteRecords extends BaseTest
                     USER_NAME, 
                     DEFAULT_PASSWORD, 
                     DEFAULT_EMAIL, 
-                    UsersAndGroupsPage.ROLE_RM_MANAGER);
+                    UsersAndGroupsPage.ROLE_RM_MANAGER,
+                    FIRST_NAME,
+                    LAST_NAME);
         
         // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
