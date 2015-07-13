@@ -14,10 +14,11 @@
  */
 package org.alfresco.po.rm.managepermissions;
 
+import static org.alfresco.dataprep.UserService.DEFAULT_LAST_NAME;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alfresco.dataprep.UserService;
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
@@ -27,6 +28,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.Button;
 
 /**
@@ -178,7 +180,7 @@ public class ManagePermissions extends FormPage
      */
     public void deleteAuthority(String username)
     {
-        deleteAuthority(username, "lastName");
+        deleteAuthority(username, DEFAULT_LAST_NAME);
     }
 
     /**
@@ -221,7 +223,7 @@ public class ManagePermissions extends FormPage
      */
     public String getPermission(String username)
     {
-        return getPermission(username, username + " " + UserService.DEFAULT_LAST_NAME);
+        return getPermission(username, username + " " + DEFAULT_LAST_NAME);
     }
 
     /**
@@ -260,7 +262,7 @@ public class ManagePermissions extends FormPage
      */
     public void setPermissions(String username, String permissionName)
     {
-        setPermissions(username, username + " " + UserService.DEFAULT_LAST_NAME, permissionName);
+        setPermissions(username, username + " " + DEFAULT_LAST_NAME, permissionName);
     }
 
     /**
