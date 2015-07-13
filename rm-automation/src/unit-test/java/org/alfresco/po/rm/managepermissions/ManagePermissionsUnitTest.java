@@ -24,12 +24,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseRmUnitTest;
-import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterClass;
@@ -55,9 +55,9 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     @Autowired
     private FilePlan filePlan;
 
-    /** data bootstrap */
+    /** data prep services */
     @Autowired
-    private DataBootstrap dataBootstrap;
+    private UserService userService;
 
     private static String actualPermissionsName;
     private static String testUserName = "user1 user1";
@@ -72,7 +72,9 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
         // create RM site
         createRMSite();
-        dataBootstrap.createUser(testUser);
+        
+        // create test user
+        userService.create(getAdminName(), getAdminPassword(), testUser, DEFAULT_PASSWORD, DEFAULT_EMAIL);
 
     }
 
@@ -235,6 +237,6 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     public void afterClass()
     {
         deleteRMSite();
-        dataBootstrap.deleteUser(testUser);
+        userService.delete(getAdminName(), getAdminPassword(), testUser);
     }
 }

@@ -21,6 +21,7 @@ package org.alfresco.test.integration.dataSetup;
 
 import static org.testng.Assert.assertFalse;
 
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -46,9 +47,10 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     /** The document library page. */
     @Autowired
     private DocumentLibrary documentLibrary;
-    @Autowired
-    private DataBootstrap dataBootstrap;
-
+   
+    /** data prep services */
+    @Autowired private UserService userService;
+    
     /**
      * Regression test execution
      */
@@ -166,9 +168,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         description = "Add the RM_MANAGER to the collaboration site",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS" }
     )
-    public void addRMManagerToCollabSite()
+    public void addRMManagerToCollabSite() throws Exception
     {
-        dataBootstrap.addSiteMembership(COLLAB_SITE_ID, RM_MANAGER, "SiteManager");
+        userService.inviteUserToSiteAndAccept(getAdminName(), getAdminPassword(), RM_MANAGER, COLLAB_SITE_ID, "SiteManager");
     }
 
     /** Add the UNCLEARED_USER to the collaboration site. */
@@ -178,9 +180,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         description = "Add the RM_MANAGER to the collaboration site",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_UNCLEARED_USER_EXISTS" }
     )
-    public void addUnclearedUserToCollabSite()
+    public void addUnclearedUserToCollabSite() throws Exception
     {
-        dataBootstrap.addSiteMembership(COLLAB_SITE_ID, UNCLEARED_USER, "SiteManager");
+        userService.inviteUserToSiteAndAccept(getAdminName(), getAdminPassword(), UNCLEARED_USER, COLLAB_SITE_ID, "SiteManager");
     }
 
     /**

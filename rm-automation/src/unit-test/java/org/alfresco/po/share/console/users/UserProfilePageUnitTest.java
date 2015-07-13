@@ -21,7 +21,6 @@ package org.alfresco.po.share.console.users;
 import static org.junit.Assert.assertTrue;
 
 import org.alfresco.test.BaseTest;
-import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -37,10 +36,9 @@ public class UserProfilePageUnitTest extends BaseTest
     @Autowired
     private UserProfilePage userProfilePage;
 
-    /** data bootstrap */
     @Autowired
-    private DataBootstrap dataBootstrap;
-
+    private NewUsersPage newUsersPage;
+    
     /**
      * Confirm that the expected elements of the page are present
      * when opened.
@@ -62,7 +60,14 @@ public class UserProfilePageUnitTest extends BaseTest
     public void clickOnNewUser()
     {
         // create a user
-        dataBootstrap.createUser("temp");
+        openPage(newUsersPage)
+            .setUserName("temp")
+            .setFirstName("temp")
+            .setLastName("temp")
+            .setEmail(DEFAULT_EMAIL)
+            .setPassword(DEFAULT_PASSWORD)
+            .clickOnCreateUser();
+        
         // TODO remove this
         try{Thread.sleep(500);}catch(Exception e){}
 

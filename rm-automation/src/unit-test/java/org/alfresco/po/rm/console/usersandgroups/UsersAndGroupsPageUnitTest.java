@@ -26,8 +26,8 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
+import org.alfresco.dataprep.UserService;
 import org.alfresco.test.BaseRmUnitTest;
-import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -50,9 +50,9 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
     @Autowired
     private UsersAndGroupsPage usersAndGroupsPage;
     
-    /** data bootstrap */
+    /** data prep services */
     @Autowired
-    private DataBootstrap dataBootstrap;
+    private UserService userService;
     
     @BeforeClass
     public void beforeClass()
@@ -61,7 +61,7 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
         createRMSite();
         
         // create users
-        dataBootstrap.createUser(USER);        
+        userService.create(getAdminName(), getAdminPassword(), USER, DEFAULT_PASSWORD, DEFAULT_PASSWORD);     
     }
     
     /**
@@ -226,7 +226,7 @@ public class UsersAndGroupsPageUnitTest extends BaseRmUnitTest
     public void afterClass()
     {
         // delete user
-        dataBootstrap.deleteUser(USER);
+        userService.delete(getAdminName(), getAdminPassword(), USER);
         
         // delete rm site
         deleteRMSite();

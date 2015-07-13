@@ -44,9 +44,6 @@ public class ModuleProperties
         PropertyLoader.populate(this);
     }
     
-    @Property("alfresco.url")
-    private String alfrescoUrl;
-    
     @Property("share.url")
     private String shareUrl;
 
@@ -57,16 +54,6 @@ public class ModuleProperties
     /** Property for admin password */
     @Property("admin.password")
     private String adminPassword;
-
-    /**
-     * Gets the Alfresco URL
-     * 
-     * @return  {@link String}  Alfresco URL
-     */
-    public String getAlfrescoURL()
-    {
-        return alfrescoUrl;
-    }
     
     /**
      * Gets the Share URL

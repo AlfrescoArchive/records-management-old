@@ -178,7 +178,7 @@ public class ManagePermissions extends FormPage
      */
     public void deleteAuthority(String username)
     {
-        deleteAuthority(username, username);
+        deleteAuthority(username, "lastName");
     }
 
     /**

@@ -49,6 +49,7 @@ public interface TestData
 
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";
+    public static final String DEFAULT_EMAIL = "default@alfresco.com";
 
 
     /* site identifiers */

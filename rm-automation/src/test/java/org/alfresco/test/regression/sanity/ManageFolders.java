@@ -24,6 +24,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.alfresco.dataprep.RecordsManagementService;
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.rm.actions.edit.EditRecordFolderPage;
 import org.alfresco.po.rm.actions.viewaudit.AuditEntry;
 import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
@@ -37,7 +39,6 @@ import org.alfresco.po.rm.details.folder.FolderDetailsPage;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.VitalReviewPeriod;
 import org.alfresco.test.BaseTest;
-import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
@@ -65,9 +66,9 @@ public class ManageFolders extends BaseTest
     @Autowired
     private AuditLogPage auditLogPage;
     
-    /** data bootstrap */
-    @Autowired
-    private DataBootstrap dataBootstrap;
+    /** data prep services */
+    @Autowired private RecordsManagementService recordsManagementService;
+    @Autowired private UserService userService;
 
     /**
      * Main regression test execution
@@ -81,7 +82,13 @@ public class ManageFolders extends BaseTest
     public void manageFolders()
     {
         // create user
-        dataBootstrap.createUser(USER1, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        recordsManagementService.createUserAndAssignToRole(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    USER1, 
+                    DEFAULT_PASSWORD, 
+                    DEFAULT_EMAIL, 
+                    UsersAndGroupsPage.ROLE_RM_MANAGER);
         
         // TODO @Hema give user1 read-only permissions on Category1
         
@@ -330,6 +337,6 @@ public class ManageFolders extends BaseTest
     protected void deleteTestUser()
     {
         // delete user
-        dataBootstrap.deleteUser(USER1);
+        userService.delete(getAdminName(), getAdminPassword(), USER1);
     }
 }

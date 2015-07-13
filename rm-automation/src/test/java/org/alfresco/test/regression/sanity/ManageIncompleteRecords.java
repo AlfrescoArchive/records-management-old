@@ -29,6 +29,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.alfresco.dataprep.RecordsManagementService;
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.actions.edit.EditNonElectronicRecordPage;
@@ -37,13 +39,13 @@ import org.alfresco.po.rm.actions.viewaudit.AuditLogPage;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.AuthoritySelectDialog;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
 import org.alfresco.po.rm.managepermissions.ManagePermissions;
 import org.alfresco.test.BaseTest;
-import org.alfresco.test.integration.dataSetup.DataBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
@@ -82,9 +84,9 @@ public class ManageIncompleteRecords extends BaseTest
     @Autowired
     private AuthoritySelectDialog authoritySelectDialog;
     
-    /** data bootstrap */
-    @Autowired
-    private DataBootstrap dataBootstrap;
+    /** data prep services */
+    @Autowired private UserService userService;
+    @Autowired private RecordsManagementService recordsManagementService;
 
     private static String USER_NAME = "user1";
 
@@ -99,7 +101,14 @@ public class ManageIncompleteRecords extends BaseTest
     )
     public void manageIncompleteRecords()
     {
-        dataBootstrap.createUser(USER_NAME);
+        recordsManagementService.createUserAndAssignToRole(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    USER_NAME, 
+                    DEFAULT_PASSWORD, 
+                    DEFAULT_EMAIL, 
+                    UsersAndGroupsPage.ROLE_RM_MANAGER);
+        
         // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
             .navigateTo(RECORD_CATEGORY_ONE, SUB_RECORD_CATEGORY_NAME, RECORD_FOLDER_ONE);
@@ -386,6 +395,6 @@ public class ManageIncompleteRecords extends BaseTest
     protected void deleteTestUser()
     {
         // delete user
-        dataBootstrap.deleteUser(USER_NAME);
+        userService.delete(getAdminName(), getAdminPassword(), USER_NAME);
     }
 }

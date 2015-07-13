@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -54,9 +55,6 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
 
     /** item count */
     private int itemCount = 0;
-    
-    /** item map indexed by name */
-    private Map<String, ListItem> itemMap;
 
     /**
      * @see org.alfresco.po.common.renderable.Renderable#render()
@@ -65,8 +63,6 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     public <T extends Renderable> T render()
     {
         T result = super.render();     
-        
-        itemMap = null;
      
         // figure out how many items are on the page
         String text = current.getText();
@@ -86,37 +82,33 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
      */
     private Map<String, ListItem> getItemMap()
     {
-        //if (itemMap == null)
-        //{
-            List<WebElement> rows = webDriver.findElements(rowsSelector);
-
-            if (rows.size() == itemCount)
+        return Utils.retry(new Retry<Map<String, ListItem>>()
+        {
+            @Override
+            public Map<String, ListItem> execute()
             {
-                // clear the current item map
-                itemMap = new HashMap<>(rows.size());
-
-                // build the new item map
-                for (WebElement row : rows)
+                List<WebElement> rows = webDriver.findElements(rowsSelector);
+        
+                if (rows.size() == itemCount)
                 {
-                    // check for staleness of row
-                    if (row.isDisplayed())
+                    // clear the current item map
+                    Map<String, ListItem>itemMap = new HashMap<String, ListItem>(rows.size());
+        
+                    // build the new item map
+                    for (WebElement row : rows)
                     {
                         ListItem item = listItemFactory.getItem(row);
                         itemMap.put(item.getName(), item);
                     }
-                    else
-                    {
-                        throw new IllegalStateException("browse list row is not visible");
-                    }
+    
+                    return itemMap;
                 }
+                else
+                {
+                    throw new IllegalStateException("Expected " + itemCount + " rows and found " + rows.size());
+                }            
             }
-            else
-            {
-                throw new IllegalStateException("Expected " + itemCount + " rows and found " + rows.size());
-            }            
-        //}
-        
-        return itemMap;
+        }, 5);
     }
     
     /**

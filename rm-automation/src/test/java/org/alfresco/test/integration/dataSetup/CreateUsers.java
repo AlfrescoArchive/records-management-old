@@ -18,6 +18,8 @@
  */
 package org.alfresco.test.integration.dataSetup;
 
+import org.alfresco.dataprep.RecordsManagementService;
+import org.alfresco.dataprep.UserService;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,9 @@ import org.testng.annotations.Test;
  */
 public class CreateUsers extends BaseTest
 {
-    @Autowired
-    protected DataBootstrap dataBootstrap;
+    /** data prep services */
+    @Autowired protected RecordsManagementService recordsManagementService;
+    @Autowired protected UserService userService;
     
     /**
      * Create users for use in tests.
@@ -46,7 +49,13 @@ public class CreateUsers extends BaseTest
     )
     public void createRMManager()
     {
-        dataBootstrap.createUser(RM_MANAGER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        recordsManagementService.createUserAndAssignToRole(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    RM_MANAGER, 
+                    DEFAULT_PASSWORD, 
+                    DEFAULT_EMAIL, 
+                    UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 
     @Test
@@ -57,14 +66,26 @@ public class CreateUsers extends BaseTest
     )
     public void createUnclearedUser()
     {
-        dataBootstrap.createUser(UNCLEARED_USER, UsersAndGroupsPage.ROLE_RM_MANAGER);
+        recordsManagementService.createUserAndAssignToRole(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    UNCLEARED_USER, 
+                    DEFAULT_PASSWORD, 
+                    DEFAULT_EMAIL, 
+                    UsersAndGroupsPage.ROLE_RM_MANAGER);
     }
 
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
     protected void deleteUsers()
     {
-        dataBootstrap.deleteUser(RM_MANAGER);
-        dataBootstrap.deleteUser(UNCLEARED_USER);
+        if (userService.userExists(getAdminName(), getAdminPassword(), RM_MANAGER))
+        {
+            userService.delete(getAdminName(), getAdminPassword(), RM_MANAGER);
+        }
+        if (userService.userExists(getAdminName(), getAdminPassword(), UNCLEARED_USER))
+        {
+            userService.delete(getAdminName(), getAdminPassword(), UNCLEARED_USER);
+        }
     }
 }

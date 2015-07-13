@@ -32,3 +32,4 @@
         <constructor-arg value="${webdriver.browser}"/>
     </bean>
 </beans>
+
