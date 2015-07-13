@@ -119,7 +119,7 @@ public class SecurityClearanceTest extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "ignored" }, //TODO Re-enable (and de-quarantine) when RM-2210 is fixed.
         description = "Check the admin user is not found by using the filter",
         dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
     )
