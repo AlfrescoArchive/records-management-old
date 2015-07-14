@@ -19,6 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -29,9 +30,12 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
+import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
+import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -59,6 +63,12 @@ public class ClassifyRecord extends BaseTest
     /** The classify content dialog. */
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
+
+    @Autowired
+    private ClassifiedRecordDetails classifiedRecordDetails;
+
+    @Autowired
+    private ClassifiedPropertiesPanel classifiedPropertiesPanel;
 
     /**
      * Check that the classify record action exists for electronic and non-electronic records.
@@ -126,16 +136,34 @@ public class ClassifyRecord extends BaseTest
 
         record.clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
 
-//        // TODO Uncomment when we have the user's full name in the UI.
-//        final String currentUserFullName = getAdminName() + " " + getAdminName();
-//        assertEquals("'Classified By' field should be preset to current user's full name",
-//                     currentUserFullName, classifyContentDialog.getClassifiedBy());
+        final String currentUserFullName = "Administrator";
+        assertEquals("'Classified By' field should be preset to current user's full name",
+                currentUserFullName, classifyContentDialog.getClassifiedBy());
 
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .clickOnClassify();
+
+        // Now go to doc details and check the classified properties there.
+        filePlan.getRecord(CLASSIFIED_RECORD).clickOnLink(classifiedRecordDetails);
+
+        assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
+
+        assertEquals(CLASSIFIED_BY,
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFIED_BY));
+
+        assertEquals(CLASSIFICATION_AGENCY,
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AGENCY));
+
+        assertEquals(CLASSIFICATION_REASON,
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
+
+        assertEquals("Expected 'Secret' classification banner to be visible.",
+                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
+                     classifiedRecordDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
 
