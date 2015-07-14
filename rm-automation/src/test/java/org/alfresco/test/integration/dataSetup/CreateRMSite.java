@@ -19,6 +19,7 @@
 
 package org.alfresco.test.integration.dataSetup;
 
+import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.share.site.create.SiteType;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
@@ -40,6 +41,10 @@ public class CreateRMSite extends BaseTest
      */
     @Autowired
     private MySitesDashlet mySitesDashlet;
+    
+    /** data prep services */
+    @Autowired
+    private SiteService siteService;
 
     /**
      * Create RM site for Integration tests
@@ -71,17 +76,14 @@ public class CreateRMSite extends BaseTest
         mySitesDashlet.clickOnRMSite(RM_SITE_ID);
     }
 
+    /** data clean-up */
     @AfterSuite(alwaysRun = true)
-    protected void deleteRMSite()
+    protected void deleteRMSite() throws Exception
     {
-        openPage(userDashboardPage);
-
-        // check for existence of site
-        if (mySitesDashlet.siteExists(RM_SITE_ID))
+     // delete site
+        if (siteService.exists(RM_SITE_ID, getAdminName(), getAdminPassword()))
         {
-            // delete site
-            mySitesDashlet.clickOnDeleteSite(RM_SITE_ID);
-            Assert.assertFalse(mySitesDashlet.siteExists(RM_SITE_ID));
+            siteService.delete(getAdminName(), getAdminPassword(), "", RM_SITE_ID);
         }
     }
 }

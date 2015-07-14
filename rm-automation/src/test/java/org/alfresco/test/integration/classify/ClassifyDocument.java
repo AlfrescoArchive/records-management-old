@@ -96,7 +96,7 @@ public class ClassifyDocument extends BaseTest
     (
         groups = { "integration" },
         description = "Verify classify action is not available for various cases",
-        dependsOnGroups = { "GROUP_LOCKED_DOCUMENT_EXISTS", "GROUP_SHARED_DOCUMENT_EXISTS" }
+        dependsOnGroups = { "GROUP_SHARED_DOCUMENT_EXISTS" }
     )
     public void checkClassifyActionUnavailableInVariousCases()
     {
@@ -105,10 +105,34 @@ public class ClassifyDocument extends BaseTest
         Document sharedDocument = documentLibrary.getDocument(SHARED_DOCUMENT);
         assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
 
-        // TODO Create test for document that has been synced to the cloud.
+        // TODO Create test for document that has been synced to the cloud.        
+        
+        // upload document
+        documentLibrary.getToolbar()
+            .clickOnFile()
+            .uploadFile(LOCKED_DOCUMENT);
 
-        Document lockedDocument = documentLibrary.getDocument(LOCKED_DOCUMENT);
-        assertFalse(lockedDocument.isActionClickable(DocumentActions.CLASSIFY));
+        // lock the document
+        documentLibrary
+            .getDocument(LOCKED_DOCUMENT)
+            .clickOnEditOffline();
+
+        try
+        {
+            // reopen the page to avoid "save" dialog
+            openPage(documentLibrary, COLLAB_SITE_ID);
+            
+            // check that you can't classify a locked document
+            Document lockedDocument = documentLibrary.getDocument(LOCKED_DOCUMENT);
+            assertFalse(lockedDocument.isActionClickable(DocumentActions.CLASSIFY));
+        }
+        finally
+        {
+            // unlock the document so the site can be deleted later
+            documentLibrary
+                .getDocument(LOCKED_DOCUMENT)
+                .clickOnCancelEdit();
+        }
     }
 
     /**

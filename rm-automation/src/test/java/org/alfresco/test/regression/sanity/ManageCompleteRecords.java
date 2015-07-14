@@ -340,15 +340,15 @@ public class ManageCompleteRecords extends BaseTest
         //open manage permissions for electronic record
         managePermissions = nelectronicRecord.clickOnManagePermission();
         //get default permission set for test user
-        actualPermissionsName = managePermissions.getPermission(testUserName);
+        actualPermissionsName = managePermissions.getPermission(testUserName, testUserName, testUserName);
         //verify the default settings
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         //change the permission to read and file
         expectedPermissionName = "Read and File";
         //set the authority permission type
-        managePermissions.setPermissions(testUserName, expectedPermissionName);
+        managePermissions.setPermissions(testUserName, testUserName, testUserName, expectedPermissionName);
         //get the test authority permission type and assert ther results
-        actualPermissionsName = managePermissions.getPermission(testUserName);
+        actualPermissionsName = managePermissions.getPermission(testUserName, testUserName, testUserName);
         //verify the permissions set
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         managePermissions.clickOnOK();

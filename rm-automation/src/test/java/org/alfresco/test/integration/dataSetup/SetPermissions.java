@@ -50,8 +50,8 @@ public class SetPermissions extends BaseTest
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary"));
         filePlan.getRecordCategory(RECORD_CATEGORY_ONE).clickonManagePermissions();
-        managePermissions.setPermissions(RM_MANAGER, "Read Only");
-        assertEquals("Read Only", managePermissions.getPermission(RM_MANAGER));
+        managePermissions.setPermissions(RM_MANAGER, RM_MANAGER, RM_MANAGER,  "Read Only");
+        assertEquals("Read Only", managePermissions.getPermission(RM_MANAGER, RM_MANAGER, RM_MANAGER));
         managePermissions.clickOnOK();
     }
 
@@ -66,8 +66,8 @@ public class SetPermissions extends BaseTest
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary"));
         filePlan.getRecordCategory(RECORD_CATEGORY_ONE).clickonManagePermissions();
-        managePermissions.setPermissions(UNCLEARED_USER, "Read and File");
-        assertEquals("Read and File", managePermissions.getPermission(UNCLEARED_USER));
+        managePermissions.setPermissions(UNCLEARED_USER, UNCLEARED_USER, UNCLEARED_USER, "Read and File");
+        assertEquals("Read and File", managePermissions.getPermission(UNCLEARED_USER, UNCLEARED_USER, UNCLEARED_USER));
         managePermissions.clickOnOK();
     }
 }

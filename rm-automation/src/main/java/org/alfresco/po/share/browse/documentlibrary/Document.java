@@ -47,6 +47,9 @@ public class Document extends ListItem implements DocumentActions
     @Autowired
     @RenderableChild
     private SocialActions socialActions;
+    
+    @Autowired
+    private DocumentLibrary documentLibrary;
 
     /**
      * Click on declare as record action
@@ -71,6 +74,22 @@ public class Document extends ListItem implements DocumentActions
     public DeleteConfirmationDialog clickOnDelete()
     {
     	return clickOnAction(DELETE, deleteConfirmationDialog);
+    }
+    
+    /**
+     * Click on edit offline action
+     */
+    public DocumentLibrary clickOnEditOffline()
+    {
+        return clickOnAction(EDIT_OFFLINE, documentLibrary);
+    }
+    
+    /**
+     * Click on cancel edit action
+     */
+    public DocumentLibrary clickOnCancelEdit()
+    {
+        return clickOnAction(CANCEL_EDIT, documentLibrary);
     }
 
     /**

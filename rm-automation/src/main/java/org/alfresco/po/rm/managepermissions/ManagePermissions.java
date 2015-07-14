@@ -214,26 +214,14 @@ public class ManagePermissions extends FormPage
     }
 
     /**
-     * Get the permissions of a specific user assuming that the user was created by
-     * {@link org.alfresco.test.BaseTest#createUser(String, String)} and so has a first name and last name set to the
-     * username.
-     *
-     * @param username The username.
-     * @return The user's permission.
-     */
-    public String getPermission(String username)
-    {
-        return getPermission(username, username + " " + DEFAULT_LAST_NAME);
-    }
-
-    /**
      * Get the permissions set for the given user name.
      *
      * @param username The user's unique username.
-     * @param fullName The first name and last name of the user, as displayed in the UI.
+     * @param firstName the users first name
+     * @param lastName the users last name
      * @return permission type or {@code null} if no permission was found.
      */
-    public String getPermission(String username, String fullName)
+    public String getPermission(String username, String firstName, String lastName)
     {
         List<WebElement> userElements = userPermissionsData.findElements(userListSelector);
         String permissionName = null;
@@ -241,7 +229,7 @@ public class ManagePermissions extends FormPage
         for (WebElement userElement : userElements)
         {
             String foundName = userElement.findElement(userNameSelector).getText();
-            if (foundName.equals(fullName))
+            if (foundName.equals(getFullName(firstName, lastName)))
             {
                 WebElement permissionElement = userElement.findElement(premissionElementSelector);
                 permissionName = permissionElement.getText();
@@ -251,30 +239,17 @@ public class ManagePermissions extends FormPage
         return permissionName;
     }
 
-
-    /**
-     * Set the permissions for specific user assuming that the user was created by
-     * {@link org.alfresco.test.BaseTest#createUser(String, String)} and so has a first name and last name set to the
-     * username.
-     *
-     * @param username The username.
-     * @param permissionName The permission to give the user.
-     */
-    public void setPermissions(String username, String permissionName)
-    {
-        setPermissions(username, username + " " + DEFAULT_LAST_NAME, permissionName);
-    }
-
     /**
      * set the permissions for specific user
      *
      * @param username The user's unique username.
-     * @param fullName The first name and last name of the user, as displayed in the UI.
+     * @param firstName the users first name
+     * @param lastName the users last name
      * @param permissionName The permission to give the user.
      */
-    public void setPermissions(String username, String fullName, String permissionName)
+    public void setPermissions(String username, String firstName, String lastName, String permissionName)
     {
-        String currentPermission = getPermission(username, fullName);
+        String currentPermission = getPermission(username, firstName, lastName);
         if (currentPermission == null)
         {
             clickOnSelectUsersAndGroups().authoritySearch(username).clickAddButton();
@@ -287,8 +262,7 @@ public class ManagePermissions extends FormPage
         for (WebElement userElement : userPermissionsData.findElements(userListSelector))
         {
             String foundName = userElement.findElement(userNameSelector).getText();
-
-            if (foundName.equals(fullName))
+            if (foundName.equals(getFullName(firstName, lastName)))
             {
                 WebElement permissionElement = userElement.findElement(premissionElementSelector);
                 permissionElement.click();
@@ -303,5 +277,13 @@ public class ManagePermissions extends FormPage
                 }
             }
         }
+    }
+    
+    /**
+     * Get full name
+     */
+    private String getFullName(String firstName, String lastName)
+    {
+        return firstName + " " + lastName;
     }
 }

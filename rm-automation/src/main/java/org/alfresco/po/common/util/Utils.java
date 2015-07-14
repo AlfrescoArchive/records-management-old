@@ -157,11 +157,10 @@ public final class Utils implements ApplicationContextAware
     /**
      * Waits for a web element to be found.
      * <p>
-     * Throws NoSuchElementException if element is not found.
+     * Throws TimeoutException if element is not found.
      * 
      * @param  selector             selector
      * @return {@link WebElement}   web element
-     * @throws NoSuchElementException
      */
     public static WebElement waitForFind(By selector)
     {
@@ -169,6 +168,15 @@ public final class Utils implements ApplicationContextAware
         return wait.until((webDriver) -> webDriver.findElement(selector));
     }
     
+    /**
+     * Waits for a web element to be found in the scope of another element.
+     * <p>
+     * Throws TimeoutException if element is not found.
+     * 
+     * @param webElement    web element to scope find
+     * @param selector      web selector
+     * @return {@link WebElement}   found web element
+     */
     public static WebElement waitForFind(WebElement webElement, By selector)
     {
         Wait<WebElement> wait = new FluentWait<WebElement>(webElement);

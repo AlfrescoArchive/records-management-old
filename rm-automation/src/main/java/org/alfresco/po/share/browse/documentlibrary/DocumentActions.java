@@ -29,6 +29,8 @@ public interface DocumentActions extends Actions
 {
     /** Lock the document for editing offline. */
     static final String EDIT_OFFLINE = "document-edit-offline";
+    /** Cancel edit */
+    static final String CANCEL_EDIT = "document-cancel-editing";
     /** Delete the document. */
     static final String DELETE = "document-delete";
     /** Classify the document. */

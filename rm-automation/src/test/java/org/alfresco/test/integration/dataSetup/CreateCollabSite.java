@@ -19,8 +19,7 @@
 
 package org.alfresco.test.integration.dataSetup;
 
-import static org.testng.Assert.assertFalse;
-
+import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
 import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
@@ -50,6 +49,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
    
     /** data prep services */
     @Autowired private UserService userService;
+    @Autowired private SiteService siteService;
     
     /**
      * Regression test execution
@@ -134,33 +134,6 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
             .clickShareDocument();
     }
 
-    /** Create a document that is locked for editing. */
-    @Test
-    (
-        groups = { "integration", "GROUP_LOCKED_DOCUMENT_EXISTS" },
-        description = "Create Collaboration Site",
-        dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
-    )
-    public void createLockedDocument()
-    {
-        openPage(documentLibrary, COLLAB_SITE_ID);
-
-        // upload document
-        documentLibrary.getToolbar()
-            .clickOnFile()
-            .uploadFile(LOCKED_DOCUMENT);
-
-        // Share document
-        documentLibrary.getDocument(LOCKED_DOCUMENT)
-            .clickOnLink()
-            .getDocumentActionsPanel()
-            .clickOnActionAndDontRender(DocumentActions.EDIT_OFFLINE);
-
-        // Navigate away from the text file page to the collaboration site, just in case any test expects the Share
-        // header bar to be on the page.
-        openPage(documentLibrary, COLLAB_SITE_ID);
-    }
-
     /** Add the RM_MANAGER to the collaboration site. */
     @Test
     (
@@ -189,18 +162,12 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
      * delete collaboration site
      */
     @AfterSuite
-    protected void deleteCollaborationSite()
+    protected void deleteCollaborationSite() throws Exception
     {
-        // check for existence of site
-        if (mySitesDashlet.siteExists(COLLAB_SITE_ID))
+        // delete site
+        if (siteService.exists(COLLAB_SITE_ID, getAdminName(), getAdminPassword()))
         {
-            // delete site
-            mySitesDashlet.clickOnDeleteSite(COLLAB_SITE_ID);
-            assertFalse(mySitesDashlet.siteExists(COLLAB_SITE_ID));
-
-            // open the user trash can and empty it
-            openPage(userTrashcan, getAdminName()).clickOnEmpty()
-                .clickOnConfirm(userTrashcan);
+            siteService.delete(getAdminName(), getAdminPassword(), "", COLLAB_SITE_ID);
         }
     }
 

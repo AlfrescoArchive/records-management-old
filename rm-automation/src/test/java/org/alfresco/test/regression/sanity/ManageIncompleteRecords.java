@@ -108,8 +108,8 @@ public class ManageIncompleteRecords extends BaseTest
                     DEFAULT_PASSWORD, 
                     DEFAULT_EMAIL, 
                     UsersAndGroupsPage.ROLE_RM_MANAGER,
-                    FIRST_NAME,
-                    LAST_NAME);
+                    USER_NAME,
+                    USER_NAME);
         
         // open record folder one
         openPage(filePlan, RM_SITE_ID, "documentlibrary")
@@ -289,8 +289,7 @@ public class ManageIncompleteRecords extends BaseTest
         managePermissions = electronicRecord.clickOnManagePermission();
         authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
         // add test authority
-        String testUserName = "user1";
-        authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
+        authoritySelectDialog.authoritySearch(USER1).clickAddButton();
         managePermissions.clickOnOK();
 
         //Manage permissions for user1
@@ -300,15 +299,15 @@ public class ManageIncompleteRecords extends BaseTest
         //open manage permissions for electronic record
         managePermissions = electronicRecord.clickOnManagePermission();
         //get default permission set for test user
-        actualPermissionsName = managePermissions.getPermission(testUserName);
+        actualPermissionsName = managePermissions.getPermission(USER_NAME, USER_NAME, USER_NAME);
         //verify the default settings
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         //change the permission to read and file
         expectedPermissionName = "Read and File";
         //set the authority permission type
-        managePermissions.setPermissions(testUserName, expectedPermissionName);
+        managePermissions.setPermissions(USER_NAME, USER_NAME, USER_NAME, expectedPermissionName);
         //get the test authority permission type and assert ther results
-        actualPermissionsName = managePermissions.getPermission(testUserName);
+        actualPermissionsName = managePermissions.getPermission(USER_NAME, USER_NAME, USER_NAME);
         //verify the permissions set
         assertTrue(actualPermissionsName.equals(expectedPermissionName));
         managePermissions.clickOnOK();

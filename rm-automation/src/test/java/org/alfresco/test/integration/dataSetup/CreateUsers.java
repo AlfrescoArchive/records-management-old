@@ -56,8 +56,8 @@ public class CreateUsers extends BaseTest
                     DEFAULT_PASSWORD, 
                     DEFAULT_EMAIL, 
                     UsersAndGroupsPage.ROLE_RM_MANAGER,
-                    FIRST_NAME,
-                    LAST_NAME);
+                    RM_MANAGER,
+                    RM_MANAGER);
     }
 
     @Test
@@ -75,8 +75,8 @@ public class CreateUsers extends BaseTest
                     DEFAULT_PASSWORD, 
                     DEFAULT_EMAIL, 
                     UsersAndGroupsPage.ROLE_RM_MANAGER,
-                    FIRST_NAME,
-                    LAST_NAME);
+                    UNCLEARED_USER,
+                    UNCLEARED_USER);
     }
 
     /** delete users on test teardown */

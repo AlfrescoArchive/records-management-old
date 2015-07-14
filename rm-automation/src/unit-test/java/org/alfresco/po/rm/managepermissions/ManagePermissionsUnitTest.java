@@ -59,10 +59,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     @Autowired
     private UserService userService;
 
-    private static String actualPermissionsName;
-    private static String testUserName = "user1 user1";
-    private static String testUser = "user1";
-    private static String expectedPermissionName = "Read Only";
+    private static final String TEST_USER = "myTestUser";
 
     /**
      * Before class
@@ -74,7 +71,7 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
         createRMSite();
         
         // create test user
-        userService.create(getAdminName(), getAdminPassword(), testUser, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);
+        userService.create(getAdminName(), getAdminPassword(), TEST_USER, DEFAULT_PASSWORD, DEFAULT_EMAIL, TEST_USER, TEST_USER);
 
     }
 
@@ -192,30 +189,27 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
         // add test authority
         // managePermissions.clickOnInheritPermissionButton().clickOnCancel();
         authoritySelectDialog = managePermissions.clickOnSelectUsersAndGroups();
-        authoritySelectDialog.authoritySearch(testUserName).clickAddButton();
+        authoritySelectDialog.authoritySearch(TEST_USER).clickAddButton();
 
         //get the authority permission type
         //actualPermissionsName = managePermissions.getPermission(testUserName);
-        actualPermissionsName = managePermissions.getPermission("admin", "Administrator");
+        String actualPermissionsName = managePermissions.getPermission("admin", "Administrator", "");
 
-        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        assertTrue(actualPermissionsName.equals("Read Only"));
 
        //set the authority permission type
-        expectedPermissionName = "Read and File";
-        managePermissions.setPermissions("Administrator", expectedPermissionName);
+        managePermissions.setPermissions("admin", "Administrator", "", "Read and File");
 
-        expectedPermissionName = "Read Only";
         // get the test authority permission type and assert the results
-        actualPermissionsName = managePermissions.getPermission(testUser);
-        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        actualPermissionsName = managePermissions.getPermission(TEST_USER, TEST_USER, TEST_USER);
+        assertTrue(actualPermissionsName.equals("Read Only"));
 
         // set the authority permission type
-        expectedPermissionName = "Read and File";
-        managePermissions.setPermissions(testUser, expectedPermissionName);
+        managePermissions.setPermissions(TEST_USER, TEST_USER, TEST_USER, "Read and File");
 
         // get the test authority permission type and assert the results
-        actualPermissionsName = managePermissions.getPermission(testUser);
-        assertTrue(actualPermissionsName.equals(expectedPermissionName));
+        actualPermissionsName = managePermissions.getPermission(TEST_USER, TEST_USER, TEST_USER);
+        assertTrue(actualPermissionsName.equals("Read and File"));
     }
 
     @Test(dependsOnMethods = "changeAuthorityPermissionType")
@@ -223,11 +217,11 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     {
 
         // delete the user from locallysetRoles
-        managePermissions.deleteAuthority(testUser);
+        managePermissions.deleteAuthority(TEST_USER);
 
         // verify the delete user from above method do not exist anymore
         List<String> localRoleList = managePermissions.getLocalRoles();
-        assertFalse(localRoleList.contains(testUserName));
+        assertFalse(localRoleList.contains(TEST_USER));
 
         // cancel any changes
         managePermissions.clickOnOkCancel();
@@ -237,6 +231,6 @@ public class ManagePermissionsUnitTest extends BaseRmUnitTest
     public void afterClass()
     {
         deleteRMSite();
-        userService.delete(getAdminName(), getAdminPassword(), testUser);
+        userService.delete(getAdminName(), getAdminPassword(), TEST_USER);
     }
 }
