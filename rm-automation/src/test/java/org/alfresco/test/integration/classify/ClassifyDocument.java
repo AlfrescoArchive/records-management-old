@@ -19,13 +19,16 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
+import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
@@ -54,6 +57,10 @@ public class ClassifyDocument extends BaseTest
     @Autowired
     private DocumentDetails documentDetails;
 
+    /** The classify content dialog. */
+    @Autowired
+    private ClassifyContentDialog classifyContentDialog;
+
     /**
      * Check that the classify action is available on the document library page and the document preview page.
      *
@@ -71,6 +78,9 @@ public class ClassifyDocument extends BaseTest
         openPage(documentLibrary, COLLAB_SITE_ID);
         Document document = documentLibrary.getDocument(DOCUMENT);
 
+        // Document should not be classified
+        assertFalse(document.hasIndicator(DocumentIndicators.CLASSIFIED));
+
         // verify document actions
         assertTrue(document.isActionClickable(DocumentActions.CLASSIFY));
 
@@ -79,7 +89,17 @@ public class ClassifyDocument extends BaseTest
 
         // verify that all the expected actions are available
         assertTrue(documentDetails.getDocumentActionsPanel()
-            .isActionClickable(DocumentActionsPanel.CLASSIFY));
+                .isActionClickable(DocumentActionsPanel.CLASSIFY));
+
+        // Click on classify action in order to validate the dialog
+        documentDetails.getDocumentActionsPanel().clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
+
+        final String userFullName = "Administrator";
+        assertEquals(userFullName, classifyContentDialog.getClassifiedBy());
+        assertFalse(classifyContentDialog.isClassifyButtonEnabled());
+
+        // Do not actually classify the document.
+        classifyContentDialog.clickOnCancel();
     }
 
     /**
