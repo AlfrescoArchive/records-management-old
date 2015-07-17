@@ -28,7 +28,6 @@ import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -62,18 +61,10 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     @Override
     public <T extends Renderable> T render()
     {
-        T result = super.render();     
-     
-        // figure out how many items are on the page
-        String text = current.getText();
-        String[] values = text.split(" ");
-        itemCount = Integer.parseInt(values[2]);        
-        
-        if (itemCount != 0)
-        {
-            Utils.waitFor(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsSelector));
-        }
-        
+        T result = super.render();
+
+        itemCount = webDriver.findElements(rowsSelector).size();
+
         return result;
     }
 
@@ -88,29 +79,29 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
             public Map<String, ListItem> execute()
             {
                 List<WebElement> rows = webDriver.findElements(rowsSelector);
-        
+
                 if (rows.size() == itemCount)
                 {
                     // clear the current item map
                     Map<String, ListItem>itemMap = new HashMap<String, ListItem>(rows.size());
-        
+
                     // build the new item map
                     for (WebElement row : rows)
                     {
                         ListItem item = listItemFactory.getItem(row);
                         itemMap.put(item.getName(), item);
                     }
-    
+
                     return itemMap;
                 }
                 else
                 {
                     throw new IllegalStateException("Expected " + itemCount + " rows and found " + rows.size());
-                }            
+                }
             }
         }, 5);
     }
-    
+
     /**
      * Browse list size
      */
