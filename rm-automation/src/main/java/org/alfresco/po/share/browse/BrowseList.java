@@ -28,6 +28,7 @@ import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -63,7 +64,15 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     {
         T result = super.render();
 
-        itemCount = webDriver.findElements(rowsSelector).size();
+        // figure out how many items are on the page
+        String text = current.getText();
+        String[] values = text.split(" ");
+        itemCount = Integer.parseInt(values[2]);
+
+        if (itemCount != 0)
+        {
+            Utils.waitFor(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsSelector));
+        }
 
         return result;
     }
