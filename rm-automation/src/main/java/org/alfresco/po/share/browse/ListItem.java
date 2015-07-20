@@ -137,6 +137,7 @@ public abstract class ListItem
         {
             // mouse over and click
             Utils.waitFor(ExpectedConditions.elementToBeClickable(moreAction));
+            Utils.mouseOver(moreAction);
             moreAction.click();                
             
             // wait for the actions to show
