@@ -84,7 +84,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         openPage(documentLibrary, COLLAB_SITE_ID);
 
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(DOCUMENT);
     }
 
@@ -101,7 +101,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
 
         // upload document
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(IN_PLACE_RECORD);
 
         // Declare as in-place record.
@@ -124,7 +124,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
 
         // upload document
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(SHARED_DOCUMENT);
 
         // Share document

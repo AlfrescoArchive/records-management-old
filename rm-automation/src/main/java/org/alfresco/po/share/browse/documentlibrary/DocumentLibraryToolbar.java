@@ -45,7 +45,7 @@ public class DocumentLibraryToolbar extends Toolbar
     /**
      * @return  boolean true if the file upload button is clickable, false otherwise
      */
-    public boolean isFileUploadClickable()
+    public boolean isUploadClickable()
     {
         return toolbarButtons.isButtonClickable(FILE_UPLOAD);
     }
@@ -55,7 +55,7 @@ public class DocumentLibraryToolbar extends Toolbar
      * 
      * @return {@link FileChoiceDialog} file choice dialog
      */
-    public UploadDialog clickOnFile()
+    public UploadDialog clickOnUpload()
     {
         return toolbarButtons.click(FILE_UPLOAD, uploadDialog);
     }

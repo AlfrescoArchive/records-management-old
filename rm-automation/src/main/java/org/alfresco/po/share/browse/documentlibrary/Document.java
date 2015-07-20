@@ -21,7 +21,9 @@ package org.alfresco.po.share.browse.documentlibrary;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.ListItem;
+import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.po.share.details.document.SocialActions;
 import org.openqa.selenium.By;
@@ -50,6 +52,9 @@ public class Document extends ListItem implements DocumentActions
     
     @Autowired
     private DocumentLibrary documentLibrary;
+    
+    @Autowired 
+    private ClassifyContentDialog classifyContentDialog;
 
     /**
      * Click on declare as record action
@@ -98,6 +103,14 @@ public class Document extends ListItem implements DocumentActions
     public boolean isShareDocumentAvailable()
     {
         return Utils.elementExists(this.getRow(), By.cssSelector("a.quickshare-action"));
+    }
+    
+    /**
+     * Click on classify content
+     */
+    public ClassifyContentDialog clickOnClassify()
+    {
+        return clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
     }
 
 }

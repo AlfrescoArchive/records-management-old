@@ -35,6 +35,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -247,11 +248,18 @@ public final class Utils implements ApplicationContextAware
      * @param webElement
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static <T extends WebElement> T mouseOver(T webElement)
     {
-        Actions actions = new Actions(getWebDriver());
-        actions.moveToElement(webElement).perform();
-        return webElement;
+        return retry(new Retry<T>()
+        {
+            public T execute()
+            {
+                Actions actions = new Actions(getWebDriver());
+                actions.moveToElement(webElement).perform();
+                return webElement;
+            }
+        }, 5, MoveTargetOutOfBoundsException.class);        
     }
 
     /**

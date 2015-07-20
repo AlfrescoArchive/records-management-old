@@ -99,7 +99,7 @@ public class CreateFilePlan extends BaseTest
             .getNavigation()
             .clickOnDocumentLibrary()
             .getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(DOCUMENT);
 
         // open the RM site and navigate to file planS

@@ -220,7 +220,7 @@ public class SecurityClearanceTest extends BaseTest
 
         // assert that the filter has been cleared
         assertFalse(securityClearancePage.getNameFilter().isEmpty());
-        assertEquals(2, securityClearancePage.getUserNames().size());
+        assertTrue(securityClearancePage.getUserNames().size() >= 2);
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
         assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
 

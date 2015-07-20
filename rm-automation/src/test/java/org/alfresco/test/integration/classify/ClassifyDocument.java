@@ -129,7 +129,7 @@ public class ClassifyDocument extends BaseTest
         
         // upload document
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(LOCKED_DOCUMENT);
 
         // lock the document
@@ -175,7 +175,7 @@ public class ClassifyDocument extends BaseTest
 
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(documentName);
 
         Document document = documentLibrary.getDocument(documentName);

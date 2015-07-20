@@ -84,7 +84,7 @@ public class ContentClassificationDialogTests extends BaseTest
         // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(SECRET_DOCUMENT, documentLibrary);
         documentLibrary.getDocument(SECRET_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
@@ -188,7 +188,7 @@ public class ContentClassificationDialogTests extends BaseTest
         // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(UNCLASSIFIED_DOCUMENT, documentLibrary);
 
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
@@ -262,7 +262,7 @@ public class ContentClassificationDialogTests extends BaseTest
         openPage(RM_MANAGER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
 
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(documentName, documentLibrary);
 
         Document document = documentLibrary.getDocument(documentName);
@@ -290,7 +290,7 @@ public class ContentClassificationDialogTests extends BaseTest
         // Open collaboration site document library, upload the document and click on the "Classify" action.
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
-            .clickOnFile()
+            .clickOnUpload()
             .uploadFile(TOP_SECRET_DOCUMENT, documentLibrary);
         documentLibrary.getDocument(TOP_SECRET_DOCUMENT)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);

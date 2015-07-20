@@ -237,6 +237,7 @@ public interface TestData
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String TOP_SECRET_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String SECRET_CLASSIFICATION_LEVEL_TEXT = "Secret";
+    public static final String CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT = "Confidential";
     public static final String UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT = "Unclassified";
     public static final String DEFAULT_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String CLASSIFIED_BY = "ClassifiedByText";

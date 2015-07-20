@@ -19,10 +19,12 @@
 
 package org.alfresco.po.share.details.document;
 
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.panel.ActionPanel;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,6 +33,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentActionsPanel extends ActionPanel implements DocumentActions
 {
+    @Autowired private ClassifyContentDialog classifyContentDialog;
+    
     @FindBy(css = "div.document-actions h2")
     private WebElement clickableTitle;
 
@@ -41,5 +45,13 @@ public class DocumentActionsPanel extends ActionPanel implements DocumentActions
     protected WebElement getClickableTitle()
     {
         return clickableTitle;
+    }
+    
+    /**
+     * Click on classify content
+     */
+    public ClassifyContentDialog clickOnClassify()
+    {
+        return clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
     }
 }
