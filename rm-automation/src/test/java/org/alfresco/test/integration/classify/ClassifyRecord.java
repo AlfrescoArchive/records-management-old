@@ -275,7 +275,7 @@ public class ClassifyRecord extends BaseTest
     }
 
     /**
-     * Check that a user with 'Secret' clearance can't classify a record owned by someone else.
+     * Check that a user with 'Secret' clearance can't classify a record if it does not have read & file permission over it
      * <p>
      * <a href="https://issues.alfresco.com/jira/browse/RM-2078">RM-2078</a><pre>
      * Given that I do not have 'read & file' permissions on the unclassified record
@@ -287,16 +287,15 @@ public class ClassifyRecord extends BaseTest
     @Test
     (
         groups = { "integration" },
-        description = "Check that a user with 'Secret' clearance can't classify a record owned by someone else.",
+        description = "Check that a user with 'Secret' clearance can't classify a record if it does not have read & file permission over it.",
         dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" }
     )
-    public void cantClassifyAnotherUsersRecord()
+    public void cantClassifyRecordWithoutReadAndFile()
     {
         openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID,
                     createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
-        // This record is owned by admin.
         Record record = filePlan.getRecord(RECORD);
-        assertFalse("Classify action should not be shown to user who doesn't own the document.",
+        assertFalse("Classify action should not be shown to a user that does not have read & file permission over it.",
                     record.isActionClickable(RecordActions.CLASSIFY));
     }
 }

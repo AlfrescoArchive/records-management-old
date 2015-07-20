@@ -27,8 +27,19 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordCategory;
 import org.alfresco.po.rm.browse.fileplan.RecordFolder;
+import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
+import org.alfresco.po.rm.details.record.RecordActionsPanel;
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.create.NewRecordFolderDialog;
 import org.alfresco.test.BaseTest;
+import static org.alfresco.test.TestData.CLASSIFICATION_AGENCY;
+import static org.alfresco.test.TestData.CLASSIFICATION_REASON;
+import static org.alfresco.test.TestData.CLASSIFIED_BY;
+import static org.alfresco.test.TestData.COMPLETE_RECORD;
+import static org.alfresco.test.TestData.RECORD_CATEGORY_ONE;
+import static org.alfresco.test.TestData.RECORD_FOLDER_ONE;
+import static org.alfresco.test.TestData.RM_SITE_ID;
+import static org.alfresco.test.TestData.SECRET_CLASSIFICATION_LEVEL_TEXT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -44,6 +55,7 @@ public class CreateFilePlan extends BaseTest
     /** file plan browse view */
     @Autowired
     private FilePlan filePlan;
+ 
 
     /**
      * Integration test execution
@@ -109,6 +121,18 @@ public class CreateFilePlan extends BaseTest
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
         createRecordFolder(RECORD_FOLDER_TWO);
+    }
+    
+    @Test
+    (
+        groups = { "integration", "GROUP_RECORD_FOLDER_SEARCH_EXISTS" },
+        description = "Create File Plan",
+        dependsOnGroups = { "GROUP_CATEGORY_ONE_EXISTS" }
+    )
+    public void createRecordFolderSearch()
+    {
+        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
+        createRecordFolder(RECORD_FOLDER_SEARCH);
     }
 
     /** Create non-electronic record. */

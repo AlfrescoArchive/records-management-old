@@ -100,6 +100,12 @@ public interface TestData
      */
     public static final String RECORD_FOLDER_TWO = "record-folder-two";
 
+    /**
+     * A folder in fileplan to use for search.
+     * <p>"GROUP_RECORD_FOLDER_SEARCH_EXISTS" RECORD_FOLDER_SEARCH has been created in CATEGORY_ONE.
+     */
+     public static final String RECORD_FOLDER_SEARCH = "record-folder-search";
+    
     /* "GROUP_FILE_PLAN_EXISTS" The file plan structure exists. */
 
     /**
@@ -233,7 +239,9 @@ public interface TestData
      * <p>"GROUP_CLASSIFIED_RECORD_EXISTS" The CLASSIFIED_RECORD has been created.
      */
     public static final String CLASSIFIED_RECORD = "classified-record";
-
+    public static final String TOP_SECRET_RECORD_SEARCH = "search-top-secret-record";
+    public static final String CONFIDENTIAL_RECORD_SEARCH = "search-confidential-record";
+    public static final String UNCLASSIFIED_RECORD_SEARCH = "search-unclassified-record";
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String TOP_SECRET_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String SECRET_CLASSIFICATION_LEVEL_TEXT = "Secret";

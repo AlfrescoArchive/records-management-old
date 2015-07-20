@@ -19,7 +19,9 @@
 package org.alfresco.po.rm.site;
 
 import org.alfresco.po.common.site.SiteNavigation;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
+import org.alfresco.po.rm.search.RecordsSearch;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,6 +52,10 @@ public class RMSiteNavigation extends SiteNavigation
     @Autowired
     private FilePlan filePlan;
     
+    /** */
+    @Autowired
+    private RecordsSearch recordsSearch;
+    
     /**
      * Click on the site dashboard link
      */
@@ -66,5 +72,15 @@ public class RMSiteNavigation extends SiteNavigation
     {
         documentLibrary.click();
         return filePlan.render();
+    }
+    
+    /**
+     * Click on search records link
+     */
+    public RecordsSearch clickOnRecordsSearch(){
+        
+        search.click();
+        Utils.webDriverWait(3);
+        return recordsSearch.render();
     }
 }
