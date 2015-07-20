@@ -18,7 +18,6 @@
  */
 package org.alfresco.test;
 
-import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,45 +30,44 @@ import org.springframework.stereotype.Component;
 public class DataPrepHelper implements TestData
 {
     @Autowired private ModuleProperties moduleProperties;
-    
+
     /** data prep services */
-    @Autowired private SiteService siteService;
     @Autowired private UserService userService;
-    
+
     /**
      * Helper method to create user if it doesn't already exist.
      */
     public void createUser(String userName)
     {
         if (!userService.userExists(
-                    moduleProperties.getAdminName(), 
-                    moduleProperties.getAdminPassword(), 
+                    moduleProperties.getAdminName(),
+                    moduleProperties.getAdminPassword(),
                     userName))
         {
             userService.create(
-                        moduleProperties.getAdminName(), 
-                        moduleProperties.getAdminPassword(), 
-                        userName, 
-                        DEFAULT_PASSWORD, 
-                        DEFAULT_EMAIL, 
-                        FIRST_NAME, 
+                        moduleProperties.getAdminName(),
+                        moduleProperties.getAdminPassword(),
+                        userName,
+                        DEFAULT_PASSWORD,
+                        DEFAULT_EMAIL,
+                        FIRST_NAME,
                         LAST_NAME);
         }
     }
-    
+
     /**
      * Helper method to delete user if it exists.
      */
     public void deleteUser(String userName)
     {
         if (userService.userExists(
-                    moduleProperties.getAdminName(), 
-                    moduleProperties.getAdminPassword(), 
+                    moduleProperties.getAdminName(),
+                    moduleProperties.getAdminPassword(),
                     userName))
         {
             userService.delete(
-                        moduleProperties.getAdminName(), 
-                        moduleProperties.getAdminPassword(), 
+                        moduleProperties.getAdminName(),
+                        moduleProperties.getAdminPassword(),
                         userName);
         }
     }

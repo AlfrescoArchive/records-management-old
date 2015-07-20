@@ -21,7 +21,6 @@ package org.alfresco.test.integration.dataSetup;
 
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
-import org.alfresco.po.share.admin.usertrashcan.UserTrashcanPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
@@ -37,20 +36,17 @@ import org.testng.annotations.Test;
  */
 public class CreateCollabSite extends BaseTest implements DocumentActions
 {
-    /** user trashcan */
-    @Autowired
-    private UserTrashcanPage userTrashcan;
     /** my sites dashlet */
     @Autowired
     private MySitesDashlet mySitesDashlet;
     /** The document library page. */
     @Autowired
     private DocumentLibrary documentLibrary;
-   
+
     /** data prep services */
     @Autowired private UserService userService;
     @Autowired private SiteService siteService;
-    
+
     /**
      * Regression test execution
      */
