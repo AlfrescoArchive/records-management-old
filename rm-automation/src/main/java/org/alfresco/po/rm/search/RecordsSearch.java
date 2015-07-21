@@ -18,12 +18,10 @@
  */
 package org.alfresco.po.rm.search;
 
-import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -73,6 +71,8 @@ public class RecordsSearch extends SharePage
 
     @FindBy(css = "input[id*='default-" + SearchConstants.SHOW_RECORD_CATEGORIES + "']")
     private CheckBox showRecordCategories;
+    
+    private final String SEARCH_URL = "/page/site/rm/rmsearch";
 
     /**
      * selects incomplete records from saved searches 
@@ -150,6 +150,6 @@ public class RecordsSearch extends SharePage
     @Override
     protected String getPageURL(String... context)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return SEARCH_URL;
     }
 }

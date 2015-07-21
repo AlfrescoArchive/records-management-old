@@ -19,7 +19,6 @@
 
 package org.alfresco.test.integration.classify;
 
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
@@ -67,13 +66,12 @@ public class SearchClassifiedRecords extends BaseTest
      @Test(
             groups = {"integration"},
             description = "User with 'no clearance' clearance can view searched records with level at most 'no clearance'.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void unclearedUserSearchResultsForClassifiedData()
     {
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, recordsSearch);
         // include incomplete records
         recordsSearch.checkResultsOption("Include Incomplete", true);
         recordsSearch.clickOnSearch();
@@ -97,13 +95,12 @@ public class SearchClassifiedRecords extends BaseTest
     @Test(
             groups = {"integration"},
             description = "User with 'no clearance' clearance can view saved searches records with level at most 'no clearance'.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void unclearedUserSearchResultsForSavedSearch() 
     {
-        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, recordsSearch);
         //select Incomplete Records saved search
         recordsSearch.selectIncompleteRecordsSearch();
         recordsSearch.clickOnSearch();
@@ -132,9 +129,8 @@ public class SearchClassifiedRecords extends BaseTest
     )
     public void secretUserSearchResultsForClassifiedData() 
     {
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
         // include incomplete records
         recordsSearch.checkResultsOption("Include Incomplete", true);
         recordsSearch.clickOnSearch();
@@ -163,10 +159,9 @@ public class SearchClassifiedRecords extends BaseTest
     )
     public void secretUserSearchResultsForSavedSearch() 
     {
-        openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
-         //select Incomplete Records saved search
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
+        //select Incomplete Records saved search
         recordsSearch.selectIncompleteRecordsSearch();
         recordsSearch.clickOnSearch();
 
@@ -189,13 +184,12 @@ public class SearchClassifiedRecords extends BaseTest
     @Test(
             groups = {"integration"},
             description = "User with 'top secret' clearance can view all searched classified and unclassified records.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void topSecretUserSearchResultsForClassifiedData() 
     {
-        openPage(filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
+        openPage(recordsSearch);
         // include incomplete records
         recordsSearch.checkResultsOption("Include Incomplete", true);
         recordsSearch.clickOnSearch();
@@ -219,14 +213,12 @@ public class SearchClassifiedRecords extends BaseTest
     @Test(
             groups = {"integration"},
             description = "User with 'top secret' clearance can view all searched classified and unclassified records from saved searches.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void topSecretUserSearchResultsForSavedSearch() 
     {
-        // access search with the top secret security clearance user  
-        openPage(filePlan, RM_SITE_ID, "documentlibrary");
         // navigate to Records Search
-        rmSiteNavigation.clickOnRecordsSearch();
+        openPage(recordsSearch);
         //select Incomplete Records saved search
         recordsSearch.selectIncompleteRecordsSearch();
         recordsSearch.clickOnSearch();
