@@ -251,14 +251,11 @@ public final class Utils implements ApplicationContextAware
     @SuppressWarnings("unchecked")
     public static <T extends WebElement> T mouseOver(T webElement)
     {
-        return retry(new Retry<T>()
+        return retry(() ->
         {
-            public T execute()
-            {
                 Actions actions = new Actions(getWebDriver());
                 actions.moveToElement(webElement).perform();
-                return webElement;
-            }
+                return webElement;            
         }, 5, MoveTargetOutOfBoundsException.class);        
     }
 
