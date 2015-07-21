@@ -19,16 +19,16 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.search.RecordsSearch;
 import org.alfresco.po.rm.search.SearchRecordsResults;
-import org.alfresco.po.rm.site.RMSiteNavigation;
 import org.alfresco.test.BaseTest;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -42,9 +42,6 @@ public class SearchClassifiedRecords extends BaseTest
     private FilePlan filePlan;
 
     @Autowired
-    private RMSiteNavigation rmSiteNavigation;
-
-    @Autowired
     private RecordsSearch recordsSearch;
 
     @Autowired
@@ -52,7 +49,7 @@ public class SearchClassifiedRecords extends BaseTest
 
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
-        
+
     /**
      * User with 'no clearance' clearance can view searched records with level at most 'no clearance'.
      * <p>
@@ -81,7 +78,7 @@ public class SearchClassifiedRecords extends BaseTest
         assertFalse("The record with confidential security clearance is displayed in search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(CONFIDENTIAL_RECORD_SEARCH));
         assertTrue("The record with unclassified security clearance is not displayed in search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'no clearance' clearance can view records from saved searches with level at most 'no clearance'.
      * <p>
@@ -97,7 +94,7 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'no clearance' clearance can view saved searches records with level at most 'no clearance'.",
             dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
-    public void unclearedUserSearchResultsForSavedSearch() 
+    public void unclearedUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, recordsSearch);
@@ -110,7 +107,7 @@ public class SearchClassifiedRecords extends BaseTest
         assertFalse("The record with confidential security clearance is displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(CONFIDENTIAL_RECORD_SEARCH));
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'secret' clearance can view searched records with level at most 'secret'.
      * <p>
@@ -127,7 +124,7 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'secret' clearance can view searched records with level at most 'secret'.",
             dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
-    public void secretUserSearchResultsForClassifiedData() 
+    public void secretUserSearchResultsForClassifiedData()
     {
         // navigate to Records Search
         openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
@@ -146,7 +143,7 @@ public class SearchClassifiedRecords extends BaseTest
      * <p>
      * <a href="https://issues.alfresco.com/jira/browse/RM-2146">RM-2146</a><pre>
      * Given that I am a RM user with mid level security clearance
-     * When I search for records 
+     * When I search for records
      * Then I can see all unclassified records in the search results
      * And I can see all classified records with a classification less than or equal to my security level in the search results
      * And I can not see any classified records with a classification higher than my security level in the search results
@@ -157,7 +154,7 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'secret' clearance can view records from saved searches with level at most 'secret'.",
             dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
-    public void secretUserSearchResultsForSavedSearch() 
+    public void secretUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
@@ -170,7 +167,7 @@ public class SearchClassifiedRecords extends BaseTest
         assertTrue("The record with confidential security clearance is not displayed in Incomplete Records filter search results for secret user.", searchRecordsResults.recordIsDisplayedInResults(CONFIDENTIAL_RECORD_SEARCH));
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for secret user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'top secret' clearance can view all searched classified and unclassified records.
      * <p>
@@ -186,7 +183,7 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'top secret' clearance can view all searched classified and unclassified records.",
             dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
-    public void topSecretUserSearchResultsForClassifiedData() 
+    public void topSecretUserSearchResultsForClassifiedData()
     {
         // navigate to Records Search
         openPage(recordsSearch);
@@ -215,7 +212,7 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'top secret' clearance can view all searched classified and unclassified records from saved searches.",
             dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
-    public void topSecretUserSearchResultsForSavedSearch() 
+    public void topSecretUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(recordsSearch);
@@ -233,9 +230,9 @@ public class SearchClassifiedRecords extends BaseTest
      * Create top secret, confidential and unclassified records for search.
      */
      @Test ( groups = { "integration", "GROUP_SEARCH_RECORDS_EXIST" },
-     description = "Create and classify records for search", 
+     description = "Create and classify records for search",
      dependsOnGroups = { "GROUP_RECORD_FOLDER_SEARCH_EXISTS" } )
-     
+
     public void createClassifiedRecordsForSearch()
     {
         // upload records
@@ -253,7 +250,7 @@ public class SearchClassifiedRecords extends BaseTest
                 .clickOnFile()
                 .clickOnElectronic()
                 .uploadFile(CONFIDENTIAL_RECORD_SEARCH);
-        
+
         // classify record to Top Secret clearance level
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
@@ -264,7 +261,7 @@ public class SearchClassifiedRecords extends BaseTest
                 .clickOnClassify();
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
-        
+
         // classify record to Confidential clearance level
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
