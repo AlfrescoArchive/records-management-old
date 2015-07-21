@@ -122,7 +122,7 @@ public class SearchClassifiedRecords extends BaseTest
     @Test(
             groups = {"integration"},
             description = "User with 'secret' clearance can view searched records with level at most 'secret'.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void secretUserSearchResultsForClassifiedData()
     {
@@ -152,7 +152,7 @@ public class SearchClassifiedRecords extends BaseTest
     @Test(
             groups = {"integration"},
             description = "User with 'secret' clearance can view records from saved searches with level at most 'secret'.",
-            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
     public void secretUserSearchResultsForSavedSearch()
     {
