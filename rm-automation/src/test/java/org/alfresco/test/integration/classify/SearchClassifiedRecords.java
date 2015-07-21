@@ -253,18 +253,15 @@ public class SearchClassifiedRecords extends BaseTest
                 .clickOnFile()
                 .clickOnElectronic()
                 .uploadFile(TOP_SECRET_RECORD_SEARCH);
-        Utils.webDriverWait(2);
         filePlan.getToolbar()
                 .clickOnFile()
                 .clickOnElectronic()
                 .uploadFile(UNCLASSIFIED_RECORD_SEARCH);
-        Utils.webDriverWait(2);
         filePlan.getToolbar()
                 .clickOnFile()
                 .clickOnElectronic()
                 .uploadFile(CONFIDENTIAL_RECORD_SEARCH);
-        Utils.webDriverWait(2);
-
+        
         // classify record to Top Secret clearance level
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
@@ -275,7 +272,7 @@ public class SearchClassifiedRecords extends BaseTest
                 .clickOnClassify();
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
-        Utils.webDriverWait(2);
+        
         // classify record to Confidential clearance level
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
@@ -286,6 +283,5 @@ public class SearchClassifiedRecords extends BaseTest
                 .clickOnClassify();
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
-        Utils.webDriverWait(2);
     }
 }

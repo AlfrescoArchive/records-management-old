@@ -18,10 +18,12 @@
  */
 package org.alfresco.po.rm.search;
 
+import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -34,8 +36,8 @@ import ru.yandex.qatools.htmlelements.element.Link;
  * @author Oana Nechiforescu
  */
 @Component
-public class RecordsSearch extends SharePage {
-
+public class RecordsSearch extends SharePage 
+{
     @Autowired
     private SearchRecordsResults searchRecordsResults;
 
@@ -75,7 +77,9 @@ public class RecordsSearch extends SharePage {
     /**
      * selects incomplete records from saved searches 
      */
-    public void selectIncompleteRecordsSearch() {
+    public void selectIncompleteRecordsSearch()
+    {
+        Utils.waitForVisibilityOf(savedSearches);
         savedSearches.click();
         Utils.waitForVisibilityOf(incompleteRecords);
         incompleteRecords.click();
@@ -86,18 +90,24 @@ public class RecordsSearch extends SharePage {
      * @param option
      * @param checked 
      */
-    public void checkResultsOption(String option, Boolean checked) {
-        if (!optionsContainer.isDisplayed()) {
+    public void checkResultsOption(String option, Boolean checked)
+    {
+        if (!optionsContainer.isDisplayed())
+        {
             resultsOptions.click();
         }
         CheckBox check = getCheckOption(option);
-        if (check != null) {
+        if (check != null) 
+        {
             Utils.waitForVisibilityOf(check);
-            if (checked) {
+            if (checked) 
+            {
                 if (!check.isSelected()) {
                     check.select();
                 }
-            } else {
+            } 
+            else 
+            {
                 if (check.isSelected()) {
                     check.select();
                 }
@@ -110,8 +120,10 @@ public class RecordsSearch extends SharePage {
      * @param option
      * @return the CheckBox element from the page that is required
      */
-    private CheckBox getCheckOption(String option) {
-        switch (option) {
+    private CheckBox getCheckOption(String option) 
+    {
+        switch (option) 
+        {
             case "Modifier":
                 return modifierCheckbox;
             case "Has Disposition Schedule":
@@ -127,16 +139,17 @@ public class RecordsSearch extends SharePage {
     /**
      * click on the search button in order to start the search
      */
-    public void clickOnSearch() {
+    public void clickOnSearch() 
+    {
+        Utils.waitForVisibilityOf(searchButton);
         searchButton.click();
         Utils.waitForVisibilityOf(resultsPageEnabled);
-        Utils.webDriverWait(3);
         searchRecordsResults.render();
     }
 
     @Override
-    protected String getPageURL(String... context) {
+    protected String getPageURL(String... context)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

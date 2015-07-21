@@ -25,6 +25,7 @@ import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Link;
@@ -35,8 +36,8 @@ import ru.yandex.qatools.htmlelements.element.Link;
  * @author Oana Nechiforescu
  */
 @Component
-public class SearchRecordsResults extends SharePage {
-
+public class SearchRecordsResults extends SharePage 
+{
     @Autowired
     private RecordsSearch recordsSearchPage;
 
@@ -54,16 +55,15 @@ public class SearchRecordsResults extends SharePage {
      *
      * @return the list of results from the Name column
      */
-    public List<String> getResults() {
+    public List<String> getResults()
+    {
         List<String> recordsNames = new ArrayList<>();
-        Utils.waitForVisibilityOf(resultsContainer);
-        Utils.waitForVisibilityOf(By.cssSelector(SearchConstants.RESULTS_NAMES_SELECTOR));
+        Utils.waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(SearchConstants.RESULTS_NAMES_SELECTOR))); 
         List<WebElement> results = webDriver.findElements(By.cssSelector(SearchConstants.RESULTS_NAMES_SELECTOR));
-        System.out.println("The current search results are : ");
-        for (WebElement record : results) {
+        for (WebElement record : results) 
+        {
             String recordName = record.getText();
             recordsNames.add(recordName);
-            System.out.println(recordName);
         }
         return recordsNames;
     }
@@ -76,9 +76,12 @@ public class SearchRecordsResults extends SharePage {
      * @return true is the record name is in the search results Name column,
      * false if not
      */
-    public Boolean recordIsDisplayedInResults(String recordName) {
-        for (String resultName : getResults()) {
-            if (resultName.startsWith(recordName)) {
+    public Boolean recordIsDisplayedInResults(String recordName)
+    {
+        for (String resultName : getResults()) 
+        {
+            if (resultName.startsWith(recordName)) 
+            {
                 return true;
             }
         }
@@ -90,10 +93,10 @@ public class SearchRecordsResults extends SharePage {
     /**
      * navigates to the Criteria tab from the Results tab
      */
-    public void navigateToCriteriaTab() {
+    public void navigateToCriteriaTab() 
+    {
         criteriaPage.click();
         Utils.waitForVisibilityOf(criteriaPageEnabled);
-        Utils.webDriverWait(5);
         recordsSearchPage.render();
     }
 
@@ -102,9 +105,12 @@ public class SearchRecordsResults extends SharePage {
      * @param recordName
      * @return true if the record name has been found in the search results
      */
-    public Boolean recheckResults(String recordName){
-        for (String resultName : getResults()) {
-            if (resultName.startsWith(recordName)) {
+    public Boolean recheckResults(String recordName)
+    {
+        for (String resultName : getResults()) 
+        {
+            if (resultName.startsWith(recordName)) 
+            {
                 return true;
             }
         }
@@ -112,7 +118,8 @@ public class SearchRecordsResults extends SharePage {
     }
     
     @Override
-    protected String getPageURL(String... context) {
+    protected String getPageURL(String... context) 
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

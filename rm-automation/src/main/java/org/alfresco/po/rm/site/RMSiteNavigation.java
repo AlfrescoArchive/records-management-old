@@ -23,6 +23,7 @@ import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.search.RecordsSearch;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -77,10 +78,10 @@ public class RMSiteNavigation extends SiteNavigation
     /**
      * Click on search records link
      */
-    public RecordsSearch clickOnRecordsSearch(){
-        
+    public RecordsSearch clickOnRecordsSearch()
+    {      
+        Utils.waitFor(ExpectedConditions.elementToBeClickable(search.getWrappedElement()));
         search.click();
-        Utils.webDriverWait(3);
         return recordsSearch.render();
     }
 }
