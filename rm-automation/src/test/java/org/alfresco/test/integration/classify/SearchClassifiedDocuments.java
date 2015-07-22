@@ -27,8 +27,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
+import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
@@ -79,6 +81,7 @@ public class SearchClassifiedDocuments extends BaseTest
     @Autowired private DataPrepHelper dataPrepHelper;
     @Autowired private SiteService siteService;
     @Autowired private UserService userService;
+    @Autowired private ContentService contentService;
 
     /** predicate used to determine if documents are ready for search (required to wait for SOLR) */
     private final Predicate<WebDriver> documentsAvailableForSearch = (w) ->
@@ -116,13 +119,7 @@ public class SearchClassifiedDocuments extends BaseTest
             .clickOnConfirm(securityClearancePage);
         
         // create collaboration site
-        openPage(userDashboardPage);
-        mySitesDashlet
-            .clickOnCreateSite()
-            .setSiteName(SEARCH_TEST_SITE_NAME)
-            .setSiteURL(SEARCH_TEST_SITE_ID)
-            .setSiteDescription(DESCRIPTION)
-            .clickOnOk();
+        dataPrepHelper.createSite(SEARCH_TEST_SITE_NAME, SEARCH_TEST_SITE_ID);
         
         // invite users to site as site manager
         for (String user : Arrays.asList(UNCLASSIFIED_USER, CONFIDENTIAL_USER, SECRET_USER, TOP_SECRET_USER))
@@ -135,12 +132,11 @@ public class SearchClassifiedDocuments extends BaseTest
         openPage(documentLibrary, SEARCH_TEST_SITE_ID);
         for (String documentName : Arrays.asList(UNCLASSIFIED_DOCUMENT, CONFIDENTIAL_DOCUMENT, SECRET_DOCUMENT, TOP_SECRET_DOCUMENT))
         {
-            documentLibrary
-                .getToolbar().clickOnUpload()
-                .uploadFile(Utils.createTempFile(documentName), documentLibrary);
+            contentService.createDocument(getAdminName(), getAdminPassword(), SEARCH_TEST_SITE_ID, DocumentType.TEXT_PLAIN, documentName, TEST_CONTENT);
         }
         
         // classify documents
+        openPage(documentLibrary, SEARCH_TEST_SITE_ID);
         classifyDocument(CONFIDENTIAL_DOCUMENT, CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
         classifyDocument(SECRET_DOCUMENT, SECRET_CLASSIFICATION_LEVEL_TEXT);
         classifyDocument(TOP_SECRET_DOCUMENT, TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);

@@ -19,22 +19,16 @@
 package org.alfresco.po.rm.browse.fileplan;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.RMBrowsePage;
 import org.alfresco.po.rm.browse.RMBrowsePlanList;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.Link;
-
-import com.google.common.base.Predicate;
-import org.openqa.selenium.WebElement;
 
 /**
  * File plan 
@@ -55,24 +49,6 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
 
     @FindBy(xpath=".//span[@class='unfiledRecords']/a")
     private Link unfiledRecordsFilter;
-    
-    @Override
-    public <T extends Renderable> T render()
-    {
-        T result = super.render();
-        
-        // wait until the wait message is not longer showing
-        Predicate<WebDriver> predicate = w -> 
-        {
-            return !Utils.elementExists(By.cssSelector(".wait"));            
-        };
-        new FluentWait<WebDriver>(Utils.getWebDriver())
-            .withTimeout(10, TimeUnit.SECONDS)
-            .pollingEvery(1, TimeUnit.SECONDS)
-            .until(predicate);
-        
-        return result;
-    }
     
     /**
      * Helper method to get the named record category from the list

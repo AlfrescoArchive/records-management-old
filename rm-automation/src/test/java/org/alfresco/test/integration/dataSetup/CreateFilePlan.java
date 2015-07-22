@@ -187,7 +187,7 @@ public class CreateFilePlan extends BaseTest
         filePlan.getToolbar()
             .clickOnFile()
             .clickOnElectronic()
-            .uploadFile(COMPLETE_RECORD);
+            .uploadFile(COMPLETE_RECORD, filePlan);
 
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnCompleteRecord();

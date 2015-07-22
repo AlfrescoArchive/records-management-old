@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.share.browse;
 
+import java.util.concurrent.TimeUnit;
+
 import org.alfresco.po.common.Toolbar;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.renderable.Renderable;
@@ -25,7 +27,11 @@ import org.alfresco.po.common.site.SiteNavigation;
 import org.alfresco.po.common.site.SitePage;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.base.Predicate;
 
 /**
  * Browse page
@@ -62,6 +68,9 @@ public abstract class BrowsePage<N extends SiteNavigation,
         return toolbar;
     }
     
+    /**
+     * @see org.alfresco.po.share.page.SharePage#render()
+     */
     @Override
     public <T extends Renderable> T render()
     {
@@ -69,6 +78,16 @@ public abstract class BrowsePage<N extends SiteNavigation,
         
         // ensure that the "no items" banner has been removed
         Utils.waitForInvisibilityOf(By.cssSelector("div[id$='no-items-template']"));
+            
+        // wait until the wait message is not longer showing
+        Predicate<WebDriver> predicate = w -> 
+        {
+            return !Utils.elementExists(By.cssSelector(".wait"));            
+        };
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+            .withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS)
+            .until(predicate);
         
         return result;
     }
