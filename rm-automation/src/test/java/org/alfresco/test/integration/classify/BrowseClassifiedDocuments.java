@@ -31,7 +31,7 @@ import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.BaseTest;
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -238,10 +238,10 @@ public class BrowseClassifiedDocuments extends BaseTest
             document.getBannerText(ContentBanner.CLASSIFICATION);
             fail("The unclassified document should not have a classification banner.");
         }
-        catch(NoSuchElementException e)
+        catch(TimeoutException e)
         {
             // NOOP - This is expected. Nb. Don't move the expected exception to cover the whole test as many places
-            // throw NoSuchElementException.
+            // throw TimeoutException.
         }
     }
 }

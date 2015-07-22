@@ -31,6 +31,7 @@ import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -286,7 +287,7 @@ public abstract class ListItem
             WebElement link = Utils.waitForFind(row, getActionSelector(actionName));
             result = new Link(link);
         }
-        catch (NoSuchElementException e)
+        catch (TimeoutException e)
         {
             // do nothing, just return null
         }
@@ -348,7 +349,7 @@ public abstract class ListItem
         {
             indicatorElement = Utils.waitForFind(row, getIndicatorSelector(indicator));
         }
-        catch (NoSuchElementException e)
+        catch (TimeoutException e)
         {
             // Nothing needs to be done.
         }

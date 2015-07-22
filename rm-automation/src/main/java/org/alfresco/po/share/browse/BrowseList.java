@@ -21,15 +21,18 @@ package org.alfresco.po.share.browse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Retry;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.base.Predicate;
 
 /**
  * Generic browse list implementation
@@ -52,10 +55,7 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
 
     /** row selector */
     private By rowsSelector = By.cssSelector("div[id$='default-documents'] tbody[class$='data'] tr");
-
-    /** item count */
-    private int itemCount = 0;
-
+    
     /**
      * @see org.alfresco.po.common.renderable.Renderable#render()
      */
@@ -64,51 +64,76 @@ public abstract class BrowseList<F extends BrowseListItemFactory> extends Render
     {
         T result = super.render();
 
-        // figure out how many items are on the page
-        String text = current.getText();
-        String[] values = text.split(" ");
-        itemCount = Integer.parseInt(values[2]);
-
-        if (itemCount != 0)
-        {
-            Utils.waitFor(ExpectedConditions.presenceOfAllElementsLocatedBy(rowsSelector));
-        }
+        // wait for rows 
+        waitForRows();
 
         return result;
     }
+    
+    /**
+     * Wait for all the expected rows to be there
+     */
+    private void waitForRows()
+    {
+        // get the number of expected items
+        int itemCount = getItemCount();
+        if (itemCount != 0)
+        {
+            // wait predicate
+            Predicate<WebDriver> waitForRows = (w) ->
+            {
+                List<WebElement> rows = w.findElements(rowsSelector);
+                return (itemCount == rows.size());
+            };
+            
+            // wait until we have the expected number of rows
+            new FluentWait<WebDriver>(Utils.getWebDriver())
+                .withTimeout(10, TimeUnit.SECONDS)
+                .pollingEvery(1, TimeUnit.SECONDS)
+                .until(waitForRows); 
+        }        
+    }
 
+    /**
+     * Helper method to get the currently stated page item count
+     */
+    private int getItemCount()
+    {
+        // figure out how many items are on the page
+        String text = current.getText();
+        String[] values = text.split(" ");
+        if (values.length == 3)
+        {
+            return Integer.parseInt(values[2]);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
     /**
      * get the item map
      */
     private Map<String, ListItem> getItemMap()
-    {
-        return Utils.retry(new Retry<Map<String, ListItem>>()
+    {        
+        // wait for rows
+        waitForRows();
+        
+        // get rows
+        List<WebElement> rows = webDriver.findElements(rowsSelector);
+
+        // clear the current item map
+        Map<String, ListItem>itemMap = new HashMap<String, ListItem>(rows.size());
+
+        // build the new item map
+        for (WebElement row : rows)
         {
-            @Override
-            public Map<String, ListItem> execute()
-            {
-                List<WebElement> rows = webDriver.findElements(rowsSelector);
+            ListItem item = listItemFactory.getItem(row);
+            itemMap.put(item.getName(), item);
+        }
 
-                if (rows.size() == itemCount)
-                {
-                    // clear the current item map
-                    Map<String, ListItem>itemMap = new HashMap<String, ListItem>(rows.size());
-
-                    // build the new item map
-                    for (WebElement row : rows)
-                    {
-                        ListItem item = listItemFactory.getItem(row);
-                        itemMap.put(item.getName(), item);
-                    }
-
-                    return itemMap;
-                }
-                else
-                {
-                    throw new IllegalStateException("Expected " + itemCount + " rows and found " + rows.size());
-                }
-            }
-        }, 5);
+        return itemMap;
     }
 
     /**
