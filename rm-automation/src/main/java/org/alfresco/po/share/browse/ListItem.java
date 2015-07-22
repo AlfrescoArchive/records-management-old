@@ -49,6 +49,8 @@ public abstract class ListItem
     /** action(s) selector */
     private static final By ACTIONS_SELECTOR = By.cssSelector("div.action-set div");
     private static final String ACTION_SELECTOR_XPATH = ".//div[@class=''{0}'']/a";
+    
+    private static final String ACTIONS_PANEL_DOCUMENT_DETAILS = "div[class='document-actions document-details-panel']";
 
     /** link selector */
     private static By linkSelector = By.xpath(".//td[contains(@class,'fileName')]//h3//a");
@@ -232,6 +234,40 @@ public abstract class ListItem
         return result;
     }
 
+    /**
+     * Click on action from Details Page
+     */
+    public <T extends Renderable> T  clickOnActionFromDetailsPage(String actionName, T renderable)
+    {   
+        Utils.waitForVisibilityOf(By.cssSelector(ACTIONS_PANEL_DOCUMENT_DETAILS));
+     // get action link
+        Link action = getActionLinkFromDetailsPage(actionName);
+        if (action == null || !action.isEnabled())
+        {
+            throw new RuntimeException("The action " + actionName + " could not be found for the item " + getName());
+        }
+        
+        action.click();
+        
+        // render the return page
+        return renderable.render();
+    }
+    
+    private Link getActionLinkFromDetailsPage(String actionName){
+    
+        Link result = null;
+        try
+        {
+            WebElement link = Utils.waitForFind(getActionSelector(actionName));
+            result = new Link(link);
+        }
+        catch (TimeoutException e)
+        {
+            // do nothing, just return null
+        }
+        return result;
+    }
+    
     /**
      * Click on action
      */

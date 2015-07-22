@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Link;
 
 import com.google.common.base.Predicate;
+import org.openqa.selenium.WebElement;
 
 /**
  * File plan 
@@ -106,6 +107,15 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
         Link link = folderBreadcrumb.get(folderBreadcrumb.size() - 1);
         link.click();
         Utils.waitForStalenessOf(link);
+        return render();
+    }
+    
+    public FilePlan navigateToContainer()
+    {
+        List<WebElement> containers = Utils.getWebDriver().findElements(By.cssSelector("span[class='folder-link folder-open'] a"));
+        if (!containers.isEmpty()) {
+            containers.get(containers.size() - 1).click();
+        }
         return render();
     }
 

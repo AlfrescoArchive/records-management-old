@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
+import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
@@ -229,9 +230,11 @@ public class SearchClassifiedRecords extends BaseTest
     /**
      * Create top secret, confidential and unclassified records for search.
      */
-     @Test ( groups = { "integration", "GROUP_SEARCH_RECORDS_EXIST" },
-     description = "Create and classify records for search",
-     dependsOnGroups = { "GROUP_RECORD_FOLDER_SEARCH_EXISTS" } )
+     @Test (
+            groups = { "integration", "GROUP_SEARCH_RECORDS_EXIST" },
+            description = "Create and classify records for search",
+            dependsOnGroups = { "GROUP_RECORD_FOLDER_SEARCH_EXISTS"}
+     )
 
     public void createClassifiedRecordsForSearch()
     {
@@ -252,24 +255,28 @@ public class SearchClassifiedRecords extends BaseTest
                 .uploadFile(CONFIDENTIAL_RECORD_SEARCH);
 
         // classify record to Top Secret clearance level
-        filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
-                .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        Record topSecretRecord = filePlan.getRecord(TOP_SECRET_RECORD_SEARCH);
+        topSecretRecord.clickOnLink();
+        topSecretRecord.clickOnActionFromDetailsPage(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
                 .setClassifiedBy(CLASSIFIED_BY)
                 .setAgency(CLASSIFICATION_AGENCY)
                 .addReason(CLASSIFICATION_REASON)
-                .clickOnClassify();
+                .clickOnClassifyFromDetailsPage();
+        filePlan.navigateToContainer();
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
 
         // classify record to Confidential clearance level
-        filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
-                .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        Record confidentialRecord = filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH);
+        confidentialRecord.clickOnLink();
+        confidentialRecord.clickOnActionFromDetailsPage(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
                 .setClassifiedBy(CLASSIFIED_BY)
                 .setAgency(CLASSIFICATION_AGENCY)
                 .addReason(CLASSIFICATION_REASON)
-                .clickOnClassify();
+                .clickOnClassifyFromDetailsPage();
+        filePlan.navigateToContainer();
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
     }

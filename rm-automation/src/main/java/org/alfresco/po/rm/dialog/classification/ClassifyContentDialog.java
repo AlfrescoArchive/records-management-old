@@ -29,14 +29,18 @@ import java.util.List;
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.rm.browse.fileplan.FilePlan;
+import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.TextInput;
@@ -202,6 +206,15 @@ public class ClassifyContentDialog extends Dialog
         createButton.click();
         waitForInvisibilityOf(createButton);
         return SharePage.getLastRenderedPage().render();
+    }
+    /**
+     * Click on Classify from the Details Page
+     */
+    public Renderable clickOnClassifyFromDetailsPage()
+    {
+         createButton.click();
+         Utils.waitFor(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".footer .alfresco-buttons-AlfButton:nth-child(1) [role=button]")));
+         return SharePage.getLastRenderedPage().render();
     }
 
     /**
