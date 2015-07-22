@@ -1,5 +1,20 @@
-/**
+/*
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
  *
+ * This file is part of Alfresco
+ *
+ * Alfresco is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.alfresco.dataprep;
 
@@ -13,16 +28,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * Records management data prep service
+ * 
  * @author Roy Wetherall
- * @since 3.0.a
  */
 @Service
 public class RecordsManagementService
 {
+    /** uri's */
+    private static final String RM_ROLES_AUTHORITIES = "{0}rm/roles/{1}/authorities/{2}?alf_ticket={3}";
+    
+    /** http client factory */
     @Autowired private AlfrescoHttpClientFactory alfrescoHttpClientFactory;
 
+    /** user service */
     @Autowired private UserService userService;
-
+    
+    /**
+     * create user and assign to records management role
+     */
     public void createUserAndAssignToRole(
             String adminUser, 
             String adminPassword,
@@ -47,7 +71,7 @@ public class RecordsManagementService
     {
         AlfrescoHttpClient client = alfrescoHttpClientFactory.getObject();
         String reqURL = MessageFormat.format(
-                    "{0}rm/roles/{1}/authorities/{2}?alf_ticket={3}",
+                    RM_ROLES_AUTHORITIES,
                     client.getApiUrl(),
                     role,
                     userName,

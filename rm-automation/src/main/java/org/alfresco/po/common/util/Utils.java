@@ -165,8 +165,9 @@ public final class Utils implements ApplicationContextAware
      */
     public static WebElement waitForFind(By selector)
     {
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(getWebDriver());
-        return wait.until((webDriver) -> webDriver.findElement(selector));
+        return new FluentWait<WebDriver>(getWebDriver())
+                    .ignoring(NoSuchElementException.class)
+                    .until((WebDriver webDriver) -> webDriver.findElement(selector));
     }
     
     /**
@@ -180,8 +181,9 @@ public final class Utils implements ApplicationContextAware
      */
     public static WebElement waitForFind(WebElement webElement, By selector)
     {
-        Wait<WebElement> wait = new FluentWait<WebElement>(webElement);
-        return wait.until((w) -> w.findElement(selector));
+        return new FluentWait<WebElement>(webElement)
+                    .ignoring(NoSuchElementException.class)
+                    .until((WebElement w) -> w.findElement(selector));
     }
 
     /**

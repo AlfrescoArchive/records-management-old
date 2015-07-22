@@ -254,5 +254,8 @@ public interface TestData
    
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
+    
+    /** Test Content */
+    public static final String TEST_CONTENT = "This is some test content";
 
 }

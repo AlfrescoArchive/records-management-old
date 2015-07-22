@@ -129,7 +129,7 @@ public class SearchClassifiedDocuments extends BaseTest
         {
             // invite user to site as site manager
             userService.inviteUserToSiteAndAccept(user, getAdminName(), getAdminPassword(), SEARCH_TEST_SITE_ID, "SiteManager");
-        }
+        }        
         
         // upload documents
         openPage(documentLibrary, SEARCH_TEST_SITE_ID);

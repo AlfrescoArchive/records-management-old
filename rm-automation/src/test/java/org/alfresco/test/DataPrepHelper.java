@@ -18,8 +18,10 @@
  */
 package org.alfresco.test;
 
+import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.alfresco.api.entities.Site.Visibility;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +35,55 @@ public class DataPrepHelper implements TestData
 
     /** data prep services */
     @Autowired private UserService userService;
+    @Autowired private SiteService siteService;
 
+    /**
+     * Helper method that creates the site if it doesn't already exist
+     */
+    public void createSite(String siteName, String siteId)
+    {
+        try
+        {
+            if (!siteService.exists(
+                        siteId, 
+                        moduleProperties.getAdminName(), 
+                        moduleProperties.getAdminPassword()))
+            {
+                siteService.create(
+                            moduleProperties.getAdminName(), 
+                            moduleProperties.getAdminPassword(), 
+                            "", 
+                            siteId, 
+                            siteName, 
+                            DESCRIPTION, 
+                            Visibility.PUBLIC);
+            }
+        }
+        catch (Exception exception)
+        {
+            throw new RuntimeException("Unable to create site", exception);
+        }
+    }
+    
+    /**
+     * Helper method that deletes a site if that site exists
+     */
+    public void deleteSite(String siteId)
+    {
+        try
+        {
+            // delete site
+            if (siteService.exists(siteId, moduleProperties.getAdminName(), moduleProperties.getAdminPassword()))
+            {
+                siteService.delete(moduleProperties.getAdminName(), moduleProperties.getAdminPassword(), "", siteId);
+            }
+        }
+        catch (Exception exception)
+        {
+            throw new RuntimeException("Unable to delete site", exception);
+        }
+    }
+    
     /**
      * Helper method to create user if it doesn't already exist.
      */

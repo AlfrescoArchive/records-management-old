@@ -19,12 +19,13 @@
 
 package org.alfresco.test.integration.dataSetup;
 
-import org.alfresco.dataprep.SiteService;
+import org.alfresco.dataprep.CMISUtil.DocumentType;
+import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.UserService;
 import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
+import org.alfresco.test.DataPrepHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
@@ -36,16 +37,14 @@ import org.testng.annotations.Test;
  */
 public class CreateCollabSite extends BaseTest implements DocumentActions
 {
-    /** my sites dashlet */
-    @Autowired
-    private MySitesDashlet mySitesDashlet;
     /** The document library page. */
     @Autowired
     private DocumentLibrary documentLibrary;
 
     /** data prep services */
+    @Autowired private DataPrepHelper dataPrepHelper;
     @Autowired private UserService userService;
-    @Autowired private SiteService siteService;
+    @Autowired private ContentService contentService;
 
     /**
      * Regression test execution
@@ -55,17 +54,9 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         groups = { "integration", "GROUP_COLLABORATION_SITE_EXISTS" },
         description = "Create Collaboration Site"
     )
-    public void createCollabSite()
+    public void createCollabSite() throws Exception
     {
-        // create collaboration site
-        openPage(userDashboardPage);
-
-        // create site
-        mySitesDashlet.clickOnCreateSite()
-            .setSiteName(COLLAB_SITE_NAME)
-            .setSiteURL(COLLAB_SITE_ID)
-            .setSiteDescription(DESCRIPTION)
-            .clickOnOk();
+        dataPrepHelper.createSite(COLLAB_SITE_NAME, COLLAB_SITE_ID);
     }
 
     /** Create a document. */
@@ -75,13 +66,16 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         description = "Create In-Place Record",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
-    public void createDocument()
-    {
-        openPage(documentLibrary, COLLAB_SITE_ID);
-
-        documentLibrary.getToolbar()
-            .clickOnUpload()
-            .uploadFile(DOCUMENT);
+    public void createDocument() throws Exception
+    {        
+        // create test document
+        contentService.createDocument(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    COLLAB_SITE_ID, 
+                    DocumentType.TEXT_PLAIN, 
+                    DOCUMENT, 
+                    TEST_CONTENT);
     }
 
     /** Create an in-place record. */
@@ -91,17 +85,20 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         description = "Create In-Place Record",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS", "GROUP_RM_SITE_EXISTS" }
     )
-    public void declareInplaceRecord()
+    public void declareInplaceRecord() throws Exception
     {
-        openPage(documentLibrary, COLLAB_SITE_ID);
-
-        // upload document
-        documentLibrary.getToolbar()
-            .clickOnUpload()
-            .uploadFile(IN_PLACE_RECORD);
+        // create in-place record
+        contentService.createDocument(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    COLLAB_SITE_ID, 
+                    DocumentType.TEXT_PLAIN, 
+                    IN_PLACE_RECORD, 
+                    TEST_CONTENT);
 
         // Declare as in-place record.
-        documentLibrary.getDocument(IN_PLACE_RECORD)
+        openPage(documentLibrary, COLLAB_SITE_ID)
+            .getDocument(IN_PLACE_RECORD)
             .clickOnLink()
             .getDocumentActionsPanel()
             .clickOnAction(ACTION_DECLARE_RECORD);
@@ -114,17 +111,20 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
         description = "Create Collaboration Site",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
-    public void createSharedDocument()
+    public void createSharedDocument() throws Exception
     {
-        openPage(documentLibrary, COLLAB_SITE_ID);
+        // create document
+        contentService.createDocument(
+                    getAdminName(), 
+                    getAdminPassword(), 
+                    COLLAB_SITE_ID, 
+                    DocumentType.TEXT_PLAIN, 
+                    SHARED_DOCUMENT, 
+                    TEST_CONTENT);
 
-        // upload document
-        documentLibrary.getToolbar()
-            .clickOnUpload()
-            .uploadFile(SHARED_DOCUMENT);
-
-        // Share document
-        documentLibrary.getDocument(SHARED_DOCUMENT)
+        // share document
+        openPage(documentLibrary, COLLAB_SITE_ID)
+            .getDocument(SHARED_DOCUMENT)
             .clickOnLink()
             .getSocialActions()
             .clickShareDocument();
@@ -160,11 +160,7 @@ public class CreateCollabSite extends BaseTest implements DocumentActions
     @AfterSuite
     protected void deleteCollaborationSite() throws Exception
     {
-        // delete site
-        if (siteService.exists(COLLAB_SITE_ID, getAdminName(), getAdminPassword()))
-        {
-            siteService.delete(getAdminName(), getAdminPassword(), "", COLLAB_SITE_ID);
-        }
+        dataPrepHelper.deleteSite(COLLAB_SITE_ID);
     }
 
 }
