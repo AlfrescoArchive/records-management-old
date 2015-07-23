@@ -263,7 +263,8 @@ public class SearchClassifiedRecords extends BaseTest
                 .setAgency(CLASSIFICATION_AGENCY)
                 .addReason(CLASSIFICATION_REASON)
                 .clickOnClassifyFromDetailsPage();
-        filePlan.navigateToContainer();
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_SEARCH));
         filePlan.getRecord(TOP_SECRET_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
 
@@ -276,7 +277,8 @@ public class SearchClassifiedRecords extends BaseTest
                 .setAgency(CLASSIFICATION_AGENCY)
                 .addReason(CLASSIFICATION_REASON)
                 .clickOnClassifyFromDetailsPage();
-        filePlan.navigateToContainer();
+        openPage(filePlan, RM_SITE_ID,
+                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_SEARCH));
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
     }

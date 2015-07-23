@@ -85,14 +85,5 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
         Utils.waitForStalenessOf(link);
         return render();
     }
-    
-    public FilePlan navigateToContainer()
-    {
-        List<WebElement> containers = Utils.getWebDriver().findElements(By.cssSelector("span[class='folder-link folder-open'] a"));
-        if (!containers.isEmpty()) {
-            containers.get(containers.size() - 1).click();
-        }
-        return render();
-    }
 
 }
