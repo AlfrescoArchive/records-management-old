@@ -36,18 +36,18 @@ import org.springframework.stereotype.Component;
  * The "My Tasks" dashlet on the User Dashboard.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 @Component
 public class MyTasks extends Dashlet
 {
     /** XPath to find (first) invitation to site */
     private static final String INVITE = "//a[contains(@href, \"task-edit\")][contains(., \"{0}\")]";
-    
+
     /** edit site invitation page */
     @Autowired
     EditTaskPage<SiteInvitationTaskPanel> editSiteInvitationPage;
-    
+
     /** my tasks container */
     @FindBy(css = ".my-tasks")
     WebElement myTasksContainer;
@@ -62,19 +62,19 @@ public class MyTasks extends Dashlet
     {
         // get the invitation selector
         By invitationSelector = getInvitationSelector(siteName);
-        
+
         // wait for invitation to becomes available
         Utils.waitFor(ExpectedConditions.elementToBeClickable(invitationSelector));
-        
+
         // get the invitation link and click
         WebElement invitationLink = myTasksContainer.findElement(invitationSelector);
         invitationLink.click();
-        
+
         // accept the invitation
         editSiteInvitationPage.render();
         return editSiteInvitationPage.getTaskPanel().acceptInvitation(renderableParent);
     }
-    
+
     /**
      * Get the site invitation selector
      */

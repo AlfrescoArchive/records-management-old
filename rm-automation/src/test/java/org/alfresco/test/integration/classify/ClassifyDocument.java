@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
  * Classify document integration test
  *
  * @author David Webster
- * @since 3.0
+ * @since 3.0.a
  */
 public class ClassifyDocument extends BaseTest
 {
@@ -125,8 +125,8 @@ public class ClassifyDocument extends BaseTest
         Document sharedDocument = documentLibrary.getDocument(SHARED_DOCUMENT);
         assertFalse(sharedDocument.isActionClickable(DocumentActions.CLASSIFY));
 
-        // TODO Create test for document that has been synced to the cloud.        
-        
+        // TODO Create test for document that has been synced to the cloud.
+
         // upload document
         documentLibrary.getToolbar()
             .clickOnUpload()
@@ -141,7 +141,7 @@ public class ClassifyDocument extends BaseTest
         {
             // reopen the page to avoid "save" dialog
             openPage(documentLibrary, COLLAB_SITE_ID);
-            
+
             // check that you can't classify a locked document
             Document lockedDocument = documentLibrary.getDocument(LOCKED_DOCUMENT);
             assertFalse(lockedDocument.isActionClickable(DocumentActions.CLASSIFY));

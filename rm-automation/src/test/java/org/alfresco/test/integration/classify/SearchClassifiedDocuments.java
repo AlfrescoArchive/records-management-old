@@ -52,7 +52,7 @@ import com.google.common.base.Predicate;
  * Search classified document integration test
  *
  * @author Roy Wetherall
- * @since 3.0
+ * @since 3.0.a
  */
 public class SearchClassifiedDocuments extends BaseTest
 {

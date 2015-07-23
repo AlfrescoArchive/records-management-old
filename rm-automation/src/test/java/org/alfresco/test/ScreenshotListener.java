@@ -30,7 +30,7 @@ import org.testng.ITestResult;
  * Screenshot listener class for taking screenshot on failures
  *
  * @author Tuna Aksoy
- * @since 3.0
+ * @since 3.0.a
  */
 public class ScreenshotListener implements ITestListener
 {

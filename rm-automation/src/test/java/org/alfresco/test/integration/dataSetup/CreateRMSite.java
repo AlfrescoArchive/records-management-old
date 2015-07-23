@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
  * Create RM site
  *
  * @author Tuna Aksoy, David Webster
- * @since 3.0
+ * @since 3.0.a
  */
 public class CreateRMSite extends BaseTest
 {
@@ -41,7 +41,7 @@ public class CreateRMSite extends BaseTest
      */
     @Autowired
     private MySitesDashlet mySitesDashlet;
-    
+
     /** data prep services */
     @Autowired
     private SiteService siteService;

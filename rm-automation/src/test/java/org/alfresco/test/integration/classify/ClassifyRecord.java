@@ -44,7 +44,7 @@ import org.testng.annotations.Test;
  * Classify document integration test
  *
  * @author David Webster
- * @since 3.0
+ * @since 3.0.a
  */
 public class ClassifyRecord extends BaseTest
 {

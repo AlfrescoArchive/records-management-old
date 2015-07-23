@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author David Webster
- * @since 3.0
+ * @since 3.0.a
  */
 @Component
 public class ClassifiedDocumentDetails extends DocumentDetails

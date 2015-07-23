@@ -30,14 +30,14 @@ import org.testng.annotations.Test;
  * Create the test users.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 public class CreateUsers extends BaseTest
 {
     /** data prep services */
     @Autowired protected RecordsManagementService recordsManagementService;
     @Autowired protected UserService userService;
-    
+
     /**
      * Create users for use in tests.
      */
@@ -50,11 +50,11 @@ public class CreateUsers extends BaseTest
     public void createRMManager()
     {
         recordsManagementService.createUserAndAssignToRole(
-                    getAdminName(), 
-                    getAdminPassword(), 
-                    RM_MANAGER, 
-                    DEFAULT_PASSWORD, 
-                    DEFAULT_EMAIL, 
+                    getAdminName(),
+                    getAdminPassword(),
+                    RM_MANAGER,
+                    DEFAULT_PASSWORD,
+                    DEFAULT_EMAIL,
                     UsersAndGroupsPage.ROLE_RM_MANAGER,
                     RM_MANAGER,
                     RM_MANAGER);
@@ -69,11 +69,11 @@ public class CreateUsers extends BaseTest
     public void createUnclearedUser()
     {
         recordsManagementService.createUserAndAssignToRole(
-                    getAdminName(), 
-                    getAdminPassword(), 
-                    UNCLEARED_USER, 
-                    DEFAULT_PASSWORD, 
-                    DEFAULT_EMAIL, 
+                    getAdminName(),
+                    getAdminPassword(),
+                    UNCLEARED_USER,
+                    DEFAULT_PASSWORD,
+                    DEFAULT_EMAIL,
                     UsersAndGroupsPage.ROLE_RM_MANAGER,
                     UNCLEARED_USER,
                     UNCLEARED_USER);

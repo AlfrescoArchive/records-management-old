@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
  * The user dropdown menu in the Share page header.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 @Component
 public class UserDropdown extends Renderable
@@ -39,10 +39,10 @@ public class UserDropdown extends Renderable
     /** selectors */
     private static final By HEADER_MENU_SELECTOR = By.cssSelector("#HEADER_USER_MENU_POPUP");
     private static final By LOGOUT_SELECTOR = By.cssSelector("#HEADER_USER_MENU_LOGOUT_text");
-    
+
     @Autowired
     private LoginPage loginPage;
-    
+
     /**
      * logout user
      */
@@ -51,10 +51,10 @@ public class UserDropdown extends Renderable
         WebElement dropdownButton = Utils.waitForFind(HEADER_MENU_SELECTOR);
         Utils.mouseOver(dropdownButton);
         dropdownButton.click();
-        
+
         Utils.waitFor(ExpectedConditions.elementToBeClickable(LOGOUT_SELECTOR));
         Utils.waitForFind(LOGOUT_SELECTOR).click();
-        
+
         return loginPage.render();
     }
 }

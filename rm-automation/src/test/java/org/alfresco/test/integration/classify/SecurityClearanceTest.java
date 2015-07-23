@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  *
  * @author tpage
  * @author David Webster
- * @since 3.0
+ * @since 3.0.a
  */
 @Test
 public class SecurityClearanceTest extends BaseTest

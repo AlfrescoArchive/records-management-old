@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  * Create File Plan for Integration tests
  *
  * @author Roy Wetherall, David Webster
- * @since 3.0
+ * @since 3.0.a
  * todo: Copied form org.alfresco.test.regression.sanity - needs modification.
  */
 public class CreateFilePlan extends BaseTest
@@ -44,7 +44,7 @@ public class CreateFilePlan extends BaseTest
     /** file plan browse view */
     @Autowired
     private FilePlan filePlan;
- 
+
 
     /**
      * Integration test execution
@@ -111,7 +111,7 @@ public class CreateFilePlan extends BaseTest
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
         createRecordFolder(RECORD_FOLDER_TWO);
     }
-    
+
     @Test
     (
         groups = { "integration", "GROUP_RECORD_FOLDER_SEARCH_EXISTS" },

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * The edit task page.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 @Component
 public class EditTaskPage<P extends TaskPanel> extends SharePage

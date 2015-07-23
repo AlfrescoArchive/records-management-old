@@ -30,7 +30,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
  * A task panel containing an invitation to join a site.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 @Component
 public class SiteInvitationTaskPanel extends TaskPanel
@@ -42,7 +42,7 @@ public class SiteInvitationTaskPanel extends TaskPanel
     {
         Utils.waitFor(ExpectedConditions.elementToBeClickable(acceptButton.getWrappedElement()));
         acceptButton.click();
-        // not ideal but this dialog needs a second to process what's happening 
+        // not ideal but this dialog needs a second to process what's happening
         // TODO figure out what can really be used to hold reliabily at this point
         try{Thread.sleep(1000);} catch (Exception e) {}
         return renderable.render();

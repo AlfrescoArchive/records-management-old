@@ -24,7 +24,7 @@ import org.alfresco.po.common.renderable.Renderable;
  * A panel containing a task on the "Edit Task" page.
  *
  * @author tpage
- * @since 3.0
+ * @since 3.0.a
  */
 public abstract class TaskPanel extends Renderable
 {
