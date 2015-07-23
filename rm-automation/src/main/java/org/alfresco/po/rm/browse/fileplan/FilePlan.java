@@ -23,20 +23,18 @@ import java.util.List;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.RMBrowsePage;
 import org.alfresco.po.rm.browse.RMBrowsePlanList;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
- * File plan 
- * 
+ * File plan
+ *
  * @author Roy Wetherall
  */
 @Component
-public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar> 
+public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
 {
     @FindBy(css="div.crumb a.folder")
     private List<Link> folderBreadcrumb;
@@ -49,7 +47,7 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
 
     @FindBy(xpath=".//span[@class='unfiledRecords']/a")
     private Link unfiledRecordsFilter;
-    
+
     /**
      * Helper method to get the named record category from the list
      */
@@ -57,7 +55,7 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
     {
         return getList().get(recordCategoryName, RecordCategory.class);
     }
-    
+
     /**
      * Helper method to get the named record folder from the list
      */
@@ -65,7 +63,7 @@ public class FilePlan extends RMBrowsePage<RMBrowsePlanList, FilePlanToolbar>
     {
         return getList().get(recordFolderName, RecordFolder.class);
     }
-    
+
     /**
      * Helper method to get the named record from the list
      */

@@ -29,8 +29,6 @@ import java.util.List;
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -40,7 +38,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.qatools.htmlelements.element.TextInput;
@@ -169,15 +166,15 @@ public class ClassifyContentDialog extends Dialog
     {
         clearAndType(reasonTextInput, id);
         waitForVisibilityOf(reasonsResultsContainer);
-       
+
         // try and find the reason
         String selectorValue = ".alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
         By selector = By.cssSelector(selectorValue);
-        
+
         // wait for the element to show
         Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver);
         wait.until(webDriver -> webDriver.findElement(selector));
-        
+
         // click on the reason
         webDriver.findElement(selector).click();
         return this;

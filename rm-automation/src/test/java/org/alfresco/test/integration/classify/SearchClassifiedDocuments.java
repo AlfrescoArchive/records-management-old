@@ -27,16 +27,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
-import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.search.AdvancedSearchPage;
 import org.alfresco.po.share.search.SearchResult;
-import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.alfresco.test.DataPrepHelper;
@@ -69,14 +68,13 @@ public class SearchClassifiedDocuments extends BaseTest
     private static final String UNCLASSIFIED_USER = "SearchClassifiedDocumentsUnclassifiedUser";
     private static final String CONFIDENTIAL_USER = "SearchClassifiedDocumentsCondidentialUser";
     private static final String SECRET_USER = "SearchClassifiedDocumentsSecretUser";
-    private static final String TOP_SECRET_USER = "SearchClassifiedDocumentsTopSecretUser";    
-    
+    private static final String TOP_SECRET_USER = "SearchClassifiedDocumentsTopSecretUser";
+
     /** page objects */
     @Autowired private AdvancedSearchPage advancedSearchPage;
-    @Autowired private MySitesDashlet mySitesDashlet;
     @Autowired private DocumentLibrary documentLibrary;
     @Autowired private SecurityClearancePage securityClearancePage;
-    
+
     /** data prep services */
     @Autowired private DataPrepHelper dataPrepHelper;
     @Autowired private SiteService siteService;
@@ -101,14 +99,14 @@ public class SearchClassifiedDocuments extends BaseTest
         groups = { "integration" }
     )
     public void setupTestData() throws Exception
-    {   
+    {
         // create users
         for (String user : Arrays.asList(UNCLASSIFIED_USER, CONFIDENTIAL_USER, SECRET_USER, TOP_SECRET_USER))
         {
             // create user
             dataPrepHelper.createUser(user);
         }
-        
+
         // assign security clearance levels
         openPage(securityClearancePage)
             .setClearance(CONFIDENTIAL_USER, CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
@@ -117,37 +115,37 @@ public class SearchClassifiedDocuments extends BaseTest
             .clickOnConfirm(securityClearancePage)
             .setClearance(TOP_SECRET_USER, TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
             .clickOnConfirm(securityClearancePage);
-        
+
         // create collaboration site
         dataPrepHelper.createSite(SEARCH_TEST_SITE_NAME, SEARCH_TEST_SITE_ID);
-        
+
         // invite users to site as site manager
         for (String user : Arrays.asList(UNCLASSIFIED_USER, CONFIDENTIAL_USER, SECRET_USER, TOP_SECRET_USER))
         {
             // invite user to site as site manager
             userService.inviteUserToSiteAndAccept(user, getAdminName(), getAdminPassword(), SEARCH_TEST_SITE_ID, "SiteManager");
-        }        
-        
+        }
+
         // upload documents
         openPage(documentLibrary, SEARCH_TEST_SITE_ID);
         for (String documentName : Arrays.asList(UNCLASSIFIED_DOCUMENT, CONFIDENTIAL_DOCUMENT, SECRET_DOCUMENT, TOP_SECRET_DOCUMENT))
         {
             contentService.createDocument(getAdminName(), getAdminPassword(), SEARCH_TEST_SITE_ID, DocumentType.TEXT_PLAIN, documentName, TEST_CONTENT);
         }
-        
+
         // classify documents
         openPage(documentLibrary, SEARCH_TEST_SITE_ID);
         classifyDocument(CONFIDENTIAL_DOCUMENT, CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
         classifyDocument(SECRET_DOCUMENT, SECRET_CLASSIFICATION_LEVEL_TEXT);
         classifyDocument(TOP_SECRET_DOCUMENT, TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);
-                
+
         // wait for documents to be available for search
         new FluentWait<WebDriver>(Utils.getWebDriver())
             .withTimeout(10, TimeUnit.SECONDS)
             .pollingEvery(1, TimeUnit.SECONDS)
             .until(documentsAvailableForSearch);
     }
-    
+
     /**
      * Helper method to classify document
      */
@@ -159,9 +157,9 @@ public class SearchClassifiedDocuments extends BaseTest
             .setLevel(level)
             .setClassifiedBy(CLASSIFIED_BY)
             .addReason(CLASSIFICATION_REASON)
-            .clickOnClassify();        
+            .clickOnClassify();
     }
-    
+
     @Test
     (
        groups = { "integration" },
@@ -171,25 +169,25 @@ public class SearchClassifiedDocuments extends BaseTest
     @AlfrescoTest(jira="RM-2143")
     public void unclassifiedUserSearch()
     {
-        List<SearchResult> results = 
+        List<SearchResult> results =
                     openPage(UNCLASSIFIED_USER, DEFAULT_PASSWORD, advancedSearchPage)
                         .setKeywords(SEARCH_TERM)
                         .clickOnSearch()
                         .getSearchResults();
-        
-        assertEquals("Unclassfied user should only see one document", 1, results.size());    
-        
-        assertTrue( "Unclassified user should be able to see the unclassfied document",         
+
+        assertEquals("Unclassfied user should only see one document", 1, results.size());
+
+        assertTrue( "Unclassified user should be able to see the unclassfied document",
                     searchResultsContainDocument(UNCLASSIFIED_DOCUMENT, results));
-        assertFalse("Unclassified user should not be able to see the confidential document",    
+        assertFalse("Unclassified user should not be able to see the confidential document",
                     searchResultsContainDocument(CONFIDENTIAL_DOCUMENT, results));
-        assertFalse("Unclassified user should not be able to see the secret document",          
+        assertFalse("Unclassified user should not be able to see the secret document",
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
-        assertFalse("Unclassified user should not be able to see the top secret document",      
+        assertFalse("Unclassified user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
-        
+
     }
-    
+
     @Test
     (
        groups = { "integration" },
@@ -199,22 +197,22 @@ public class SearchClassifiedDocuments extends BaseTest
     @AlfrescoTest(jira="RM-2144")
     public void confidentialUserSearch()
     {
-        List<SearchResult> results = 
+        List<SearchResult> results =
                     openPage(CONFIDENTIAL_USER, DEFAULT_PASSWORD, advancedSearchPage)
                         .setKeywords(SEARCH_TERM)
                         .clickOnSearch()
                         .getSearchResults();
-                
-        assertEquals("Confidential user should only see two documents", 2, results.size());   
-        
-        assertTrue( "Confidential user should be able to see the unclassfied document",         
+
+        assertEquals("Confidential user should only see two documents", 2, results.size());
+
+        assertTrue( "Confidential user should be able to see the unclassfied document",
                     searchResultsContainDocument(UNCLASSIFIED_DOCUMENT, results));
-        assertTrue("Confidential user should be able to see the confidential document",    
+        assertTrue("Confidential user should be able to see the confidential document",
                     searchResultsContainDocument(CONFIDENTIAL_DOCUMENT, results));
-        assertFalse("Confidential user should not be able to see the secret document",          
+        assertFalse("Confidential user should not be able to see the secret document",
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
-        assertFalse("Confidential user should not be able to see the top secret document",      
-                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));     
+        assertFalse("Confidential user should not be able to see the top secret document",
+                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
     }
 
     @Test
@@ -226,24 +224,24 @@ public class SearchClassifiedDocuments extends BaseTest
     @AlfrescoTest(jira="RM-2144")
     public void secretUserSearch()
     {
-        List<SearchResult> results = 
+        List<SearchResult> results =
                     openPage(SECRET_USER, DEFAULT_PASSWORD, advancedSearchPage)
                         .setKeywords(SEARCH_TERM)
                         .clickOnSearch()
                         .getSearchResults();
-                
-        assertEquals("Secret user should only see three documents", 3, results.size());      
-        
-        assertTrue( "Secret user should be able to see the unclassfied document",         
+
+        assertEquals("Secret user should only see three documents", 3, results.size());
+
+        assertTrue( "Secret user should be able to see the unclassfied document",
                     searchResultsContainDocument(UNCLASSIFIED_DOCUMENT, results));
-        assertTrue("Secret user should be able to see the confidential document",    
+        assertTrue("Secret user should be able to see the confidential document",
                     searchResultsContainDocument(CONFIDENTIAL_DOCUMENT, results));
-        assertTrue("Secret user should be able to see the secret document",          
+        assertTrue("Secret user should be able to see the secret document",
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
-        assertFalse("Confidential user should not be able to see the top secret document",      
-                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));     
+        assertFalse("Confidential user should not be able to see the top secret document",
+                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
     }
-    
+
     @Test
     (
        groups = { "integration" },
@@ -253,24 +251,24 @@ public class SearchClassifiedDocuments extends BaseTest
     @AlfrescoTest(jira="RM-2360")
     public void topSecretUserSearch()
     {
-        List<SearchResult> results = 
+        List<SearchResult> results =
                     openPage(TOP_SECRET_USER, DEFAULT_PASSWORD, advancedSearchPage)
                         .setKeywords(SEARCH_TERM)
                         .clickOnSearch()
                         .getSearchResults();
-                
-        assertEquals("Top secret user should see all four documents", 4, results.size());    
-        
-        assertTrue( "Top Secret user should be able to see the unclassfied document",         
+
+        assertEquals("Top secret user should see all four documents", 4, results.size());
+
+        assertTrue( "Top Secret user should be able to see the unclassfied document",
                     searchResultsContainDocument(UNCLASSIFIED_DOCUMENT, results));
-        assertTrue("Top Secret user should be able to see the confidential document",    
+        assertTrue("Top Secret user should be able to see the confidential document",
                     searchResultsContainDocument(CONFIDENTIAL_DOCUMENT, results));
-        assertTrue("Top Secret user should be able to see the secret document",          
+        assertTrue("Top Secret user should be able to see the secret document",
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
-        assertTrue("Top Secret user should be able to see the top secret document",      
-                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));          
+        assertTrue("Top Secret user should be able to see the top secret document",
+                    searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
     }
-    
+
     /**
      * Helper method to determine whether the search results contain a specified document.
      * <p>
@@ -279,7 +277,7 @@ public class SearchClassifiedDocuments extends BaseTest
     private boolean searchResultsContainDocument(String partialDocumentName, List<SearchResult> searchResults)
     {
         boolean result = false;
-        
+
         for (SearchResult searchResult : searchResults)
         {
             if (searchResult.getName().contains(partialDocumentName))
@@ -288,7 +286,7 @@ public class SearchClassifiedDocuments extends BaseTest
                 break;
             }
         }
-        
+
         return result;
     }
 
@@ -301,7 +299,7 @@ public class SearchClassifiedDocuments extends BaseTest
         {
             siteService.delete(getAdminName(), getAdminPassword(), "", SEARCH_TEST_SITE_ID);
         }
-        
+
         // delete users
         for (String user : Arrays.asList(UNCLASSIFIED_USER, CONFIDENTIAL_USER, SECRET_USER, TOP_SECRET_USER))
         {
