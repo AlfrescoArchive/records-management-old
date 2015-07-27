@@ -16,33 +16,76 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.alfresco.po.rm.search;
 
 /**
  * Records Search page used constants
- * 
+ *
  * @author Oana Nechiforescu
  */
 public class SearchConstants 
 {
-    // saved searches section
-    final static String INCOMPLETE_RECORDS = "Incomplete Records";
-    final static String ELIGIBLE_FOR_CUT_OFF = "Records And Record Folders Eligible For Cut Off";
-    final static String ELIGIBLE_FOR_DESTRUCTION = "Records And Record Folders Eligible For Destruction";
-    final static String ELIGIBLE_FOR_TRANSFER = "Records and Record Folders Eligible For Transfer";
-    final static String ON_HOLD = "Records and Record Folders On Hold";
-    final static String DUE_FOR_REVIEW = "Vital Records Due For Review";
-    final static String CUSTOM_SEARCH = "Custom Search";
+    public enum SearchOptionType 
+    {
+        // search option type selector part from Metadata section 
+        METADATA("default-metadata-"),
+        // search option type selector part from Components section 
+        COMPONENTS("default-");
+
+        //selector part used for finding the search options section
+        String selector;
+
+        SearchOptionType(String selector) 
+        {
+            this.selector = selector;
+        }
+
+        public String getSelector()
+        {
+            return selector;
+        }
+    }
+
+    public enum SearchOption 
+    {
+        INCLUDE_INCOMPLETE("undeclared"),
+        SHOW_RECORD_CATEGORIES("categories"),
+        MODIFIER("modifier"),
+        HAS_DISPOSITION_SCHEDULE("hasDispositionSchedule");
+        
+        //selector part used for finding the search option
+        String optionSelector;
+
+        SearchOption(String optionSelector) 
+        {
+            this.optionSelector = optionSelector;
+        }
+
+        public String getOptionSelector() 
+        {
+            return optionSelector;
+        }
+    }
     
-    // metadata section
-    final static String MODIFIER = "modifier";
-    final static String HAS_DISPOSITION_SCHEDULE = "hasDispositionSchedule";
-            
-    // components section
-    final static String INCLUDE_INCOMPLETE = "undeclared";
-    final static String SHOW_RECORD_CATEGORIES = "categories";
-    
-    // selector used to retrieve the results names in the search results page
-    final static String RESULTS_NAMES_SELECTOR = "td[headers*='-th-name']>div";
+    public enum SavedSearch
+    {
+        INCOMPLETE_RECORDS("Incomplete Records"),
+        RECORDS_FOLDERS_ELIGIBLE_FOR_CUT_OFF("Records And Record Folders Eligible For Cut Off"),
+        RECORDS_FOLDERS_ELIGIBLE_FOR_DESTRUCTION("Records And Record Folders Eligible For Destruction"),
+        RECORDS_FOLDERS_ELIGIBLE_FOR_TRANSFER("Records and Record Folders Eligible For Transfer"),
+        RECORDS_FOLDERS_ON_HOLD("Records and Record Folders On Hold"),
+        VITAL_RECORDS_DUE_FOR_REVIEW("Vital Records Due For Review");
+
+        String savedSearchLabel;
+
+        SavedSearch(String savedSearchLabel) 
+        {
+            this.savedSearchLabel = savedSearchLabel;
+        }
+
+        public String getSavedSearchLabel()
+        {
+            return savedSearchLabel;
+        }
+    }
 }

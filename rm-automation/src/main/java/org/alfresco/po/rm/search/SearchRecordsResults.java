@@ -20,6 +20,7 @@ package org.alfresco.po.rm.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
@@ -50,71 +51,56 @@ public class SearchRecordsResults extends SharePage
     @FindBy(css = "li[class='selected']>a[href*='default-critera-tab']")
     private Link criteriaPageEnabled;
     
+    // selector used to retrieve the results names in the search results page
+    final static String RESULTS_SELECTOR = "tbody[class='yui-dt-data'] tr";
+   
     /**
-     * get the search results names from the results tab
+     * get the search results from the results tab
      *
-     * @return the list of results from the Name column
+     * @return the list of search results
      */
-    public List<String> getResults()
+    public List<RecordSearchResult> getResults()
     {
-        List<String> recordsNames = new ArrayList<>();
-        Utils.waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(SearchConstants.RESULTS_NAMES_SELECTOR))); 
-        List<WebElement> results = webDriver.findElements(By.cssSelector(SearchConstants.RESULTS_NAMES_SELECTOR));
+        List<RecordSearchResult> recordsResults= new ArrayList<>();
+        Utils.waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(RESULTS_SELECTOR))); 
+        List<WebElement> results = webDriver.findElements(By.cssSelector(RESULTS_SELECTOR));
         for (WebElement record : results) 
         {
-            String recordName = record.getText();
-            recordsNames.add(recordName);
+            RecordSearchResult searchResult = new RecordSearchResult();
+            searchResult.setSearchResultRow(record);
+            recordsResults.add(searchResult);
         }
-        return recordsNames;
+        return recordsResults;
     }
 
     /**
-     * checks is the record name given as parameter is displayed in the Name
+     * checks if the record name given as parameter is displayed in the Name
      * column from the search results
      *
      * @param recordName
      * @return true is the record name is in the search results Name column,
      * false if not
      */
-    public Boolean recordIsDisplayedInResults(String recordName)
+    public boolean recordIsDisplayedInResults(String recordName)
     {
-        for (String resultName : getResults()) 
+        for (RecordSearchResult searchResult : getResults()) 
         {
-            if (resultName.startsWith(recordName)) 
-            {
-                return true;
-            }
-        }
-        navigateToCriteriaTab();
-        recordsSearchPage.clickOnSearch();
-        return recheckResults(recordName);
-    }
-
-    /**
-     * navigates to the Criteria tab from the Results tab
-     */
-    public void navigateToCriteriaTab() 
-    {
-        criteriaPage.click();
-        Utils.waitForVisibilityOf(criteriaPageEnabled);
-        recordsSearchPage.render();
-    }
-
-    /**
-     * recheck the search results that they have been updated correctly before verification (like an refresh)
-     * @param recordName
-     * @return true if the record name has been found in the search results
-     */
-    public Boolean recheckResults(String recordName)
-    {
-        for (String resultName : getResults()) 
-        {
-            if (resultName.startsWith(recordName)) 
+            if (searchResult.getName().startsWith(recordName)) 
             {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * navigates to the Criteria tab from the Results tab
+     */
+    public Renderable navigateToCriteriaTab() 
+    {
+        criteriaPage.click();
+        Utils.waitForVisibilityOf(criteriaPageEnabled);
+        return recordsSearchPage.render();
     }
     
     @Override

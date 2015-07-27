@@ -18,8 +18,14 @@
  */
 package org.alfresco.po.rm.search;
 
+import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.rm.browse.fileplan.FilePlan;
+import org.alfresco.po.rm.search.SearchConstants.SavedSearch;
+import org.alfresco.po.rm.search.SearchConstants.SearchOption;
+import org.alfresco.po.rm.search.SearchConstants.SearchOptionType;
 import org.alfresco.po.share.page.SharePage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +44,9 @@ public class RecordsSearch extends SharePage
 {
     @Autowired
     private SearchRecordsResults searchRecordsResults;
+    
+    @Autowired
+    private FilePlan filePlan;
 
     @FindBy(css = "button[id*='default-savedsearches-button-button']")
     private Button savedSearches;
@@ -48,9 +57,6 @@ public class RecordsSearch extends SharePage
     @FindBy(css = "li[class='selected']>a[href*='-results-tab']")
     private Link resultsPageEnabled;
 
-    @FindBy(xpath = "//a[contains(text(),'" + SearchConstants.INCOMPLETE_RECORDS + "')]")
-    private Button incompleteRecords;
-
     @FindBy(css = ".options")
     private Button resultsOptions;
 
@@ -59,60 +65,48 @@ public class RecordsSearch extends SharePage
 
     @FindBy(css = "div[id$='default-options']")
     private WebElement optionsContainer;
-
-    @FindBy(css = "input[id*='default-metadata-" + SearchConstants.MODIFIER + "']")
-    private CheckBox modifierCheckbox;
-
-    @FindBy(css = "input[id*='default-metadata-" + SearchConstants.HAS_DISPOSITION_SCHEDULE + "']")
-    private CheckBox hasDispositionScheduleCheckbox;
-
-    @FindBy(css = "input[id*='default-" + SearchConstants.INCLUDE_INCOMPLETE + "']")
-    private CheckBox includeIncompleteCheckbox;
-
-    @FindBy(css = "input[id*='default-" + SearchConstants.SHOW_RECORD_CATEGORIES + "']")
-    private CheckBox showRecordCategories;
     
     private final String SEARCH_URL = "/page/site/rm/rmsearch";
 
     /**
-     * selects incomplete records from saved searches 
+     * selects saved search with the specified label 
+     * @param savedSearch
      */
-    public void selectIncompleteRecordsSearch()
+    public void selectSavedRecordsSearch(SavedSearch savedSearch)
     {
         Utils.waitForVisibilityOf(savedSearches);
         savedSearches.click();
-        Utils.waitForVisibilityOf(incompleteRecords);
-        incompleteRecords.click();
+        Utils.waitForVisibilityOf(By.linkText(savedSearch.getSavedSearchLabel())).click();
     }
     
     /**
      * check or uncheck an option from Results options
-     * @param option
+     * @param option the option to check
+     * @param type metadata or components section option
      * @param checked 
      */
-    public void checkResultsOption(String option, Boolean checked)
+    public void checkResultsComponentsOption(SearchOption option, SearchOptionType type, boolean checked)
     {
         if (!optionsContainer.isDisplayed())
         {
             resultsOptions.click();
         }
-        CheckBox check = getCheckOption(option);
-        if (check != null) 
-        {
-            Utils.waitForVisibilityOf(check);
+        CheckBox check = getCheckOption(option, type);
+
             if (checked) 
             {
-                if (!check.isSelected()) {
+                if (!check.isSelected())
+                {
                     check.select();
                 }
             } 
             else 
             {
-                if (check.isSelected()) {
+                if (check.isSelected()) 
+                {
                     check.select();
                 }
             }
-        }
     }
     
     /**
@@ -120,31 +114,37 @@ public class RecordsSearch extends SharePage
      * @param option
      * @return the CheckBox element from the page that is required
      */
-    private CheckBox getCheckOption(String option) 
+    private CheckBox getCheckOption(SearchOption option, SearchOptionType type) 
     {
-        switch (option) 
+        String selector = "input[id*='[optionType][optionName]']";
+        if (type.equals(SearchOptionType.COMPONENTS)) 
         {
-            case "Modifier":
-                return modifierCheckbox;
-            case "Has Disposition Schedule":
-                return hasDispositionScheduleCheckbox;
-            case "Include Incomplete":
-                return includeIncompleteCheckbox;
-            case "Show Record Categories":
-                return showRecordCategories;
+            selector = selector.replace("[optionType]", SearchOptionType.COMPONENTS.getSelector());
+        } 
+        else if (type.equals(SearchOptionType.METADATA)) 
+        {
+            selector = selector.replace("[optionType]", SearchOptionType.METADATA.getSelector());
         }
-        return null;
+        selector = selector.replace("[optionName]", option.getOptionSelector());
+        return new CheckBox(Utils.waitForVisibilityOf(By.cssSelector(selector)));
     }
     
     /**
      * click on the search button in order to start the search
      */
-    public void clickOnSearch() 
+    public Renderable clickOnSearch() 
     {
         Utils.waitForVisibilityOf(searchButton);
         searchButton.click();
         Utils.waitForVisibilityOf(resultsPageEnabled);
-        searchRecordsResults.render();
+        return searchRecordsResults.render();
+    }
+    
+    public FilePlan selectSavedSearchFromFilePlan(SavedSearch savedSearch)
+    {      
+        Utils.waitForVisibilityOf(By.cssSelector("a[rel='" + savedSearch.getSavedSearchLabel() + "']")).click();
+        Utils.waitForVisibilityOf(By.cssSelector(".message"));
+        return filePlan.render();
     }
 
     @Override

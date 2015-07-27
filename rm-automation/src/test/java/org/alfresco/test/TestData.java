@@ -103,6 +103,7 @@ public interface TestData
     /**
      * A folder in fileplan to use for search.
      * <p>"GROUP_RECORD_FOLDER_SEARCH_EXISTS" RECORD_FOLDER_SEARCH has been created in CATEGORY_ONE.
+     * <p>"GROUP_SEARCH_RECORDS_EXIST" SEARCH_RECORDS have been created and classified in RECORD_FOLDER_SEARCH
      */
      public static final String RECORD_FOLDER_SEARCH = "record-folder-search";
     

@@ -28,13 +28,19 @@ import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.search.RecordsSearch;
+import org.alfresco.po.rm.search.SearchConstants.SavedSearch;
+import org.alfresco.po.rm.search.SearchConstants.SearchOption;
+import org.alfresco.po.rm.search.SearchConstants.SearchOptionType;
 import org.alfresco.po.rm.search.SearchRecordsResults;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNull;
 import org.testng.annotations.Test;
 
 /**
- *
+ * tests the search of classified records in Records Search page
  * @author Oana Nechiforescu
  */
 public class SearchClassifiedRecords extends BaseTest
@@ -66,12 +72,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'no clearance' clearance can view searched records with level at most 'no clearance'.",
             dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+    @AlfrescoTest(jira="RM-2145")
     public void unclearedUserSearchResultsForClassifiedData()
     {
         // navigate to Records Search
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, recordsSearch);
         // include incomplete records
-        recordsSearch.checkResultsOption("Include Incomplete", true);
+        recordsSearch.checkResultsComponentsOption(SearchOption.INCLUDE_INCOMPLETE, SearchOptionType.COMPONENTS, true);
         recordsSearch.clickOnSearch();
 
         assertFalse("The record with top secret security clearance is displayed in search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -95,12 +102,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'no clearance' clearance can view saved searches records with level at most 'no clearance'.",
             dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+    @AlfrescoTest(jira="RM-2145")
     public void unclearedUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, recordsSearch);
         //select Incomplete Records saved search
-        recordsSearch.selectIncompleteRecordsSearch();
+        recordsSearch.selectSavedRecordsSearch(SavedSearch.INCOMPLETE_RECORDS);
         recordsSearch.clickOnSearch();
 
         assertFalse("The record with top secret security clearance is displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -108,7 +116,36 @@ public class SearchClassifiedRecords extends BaseTest
         assertFalse("The record with confidential security clearance is displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(CONFIDENTIAL_RECORD_SEARCH));
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
-
+    
+    /**
+     * User with 'no clearance' clearance can view records from File Plan saved searches with level at most 'no clearance'.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2367">RM-2367</a><pre>
+     * Given that I am a RM user with no security clearance
+     * When I search for records using the File Plan saved searches
+     * Then I can see all unclassified records in the search results
+     * And can not see any classified records in the search results
+     * </pre>
+     */
+    @Test(
+            groups = {"integration"},
+            description = "User with 'no clearance' clearance can view File Plan saved searches records with level at most 'no clearance'.",
+            dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+    )
+    @AlfrescoTest(jira="RM-2367")
+    public void unclearedUserFilePlanSearchResultsForSavedSearch()
+    {
+        // navigate to File Plan 
+        openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+        //select Incomplete Records saved search
+        recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
+        
+        assertNull("The record with top secret security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
+        assertNull("The record with secret security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(CLASSIFIED_RECORD));
+        assertNull("The record with confidential security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
+        assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
+    }
+    
     /**
      * User with 'secret' clearance can view searched records with level at most 'secret'.
      * <p>
@@ -125,12 +162,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'secret' clearance can view searched records with level at most 'secret'.",
             dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+     @AlfrescoTest(jira="RM-2146")
     public void secretUserSearchResultsForClassifiedData()
     {
         // navigate to Records Search
         openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
         // include incomplete records
-        recordsSearch.checkResultsOption("Include Incomplete", true);
+        recordsSearch.checkResultsComponentsOption(SearchOption.INCLUDE_INCOMPLETE, SearchOptionType.COMPONENTS, true);
         recordsSearch.clickOnSearch();
 
         assertFalse("The record with top secret security clearance is displayed in search results for secret user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -144,7 +182,7 @@ public class SearchClassifiedRecords extends BaseTest
      * <p>
      * <a href="https://issues.alfresco.com/jira/browse/RM-2146">RM-2146</a><pre>
      * Given that I am a RM user with mid level security clearance
-     * When I search for records
+     * When I search for records using saved searches
      * Then I can see all unclassified records in the search results
      * And I can see all classified records with a classification less than or equal to my security level in the search results
      * And I can not see any classified records with a classification higher than my security level in the search results
@@ -155,12 +193,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'secret' clearance can view records from saved searches with level at most 'secret'.",
             dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+    @AlfrescoTest(jira="RM-2146")
     public void secretUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(RM_MANAGER, DEFAULT_PASSWORD, recordsSearch);
         //select Incomplete Records saved search
-        recordsSearch.selectIncompleteRecordsSearch();
+        recordsSearch.selectSavedRecordsSearch(SavedSearch.INCOMPLETE_RECORDS);
         recordsSearch.clickOnSearch();
 
         assertFalse("The record with top secret security clearance is displayed in Incomplete Records filter search results for secret user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -169,6 +208,36 @@ public class SearchClassifiedRecords extends BaseTest
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for secret user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
 
+     /**
+     * User with 'secret' clearance can view records from File Plan saved searches with level at most 'secret'.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2367">RM-2367</a><pre>
+     * Given that I am a RM user with mid level security clearance
+     * When I search for records using the File Plan saved searches
+     * Then I can see all unclassified records in the search results
+     * And I can see all classified records with a classification less than or equal to my security level in the search results
+     * And I can not see any classified records with a classification higher than my security level in the search results
+     * </pre>
+     */
+    @Test(
+            groups = {"integration"},
+            description = "User with 'secret' clearance can view records from File Plan saved searches with level at most 'secret'.",
+            dependsOnGroups = { "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+    )
+    @AlfrescoTest(jira="RM-2367")
+    public void secretUserFilePlanSearchResultsForSavedSearch()
+    {
+        // navigate to File Plan 
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+        //select Incomplete Records saved search
+        recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
+        
+        assertNull("The record with top secret security clearance is displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
+        assertNotNull("The record with secret security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(CLASSIFIED_RECORD));
+        assertNotNull("The record with confidential security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
+        assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
+    }
+    
     /**
      * User with 'top secret' clearance can view all searched classified and unclassified records.
      * <p>
@@ -184,12 +253,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'top secret' clearance can view all searched classified and unclassified records.",
             dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+    @AlfrescoTest(jira="RM-2361")
     public void topSecretUserSearchResultsForClassifiedData()
     {
         // navigate to Records Search
         openPage(recordsSearch);
         // include incomplete records
-        recordsSearch.checkResultsOption("Include Incomplete", true);
+        recordsSearch.checkResultsComponentsOption(SearchOption.INCLUDE_INCOMPLETE, SearchOptionType.COMPONENTS, true);
         recordsSearch.clickOnSearch();
 
         assertTrue("The record with top secret security clearance is not displayed in search results for top secret user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -213,12 +283,13 @@ public class SearchClassifiedRecords extends BaseTest
             description = "User with 'top secret' clearance can view all searched classified and unclassified records from saved searches.",
             dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
     )
+    @AlfrescoTest(jira="RM-2361")
     public void topSecretUserSearchResultsForSavedSearch()
     {
         // navigate to Records Search
         openPage(recordsSearch);
         //select Incomplete Records saved search
-        recordsSearch.selectIncompleteRecordsSearch();
+        recordsSearch.selectSavedRecordsSearch(SavedSearch.INCOMPLETE_RECORDS);
         recordsSearch.clickOnSearch();
 
         assertTrue("The record with top secret security clearance is not displayed in Incomplete Records filter search results for top secret user.", searchRecordsResults.recordIsDisplayedInResults(TOP_SECRET_RECORD_SEARCH));
@@ -227,6 +298,35 @@ public class SearchClassifiedRecords extends BaseTest
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for top secret user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
 
+    /**
+     * User with 'top secret' clearance can view all classified and unclassified records from File Plan saved searches.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2367">RM-2367</a><pre>
+     * Given that I am a RM user with the highest security clearance
+     * When I search for records from File Plan saved searches
+     * Then I can see all the unclassified records in the search results
+     * And I can see all the classified records in the search results
+     * </pre>
+     */
+    @Test(
+            groups = {"integration"},
+            description = "User with 'top secret' clearance can view all searched classified and unclassified records from File Plan saved searches.",
+            dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
+    )
+    @AlfrescoTest(jira="RM-2367")
+    public void topSecretUserFilePlanSearchResultsForSavedSearch()
+    {
+        // navigate to Records Search
+        openPage(filePlan, RM_SITE_ID, "documentlibrary");
+        //select Incomplete Records saved search
+        recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
+        
+        assertNotNull("The record with top secret security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
+        assertNotNull("The record with secret security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(CLASSIFIED_RECORD));
+        assertNotNull("The record with confidential security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
+        assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
+    }
+    
     /**
      * Create top secret, confidential and unclassified records for search.
      */
