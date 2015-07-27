@@ -18,7 +18,6 @@
  */
 package org.alfresco.po.rm.search;
 
-import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.search.SearchConstants.SavedSearch;
@@ -40,11 +39,11 @@ import ru.yandex.qatools.htmlelements.element.Link;
  * @author Oana Nechiforescu
  */
 @Component
-public class RecordsSearch extends SharePage 
+public class RecordsSearch extends SharePage
 {
     @Autowired
     private SearchRecordsResults searchRecordsResults;
-    
+
     @Autowired
     private FilePlan filePlan;
 
@@ -60,16 +59,23 @@ public class RecordsSearch extends SharePage
     @FindBy(css = ".options")
     private Button resultsOptions;
 
-    @FindBy(css = "textarea[id*='_default-terms']")
+    @FindBy(css = "textarea[id$='_default-terms']")
     private WebElement searchQueryTextarea;
 
     @FindBy(css = "div[id$='default-options']")
     private WebElement optionsContainer;
-    
+
     private final String SEARCH_URL = "/page/site/rm/rmsearch";
 
+    /** Type into the search box. */
+    public RecordsSearch setKeywords(String keywords)
+    {
+        Utils.clearAndType(searchQueryTextarea, "keywords:" + keywords);
+        return this;
+    }
+
     /**
-     * selects saved search with the specified label 
+     * selects saved search with the specified label
      * @param savedSearch
      */
     public void selectSavedRecordsSearch(SavedSearch savedSearch)
@@ -78,14 +84,15 @@ public class RecordsSearch extends SharePage
         savedSearches.click();
         Utils.waitForVisibilityOf(By.linkText(savedSearch.getSavedSearchLabel())).click();
     }
-    
+
     /**
      * check or uncheck an option from Results options
      * @param option the option to check
      * @param type metadata or components section option
-     * @param checked 
+     * @param checked
+     * @return The records search control.
      */
-    public void checkResultsComponentsOption(SearchOption option, SearchOptionType type, boolean checked)
+    public RecordsSearch checkResultsComponentsOption(SearchOption option, SearchOptionType type, boolean checked)
     {
         if (!optionsContainer.isDisplayed())
         {
@@ -93,55 +100,58 @@ public class RecordsSearch extends SharePage
         }
         CheckBox check = getCheckOption(option, type);
 
-            if (checked) 
+        if (checked)
+        {
+            if (!check.isSelected())
             {
-                if (!check.isSelected())
-                {
-                    check.select();
-                }
-            } 
-            else 
-            {
-                if (check.isSelected()) 
-                {
-                    check.select();
-                }
+                check.select();
             }
+        }
+        else
+        {
+            if (check.isSelected())
+            {
+                check.select();
+            }
+        }
+
+        return this;
     }
-    
+
     /**
      * get the CheckBox that displays the given option
      * @param option
      * @return the CheckBox element from the page that is required
      */
-    private CheckBox getCheckOption(SearchOption option, SearchOptionType type) 
+    private CheckBox getCheckOption(SearchOption option, SearchOptionType type)
     {
         String selector = "input[id*='[optionType][optionName]']";
-        if (type.equals(SearchOptionType.COMPONENTS)) 
+        if (type.equals(SearchOptionType.COMPONENTS))
         {
             selector = selector.replace("[optionType]", SearchOptionType.COMPONENTS.getSelector());
-        } 
-        else if (type.equals(SearchOptionType.METADATA)) 
+        }
+        else if (type.equals(SearchOptionType.METADATA))
         {
             selector = selector.replace("[optionType]", SearchOptionType.METADATA.getSelector());
         }
         selector = selector.replace("[optionName]", option.getOptionSelector());
         return new CheckBox(Utils.waitForVisibilityOf(By.cssSelector(selector)));
     }
-    
+
     /**
      * click on the search button in order to start the search
+     * @return The search record results.
      */
-    public Renderable clickOnSearch() 
+    public SearchRecordsResults clickOnSearch()
     {
         Utils.waitForVisibilityOf(searchButton);
         searchButton.click();
         Utils.waitForVisibilityOf(resultsPageEnabled);
         return searchRecordsResults.render();
     }
-    
+
     public FilePlan selectSavedSearchFromFilePlan(SavedSearch savedSearch)
-    {      
+    {
         Utils.waitForVisibilityOf(By.cssSelector("a[rel='" + savedSearch.getSavedSearchLabel() + "']")).click();
         Utils.waitForVisibilityOf(By.cssSelector(".message"));
         return filePlan.render();

@@ -21,7 +21,13 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNull;
 
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.base.Predicate;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
@@ -34,9 +40,9 @@ import org.alfresco.po.rm.search.SearchConstants.SearchOptionType;
 import org.alfresco.po.rm.search.SearchRecordsResults;
 import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertNull;
 import org.testng.annotations.Test;
 
 /**
@@ -45,6 +51,9 @@ import org.testng.annotations.Test;
  */
 public class SearchClassifiedRecords extends BaseTest
 {
+    /** The number of test records created by this set of tests. */
+    private static final int NUMBER_OF_TEST_RECORDS = 3;
+
     @Autowired
     private FilePlan filePlan;
 
@@ -56,6 +65,17 @@ public class SearchClassifiedRecords extends BaseTest
 
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
+
+    /** predicate used to determine if documents are ready for search (required to wait for SOLR) */
+    private final Predicate<WebDriver> documentsAvailableForSearch = (w) ->
+    {
+        return (NUMBER_OF_TEST_RECORDS == openPage(recordsSearch)
+                        .setKeywords("*" + RECORD_SEARCH_SUFFIX + "*")
+                        .checkResultsComponentsOption(SearchOption.INCLUDE_INCOMPLETE, SearchOptionType.COMPONENTS, true)
+                        .clickOnSearch()
+                        .getResults()
+                        .size());
+    };
 
     /**
      * User with 'no clearance' clearance can view searched records with level at most 'no clearance'.
@@ -116,7 +136,7 @@ public class SearchClassifiedRecords extends BaseTest
         assertFalse("The record with confidential security clearance is displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(CONFIDENTIAL_RECORD_SEARCH));
         assertTrue("The record with unclassified security clearance is not displayed in Incomplete Records filter search results for uncleared user.", searchRecordsResults.recordIsDisplayedInResults(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'no clearance' clearance can view records from File Plan saved searches with level at most 'no clearance'.
      * <p>
@@ -135,17 +155,17 @@ public class SearchClassifiedRecords extends BaseTest
     @AlfrescoTest(jira="RM-2367")
     public void unclearedUserFilePlanSearchResultsForSavedSearch()
     {
-        // navigate to File Plan 
+        // navigate to File Plan
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         //select Incomplete Records saved search
         recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
-        
+
         assertNull("The record with top secret security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
         assertNull("The record with secret security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(CLASSIFIED_RECORD));
         assertNull("The record with confidential security clearance is displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
         assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for uncleared user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'secret' clearance can view searched records with level at most 'secret'.
      * <p>
@@ -227,17 +247,17 @@ public class SearchClassifiedRecords extends BaseTest
     @AlfrescoTest(jira="RM-2367")
     public void secretUserFilePlanSearchResultsForSavedSearch()
     {
-        // navigate to File Plan 
+        // navigate to File Plan
         openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         //select Incomplete Records saved search
         recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
-        
+
         assertNull("The record with top secret security clearance is displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
         assertNotNull("The record with secret security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(CLASSIFIED_RECORD));
         assertNotNull("The record with confidential security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
         assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for secret user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * User with 'top secret' clearance can view all searched classified and unclassified records.
      * <p>
@@ -320,13 +340,13 @@ public class SearchClassifiedRecords extends BaseTest
         openPage(filePlan, RM_SITE_ID, "documentlibrary");
         //select Incomplete Records saved search
         recordsSearch.selectSavedSearchFromFilePlan(SavedSearch.INCOMPLETE_RECORDS);
-        
+
         assertNotNull("The record with top secret security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(TOP_SECRET_RECORD_SEARCH));
         assertNotNull("The record with secret security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(CLASSIFIED_RECORD));
         assertNotNull("The record with confidential security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH));
         assertNotNull("The record with unclassified security clearance is not displayed in Incomplete Records File Plan search results for top secret user.", filePlan.getRecord(UNCLASSIFIED_RECORD_SEARCH));
     }
-    
+
     /**
      * Create top secret, confidential and unclassified records for search.
      */
@@ -381,5 +401,11 @@ public class SearchClassifiedRecords extends BaseTest
                     createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_SEARCH));
         filePlan.getRecord(CONFIDENTIAL_RECORD_SEARCH)
                 .hasIndicator(RecordIndicators.CLASSIFIED);
+
+        // wait for documents to be available for search
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+            .withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS)
+            .until(documentsAvailableForSearch);
     }
 }

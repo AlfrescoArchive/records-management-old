@@ -106,7 +106,7 @@ public interface TestData
      * <p>"GROUP_SEARCH_RECORDS_EXIST" SEARCH_RECORDS have been created and classified in RECORD_FOLDER_SEARCH
      */
      public static final String RECORD_FOLDER_SEARCH = "record-folder-search";
-    
+
     /* "GROUP_FILE_PLAN_EXISTS" The file plan structure exists. */
 
     /**
@@ -240,9 +240,12 @@ public interface TestData
      * <p>"GROUP_CLASSIFIED_RECORD_EXISTS" The CLASSIFIED_RECORD has been created.
      */
     public static final String CLASSIFIED_RECORD = "classified-record";
-    public static final String TOP_SECRET_RECORD_SEARCH = "search-top-secret-record";
-    public static final String CONFIDENTIAL_RECORD_SEARCH = "search-confidential-record";
-    public static final String UNCLASSIFIED_RECORD_SEARCH = "search-unclassified-record";
+
+    public static final String RECORD_SEARCH_SUFFIX = "_RECORD_SEARCH";
+    public static final String TOP_SECRET_RECORD_SEARCH = "search-top-secret" + RECORD_SEARCH_SUFFIX;
+    public static final String CONFIDENTIAL_RECORD_SEARCH = "search-confidential" + RECORD_SEARCH_SUFFIX;
+    public static final String UNCLASSIFIED_RECORD_SEARCH = "search-unclassified" + RECORD_SEARCH_SUFFIX;
+
     public static final String CLASSIFIED_NON_ELECTRONIC_RECORD = "classified-non-electronic-record";
     public static final String TOP_SECRET_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
     public static final String SECRET_CLASSIFICATION_LEVEL_TEXT = "Secret";
@@ -252,10 +255,10 @@ public interface TestData
     public static final String CLASSIFIED_BY = "ClassifiedByText";
     public static final String CLASSIFICATION_AGENCY = "ClassificationAgency";
     public static final String CLASSIFICATION_REASON = "1.4(c)";
-   
+
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
-    
+
     /** Test Content */
     public static final String TEST_CONTENT = "This is some test content";
 
