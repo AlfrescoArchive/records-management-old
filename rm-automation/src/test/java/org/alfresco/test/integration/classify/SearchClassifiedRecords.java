@@ -51,7 +51,7 @@ import org.testng.annotations.Test;
  */
 public class SearchClassifiedRecords extends BaseTest
 {
-    /** The number of test records created by this set of tests. */
+    /** The number of test records created by this set of tests in {@link #createClassifiedRecordsForSearch}. */
     private static final int NUMBER_OF_TEST_RECORDS = 3;
 
     @Autowired
@@ -66,8 +66,8 @@ public class SearchClassifiedRecords extends BaseTest
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
 
-    /** predicate used to determine if documents are ready for search (required to wait for SOLR) */
-    private final Predicate<WebDriver> documentsAvailableForSearch = (w) ->
+    /** Predicate used to determine if records are ready for search (required to wait for SOLR) */
+    private final Predicate<WebDriver> recordsAvailableForSearch = (w) ->
     {
         return (NUMBER_OF_TEST_RECORDS == openPage(recordsSearch)
                         .setKeywords("*" + RECORD_SEARCH_SUFFIX + "*")
@@ -84,10 +84,10 @@ public class SearchClassifiedRecords extends BaseTest
      * Given that I am a RM user with no security clearance
      * When I search for records
      * Then I can see all unclassified records in the search results
-     * And can not see any classified records in the search results
+     * And I cannot see any classified records in the search results
      * </pre>
      */
-     @Test(
+    @Test(
             groups = {"integration"},
             description = "User with 'no clearance' clearance can view searched records with level at most 'no clearance'.",
             dependsOnGroups = { "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE", "GROUP_CLASSIFIED_RECORD_EXISTS", "GROUP_SEARCH_RECORDS_EXIST" }
@@ -350,12 +350,11 @@ public class SearchClassifiedRecords extends BaseTest
     /**
      * Create top secret, confidential and unclassified records for search.
      */
-     @Test (
+    @Test(
             groups = { "integration", "GROUP_SEARCH_RECORDS_EXIST" },
             description = "Create and classify records for search",
             dependsOnGroups = { "GROUP_RECORD_FOLDER_SEARCH_EXISTS"}
-     )
-
+    )
     public void createClassifiedRecordsForSearch()
     {
         // upload records
@@ -406,6 +405,6 @@ public class SearchClassifiedRecords extends BaseTest
         new FluentWait<WebDriver>(Utils.getWebDriver())
             .withTimeout(10, TimeUnit.SECONDS)
             .pollingEvery(1, TimeUnit.SECONDS)
-            .until(documentsAvailableForSearch);
+            .until(recordsAvailableForSearch);
     }
 }
