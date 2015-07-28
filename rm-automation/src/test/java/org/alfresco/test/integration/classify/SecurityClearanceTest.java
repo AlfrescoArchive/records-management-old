@@ -283,9 +283,6 @@ public class SecurityClearanceTest extends BaseTest
         // Go back and verify filter still applied.
         userProfilePage.clickOnBack();
 
-        // FIXME: previous filter should be displayed, but won't due to an Aikau bug. See AKU-415.
-        // This temporary line checks the page has loaded replace with one below once AKU-415 is fixed.
-        assertTrue(securityClearancePage.getNameFilter().isEmpty());
-        // assertEquals(securityClearancePage.getNameFilter(), RM_MANAGER);
+        assertEquals(securityClearancePage.getNameFilter(), RM_MANAGER);
     }
 }
