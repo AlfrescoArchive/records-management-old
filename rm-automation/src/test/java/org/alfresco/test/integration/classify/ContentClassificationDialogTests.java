@@ -115,6 +115,14 @@ public class ContentClassificationDialogTests extends BaseTest
         String[] clickableActions = documentLibrary.getDocument(SECRET_DOCUMENT).getClickableActions();
         assertFalse("The classify action should no longer be available.",
                     Arrays.asList(clickableActions).contains(DocumentActionsPanel.CLASSIFY));
+        // Check that the Edit Classification button is available after classification
+        assertTrue("The edit classification action should be available after classification.",
+                    Arrays.asList(clickableActions).contains(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
+      
+        // Navigate to Document Details and check that the Edit Classification button is available and clickable after classification 
+        documentLibrary.getDocument(SECRET_DOCUMENT).clickOnLink(documentDetails);
+        assertTrue("The edit classification action should be available after classification in Document Details.",
+                    documentDetails.getDocumentActionsPanel().isActionClickable(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
     }
 
     /**

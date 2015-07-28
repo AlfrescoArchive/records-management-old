@@ -34,6 +34,7 @@ public interface RecordActions extends Actions
     static final String REQUEST_INFORMATION = "rm-request-info";
     static final String ADD_RELATIONSHIP = "rm-add-relationship";
     static final String CLASSIFY = "rm-classify-content";
+    static final String EDIT_CLASSIFIED_CONTENT= "rm-edit-classified-content";
 
     /** incomplete record actions with download */
     static final String[] INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD = new String[]
