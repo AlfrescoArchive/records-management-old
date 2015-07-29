@@ -35,7 +35,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -74,7 +73,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         return PAGE_URL;
     }
-    
+
     /** Clears the name filter */
     public SecurityClearancePage clearNameFilter()
     {
@@ -104,7 +103,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         return Utils.elementExists(NO_DATA);
     }
-    
+
     /**
      * Indicates whether the given user is shown in the current page of results
      */
@@ -165,6 +164,18 @@ public class SecurityClearancePage extends ConsolePage
                     .findElements(USER_NAME_SELECTOR)
                     .stream()
                     .map(webElement -> webElement.getText().split("[\\(\\)]")[1])
+                    .collect(Collectors.toList());
+    }
+
+    /**
+     * Get all the names (first name, space, last name) displayed on the page.
+     */
+    public List<String> getNames()
+    {
+        return clearanceTable
+                    .findElements(USER_NAME_SELECTOR)
+                    .stream()
+                    .map(webElement -> webElement.getText().split(" \\(")[0])
                     .collect(Collectors.toList());
     }
 

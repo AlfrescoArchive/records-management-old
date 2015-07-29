@@ -54,14 +54,14 @@ public class SecurityClearanceTest extends BaseTest
     /**
      * Check that the displayed users are sorted correctly.
      */
-    protected void checkUserOrdering(List<String> userNames)
+    protected void checkUserOrdering(List<String> names)
     {
-        String previousUserName = "";
-        for (String userName : userNames)
+        String previousName = "";
+        for (String name : names)
         {
-            assertTrue("Expected users to be sorted by user id, but found '"+previousUserName+"' and then '"+userName+"'",
-                        userName.toLowerCase().compareTo(previousUserName.toLowerCase()) >= 0);
-            previousUserName = userName;
+            assertTrue("Expected users to be sorted case-insensitively by first name then surname, but found '"+previousName+"' and then '"+name+"'",
+                        name.toLowerCase().compareTo(previousName.toLowerCase()) >= 0);
+            previousName = name;
         }
     }
 
@@ -100,7 +100,8 @@ public class SecurityClearanceTest extends BaseTest
         List<String> userNames = securityClearancePage.getUserNames();
         assertTrue(userNames.contains(RM_MANAGER));
         assertTrue(userNames.contains(UNCLEARED_USER));
-        checkUserOrdering(userNames);
+        List<String> names = securityClearancePage.getNames();
+        checkUserOrdering(names);
 
         // check the individual users are displayed
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
