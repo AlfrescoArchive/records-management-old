@@ -24,6 +24,9 @@ import static org.junit.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
@@ -120,17 +123,19 @@ public class BrowseClassifiedDocuments extends BaseTest
             .clickOnLink(classifiedDocumentDetails);
 
         // verify that classification is as expected.
-        assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION));
-
-        assertEquals(CLASSIFIED_BY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFIED_BY));
-
-        assertEquals(CLASSIFICATION_AGENCY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY));
-
-        assertEquals(CLASSIFICATION_REASON,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON));
+        Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
+        expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, SECRET_CLASSIFICATION_LEVEL_TEXT);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFIED_BY, CLASSIFIED_BY);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY, CLASSIFICATION_AGENCY);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON, CLASSIFICATION_REASON);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_DATE, DOWNGRADE_DATE_OUTPUT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_EVENT, DOWNGRADE_EVENT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_INSTRUCTIONS, DOWNGRADE_INSTRUCTIONS);
+        expectedFields.put(ClassifiedPropertiesPanelField.DECLASSIFICATION_DATE, DECLASSIFICATION_DATE_OUTPUT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DECLASSIFICATION_EVENT, DECLASSIFICATION_EVENT);
+        expectedFields.put(ClassifiedPropertiesPanelField.EXEMPTION_CATEGORIES, EXEMPTION_CATEGORY);
+        expectedFields.forEach(
+                    (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),

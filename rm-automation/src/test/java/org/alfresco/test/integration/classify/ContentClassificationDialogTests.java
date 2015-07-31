@@ -104,7 +104,13 @@ public class ContentClassificationDialogTests extends BaseTest
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
-            .addReason(CLASSIFICATION_REASON);
+            .addReason(CLASSIFICATION_REASON)
+            .setDowngradeDate(DOWNGRADE_DATE_INPUT)
+            .setDowngradeEvent(DOWNGRADE_EVENT)
+            .setDowngradeInstructions(DOWNGRADE_INSTRUCTIONS)
+            .setDeclassificationDate(DECLASSIFICATION_DATE_INPUT)
+            .setDeclassificationEvent(DECLASSIFICATION_EVENT)
+            .addExemptionCategory(EXEMPTION_CATEGORY);
 
         // Check the "Create" button is now enabled.
         assertTrue("Create button should be enabled now form is filled.", classifyContentDialog.isClassifyButtonEnabled());

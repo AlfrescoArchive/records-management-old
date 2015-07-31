@@ -255,6 +255,16 @@ public interface TestData
     public static final String CLASSIFIED_BY = "ClassifiedByText";
     public static final String CLASSIFICATION_AGENCY = "ClassificationAgency";
     public static final String CLASSIFICATION_REASON = "1.4(c)";
+    /** The downgrade date to use. Here we set the date and month to the same thing to avoid cross-locale issues. */
+    public static final String DOWNGRADE_DATE_INPUT = "07/07/2045";
+    public static final String DOWNGRADE_DATE_OUTPUT = "Fri 7 Jul 2045";
+    public static final String DOWNGRADE_EVENT = "Downgrade Event";
+    public static final String DOWNGRADE_INSTRUCTIONS = "Downgrade Instructions";
+    /** The declassification date to use. Here we set the date and month to the same thing to avoid cross-locale issues. */
+    public static final String DECLASSIFICATION_DATE_INPUT = "08/08/2045";
+    public static final String DECLASSIFICATION_DATE_OUTPUT = "Tue 8 Aug 2045";
+    public static final String DECLASSIFICATION_EVENT = "Declassification Event";
+    public static final String EXEMPTION_CATEGORY = "9";
 
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";

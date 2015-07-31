@@ -30,7 +30,13 @@ public enum ClassifiedPropertiesPanelField
     CURRENT_CLASSIFICATION(1),
     CLASSIFIED_BY(2),
     CLASSIFICATION_AGENCY(3),
-    CLASSIFICATION_REASON(4);
+    CLASSIFICATION_REASON(4),
+    DOWNGRADE_DATE(6),
+    DOWNGRADE_EVENT(7),
+    DOWNGRADE_INSTRUCTIONS(8),
+    DECLASSIFICATION_DATE(9),
+    DECLASSIFICATION_EVENT(10),
+    EXEMPTION_CATEGORIES(11);
 
     /** The index of the field in the classified properties panel. */
     private int index;

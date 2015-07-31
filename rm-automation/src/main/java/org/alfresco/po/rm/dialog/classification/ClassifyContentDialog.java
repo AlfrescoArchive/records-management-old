@@ -39,7 +39,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 /**
@@ -76,6 +75,21 @@ public class ClassifyContentDialog extends Dialog
 
     @FindBy(css="#REASONS_CONTROL_RESULTS")
     private WebElement reasonsResultsContainer;
+
+    @FindBy(css="#DOWNGRADE_DATE_CONTROL")
+    private WebElement downgradeDateInput;
+    @FindBy(css="#DOWNGRADE_EVENT .dijitInputContainer input")
+    private WebElement downgradeEventInput;
+    @FindBy(css="#DOWNGRADE_INSTRUCTIONS textarea")
+    private WebElement downgradeInstrucationsInput;
+    @FindBy(css="#DECLASSIFICATION_DATE_CONTROL")
+    private WebElement declassificationDateInput;
+    @FindBy(css="#DECLASSIFICATION_EVENT .dijitInputContainer input")
+    private WebElement declassificationEventInput;
+    @FindBy(css="#EXEMPTIONS_CONTROL input")
+    private TextInput exemptionCategoriesInput;
+    @FindBy(css="#EXEMPTIONS_CONTROL_RESULTS")
+    private WebElement exemptionCategoriesResultsContainer;
 
     /** Here we rely on the create button being the first in the footer. */
     @FindBy(css=".footer .alfresco-buttons-AlfButton:nth-child(1) [role=button]")
@@ -159,7 +173,7 @@ public class ClassifyContentDialog extends Dialog
     /**
      * Search for a classification reason then, when the dropdown options are visible, click on the desired reason.
      *
-     * @param id The classification reason id (e.g. "1.4(c)") - note this is currently not displayed on the page.
+     * @param id The classification reason id (e.g. "1.4(c)").
      * @return The dialog to allow chaining of actions.
      */
     public ClassifyContentDialog addReason(String id)
@@ -176,6 +190,78 @@ public class ClassifyContentDialog extends Dialog
         wait.until(webDriver -> webDriver.findElement(selector));
 
         // click on the reason
+        webDriver.findElement(selector).click();
+        return this;
+    }
+
+    /**
+     * Set the downgrade date.
+     *
+     * @param downgradeDate A string containing the downgrade date in the current locale. For maximum portability it is
+     *            recommended to supply a date where the date and month are the same (e.g. "01/01/2016").
+     * @return The dialog to allow chaining.
+     */
+    public ClassifyContentDialog setDowngradeDate(String downgradeDate)
+    {
+        clearAndType(downgradeDateInput, downgradeDate);
+        return this;
+    }
+
+    /** Set the downgrade event. */
+    public ClassifyContentDialog setDowngradeEvent(String downgradeEvent)
+    {
+        clearAndType(downgradeEventInput, downgradeEvent);
+        return this;
+    }
+
+    /** Set the downgrade instructions. */
+    public ClassifyContentDialog setDowngradeInstructions(String downgradeInstructions)
+    {
+        clearAndType(downgradeInstrucationsInput, downgradeInstructions);
+        return this;
+    }
+
+    /**
+     * Set the declassification date.
+     *
+     * @param declassificationDate A string containing the declassification date in the current locale. For maximum
+     *            portability it is recommended to supply a date where the date and month are the same (e.g.
+     *            "01/01/2016").
+     * @return The dialog to allow chaining.
+     */
+    public ClassifyContentDialog setDeclassificationDate(String declassificationDate)
+    {
+        clearAndType(declassificationDateInput, declassificationDate);
+        return this;
+    }
+
+    /** Set the declassification event. */
+    public ClassifyContentDialog setDeclassificationEvent(String declassificationEvent)
+    {
+        clearAndType(declassificationEventInput, declassificationEvent);
+        return this;
+    }
+
+    /**
+     * Search for an exemption category then, when the dropdown options are visible, click on the desired category.
+     *
+     * @param id The exemption category id (e.g. "4").
+     * @return The dialog to allow chaining of actions.
+     */
+    public ClassifyContentDialog addExemptionCategory(String id)
+    {
+        clearAndType(exemptionCategoriesInput, id);
+        waitForVisibilityOf(exemptionCategoriesResultsContainer);
+
+        // try and find the category
+        String selectorValue = ".alfresco-forms-controls-MultiSelect__results__result[data-aikau-value='" + id + "']";
+        By selector = By.cssSelector(selectorValue);
+
+        // wait for the element to show
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(webDriver);
+        wait.until(webDriver -> webDriver.findElement(selector));
+
+        // click on the category
         webDriver.findElement(selector).click();
         return this;
     }
