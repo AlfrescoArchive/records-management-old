@@ -108,6 +108,7 @@ public class ContentClassificationDialogTests extends BaseTest
             .setDowngradeDate(DOWNGRADE_DATE_INPUT)
             .setDowngradeEvent(DOWNGRADE_EVENT)
             .setDowngradeInstructions(DOWNGRADE_INSTRUCTIONS)
+            .clickDeclassificationScheduleTab()
             .setDeclassificationDate(DECLASSIFICATION_DATE_INPUT)
             .setDeclassificationEvent(DECLASSIFICATION_EVENT)
             .addExemptionCategory(EXEMPTION_CATEGORY);

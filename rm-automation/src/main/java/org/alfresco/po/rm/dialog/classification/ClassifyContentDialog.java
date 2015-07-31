@@ -78,16 +78,25 @@ public class ClassifyContentDialog extends Dialog
 
     @FindBy(css="#DOWNGRADE_DATE_CONTROL")
     private WebElement downgradeDateInput;
+
     @FindBy(css="#DOWNGRADE_EVENT .dijitInputContainer input")
     private WebElement downgradeEventInput;
+
     @FindBy(css="#DOWNGRADE_INSTRUCTIONS textarea")
     private WebElement downgradeInstrucationsInput;
+
+    @FindBy(xpath=".//*[@id='TAB_CONTAINER']/div[2]/div[1]/div[4]/div/div[2]/span[2]")
+    private WebElement declassificationScheduleTab;
+
     @FindBy(css="#DECLASSIFICATION_DATE_CONTROL")
     private WebElement declassificationDateInput;
+
     @FindBy(css="#DECLASSIFICATION_EVENT .dijitInputContainer input")
     private WebElement declassificationEventInput;
+
     @FindBy(css="#EXEMPTIONS_CONTROL input")
     private TextInput exemptionCategoriesInput;
+
     @FindBy(css="#EXEMPTIONS_CONTROL_RESULTS")
     private WebElement exemptionCategoriesResultsContainer;
 
@@ -211,6 +220,13 @@ public class ClassifyContentDialog extends Dialog
     public ClassifyContentDialog setDowngradeEvent(String downgradeEvent)
     {
         clearAndType(downgradeEventInput, downgradeEvent);
+        return this;
+    }
+
+    /** Click the declassification schedule tab */
+    public ClassifyContentDialog clickDeclassificationScheduleTab()
+    {
+        declassificationScheduleTab.click();
         return this;
     }
 
