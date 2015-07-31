@@ -19,12 +19,12 @@
 
 package org.alfresco.test.integration.classify;
 
-import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
@@ -32,6 +32,7 @@ import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
+import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
@@ -117,8 +118,8 @@ public class ClassifyRecord extends BaseTest
             .isActionsClickable(RecordActionsPanel.CLASSIFY));
     }
 
-    /** Check a record can be classified. Also check the Edit Classification button availability before and after classification 
-     * The classified record is used by other tests. 
+    /** Check a record can be classified. Also check the Edit Classification button availability before and after classification
+     * The classified record is used by other tests.
      */
     @Test
     (
@@ -136,13 +137,13 @@ public class ClassifyRecord extends BaseTest
             .clickOnElectronic()
             .uploadFile(CLASSIFIED_RECORD);
         Record record = filePlan.getRecord(CLASSIFIED_RECORD);
-        
+
         String[] clickableActions = record.getClickableActions();
          // Check that the Edit Classification button is not available before record classification
-        assertFalse("Expected the Edit Classification button not to be available for record before classification", 
+        assertFalse("Expected the Edit Classification button not to be available for record before classification",
                     Arrays.asList(clickableActions).contains(RecordActions.EDIT_CLASSIFIED_CONTENT));
         record.clickOnLink(recordDetails);
-        assertFalse("Expected the Edit Classification button not to be available before classification in Record Details", 
+        assertFalse("Expected the Edit Classification button not to be available before classification in Record Details",
                      recordDetails.getRecordActionsPanel().isActionAvailable(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT));
         openPage(filePlan, RM_SITE_ID,
                 createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
@@ -159,28 +160,28 @@ public class ClassifyRecord extends BaseTest
             .clickOnClassify();
 
         // Check that the Edit Classification button is available after classification
-        assertTrue("Expected the Edit Classification button to be available and clickable after classification", 
+        assertTrue("Expected the Edit Classification button to be available and clickable after classification",
                     filePlan.getRecord(CLASSIFIED_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
         // Now go to doc details and check the classified properties there.
         filePlan.getRecord(CLASSIFIED_RECORD).clickOnLink(classifiedRecordDetails);
-        
+
         assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION));
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION));
 
         assertEquals(CLASSIFIED_BY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFIED_BY));
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFIED_BY));
 
         assertEquals(CLASSIFICATION_AGENCY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_AGENCY));
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY));
 
         assertEquals(CLASSIFICATION_REASON,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CLASSIFICATION_REASON));
+                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
                      SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                      classifiedRecordDetails.getBannerText(ContentBanner.CLASSIFICATION));
         // Check that the Edit Classification button is available after classification in Record Details
-        assertTrue("Expected the Edit Classification button to be available and clickable after classification in Record Details", 
+        assertTrue("Expected the Edit Classification button to be available and clickable after classification in Record Details",
                      recordDetails.getRecordActionsPanel().isActionClickable(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT));
     }
 
@@ -267,7 +268,7 @@ public class ClassifyRecord extends BaseTest
         assertFalse(filePlan.getRecord(COMPLETE_RECORD).isHeld());
         assertTrue(filePlan.getRecord(COMPLETE_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
     }
-    
+
     /**
      * Check that a completed record can be classified.
      * <p>
@@ -354,7 +355,7 @@ public class ClassifyRecord extends BaseTest
         assertFalse("Classify action should not be shown to a user that does not have read & file permission over it.",
                     record.isActionClickable(RecordActions.CLASSIFY));
     }
-    
+
     /**
      * Check that a user with 'Secret' clearance can't edit the classification of a classified record if it does not have read & file permission over it <pre>
      * Given that I do not have 'read & file' permissions on the classified record
@@ -380,5 +381,5 @@ public class ClassifyRecord extends BaseTest
         assertFalse("Edit Classification action should not be shown in Record Details to a user that does not have read & file permission over the classified record.",
                 recordDetails.getRecordActionsPanel().isActionAvailable(RecordActions.EDIT_CLASSIFIED_CONTENT));
     }
-    
+
 }

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
+import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -118,8 +119,8 @@ public class ContentClassificationDialogTests extends BaseTest
         // Check that the Edit Classification button is available after classification
         assertTrue("The edit classification action should be available after classification.",
                     Arrays.asList(clickableActions).contains(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
-      
-        // Navigate to Document Details and check that the Edit Classification button is available and clickable after classification 
+
+        // Navigate to Document Details and check that the Edit Classification button is available and clickable after classification
         documentLibrary.getDocument(SECRET_DOCUMENT).clickOnLink(documentDetails);
         assertTrue("The edit classification action should be available after classification in Document Details.",
                     documentDetails.getDocumentActionsPanel().isActionClickable(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
@@ -212,7 +213,7 @@ public class ContentClassificationDialogTests extends BaseTest
         documentLibrary.getDocument(UNCLASSIFIED_DOCUMENT)
             .clickOnLink(documentDetails);
         assertNotNull("Classified properties not found.", classifiedPropertiesPanel);
-        String level = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanel.CURRENT_CLASSIFICATION);
+        String level = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION);
         assertEquals("Unexpected current classification.", UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT, level);
     }
 
