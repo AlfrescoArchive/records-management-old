@@ -67,10 +67,10 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#AGENCY .dijitInputContainer input")
     private TextInput agencyTextInput;
 
-    @FindBy(css="#REASONS_CONTROL .alfresco-forms-controls-MultiSelect__container")
+    @FindBy(css="#REASONS .alfresco-forms-controls-MultiSelect__container")
     private WebElement reasonsContainer;
 
-    @FindBy(css="#REASONS_CONTROL input")
+    @FindBy(css="#REASONS input")
     private TextInput reasonTextInput;
 
     @FindBy(css="#REASONS_CONTROL_RESULTS")
@@ -94,7 +94,7 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#DECLASSIFICATION_EVENT .dijitInputContainer input")
     private WebElement declassificationEventInput;
 
-    @FindBy(css="#EXEMPTIONS_CONTROL input")
+    @FindBy(css="#EXEMPTIONS input")
     private TextInput exemptionCategoriesInput;
 
     @FindBy(css="#EXEMPTIONS_CONTROL_RESULTS")
