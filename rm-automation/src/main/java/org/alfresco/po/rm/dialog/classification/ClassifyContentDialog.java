@@ -85,7 +85,7 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#DOWNGRADE_INSTRUCTIONS textarea")
     private WebElement downgradeInstrucationsInput;
 
-    @FindBy(xpath=".//*[@id='TAB_CONTAINER']/div[2]/div[1]/div[4]/div/div[2]/span[2]")
+    @FindBy(css="span[class='tabLabel'][tabIndex='-1']")
     private WebElement declassificationScheduleTab;
 
     @FindBy(css="#DECLASSIFICATION_DATE_CONTROL")
