@@ -31,12 +31,16 @@ public enum ClassifiedPropertiesPanelField
     CLASSIFIED_BY(2),
     CLASSIFICATION_AGENCY(3),
     CLASSIFICATION_REASON(4),
-    DOWNGRADE_DATE(6),
-    DOWNGRADE_EVENT(7),
-    DOWNGRADE_INSTRUCTIONS(8),
-    DECLASSIFICATION_DATE(9),
-    DECLASSIFICATION_EVENT(10),
-    EXEMPTION_CATEGORIES(11);
+    DOWNGRADE_DATE(5),
+    DOWNGRADE_EVENT(6),
+    DOWNGRADE_INSTRUCTIONS(7),
+    DECLASSIFICATION_DATE(8),
+    DECLASSIFICATION_EVENT(9),
+    EXEMPTION_CATEGORIES(10),
+    RECLASSIFY_BY(11),
+    RECLASSIFY_DATE(12),
+    RECLASSIFY_REASON(13),
+    RECLASSIFY_ACTION(14);
 
     /** The index of the field in the classified properties panel. */
     private int index;
@@ -47,10 +51,7 @@ public enum ClassifiedPropertiesPanelField
         this.index = index;
     }
 
-    /**
-     * The index of the field in the properties panel. Generally these are sequential, but occasionally tooltips match
-     * the same path ({@link ClassifiedPropertiesPanel#CLASSIFIED_PROPERTIES_SELECTOR}).
-     */
+    /** The index of the field in the properties panel. Hopefully these are sequential. */
     public int getIndex()
     {
         return this.index;

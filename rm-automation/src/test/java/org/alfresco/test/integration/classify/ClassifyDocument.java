@@ -19,11 +19,11 @@
 
 package org.alfresco.test.integration.classify;
 
-import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
@@ -84,12 +84,12 @@ public class ClassifyDocument extends BaseTest
 
         // verify document actions
         assertTrue(document.isActionClickable(DocumentActions.CLASSIFY));
-        
+
         // verify the Edit Classification button is not available before classification
         String[] clickableActions = document.getClickableActions();
         assertFalse("Expected the Edit Classification button not to be available for document before classification",
-                 Arrays.asList(clickableActions).contains(DocumentActions.EDIT_CLASSIFIED_CONTENT));
-        
+                 Arrays.asList(clickableActions).contains(DocumentActions.EDIT_CLASSIFICATION));
+
         // navigate to the document details page
         document.clickOnLink();
 
@@ -98,7 +98,7 @@ public class ClassifyDocument extends BaseTest
                 .isActionClickable(DocumentActionsPanel.CLASSIFY));
         // verify the Edit Classification button is not available in Document Details
         assertFalse("Expected the Edit Classification button not to be available in Document Details before classification",
-                 documentDetails.getDocumentActionsPanel().isActionAvailable(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
+                 documentDetails.getDocumentActionsPanel().isActionAvailable(DocumentActionsPanel.EDIT_CLASSIFICATION));
         // Click on classify action in order to validate the dialog
         documentDetails.getDocumentActionsPanel().clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 
@@ -108,11 +108,11 @@ public class ClassifyDocument extends BaseTest
 
         // Do not actually classify the document.
         classifyContentDialog.clickOnCancel();
-        
+
         // verify the Edit Classification button is not available in Document Details after cancelling the classification
         assertFalse("Expected the Edit Classification button not to be available in Document Details after cancelling the classification",
                  documentDetails.getDocumentActionsPanel()
-                .isActionAvailable(DocumentActionsPanel.EDIT_CLASSIFIED_CONTENT));
+                .isActionAvailable(DocumentActionsPanel.EDIT_CLASSIFICATION));
     }
 
     /**
@@ -195,7 +195,7 @@ public class ClassifyDocument extends BaseTest
         assertFalse("Classify action should not be shown to uncleared user.",
                     document.isActionClickable(DocumentActions.CLASSIFY));
     }
-    
+
     /**
      * Check that a user with no security clearance doesn't see the 'Edit Classification' action.
      *
@@ -213,12 +213,12 @@ public class ClassifyDocument extends BaseTest
     public void checkUnclearedUserCannotEditClassification()
     {
         String documentName = UUID.randomUUID().toString();
-        
+
         openPage(documentLibrary, COLLAB_SITE_ID);
         documentLibrary.getToolbar()
             .clickOnUpload()
             .uploadFile(documentName);
-        
+
         // Classify document with admin
         documentLibrary.getDocument(documentName)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
@@ -228,14 +228,14 @@ public class ClassifyDocument extends BaseTest
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
             .clickOnClassify();
-        
+
         // Check that the Edit classification action is not available for uncleared user
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, documentLibrary, COLLAB_SITE_ID);
         assertFalse("Edit Classification action should not be available for uncleared user.",
-                Arrays.asList(documentLibrary.getDocument(documentName).getClickableActions()).contains(DocumentActions.EDIT_CLASSIFIED_CONTENT));
+                Arrays.asList(documentLibrary.getDocument(documentName).getClickableActions()).contains(DocumentActions.EDIT_CLASSIFICATION));
         documentLibrary.getDocument(documentName).clickOnLink(documentDetails);
         assertFalse("Edit Classification action should not be available for uncleared user in Document Details.",
-                documentDetails.getDocumentActionsPanel().isActionAvailable(DocumentActions.EDIT_CLASSIFIED_CONTENT));     
+                documentDetails.getDocumentActionsPanel().isActionAvailable(DocumentActions.EDIT_CLASSIFICATION));
     }
 
     /**

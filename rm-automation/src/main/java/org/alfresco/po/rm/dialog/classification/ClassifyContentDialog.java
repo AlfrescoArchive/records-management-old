@@ -100,6 +100,12 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#EXEMPTIONS_CONTROL_RESULTS")
     private WebElement exemptionCategoriesResultsContainer;
 
+    @FindBy(css="#LAST_RECLASSIFY_BY .dijitInputField input")
+    private WebElement reclassifiedBy;
+
+    @FindBy(css="#LAST_RECLASSIFY_REASON textarea")
+    private WebElement reclassifyReason;
+
     /** Here we rely on the create button being the first in the footer. */
     @FindBy(css=".footer .alfresco-buttons-AlfButton:nth-child(1) [role=button]")
     private WebElement createButton;
@@ -279,6 +285,20 @@ public class ClassifyContentDialog extends Dialog
 
         // click on the category
         webDriver.findElement(selector).click();
+        return this;
+    }
+
+    /** Set a string representing the entity that is reclassifying the document. */
+    public ClassifyContentDialog setReclassifiedBy(String reclassifiedByText)
+    {
+        clearAndType(reclassifiedBy, reclassifiedByText);
+        return this;
+    }
+
+    /** Set the reason for reclassifying the content. */
+    public ClassifyContentDialog setReclassifyReason(String reclassifiedReasonText)
+    {
+        clearAndType(reclassifyReason, reclassifiedReasonText);
         return this;
     }
 

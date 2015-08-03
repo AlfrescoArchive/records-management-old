@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Document list item
- * 
+ *
  * @author Roy Wetherall
  */
 @Scope("prototype")
@@ -42,18 +42,18 @@ public class Document extends ListItem implements DocumentActions
 {
     @Autowired
     private DocumentDetails documentDetails;
-    
+
     @Autowired
     private DeleteConfirmationDialog deleteConfirmationDialog;
 
     @Autowired
     @RenderableChild
     private SocialActions socialActions;
-    
+
     @Autowired
     private DocumentLibrary documentLibrary;
-    
-    @Autowired 
+
+    @Autowired
     private ClassifyContentDialog classifyContentDialog;
 
     /**
@@ -72,15 +72,15 @@ public class Document extends ListItem implements DocumentActions
     {
         return super.clickOnLink(documentDetails);
     }
-    
+
     /**
      * Click on delete action
      */
     public DeleteConfirmationDialog clickOnDelete()
     {
-    	return clickOnAction(DELETE, deleteConfirmationDialog);
+        return clickOnAction(DELETE, deleteConfirmationDialog);
     }
-    
+
     /**
      * Click on edit offline action
      */
@@ -88,7 +88,7 @@ public class Document extends ListItem implements DocumentActions
     {
         return clickOnAction(EDIT_OFFLINE, documentLibrary);
     }
-    
+
     /**
      * Click on cancel edit action
      */
@@ -104,7 +104,7 @@ public class Document extends ListItem implements DocumentActions
     {
         return Utils.elementExists(this.getRow(), By.cssSelector("a.quickshare-action"));
     }
-    
+
     /**
      * Click on classify content
      */
@@ -113,4 +113,9 @@ public class Document extends ListItem implements DocumentActions
         return clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
     }
 
+    /** Click on edit classification. */
+    public ClassifyContentDialog clickOnEditClassification()
+    {
+        return clickOnAction(DocumentActionsPanel.EDIT_CLASSIFICATION, classifyContentDialog);
+    }
 }
