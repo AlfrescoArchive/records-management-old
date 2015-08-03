@@ -32,12 +32,10 @@ import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
-import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
-import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -157,30 +155,21 @@ public class ClassifyRecord extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .setAgency(CLASSIFICATION_AGENCY)
             .addReason(CLASSIFICATION_REASON)
+            .setDowngradeDate(DOWNGRADE_DATE_INPUT)
+            .setDowngradeEvent(DOWNGRADE_EVENT)
+            .setDowngradeInstructions(DOWNGRADE_INSTRUCTIONS)
+            .clickDeclassificationScheduleTab()
+            .setDeclassificationDate(DECLASSIFICATION_DATE_INPUT)
+            .setDeclassificationEvent(DECLASSIFICATION_EVENT)
+            .addExemptionCategory(EXEMPTION_CATEGORY)
             .clickOnClassify();
 
         // Check that the Edit Classification button is available after classification
         assertTrue("Expected the Edit Classification button to be available and clickable after classification",
                     filePlan.getRecord(CLASSIFIED_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
-        // Now go to doc details and check the classified properties there.
+
+        // Now go to doc details and check the Edit Classification button is available.
         filePlan.getRecord(CLASSIFIED_RECORD).clickOnLink(classifiedRecordDetails);
-
-        assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION));
-
-        assertEquals(CLASSIFIED_BY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFIED_BY));
-
-        assertEquals(CLASSIFICATION_AGENCY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY));
-
-        assertEquals(CLASSIFICATION_REASON,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON));
-
-        assertEquals("Expected 'Secret' classification banner to be visible.",
-                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
-                     classifiedRecordDetails.getBannerText(ContentBanner.CLASSIFICATION));
-        // Check that the Edit Classification button is available after classification in Record Details
         assertTrue("Expected the Edit Classification button to be available and clickable after classification in Record Details",
                      recordDetails.getRecordActionsPanel().isActionClickable(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT));
     }

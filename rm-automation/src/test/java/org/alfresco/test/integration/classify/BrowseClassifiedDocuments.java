@@ -34,6 +34,7 @@ import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentIndicators;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.openqa.selenium.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,17 @@ public class BrowseClassifiedDocuments extends BaseTest
      * When I view the document details page
      * Then the classification level of the document is clearly visible
      * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2454">RM-2454</a><pre>
+     * Given a classified document
+     * When I view the documents properties via the document details page
+     * Then I am able to see the following values:
+     * * Downgrade date
+     * * Downgrade event
+     * * Downgrade instructions
+     * * Declassification date
+     * * Declassification event
+     * * Declassification exemptions
+     * </pre>
      */
     @Test
     (
@@ -113,6 +125,7 @@ public class BrowseClassifiedDocuments extends BaseTest
         description = "Verify document details page displays classification information.",
         dependsOnGroups = { "GROUP_SECRET_DOCUMENT_EXISTS" }
     )
+    @AlfrescoTest(jira="RM-2002, RM-2282, RM-2454")
     public void classifyDocumentProperties()
     {
         // Open Collab site DocumentLibrary.

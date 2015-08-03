@@ -34,6 +34,7 @@ import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -73,6 +74,18 @@ public class ContentClassificationDialogTests extends BaseTest
      * Then the content is classified
      * And the classify content action is no longer available
      * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2455">RM-2455</a><pre>
+     * Given I am a cleared user
+     * And content has not been classified
+     * When I classify content for the first time
+     * Then the following properties are available to define the reclassification schedule of the content:
+     * * downgrade date (optional, date selection control)
+     * * downgrade event (optional, text input control)
+     * * downgrade instructions (optional unless downgrade date or event are set, text input control)
+     * * declassification date (optional, date selection control)
+     * * declassification event (optional, text input control)
+     * * declassification exemptions (optional, exemption selector control)
+     * </pre>
      */
     @Test
     (
@@ -80,6 +93,7 @@ public class ContentClassificationDialogTests extends BaseTest
         description = "Use the classify content dialog to classify a document.",
         dependsOnGroups = { "GROUP_COLLABORATION_SITE_EXISTS" }
     )
+    @AlfrescoTest(jira="RM-2051, RM-2408")
     public void classifyDocument()
     {
         // Open collaboration site document library, upload the document and click on the "Classify" action.

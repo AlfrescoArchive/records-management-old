@@ -22,6 +22,9 @@ package org.alfresco.test.integration.classify;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
@@ -29,6 +32,7 @@ import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -100,6 +104,17 @@ public class BrowseClassifiedRecords extends BaseTest
      * When I view the record details page
      * Then the classification level of the record is clearly visible
      * </pre>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2455">RM-2455</a><pre>
+     * Given a classified record
+     * When I view the documents properties via the record details page
+     * Then I am able to see the following values:
+     * * Downgrade date
+     * * Downgrade event
+     * * Downgrade instructions
+     * * Declassification date
+     * * Declassification event
+     * * Declassification exemptions
+     * </pre>
      */
     @Test
     (
@@ -107,6 +122,7 @@ public class BrowseClassifiedRecords extends BaseTest
         description = "Verify record details page displays classification information.",
         dependsOnGroups = { "GROUP_CLASSIFIED_RECORD_EXISTS" }
     )
+    @AlfrescoTest(jira="RM-2083, RM-2282, RM-2455")
     public void classifyRecordProperties()
     {
         // Open Collab site DocumentLibrary.
@@ -118,17 +134,19 @@ public class BrowseClassifiedRecords extends BaseTest
             .clickOnLink(classifiedRecordDetails);
 
         // verify that classification is as expected.
-        assertEquals(SECRET_CLASSIFICATION_LEVEL_TEXT,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION));
-
-        assertEquals(CLASSIFIED_BY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFIED_BY));
-
-        assertEquals(CLASSIFICATION_AGENCY,
-                     classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY));
-
-        assertEquals(CLASSIFICATION_REASON,
-                    classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON));
+        Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
+        expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, SECRET_CLASSIFICATION_LEVEL_TEXT);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFIED_BY, CLASSIFIED_BY);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFICATION_AGENCY, CLASSIFICATION_AGENCY);
+        expectedFields.put(ClassifiedPropertiesPanelField.CLASSIFICATION_REASON, CLASSIFICATION_REASON);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_DATE, DOWNGRADE_DATE_OUTPUT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_EVENT, DOWNGRADE_EVENT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DOWNGRADE_INSTRUCTIONS, DOWNGRADE_INSTRUCTIONS);
+        expectedFields.put(ClassifiedPropertiesPanelField.DECLASSIFICATION_DATE, DECLASSIFICATION_DATE_OUTPUT);
+        expectedFields.put(ClassifiedPropertiesPanelField.DECLASSIFICATION_EVENT, DECLASSIFICATION_EVENT);
+        expectedFields.put(ClassifiedPropertiesPanelField.EXEMPTION_CATEGORIES, EXEMPTION_CATEGORY);
+        expectedFields.forEach(
+                    (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
         assertEquals("Expected 'Secret' classification banner to be visible.",
                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
