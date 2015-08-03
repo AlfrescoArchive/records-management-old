@@ -72,7 +72,7 @@ public class Reclassification extends BaseTest
     (
         groups = { "integration" }
     )
-    public void setupTestData() throws Exception
+    public void setUpReclassificationData() throws Exception
     {
         // Create collaboration site
         dataPrepHelper.createSite(SITE_NAME, SITE_ID);
@@ -97,12 +97,12 @@ public class Reclassification extends BaseTest
     (
        groups = { "integration" },
        description = "Upgrade the classification of the document to Top Secret.",
-       dependsOnMethods = "setupTestData"
+       dependsOnMethods = "setUpReclassificationData"
     )
     @AlfrescoTest(jira="RM-2441, RM-2454")
     public void upgradeDocument()
     {
-        // Upgrade document to Top Secret.
+        // Upgrade document to "Top Secret".
         openPage(documentLibrary, SITE_ID);
         documentLibrary
             .getDocument(DOCUMENT)
@@ -131,12 +131,12 @@ public class Reclassification extends BaseTest
     (
        groups = { "integration" },
        description = "Downgrade the classification of the document to Confidential.",
-       dependsOnMethods = "setupTestData"
+       dependsOnMethods = "setUpReclassificationData"
     )
     @AlfrescoTest(jira="RM-2442")
     public void downgradeDocument()
     {
-        // Downgrade document to Confidential.
+        // Downgrade document to "Confidential".
         openPage(documentLibrary, SITE_ID);
         documentLibrary
             .getDocument(DOCUMENT)
@@ -173,7 +173,7 @@ public class Reclassification extends BaseTest
     @AlfrescoTest(jira="RM-2443")
     public void declassifyDocument()
     {
-        // Upgrade document to Top Secret.
+        // Declassify the document by setting the classification to "Unclassified".
         openPage(documentLibrary, SITE_ID);
         documentLibrary
             .getDocument(DOCUMENT)
@@ -199,7 +199,7 @@ public class Reclassification extends BaseTest
 
     /** Remove the test site. */
     @AfterSuite(alwaysRun=true)
-    public void tearDownTestData() throws Exception
+    public void tearDownReclassificationData() throws Exception
     {
         // delete site
         if (siteService.exists(SITE_ID, getAdminName(), getAdminPassword()))
