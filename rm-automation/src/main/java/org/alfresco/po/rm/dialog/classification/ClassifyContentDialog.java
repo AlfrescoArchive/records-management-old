@@ -71,7 +71,7 @@ public class ClassifyContentDialog extends Dialog
     @FindBy(css="#REASONS .alfresco-forms-controls-MultiSelect__container")
     private WebElement reasonsContainer;
     
-    @FindBy(css="#EXEMPTIONS_CONTROL .alfresco-forms-controls-MultiSelect__container")
+    @FindBy(css="#EXEMPTIONS .alfresco-forms-controls-MultiSelect__container")
     private WebElement exemptionsContainer;
 
     @FindBy(css="#REASONS input")
