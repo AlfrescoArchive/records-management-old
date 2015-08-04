@@ -19,6 +19,7 @@
 
 package org.alfresco.test.integration.classify;
 
+import static org.alfresco.po.common.util.RMCollectionUtils.tail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
@@ -142,7 +144,7 @@ public class ClassifyRecord extends BaseTest
                     Arrays.asList(clickableActions).contains(RecordActions.EDIT_CLASSIFIED_CONTENT));
         record.clickOnLink(recordDetails);
         assertFalse("Expected the Edit Classification button not to be available before classification in Record Details",
-                     recordDetails.getRecordActionsPanel().isActionAvailable(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT));
+                recordDetails.getRecordActionsPanel().isActionAvailable(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT));
         openPage(filePlan, RM_SITE_ID,
                 createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
         filePlan.getRecord(CLASSIFIED_RECORD).clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
@@ -165,7 +167,7 @@ public class ClassifyRecord extends BaseTest
 
         // Check that the Edit Classification button is available after classification
         assertTrue("Expected the Edit Classification button to be available and clickable after classification",
-                    filePlan.getRecord(CLASSIFIED_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
+                filePlan.getRecord(CLASSIFIED_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
 
         // Now go to doc details and check the Edit Classification button is available.
         filePlan.getRecord(CLASSIFIED_RECORD).clickOnLink(classifiedRecordDetails);
@@ -189,7 +191,7 @@ public class ClassifyRecord extends BaseTest
     {
         // open record folder one
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
 
         // show that the classify action is available
         assertFalse(filePlan.getRecord(RECORD).isHeld());
@@ -233,7 +235,7 @@ public class ClassifyRecord extends BaseTest
     {
         // open record folder one
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
 
         // add record to hold
         filePlan
@@ -275,7 +277,7 @@ public class ClassifyRecord extends BaseTest
     public void checkCanClassifyCompleteRecord()
     {
         openPage(filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
         filePlan.getRecord(COMPLETE_RECORD)
             .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
@@ -308,7 +310,7 @@ public class ClassifyRecord extends BaseTest
         String recordName = UUID.randomUUID().toString();
 
         openPage(UNCLEARED_USER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID,
-                    createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
+                createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
         filePlan.getToolbar()
             .clickOnFile()
             .clickOnElectronic()
@@ -316,7 +318,80 @@ public class ClassifyRecord extends BaseTest
 
         Record record = filePlan.getRecord(recordName);
         assertFalse("Classify action should not be shown to uncleared user.",
-                    record.isActionClickable(RecordActions.CLASSIFY));
+                record.isActionClickable(RecordActions.CLASSIFY));
+    }
+
+    /**
+     * Check that a user with intermediate security clearance cannot reclassify a record above their clearance.
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2440">RM-2440</a><pre>
+     * Given that I am a user with mid-level clearance (for example Secret)
+     * And content is already classified
+     * When I edit the content classification
+     * Then I am only able to reclassify the content up to my security clearance (for example I would have the options
+     *     Unclassified, Confidential and Secret, but Top Secret would not be available to me)
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration" },
+        description = "Check that a user with Secret clearance cannot reclassify above that level",
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS",
+                            "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE",
+                            "GROUP_RM_MANAGER_FILE_CATEGORY_ONE" }
+    )
+    public void checkUserWithIntermediateClearanceHasLimitedReclassificationOptions() throws Exception
+    {
+        final String recordName = UUID.randomUUID().toString();
+        final String folderOnePath = createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE);
+
+        // Log in as admin ...
+        openPage(filePlan, RM_SITE_ID, folderOnePath);
+
+        // ... and upload a file...
+        filePlan.getToolbar()
+                .clickOnFile()
+                .clickOnElectronic()
+                .uploadFile(recordName);
+
+        // ... and classify it as Confidential ...
+        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        classifyContentDialog.setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
+                             .setClassifiedBy(CLASSIFIED_BY)
+                             .setAgency(CLASSIFICATION_AGENCY)
+                             .addReason(CLASSIFICATION_REASON)
+                             .clickOnClassify();
+
+        // Implementation note. We now need to ensure that the admin user has permission to reclassify to any level
+        // and that the RM Manager user can only reclassify up to Secret.
+        // However we will switch to the RM Manager user first in order to work around an issue whereby Selenium
+        // elements become stale if a dialog is used & dismissed multiple times within a test.
+
+        // Then log in as a user with more limited clearance ...
+        openPage(RM_MANAGER, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, folderOnePath);
+
+        // ... and ensure that the record can be reclassified only up to the current user's clearance level
+        assertTrue("Edit classification action should be shown.",
+                filePlan.getRecord(recordName).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
+        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
+
+        assertEquals("Unexpected reclassification levels offered",
+                tail(CLASSIFICATION_LEVELS_TEXT), classifyContentDialog.getAvailableLevels());
+
+        classifyContentDialog.clickOnCancel();
+
+        // ... and log in again as a user with full reclassification options ...
+        openPage(filePlan, RM_SITE_ID, folderOnePath);
+
+        // ... and check that admin can reclassify at any level ...
+        assertTrue("Edit classification action should be shown.",
+                filePlan.getRecord(recordName).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
+        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
+
+        assertEquals("Unexpected reclassification levels offered",
+                     CLASSIFICATION_LEVELS_TEXT, classifyContentDialog.getAvailableLevels());
+
+        classifyContentDialog.clickOnCancel();
     }
 
     /**

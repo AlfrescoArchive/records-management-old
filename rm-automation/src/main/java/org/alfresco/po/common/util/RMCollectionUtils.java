@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.module.org_alfresco_module_rm.util;
+package org.alfresco.po.common.util;
 
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
@@ -37,31 +37,6 @@ import java.util.Set;
 public final class RMCollectionUtils
 {
     private RMCollectionUtils() { /* Intentionally empty. */}
-
-    /**
-     * Gets the list of duplicate elements contained within the specified list, if any.
-     * @param l   the list in which to find duplicates.
-     * @param <T> the element type of the list.
-     * @return    a list of duplicate elements. If there are no duplicates, returns an empty list.
-     */
-    public static <T> List<T> getDuplicateElements(List<T> l)
-    {
-        final Set<T> uniqueElems = new HashSet<>();
-        final List<T> duplicateElems = new ArrayList<>();
-
-        for (T elem: l)
-        {
-            if (uniqueElems.contains(elem))
-            {
-                if (!duplicateElems.contains(elem)) duplicateElems.add(elem);
-            }
-            else
-            {
-                uniqueElems.add(elem);
-            }
-        }
-        return duplicateElems;
-    }
 
     /** Returns the head (element at index 0) of the provided List.
      *

@@ -18,6 +18,10 @@
  */
 package org.alfresco.test;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 /**
  * Test data used in tests
  *
@@ -36,6 +40,7 @@ public interface TestData
      * <p>"GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" The RM_MANAGER has been given 'Secret' clearance.
      * <p>"GROUP_RM_MANAGER_IN_COLLAB_SITE" The RM_MANAGER is a manager of the COLLAB_SITE.
      * <p>"GROUP_RM_MANAGER_READ_CATEGORY_ONE" The RM_MANAGER can read records in RECORD_CATEGORY_ONE.
+     * <p>"GROUP_RM_MANAGER_FILE_CATEGORY_ONE" The RM_MANAGER can read and file records in RECORD_CATEGORY_ONE.
      */
     public static final String RM_MANAGER = "rm_manager_user";
 
@@ -252,6 +257,10 @@ public interface TestData
     public static final String CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT = "Confidential";
     public static final String UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT = "Unclassified";
     public static final String DEFAULT_CLASSIFICATION_LEVEL_TEXT = "Top Secret";
+    public static final List<String> CLASSIFICATION_LEVELS_TEXT = asList(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT,
+                                                                         SECRET_CLASSIFICATION_LEVEL_TEXT,
+                                                                         CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT,
+                                                                         UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
     public static final String CLASSIFIED_BY = "ClassifiedByText";
     public static final String CLASSIFICATION_AGENCY = "ClassificationAgency";
     public static final String CLASSIFICATION_REASON = "1.4(c)";

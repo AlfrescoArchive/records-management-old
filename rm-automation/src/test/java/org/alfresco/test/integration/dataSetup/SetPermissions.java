@@ -55,6 +55,22 @@ public class SetPermissions extends BaseTest
         managePermissions.clickOnOK();
     }
 
+    /** Give RM_MANAGER permission to file records in CATEGORY_ONE. */
+    @Test
+            (
+                    groups = { "integration", "GROUP_RM_MANAGER_FILE_CATEGORY_ONE" },
+                    description = "Give RM_MANAGER permission to file records in CATEGORY_ONE.",
+                    dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_CATEGORY_ONE_EXISTS" }
+            )
+    public void rmManagerCanFileCategoryOne()
+    {
+        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary"));
+        filePlan.getRecordCategory(RECORD_CATEGORY_ONE).clickonManagePermissions();
+        managePermissions.setPermissions(RM_MANAGER, RM_MANAGER, RM_MANAGER,  "Read and File");
+        assertEquals("Read and File", managePermissions.getPermission(RM_MANAGER, RM_MANAGER, RM_MANAGER));
+        managePermissions.clickOnOK();
+    }
+
     /** Give UNCLEARED_USER permission to file records in CATEGORY_ONE. */
     @Test
     (
