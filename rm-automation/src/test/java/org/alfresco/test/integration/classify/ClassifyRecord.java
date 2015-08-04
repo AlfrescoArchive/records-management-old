@@ -28,7 +28,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
