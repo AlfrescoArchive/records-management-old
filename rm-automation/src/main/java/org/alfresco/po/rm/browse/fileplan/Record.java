@@ -24,10 +24,12 @@ import java.text.MessageFormat;
 
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.RequestInformationDialog;
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.RecordLinkDialog;
 import org.alfresco.po.rm.managepermissions.ManagePermissions;
+import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -81,6 +83,9 @@ public class Record extends DisposableItem implements RecordActions
     @Autowired
     private ManagePermissions managePermissions;
     
+    /** Classify content dialog*/
+    @Autowired
+    private ClassifyContentDialog classifyContentDialog;
     /**
      * Click on record details link
      */
@@ -207,4 +212,13 @@ public class Record extends DisposableItem implements RecordActions
         return elementExists(getRow(), CUTTOFF_INDICATOR_SELECTOR);
     }
 
+    public ClassifyContentDialog clickOnClassifyAction(){
+    
+        return clickOnAction(CLASSIFY, classifyContentDialog);
+    }
+   
+    public ClassifyContentDialog clickOnEditClassification(){
+    
+        return clickOnAction(EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
+    }
 }

@@ -34,6 +34,7 @@ import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.browse.documentlibrary.InplaceRecord;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -85,9 +86,9 @@ public class ClassifyDocument extends BaseTest
         // verify document actions
         assertTrue(document.isActionClickable(DocumentActions.CLASSIFY));
 
-        // verify the Edit Classification button is not available before classification
+        // verify the Edit Classification button is not available if the document has not been classified
         String[] clickableActions = document.getClickableActions();
-        assertFalse("Expected the Edit Classification button not to be available for document before classification",
+        assertFalse("Expected the Edit Classification button not to be available for document that has not been classified",
                  Arrays.asList(clickableActions).contains(DocumentActions.EDIT_CLASSIFICATION));
 
         // navigate to the document details page
@@ -97,7 +98,7 @@ public class ClassifyDocument extends BaseTest
         assertTrue(documentDetails.getDocumentActionsPanel()
                 .isActionClickable(DocumentActionsPanel.CLASSIFY));
         // verify the Edit Classification button is not available in Document Details
-        assertFalse("Expected the Edit Classification button not to be available in Document Details before classification",
+        assertFalse("Expected the Edit Classification button not to be available in Document Details if the document has not been classified",
                  documentDetails.getDocumentActionsPanel().isActionAvailable(DocumentActionsPanel.EDIT_CLASSIFICATION));
         // Click on classify action in order to validate the dialog
         documentDetails.getDocumentActionsPanel().clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
@@ -210,6 +211,7 @@ public class ClassifyDocument extends BaseTest
         description = "Check that a user with no security clearance doesn't see the 'Edit Classification' action",
         dependsOnGroups = { "GROUP_UNCLEARED_USER_IN_COLLAB_SITE" }
     )
+    @AlfrescoTest(jira="RM-2417")
     public void checkUnclearedUserCannotEditClassification()
     {
         String documentName = UUID.randomUUID().toString();
@@ -219,7 +221,7 @@ public class ClassifyDocument extends BaseTest
             .clickOnUpload()
             .uploadFile(documentName);
 
-        // Classify document with admin
+        // Classify document with admin *explicitly as unclassified*
         documentLibrary.getDocument(documentName)
             .clickOnAction(DocumentActionsPanel.CLASSIFY, classifyContentDialog);
 

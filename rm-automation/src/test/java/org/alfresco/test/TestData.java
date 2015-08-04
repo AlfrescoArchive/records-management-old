@@ -255,16 +255,34 @@ public interface TestData
     public static final String CLASSIFIED_BY = "ClassifiedByText";
     public static final String CLASSIFICATION_AGENCY = "ClassificationAgency";
     public static final String CLASSIFICATION_REASON = "1.4(c)";
+  
+    /**
+     * A record has been classified and its initial edit classification state has been checked.
+     * <p>"EDIT_CLASSIFICATION_INITIAL_STATE" The classified record initial edit classification state has been verified.
+     */
+    public static final String EDIT_CLASSIFICATION_RECORD = "edit-classification-record";
+    public static final String EDIT_CLASSIFICATION_DOCUMENT = "edit-classification-document";
+    // Field values to use for the editing of the classification
+    public static final String EDITED_CLASSIFICATION_REASON = "1.4(a)";
+    public static final String EDITED_CLASSIFIED_BY = "Edited Classified By Text";
+    public static final String EDITED_CLASSIFICATION_AGENCY = "Edited Classification Agency";
+    // Information message that appears when successfully editing a classification meta-data
+    public static final String SUCCESSFULLY_EDITED_CLASSIFICATION = "Successfully edited classified content";
+    
     /** The downgrade date to use. Here we set the date and month to the same thing to avoid cross-locale issues. */
+    public static final String DOWNGRADE_DATE_EDIT = "11/11/2045";
     public static final String DOWNGRADE_DATE_INPUT = "07/07/2045";
     public static final String DOWNGRADE_DATE_OUTPUT = "Fri 7 Jul 2045";
     public static final String DOWNGRADE_EVENT = "Downgrade Event";
     public static final String DOWNGRADE_INSTRUCTIONS = "Downgrade Instructions";
     /** The declassification date to use. Here we set the date and month to the same thing to avoid cross-locale issues. */
+    public static final String DECLASSIFICATION_DATE_EDIT = "12/12/2045";
     public static final String DECLASSIFICATION_DATE_INPUT = "08/08/2045";
     public static final String DECLASSIFICATION_DATE_OUTPUT = "Tue 8 Aug 2045";
     public static final String DECLASSIFICATION_EVENT = "Declassification Event";
     public static final String EXEMPTION_CATEGORY = "9";
+    
+    public static final String VALIDATION_BLANK_FIELD = "Must not be blank and cannot start with a whitespace";
 
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";

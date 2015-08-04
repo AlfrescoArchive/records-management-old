@@ -46,7 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 /**
- * tests the search of classified records in Records Search page
+ * Tests the search of classified records in Records Search page
  * @author Oana Nechiforescu
  */
 public class SearchClassifiedRecords extends BaseTest
