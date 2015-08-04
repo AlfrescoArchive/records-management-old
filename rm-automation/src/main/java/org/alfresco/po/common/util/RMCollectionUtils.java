@@ -20,11 +20,8 @@ package org.alfresco.po.common.util;
 
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Various common helper methods for Collections. This class is probably only appropriate for use with relatively

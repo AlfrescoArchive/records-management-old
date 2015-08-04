@@ -32,7 +32,6 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.browse.fileplan.RecordIndicators;
-import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
@@ -67,9 +66,6 @@ public class ClassifyRecord extends BaseTest
 
     @Autowired
     private ClassifiedRecordDetails classifiedRecordDetails;
-
-    @Autowired
-    private ClassifiedPropertiesPanel classifiedPropertiesPanel;
 
     /**
      * Check that the classify record action exists for electronic and non-electronic records.

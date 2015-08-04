@@ -29,7 +29,6 @@ import java.util.Map;
 import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
-import org.alfresco.dataprep.UserService;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -61,7 +60,6 @@ public class Reclassification extends BaseTest
     /* Data prep services */
     @Autowired private DataPrepHelper dataPrepHelper;
     @Autowired private SiteService siteService;
-    @Autowired private UserService userService;
     @Autowired private ContentService contentService;
 
     /**

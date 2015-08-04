@@ -18,6 +18,10 @@
  */
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
@@ -26,14 +30,6 @@ import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
-import static org.alfresco.test.TestData.CLASSIFICATION_AGENCY;
-import static org.alfresco.test.TestData.CLASSIFICATION_REASON;
-import static org.alfresco.test.TestData.CLASSIFIED_BY;
-import static org.alfresco.test.TestData.COLLAB_SITE_ID;
-import static org.alfresco.test.TestData.SECRET_CLASSIFICATION_LEVEL_TEXT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -42,7 +38,7 @@ import org.testng.annotations.Test;
  *
  * @author Oana Nechiforescu
  */
-public class EditClassification extends BaseTest 
+public class EditClassification extends BaseTest
 {
     @Autowired
     private FilePlan filePlan;
@@ -55,15 +51,15 @@ public class EditClassification extends BaseTest
 
     // initial selected exemption ID
     final String EXEMPTION_ID = "2";
-    
+
     // classification meta-data used for editing
     final String EDITED_DOWNGRADE_DATE = "10/20/2080";
     final String EDITED_DOWNGRADE_EVENT = "not on this level anymore on the current project";
     final String EDITED_DOWNGRADE_INSTRUCTIONS = "1. a) Give Jack J. a notice.";
     final String EDITED_DECLASSIFICATION_DATE = "11/10/2081";
-    final String EDITED_DECLASSIFICATION_EVENT = "made public"; 
-    final String EDITED_EXEMPTION_INDEX = "1"; 
-    
+    final String EDITED_DECLASSIFICATION_EVENT = "made public";
+    final String EDITED_EXEMPTION_INDEX = "1";
+
     /**
      * The Edit Classification dialog illustrates the current classification meta-data values for records
      * <p>
@@ -81,10 +77,10 @@ public class EditClassification extends BaseTest
             dependsOnGroups = {"EDIT_CLASSIFICATION_DATA_PREP"}
     )
     @AlfrescoTest(jira = "RM-2427")
-    public void editRecordClassificationDialogInitialState() 
+    public void editRecordClassificationDialogInitialState()
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
-        // Check that the Edit Classification button is available and open the Edit Classification dialog   
+        // Check that the Edit Classification button is available and open the Edit Classification dialog
         assertTrue(filePlan.getRecord(EDIT_CLASSIFICATION_RECORD).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
         filePlan.getRecord(EDIT_CLASSIFICATION_RECORD).clickOnEditClassification();
         assertTrue("The Edit Classification dialog is not displayed on click on Edit Classification button.", editContentClassificationDialog.isEditClassificationDialogDisplayed());
@@ -152,7 +148,7 @@ public class EditClassification extends BaseTest
         assertEquals("The exemption value from Edit Classification dialog is not the one set in Classification Dialog.", EXEMPTION_ID, editContentClassificationDialog.getExemptions().get(0));
         editContentClassificationDialog.clickOnCancel();
     }
-    
+
     /**
      * Successful editing of classification meta-data
      * <p>
@@ -187,7 +183,7 @@ public class EditClassification extends BaseTest
                 .removeSelectedExemption(EXEMPTION_ID)
                 .addExemptionCategory(EDITED_EXEMPTION_INDEX)
                 .clickOnEdit();
-        
+
         documentLibrary.getDocument(EDIT_CLASSIFICATION_DOCUMENT).clickOnEditClassification();
         assertEquals("The classified by value has not been edited succesfully in Edit Classification dialog.", EDITED_CLASSIFIED_BY, editContentClassificationDialog.getClassifiedBy());
         assertEquals("The classification agency value has not been edited succesfully in Edit Classification dialog.", EDITED_CLASSIFICATION_AGENCY, editContentClassificationDialog.getAgency());
@@ -200,9 +196,9 @@ public class EditClassification extends BaseTest
         assertEquals("The exemption value has not been edited succesfully in Edit Classification dialog.", EDITED_EXEMPTION_INDEX, editContentClassificationDialog.getExemptions().get(0));
         editContentClassificationDialog.clickOnCancel();
     }
-    
+
     /**
-     * Canceling the classification meta-data editing of a record 
+     * Canceling the classification meta-data editing of a record
      * <p>
      * <a href="https://issues.alfresco.com/jira/browse/RM-RM-2430">RM-2430</a><pre>
      * Given that I am viewing the edit classification dialog
@@ -236,7 +232,7 @@ public class EditClassification extends BaseTest
                 .removeSelectedExemption(EXEMPTION_ID)
                 .addExemptionCategory(EDITED_EXEMPTION_INDEX)
                 .clickOnCancel();
-        
+
         filePlan.getRecord(EDIT_CLASSIFICATION_RECORD).clickOnEditClassification();
         // Verify the metadata values have not changed
         assertEquals("The classification level value from Edit Classification dialog has changed after cancel in Classification Dialog.", SECRET_CLASSIFICATION_LEVEL_TEXT, editContentClassificationDialog.getLevel());
@@ -251,7 +247,7 @@ public class EditClassification extends BaseTest
         assertEquals("The exemption value from Edit Classification dialog has changed after cancel in Classification Dialog.", EXEMPTION_ID, editContentClassificationDialog.getExemptions().get(0));
         editContentClassificationDialog.clickOnCancel();
     }
-    
+
     /**
      * Check mandatory values
      * <p>
@@ -274,25 +270,25 @@ public class EditClassification extends BaseTest
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
         filePlan.getRecord(EDIT_CLASSIFICATION_RECORD).clickOnEditClassification();
         // Edit the mandatory fields to empty values
-        editContentClassificationDialog.setClassifiedByEmpty()    
+        editContentClassificationDialog.setClassifiedByEmpty()
                 .setAgencyEmpty()
                 .removeSelectedReason(CLASSIFICATION_REASON)
                 .removeSelectedExemption(EXEMPTION_ID);
-        
+
         assertFalse("The edit classification button is enabled even if the mandatory fields are not completed.", classifyContentDialog.isClassifyButtonEnabled());
         assertTrue("The validation message for the blank space in the Classified field is not displayed.", classifyContentDialog.isValidationDisplayed(VALIDATION_BLANK_FIELD));
         editContentClassificationDialog.clickOnCancel();
     }
-    
+
      @Test(
             groups = {"integration", "EDIT_CLASSIFICATION_DATA_PREP"},
             description = "Method that creates and classifies the required content for the Edit Content Classification dialog tests",
             dependsOnGroups = {"GROUP_RECORD_FOLDER_ONE_EXISTS", "GROUP_COLLABORATION_SITE_EXISTS"}
     )
-    public void editClassificationDataPrep() 
+    public void editClassificationDataPrep()
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
-        
+
         // Classify record
         filePlan.getToolbar()
                 .clickOnFile()

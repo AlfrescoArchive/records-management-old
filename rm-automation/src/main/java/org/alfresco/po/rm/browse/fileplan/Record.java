@@ -29,7 +29,6 @@ import org.alfresco.po.rm.dialog.copymovelinkfile.CopyDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.MoveDialog;
 import org.alfresco.po.rm.dialog.copymovelinkfile.RecordLinkDialog;
 import org.alfresco.po.rm.managepermissions.ManagePermissions;
-import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,7 +36,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Record list item
- * 
+ *
  * @author Roy Wetherall
  */
 @Scope("prototype")
@@ -70,7 +69,7 @@ public class Record extends DisposableItem implements RecordActions
     /** record link dialog */
     @Autowired
     private RecordLinkDialog recordLinkDialog;
-    
+
     /** record details */
     @Autowired
     private RecordDetails recordDetails;
@@ -78,11 +77,11 @@ public class Record extends DisposableItem implements RecordActions
     /** request information dialog*/
     @Autowired
     private RequestInformationDialog requestInformationDialog;
-    
+
     /** manage permissions dialog**/
     @Autowired
     private ManagePermissions managePermissions;
-    
+
     /** Classify content dialog*/
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
@@ -94,7 +93,7 @@ public class Record extends DisposableItem implements RecordActions
     {
         return super.clickOnLink(recordDetails);
     }
-    
+
     /**
      * @return  true if record is incomplete, false otherwise
      */
@@ -102,7 +101,7 @@ public class Record extends DisposableItem implements RecordActions
     {
         return elementExists(getRow(), INFO_BANNER_SELECTOR);
     }
-    
+
     /**
      * @return  true if record is linked, false otherwise
      */
@@ -126,7 +125,7 @@ public class Record extends DisposableItem implements RecordActions
     {
         return (FilePlan)clickOnAction(COMPLETE_RECORD);
     }
-    
+
     /**
      * Click on reopen record action
      */
@@ -158,7 +157,7 @@ public class Record extends DisposableItem implements RecordActions
     {
         return clickOnAction(LINK, recordLinkDialog);
     }
-    
+
     /**
      * Click on Request Information action
      */
@@ -166,7 +165,7 @@ public class Record extends DisposableItem implements RecordActions
     {
         return clickOnAction(REQUEST_INFORMATION, requestInformationDialog);
     }
-    
+
     /**
      * Click on Manage Permission action
      */
@@ -213,12 +212,12 @@ public class Record extends DisposableItem implements RecordActions
     }
 
     public ClassifyContentDialog clickOnClassifyAction(){
-    
+
         return clickOnAction(CLASSIFY, classifyContentDialog);
     }
-   
+
     public ClassifyContentDialog clickOnEditClassification(){
-    
+
         return clickOnAction(EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
     }
 }
