@@ -208,6 +208,44 @@ public class Reclassification extends BaseTest
     }
 
     /**
+     * Classify a document as secret and check that when we reclassify it as confidential the "Reclassified By" field is
+     * pre-populated with the current user.
+     */
+    @Test
+    (
+       groups = { "integration", "ignored" }, // Ignored until RM-2434 is complete.
+       description = "Check the initial fields when trying to reclassify a document.",
+       dependsOnMethods = "setUpReclassificationData"
+    )
+    @AlfrescoTest(jira="RM-2444")
+    public void checkInitialReclassificationFields() throws Exception
+    {
+        // Upload document specifically for this test.
+        String document = "checkInitialReclassificationFields document";
+        openPage(documentLibrary, SITE_ID);
+        contentService.createDocument(getAdminName(), getAdminPassword(), SITE_ID, DocumentType.TEXT_PLAIN, document, TEST_CONTENT);
+
+        // Classify document
+        openPage(documentLibrary, SITE_ID);
+        documentLibrary
+            .getDocument(document)
+            .clickOnClassify()
+            .setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
+            .addReason(CLASSIFICATION_REASON)
+            .clickOnClassify();
+
+        // Attempt to reclassify and check the initial value of the "reclassified by" field.
+        openPage(documentLibrary, SITE_ID);
+        String reclassifiedBy = documentLibrary
+            .getDocument(document)
+            .clickOnEditClassification()
+            .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
+            .getReclassifiedBy();
+        assertEquals("'Reclassified by' should default to the current user.", "Administrator", reclassifiedBy);
+    }
+
+    /**
      * Validate that a date is correctly displayed in the properties panel (i.e. is similar to "Wed 5 Aug 2015").
      *
      * @param dateString The date string to validate.

@@ -19,6 +19,7 @@
 package org.alfresco.po.rm.dialog.classification;
 
 import static java.util.stream.Collectors.toList;
+import static org.alfresco.po.common.util.Utils.clear;
 import static org.alfresco.po.common.util.Utils.clearAndType;
 import static org.alfresco.po.common.util.Utils.retry;
 import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
@@ -29,7 +30,6 @@ import java.util.List;
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
-import static org.alfresco.po.common.util.Utils.clear;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -70,7 +70,7 @@ public class ClassifyContentDialog extends Dialog
 
     @FindBy(css="#REASONS .alfresco-forms-controls-MultiSelect__container")
     private WebElement reasonsContainer;
-    
+
     @FindBy(css="#EXEMPTIONS .alfresco-forms-controls-MultiSelect__container")
     private WebElement exemptionsContainer;
 
@@ -117,39 +117,39 @@ public class ClassifyContentDialog extends Dialog
     /** Here we rely on the cancel button being the second in the footer. */
     @FindBy(css=".footer .alfresco-buttons-AlfButton:nth-child(2) [role=button]")
     private WebElement cancelButton;
-    
+
     /** Classify Content title */
     @FindBy(css="#CLASSIFY_CONTENT_DIALOG_title")
     private WebElement classifyContentTitle;
-    
+
     /** Declassification date */
     @FindBy(css="#DECLASSIFICATION_DATE_CONTROL")
-    private WebElement declassificationDate; 
-    
+    private WebElement declassificationDate;
+
     /** Declassification event */
     @FindBy(css="#DECLASSIFICATION_EVENT input[name='declassificationEvent']")
-    private WebElement declassificationEvent; 
-    
+    private WebElement declassificationEvent;
+
     /** Edit Classification title*/
     @FindBy(css="#EDIT_CLASSIFIED_CONTENT_DIALOG_title")
-    private WebElement editClassificationTitle; 
-    
+    private WebElement editClassificationTitle;
+
     /** Classify Content OK button */
     @FindBy(css="#OK_label")
-    private WebElement classifyContentOKButtonLabel; 
-    
+    private WebElement classifyContentOKButtonLabel;
+
     /** Edit Classification OK button */
     @FindBy(css="#Edit_label")
     private WebElement editClassificationOKButtonLabel;
-    
+
     /** Edit Classification blank or contains whitespace validation */
     @FindBy(css="span[class='validation-message display']")
     private WebElement blankFieldValidationMessage;
-    
+
     /** Dialog tabs */
     @FindBy(css=".tabLabel")
     private List<WebElement> dialogTabs;
-    
+
     /** Labels used in the dialog */
     public final String CLASSIFY_BUTTON_LABEL = "Classify";
     public final String EDIT_BUTTON_LABEL = "Edit";
@@ -157,11 +157,11 @@ public class ClassifyContentDialog extends Dialog
     public final String CLASSIFY_DOCUMENT_TITLE = "Classify File";
     public final String EDIT_DOCUMENT_CLASSIFICATION_TITLE = "Edit Classified File";
     public final String EDIT_RECORD_CLASSIFICATION_TITLE = "Edit Classified Record";
-    
+
     /** Dialog tabs indexes*/
     public final int DOWNGRADE_SCHEDULE = 1;
     public final int DECLASSIFICATION_SCHEDULE = 2;
-    
+
     /**
      * Set the classification level.
      *
@@ -232,7 +232,7 @@ public class ClassifyContentDialog extends Dialog
         clear(agencyTextInput);
         return this;
     }
-    
+
     /**
      * Set classified by
      */
@@ -241,7 +241,7 @@ public class ClassifyContentDialog extends Dialog
         clearAndType(classifiedByTextInput, classifiedBy);
         return this;
     }
-    
+
     /**
     * Set classified by to empty value
     */
@@ -250,7 +250,7 @@ public class ClassifyContentDialog extends Dialog
         clear(classifiedByTextInput);
         return this;
     }
-         
+
    /**
      * Set the downgrade date.
      *
@@ -264,7 +264,7 @@ public class ClassifyContentDialog extends Dialog
         clearAndType(downgradeDateInput, downgradeDate);
         return this;
     }
-      
+
     /**
      * Set downgrade event
      */
@@ -274,7 +274,7 @@ public class ClassifyContentDialog extends Dialog
         clearAndType(downgradeEventInput, event);
         return this;
     }
-      
+
     /**
      * Set downgrade instructions
      */
@@ -284,7 +284,7 @@ public class ClassifyContentDialog extends Dialog
         clearAndType(downgradeInstrucationsInput, instructions);
         return this;
     }
-      
+
      /**
      * Set the declassification date.
      *
@@ -299,7 +299,7 @@ public class ClassifyContentDialog extends Dialog
         clearAndType(declassificationDateInput, declassificationDate);
         return this;
     }
-             
+
     /**
      * Set declassification event
      */
@@ -393,7 +393,7 @@ public class ClassifyContentDialog extends Dialog
         removeButton.click();
         return this;
     }
-    
+
     /**
      * Remove a exemption that has previously been selected.
      *
@@ -419,7 +419,7 @@ public class ClassifyContentDialog extends Dialog
         waitForInvisibilityOf(createButton);
         return SharePage.getLastRenderedPage().render();
     }
-    
+
     /**
      * Click on edit classification
      */
@@ -429,7 +429,7 @@ public class ClassifyContentDialog extends Dialog
         waitForInvisibilityOf(By.cssSelector("span[role='status']"));
         return SharePage.getLastRenderedPage().render();
     }
-    
+
     /**
      * Click on Classify from the Details Page
      */
@@ -459,22 +459,22 @@ public class ClassifyContentDialog extends Dialog
         waitForInvisibilityOf(closeButton);
         return SharePage.getLastRenderedPage().render();
     }
-    
+
     /**
-     * Check if the tab with the number given as parameter is selected 
+     * Check if the tab with the number given as parameter is selected
      */
     public boolean isTabSelected(int index)
-    { 
-        if(dialogTabs != null && !dialogTabs.isEmpty()){  
-            
+    {
+        if(dialogTabs != null && !dialogTabs.isEmpty())
+        {
             String enabled = dialogTabs.get(index - 1).getAttribute("aria-selected");
-            return enabled != null && enabled.equals("true"); 
+            return enabled != null && enabled.equals("true");
         }
         return false;
     }
-    
+
     /**
-     * Select tab if the tab with the index given as parameter is not already selected 
+     * Select tab if the tab with the index given as parameter is not already selected
      */
     public void selectTab(Integer index)
     {
@@ -489,13 +489,13 @@ public class ClassifyContentDialog extends Dialog
     {
         return (createButton != null && createButton.isDisplayed());
     }
-    
+
     /** @return <code>true</code> if the Classify Content dialog is visible (actually check if the "create" button is visible). */
     public boolean isEditClassificationDialogDisplayed()
     {
         return (editClassificationTitle != null && editClassificationTitle.isDisplayed());
     }
-    
+
     /** @return <code>true</code> if the classify button is visible and enabled. */
     public boolean isClassifyButtonEnabled()
     {
@@ -523,7 +523,7 @@ public class ClassifyContentDialog extends Dialog
                       .map(reason -> reason.getAttribute("data-aikau-value"))
                       .collect(toList());
     }
-    
+
     /** @return The list of selected exemptions. */
     public List<String> getExemptions()
     {
@@ -535,44 +535,44 @@ public class ClassifyContentDialog extends Dialog
                       .map(reason -> reason.getAttribute("data-aikau-value"))
                       .collect(toList());
     }
-    
-    
+
+
     /** @return The downgrade date. */
     public String getDowngradeDate()
     {
         selectTab(DOWNGRADE_SCHEDULE);
         return downgradeDateInput.getAttribute("value");
     }
-    
-    
+
+
     /** @return The downgrade event. */
     public String getDowngradeEvent()
     {
         selectTab(DOWNGRADE_SCHEDULE);
         return downgradeEventInput.getAttribute("value");
     }
-    
+
     /** @return The downgrade instructions. */
     public String getDowngradeInstructions()
     {
         selectTab(DOWNGRADE_SCHEDULE);
         return downgradeInstrucationsInput.getAttribute("value");
     }
-    
+
     /** @return The declassification date. */
     public String getDeclassificationDate()
     {
         selectTab(DECLASSIFICATION_SCHEDULE);
         return declassificationDate.getAttribute("value");
     }
-     
+
     /** @return The declassification event. */
     public String getDeclassificationEvent()
     {
         selectTab(DECLASSIFICATION_SCHEDULE);
         return declassificationEvent.getAttribute("value");
     }
-    
+
     /** @return The Classify content dialog title. */
     public String getClassifyDialogTitle()
     {
@@ -582,7 +582,7 @@ public class ClassifyContentDialog extends Dialog
         }
         return null;
     }
-    
+
     /** @return The Edit Classification dialog title. */
     public String getEditClasificationTitle()
     {
@@ -592,7 +592,7 @@ public class ClassifyContentDialog extends Dialog
         }
         return null;
     }
-    
+
     /** @return the Edit classification button label*/
     public String getEditButtonLabel()
     {
@@ -602,7 +602,7 @@ public class ClassifyContentDialog extends Dialog
         }
         return null;
     }
-    
+
     /** @return the Classify button label*/
     public String getClassifyButtonLabel()
     {
@@ -612,13 +612,19 @@ public class ClassifyContentDialog extends Dialog
         }
         return null;
     }
-    
+
     public boolean isValidationDisplayed(String validationMessage)
     {
         if(blankFieldValidationMessage != null)
-        {      
+        {
         return blankFieldValidationMessage.isDisplayed() && blankFieldValidationMessage.getText().equals(validationMessage);
         }
         return false;
-    }               
+    }
+
+    /** @return The current value in the 'Reclassified by' field. */
+    public String getReclassifiedBy()
+    {
+        return reclassifiedBy.getText();
+    }
 }
