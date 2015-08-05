@@ -55,18 +55,18 @@ public class SetPermissions extends BaseTest
         managePermissions.clickOnOK();
     }
 
-    /** Give RM_MANAGER permission to file records in CATEGORY_ONE. */
+    /** Give RM_MANAGER permission to file records in CATEGORY_THREE. */
     @Test
-            (
-                    groups = { "integration", "GROUP_RM_MANAGER_FILE_CATEGORY_ONE" },
-                    description = "Give RM_MANAGER permission to file records in CATEGORY_ONE.",
-                    dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_CATEGORY_ONE_EXISTS" }
-            )
-    public void rmManagerCanFileCategoryOne()
+    (
+        groups = { "integration", "GROUP_RM_MANAGER_FILE_CATEGORY_THREE" },
+        description = "Give RM_MANAGER permission to file records in CATEGORY_THREE.",
+        dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_CATEGORY_THREE_EXISTS" }
+    )
+    public void rmManagerCanFileCategoryThree()
     {
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary"));
-        filePlan.getRecordCategory(RECORD_CATEGORY_ONE).clickonManagePermissions();
-        managePermissions.setPermissions(RM_MANAGER, RM_MANAGER, RM_MANAGER,  "Read and File");
+        filePlan.getRecordCategory(RECORD_CATEGORY_THREE).clickonManagePermissions();
+        managePermissions.setPermissions(RM_MANAGER, RM_MANAGER, RM_MANAGER, "Read and File");
         assertEquals("Read and File", managePermissions.getPermission(RM_MANAGER, RM_MANAGER, RM_MANAGER));
         managePermissions.clickOnOK();
     }

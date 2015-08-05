@@ -40,7 +40,7 @@ public interface TestData
      * <p>"GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" The RM_MANAGER has been given 'Secret' clearance.
      * <p>"GROUP_RM_MANAGER_IN_COLLAB_SITE" The RM_MANAGER is a manager of the COLLAB_SITE.
      * <p>"GROUP_RM_MANAGER_READ_CATEGORY_ONE" The RM_MANAGER can read records in RECORD_CATEGORY_ONE.
-     * <p>"GROUP_RM_MANAGER_FILE_CATEGORY_ONE" The RM_MANAGER can read and file records in RECORD_CATEGORY_ONE.
+     * <p>"GROUP_RM_MANAGER_FILE_CATEGORY_THREE" The RM_MANAGER can read and file records in RECORD_CATEGORY_THREE.
      */
     public static final String RM_MANAGER = "rm_manager_user";
 
@@ -80,12 +80,15 @@ public interface TestData
     public static final String RECORD_CATEGORY_NAME = "record-category";
 
     /**
-     * An RM category.
+     * RM categories.
      * <p>"GROUP_CATEGORY_ONE_EXISTS" CATEGORY_ONE has been created in the root of the fileplan.
+     * <p>"GROUP_CATEGORY_THREE_EXISTS" CATEGORY_THREE has been created in the root of the fileplan.
      */
     public static final String RECORD_CATEGORY_ONE = "record-category-one";
 
     public static final String RECORD_CATEGORY_TWO = "record-category-two";
+    
+    public static final String RECORD_CATEGORY_THREE = "record-category-three";
 
     /**
      * An RM category.
@@ -105,6 +108,12 @@ public interface TestData
      */
     public static final String RECORD_FOLDER_TWO = "record-folder-two";
 
+     /**
+     * A folder in the fileplan.
+     * <p>"GROUP_RECORD_FOLDER_THREE_EXISTS" RECORD_FOLDER_THREE has been created in CATEGORY_THREE.
+     */
+    public static final String RECORD_FOLDER_THREE = "record-folder-three";
+    
     /**
      * A folder in fileplan to use for search.
      * <p>"GROUP_RECORD_FOLDER_SEARCH_EXISTS" RECORD_FOLDER_SEARCH has been created in CATEGORY_ONE.
@@ -290,8 +299,6 @@ public interface TestData
     public static final String DECLASSIFICATION_DATE_OUTPUT = "Tue 8 Aug 2045";
     public static final String DECLASSIFICATION_EVENT = "Declassification Event";
     public static final String EXEMPTION_CATEGORY = "9";
-    
-    public static final String VALIDATION_BLANK_FIELD = "Must not be blank and cannot start with a whitespace";
 
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";

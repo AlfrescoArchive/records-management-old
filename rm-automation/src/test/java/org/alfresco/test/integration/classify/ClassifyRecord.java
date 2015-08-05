@@ -331,14 +331,14 @@ public class ClassifyRecord extends BaseTest
     (
         groups = { "integration" },
         description = "Check that a user with Secret clearance cannot reclassify above that level",
-        dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS",
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_THREE_EXISTS",
                             "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE",
-                            "GROUP_RM_MANAGER_FILE_CATEGORY_ONE" }
+                            "GROUP_RM_MANAGER_FILE_CATEGORY_THREE" }
     )
     public void checkUserWithIntermediateClearanceHasLimitedReclassificationOptions() throws Exception
     {
         final String recordName = UUID.randomUUID().toString();
-        final String folderOnePath = createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE);
+        final String folderOnePath = createPathFrom("documentlibrary", RECORD_CATEGORY_THREE, RECORD_FOLDER_THREE);
 
         // Log in as admin ...
         openPage(filePlan, RM_SITE_ID, folderOnePath);

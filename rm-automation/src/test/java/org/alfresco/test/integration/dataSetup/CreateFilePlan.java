@@ -75,6 +75,18 @@ public class CreateFilePlan extends BaseTest
         openPage(filePlan, RM_SITE_ID, "documentlibrary");
         createCategory(RECORD_CATEGORY_ONE);
     }
+    
+    @Test
+    (
+        groups = { "integration", "GROUP_CATEGORY_THREE_EXISTS" },
+        description = "Create File Plan",
+        dependsOnGroups = { "GROUP_FILE_PLAN_EXISTS" }
+    )
+    public void createCategoryThree()
+    {
+        openPage(filePlan, RM_SITE_ID, "documentlibrary");
+        createCategory(RECORD_CATEGORY_THREE);
+    }
 
     @Test
     (
@@ -111,7 +123,19 @@ public class CreateFilePlan extends BaseTest
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE));
         createRecordFolder(RECORD_FOLDER_TWO);
     }
-
+    
+    @Test
+    (
+        groups = { "integration", "GROUP_RECORD_FOLDER_THREE_EXISTS" },
+        description = "Create File Plan",
+        dependsOnGroups = { "GROUP_CATEGORY_THREE_EXISTS" }
+    )
+    public void createRecordFolderThree()
+    {
+        openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_THREE));
+        createRecordFolder(RECORD_FOLDER_THREE);
+    }
+    
     @Test
     (
         groups = { "integration", "GROUP_RECORD_FOLDER_SEARCH_EXISTS" },

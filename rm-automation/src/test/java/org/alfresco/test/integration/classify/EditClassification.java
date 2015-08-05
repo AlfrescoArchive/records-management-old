@@ -276,7 +276,6 @@ public class EditClassification extends BaseTest
                 .removeSelectedExemption(EXEMPTION_ID);
 
         assertFalse("The edit classification button is enabled even if the mandatory fields are not completed.", classifyContentDialog.isClassifyButtonEnabled());
-        assertTrue("The validation message for the blank space in the Classified field is not displayed.", classifyContentDialog.isValidationDisplayed(VALIDATION_BLANK_FIELD));
         editContentClassificationDialog.clickOnCancel();
     }
 
