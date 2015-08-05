@@ -18,11 +18,15 @@
  */
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,12 +120,14 @@ public class Reclassification extends BaseTest
         Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
         expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_BY, "Upgrade person");
-        String expectedDate = DateTimeFormatter.ofPattern("EEE d MMM yyyy").withZone(ZoneOffset.UTC).format(Instant.now());
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_DATE, expectedDate);
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_REASON, "Upgrade reason");
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Upgrade");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
+
+        // To avoid complications with running in different timezones, just check that the date has been set.
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
+        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
     /** Downgrade the classification of a document and check the reclassification fields are set. */
@@ -156,6 +162,10 @@ public class Reclassification extends BaseTest
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Downgrade");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
+
+        // To avoid complications with running in different timezones, just check that the date has been set.
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
+        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
     /**
@@ -187,12 +197,34 @@ public class Reclassification extends BaseTest
         Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
         expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_BY, "Declassify person");
-        String expectedDate = DateTimeFormatter.ofPattern("EEE d MMM yyyy").withZone(ZoneOffset.UTC).format(Instant.now());
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_DATE, expectedDate);
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_REASON, "Declassify reason");
         expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Declassify");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
+
+     // To avoid complications with running in different timezones, just check that the date has been set.
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
+        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
+    }
+
+    /**
+     * Validate that a date is correctly displayed in the properties panel (i.e. is similar to "Wed 5 Aug 2015").
+     *
+     * @param dateString The date string to validate.
+     * @param dateName The name of the date; to be output in error messages.
+     * @throws AssertionError if the date is not in the correct format.
+     */
+    private void checkValidPropertiesPanelDate(String dateString, String dateName)
+    {
+        try
+        {
+            TemporalAccessor parsedDate = DateTimeFormatter.ofPattern("EEE d MMM yyyy").parse(dateString);
+            assertNotNull("Expected " + dateName + " to be populated.", parsedDate);
+        }
+        catch (DateTimeParseException e)
+        {
+            fail("Invalid " + dateName + " found: " + dateString);
+        }
     }
 
     /** Remove the test site. */
