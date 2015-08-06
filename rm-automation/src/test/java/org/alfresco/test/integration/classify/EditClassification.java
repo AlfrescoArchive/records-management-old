@@ -262,7 +262,7 @@ public class EditClassification extends BaseTest
     @Test(
             groups = {"integration"},
             description = "Check the mandatory fields from the Edit Classification dialog",
-            dependsOnGroups = {"EDIT_CLASSIFICATION_INITIAL_STATE", "EDIT_CLASSIFICATION_DATA_PREP"}
+            dependsOnGroups = {"EDIT_CLASSIFICATION_DATA_PREP"}
     )
     @AlfrescoTest(jira = "RM-2429")
     public void checkMandatoryFieldsForEditClassificationDialog()
@@ -282,7 +282,7 @@ public class EditClassification extends BaseTest
      @Test(
             groups = {"integration", "EDIT_CLASSIFICATION_DATA_PREP"},
             description = "Method that creates and classifies the required content for the Edit Content Classification dialog tests",
-            dependsOnGroups = {"GROUP_RECORD_FOLDER_ONE_EXISTS", "GROUP_COLLABORATION_SITE_EXISTS"}
+            dependsOnGroups = {"CLASSIFICATION_ACTION", "GROUP_RECORD_FOLDER_ONE_EXISTS", "GROUP_COLLABORATION_SITE_EXISTS"}
     )
     public void editClassificationDataPrep()
     {

@@ -74,7 +74,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Verify classify record action exists",
         dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_NON_ELECTRONIC_RECORD_EXISTS" }
     )
@@ -118,7 +118,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "GROUP_CLASSIFIED_RECORD_EXISTS" },
+        groups = { "integration", "GROUP_CLASSIFIED_RECORD_EXISTS", "CLASSIFICATION_ACTION"},
         description = "Verify classify record action exists",
         dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS" }
     )
@@ -178,7 +178,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Verify classify record action exists",
         dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_HOLDS_EXIST" }
     )
@@ -222,7 +222,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Verify classified but held record can't have the classification edited",
         dependsOnGroups = { "GROUP_COMPLETE_RECORD_IS_CLASSIFIED", "GROUP_HOLDS_EXIST" }
     )
@@ -265,7 +265,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration", "GROUP_COMPLETE_RECORD_IS_CLASSIFIED" },
+        groups = { "integration", "GROUP_COMPLETE_RECORD_IS_CLASSIFIED", "CLASSIFICATION_ACTION"},
         description = "Check that a completed record can be classified.",
         dependsOnGroups = { "GROUP_COMPLETE_RECORD_EXISTS" }
     )
@@ -296,7 +296,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Check that a user with no security clearance doesn't see the 'Classify' action",
         dependsOnGroups = { "GROUP_RECORD_FOLDER_ONE_EXISTS", "GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE" }
     )
@@ -329,7 +329,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Check that a user with Secret clearance cannot reclassify above that level",
         dependsOnGroups = { "GROUP_RECORD_FOLDER_THREE_EXISTS",
                             "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE",
@@ -401,7 +401,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "integration" },
+        groups = { "integration" , "CLASSIFICATION_ACTION"},
         description = "Check that a user with 'Secret' clearance can't classify a record if it does not have read & file permission over it.",
         dependsOnGroups = { "GROUP_ELECTRONIC_RECORD_EXISTS", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" }
     )
@@ -424,7 +424,7 @@ public class ClassifyRecord extends BaseTest
      */
      @Test
     (
-        groups = { "integration" },
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Check that a user with 'Secret' clearance can't edit a classified record clasification if it does not have read & file permission over it.",
         dependsOnGroups = { "GROUP_COMPLETE_RECORD_IS_CLASSIFIED", "GROUP_RM_MANAGER_READ_CATEGORY_ONE", "GROUP_RM_MANAGER_HAS_SECRET_CLEARANCE" }
     )
