@@ -625,6 +625,26 @@ public class ClassifyContentDialog extends Dialog
     /** @return The current value in the 'Reclassified by' field. */
     public String getReclassifiedBy()
     {
-        return reclassifiedBy.getText();
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return reclassifiedBy.getAttribute("value");
+    }
+
+    /** @return The current value in the 'Reclassification reason' field. */
+    public String getReclassifiedReason()
+    {
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return reclassifyReason.getAttribute("value");
+    }
+
+    /** @return true if the 'Reclassified By' input is enabled. */
+    public boolean isReclassifiedByEnabled()
+    {
+        return reclassifiedBy.isEnabled();
+    }
+
+    /** @return true if the 'Reclassification Reason' input is enabled. */
+    public boolean isReclassificationReasonEnabled()
+    {
+        return reclassifyReason.isEnabled();
     }
 }

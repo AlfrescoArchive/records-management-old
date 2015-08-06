@@ -18,6 +18,7 @@
  */
 package org.alfresco.test.integration.classify;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
@@ -35,6 +36,7 @@ import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
+import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.AlfrescoTest;
@@ -130,12 +132,15 @@ public class Reclassification extends BaseTest
         checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
-    /** Downgrade the classification of a document and check the reclassification fields are set. */
+    /**
+     * Downgrade the classification of a document and check the reclassification fields are set. This test 'depends on'
+     * the upgrade test to ensure they run in a predictable order.
+     */
     @Test
     (
        groups = { "integration" },
        description = "Downgrade the classification of the document to Confidential.",
-       dependsOnMethods = "setUpReclassificationData"
+       dependsOnMethods = "upgradeDocument"
     )
     @AlfrescoTest(jira="RM-2442")
     public void downgradeDocument()
@@ -170,7 +175,8 @@ public class Reclassification extends BaseTest
 
     /**
      * Declassify a document and check the reclassification fields are set. This must not be done before the downgrade
-     * test and so it 'depends' on it.
+     * test and so it 'depends' on it. Also test that when editing the classification of the reclassified document, the
+     * reclassification fields are initially disabled, but can be set after setting the level.
      */
     @Test
     (
@@ -178,16 +184,32 @@ public class Reclassification extends BaseTest
        description = "Declassify the document.",
        dependsOnMethods = "downgradeDocument"
     )
-    @AlfrescoTest(jira="RM-2443")
+    @AlfrescoTest(jira="RM-2443, RM-2446")
     public void declassifyDocument()
     {
-        // Declassify the document by setting the classification to "Unclassified".
+        // Open the edit classification dialog.
         openPage(documentLibrary, SITE_ID);
-        documentLibrary
+        ClassifyContentDialog dialog = documentLibrary
             .getDocument(DOCUMENT)
-            .clickOnEditClassification()
-            .setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT)
-            .setReclassifiedBy("Declassify person")
+            .clickOnEditClassification();
+
+        // Check that the reclassification fields are disabled and set to the values from the last test.
+        assertEquals("Downgrade person", dialog.getReclassifiedBy());
+        assertEquals("Downgrade reason", dialog.getReclassifiedReason());
+        assertFalse("Expected 'Reclassified By' to be disabled.", dialog.isReclassifiedByEnabled());
+        assertFalse("Expected 'Reclassification Reason' to be disabled.", dialog.isReclassificationReasonEnabled());
+
+        // Declassify the document by setting the classification to "Unclassified".
+        dialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
+
+        // Check that once the classification level is changed, the reclassification fields are reset.
+        /* TODO Enable these assertions once RM-2434 is implemented.
+        assertEquals("Administrator", dialog.getReclassifiedBy());
+        assertTrue("Reclassification reason should be cleared when level is changed.",
+                    dialog.getReclassifiedReason().isEmpty());*/
+
+        // Set the reclassification fields.
+        dialog.setReclassifiedBy("Declassify person")
             .setReclassifyReason("Declassify reason")
             .clickOnClassify();
 
@@ -202,7 +224,7 @@ public class Reclassification extends BaseTest
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
-     // To avoid complications with running in different timezones, just check that the date has been set.
+        // To avoid complications with running in different timezones, just check that the date has been set.
         String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
         checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
@@ -237,12 +259,14 @@ public class Reclassification extends BaseTest
 
         // Attempt to reclassify and check the initial value of the "reclassified by" field.
         openPage(documentLibrary, SITE_ID);
-        String reclassifiedBy = documentLibrary
+        ClassifyContentDialog dialog = documentLibrary
             .getDocument(document)
             .clickOnEditClassification()
-            .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
-            .getReclassifiedBy();
+            .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
+        String reclassifiedBy = dialog.getReclassifiedBy();
         assertEquals("'Reclassified by' should default to the current user.", "Administrator", reclassifiedBy);
+
+        dialog.clickOnCancel();
     }
 
     /**
