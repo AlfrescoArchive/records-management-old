@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.rm.dialog.classification;
 
+import static org.alfresco.po.common.util.Utils.clearAndType;
+
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -25,22 +27,28 @@ import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
- * The classify content dialog.
+ * The edit classified content dialog.
  *
- * @author tpage
+ * @author Tuna Aksoy
  * @since 3.0.a
  */
 @Component
-public class ClassifyContentDialog extends ClassificationDialog
+public class EditClassifiedContentDialog extends ClassificationDialog
 {
-    @FindBy(css="#LEVELS_CONTROL")
+    @FindBy(css="#LEVELS_EDIT_CONTROL")
     private WebElement levelSelectButton;
 
-    @FindBy(css="#LEVELS_CONTROL .dijitSelectLabel")
+    @FindBy(css="#LEVELS_EDIT_CONTROL .dijitSelectLabel")
     private WebElement selectedLevel;
 
-    @FindBy(css="#LEVELS_CONTROL_menu")
+    @FindBy(css="#LEVELS_EDIT_CONTROL_menu")
     private WebElement levelsMenu;
+
+    @FindBy(css="#LAST_RECLASSIFY_BY_EDIT .dijitInputField input")
+    private WebElement reclassifiedBy;
+
+    @FindBy(css="#LAST_RECLASSIFY_REASON_EDIT textarea")
+    private WebElement reclassifyReason;
 
     /**
      * @see org.alfresco.po.rm.dialog.classification.ClassificationDialog#getLevelSelectButton()
@@ -69,11 +77,51 @@ public class ClassifyContentDialog extends ClassificationDialog
         return levelsMenu;
     }
 
+    /** Set a string representing the entity that is reclassifying the document. */
+    public EditClassifiedContentDialog setReclassifiedBy(String reclassifiedByText)
+    {
+        clearAndType(reclassifiedBy, reclassifiedByText);
+        return this;
+    }
+
+    /** Set the reason for reclassifying the content. */
+    public EditClassifiedContentDialog setReclassifyReason(String reclassifiedReasonText)
+    {
+        clearAndType(reclassifyReason, reclassifiedReasonText);
+        return this;
+    }
+
+    /** @return The current value in the 'Reclassified by' field. */
+    public String getReclassifiedBy()
+    {
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return reclassifiedBy.getAttribute("value");
+    }
+
+    /** @return The current value in the 'Reclassification reason' field. */
+    public String getReclassifiedReason()
+    {
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return reclassifyReason.getAttribute("value");
+    }
+
+    /** @return true if the 'Reclassified By' input is enabled. */
+    public boolean isReclassifiedByEnabled()
+    {
+        return reclassifiedBy.isEnabled();
+    }
+
+    /** @return true if the 'Reclassification Reason' input is enabled. */
+    public boolean isReclassificationReasonEnabled()
+    {
+        return reclassifyReason.isEnabled();
+    }
+
     /**
      * @see org.alfresco.po.rm.dialog.classification.ClassificationDialog#setLevel(java.lang.String)
      */
     @Override
-    public ClassifyContentDialog setLevel(String levelId)
+    public EditClassifiedContentDialog setLevel(String levelId)
     {
         // Open the dropdown menu.
         getLevelSelectButton().click();

@@ -36,6 +36,7 @@ import org.alfresco.po.rm.details.record.ClassifiedRecordDetails;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -63,6 +64,10 @@ public class ClassifyRecord extends BaseTest
     /** The classify content dialog. */
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
+
+    /** The edit classified content dialog. */
+    @Autowired
+    private EditClassifiedContentDialog editClassifiedContentDialog;
 
     @Autowired
     private ClassifiedRecordDetails classifiedRecordDetails;
@@ -368,12 +373,12 @@ public class ClassifyRecord extends BaseTest
         // ... and ensure that the record can be reclassified only up to the current user's clearance level
         assertTrue("Edit classification action should be shown.",
                 filePlan.getRecord(recordName).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
-        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
+        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, editClassifiedContentDialog);
 
         assertEquals("Unexpected reclassification levels offered",
-                tail(CLASSIFICATION_LEVELS_TEXT), classifyContentDialog.getAvailableLevels());
+                tail(CLASSIFICATION_LEVELS_TEXT), editClassifiedContentDialog.getAvailableLevels());
 
-        classifyContentDialog.clickOnCancel();
+        editClassifiedContentDialog.clickOnCancel();
 
         // ... and log in again as a user with full reclassification options ...
         openPage(filePlan, RM_SITE_ID, folderOnePath);
@@ -381,12 +386,12 @@ public class ClassifyRecord extends BaseTest
         // ... and check that admin can reclassify at any level ...
         assertTrue("Edit classification action should be shown.",
                 filePlan.getRecord(recordName).isActionClickable(RecordActions.EDIT_CLASSIFIED_CONTENT));
-        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, classifyContentDialog);
+        filePlan.getRecord(recordName).clickOnAction(RecordActionsPanel.EDIT_CLASSIFIED_CONTENT, editClassifiedContentDialog);
 
         assertEquals("Unexpected reclassification levels offered",
-                     CLASSIFICATION_LEVELS_TEXT, classifyContentDialog.getAvailableLevels());
+                     CLASSIFICATION_LEVELS_TEXT, editClassifiedContentDialog.getAvailableLevels());
 
-        classifyContentDialog.clickOnCancel();
+        editClassifiedContentDialog.clickOnCancel();
     }
 
     /**

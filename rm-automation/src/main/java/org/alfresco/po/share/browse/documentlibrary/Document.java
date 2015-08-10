@@ -22,6 +22,7 @@ import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
 import org.alfresco.po.share.browse.ListItem;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
@@ -55,6 +56,9 @@ public class Document extends ListItem implements DocumentActions
 
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
+
+    @Autowired
+    private EditClassifiedContentDialog editClassifiedContentDialog;
 
     /**
      * Click on declare as record action
@@ -114,8 +118,8 @@ public class Document extends ListItem implements DocumentActions
     }
 
     /** Click on edit classification. */
-    public ClassifyContentDialog clickOnEditClassification()
+    public EditClassifiedContentDialog clickOnEditClassification()
     {
-        return clickOnAction(DocumentActionsPanel.EDIT_CLASSIFICATION, classifyContentDialog);
+        return clickOnAction(DocumentActionsPanel.EDIT_CLASSIFICATION, editClassifiedContentDialog);
     }
 }

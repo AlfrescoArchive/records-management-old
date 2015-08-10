@@ -36,7 +36,7 @@ import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanel;
 import org.alfresco.po.rm.details.record.ClassifiedPropertiesPanelField;
-import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.ClassifiedDocumentDetails;
 import org.alfresco.test.AlfrescoTest;
@@ -189,7 +189,7 @@ public class Reclassification extends BaseTest
     {
         // Open the edit classification dialog.
         openPage(documentLibrary, SITE_ID);
-        ClassifyContentDialog dialog = documentLibrary
+        EditClassifiedContentDialog dialog = documentLibrary
             .getDocument(DOCUMENT)
             .clickOnEditClassification();
 
@@ -259,7 +259,7 @@ public class Reclassification extends BaseTest
 
         // Attempt to reclassify and check the initial value of the "reclassified by" field.
         openPage(documentLibrary, SITE_ID);
-        ClassifyContentDialog dialog = documentLibrary
+        EditClassifiedContentDialog dialog = (EditClassifiedContentDialog) documentLibrary
             .getDocument(document)
             .clickOnEditClassification()
             .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);

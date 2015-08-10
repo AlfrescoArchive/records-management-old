@@ -26,6 +26,7 @@ import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
 import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.test.AlfrescoTest;
@@ -45,7 +46,7 @@ public class EditClassification extends BaseTest
     @Autowired
     private ClassifyContentDialog classifyContentDialog;
     @Autowired
-    private ClassifyContentDialog editContentClassificationDialog;
+    private EditClassifiedContentDialog editContentClassificationDialog;
     @Autowired
     private DocumentLibrary documentLibrary;
 
