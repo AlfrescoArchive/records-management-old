@@ -20,6 +20,7 @@ package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -203,10 +204,9 @@ public class Reclassification extends BaseTest
         dialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
 
         // Check that once the classification level is changed, the reclassification fields are reset.
-        /* TODO Enable these assertions once RM-2434 is implemented.
         assertEquals("Administrator", dialog.getReclassifiedBy());
         assertTrue("Reclassification reason should be cleared when level is changed.",
-                    dialog.getReclassifiedReason().isEmpty());*/
+                    dialog.getReclassifiedReason().isEmpty());
 
         // Set the reclassification fields.
         dialog.setReclassifiedBy("Declassify person")
@@ -235,7 +235,7 @@ public class Reclassification extends BaseTest
      */
     @Test
     (
-       groups = { "integration", "ignored" }, // Ignored until RM-2434 is complete.
+       groups = { "integration" },
        description = "Check the initial fields when trying to reclassify a document.",
        dependsOnMethods = "setUpReclassificationData"
     )
