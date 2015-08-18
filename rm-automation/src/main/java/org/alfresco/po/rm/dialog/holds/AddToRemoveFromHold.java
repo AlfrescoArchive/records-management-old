@@ -18,6 +18,8 @@
  */
 package org.alfresco.po.rm.dialog.holds;
 
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
+
 import java.util.List;
 
 import org.alfresco.po.common.Dialog;
@@ -89,7 +91,7 @@ public abstract class AddToRemoveFromHold extends Dialog
      */
     private CheckBox findHoldCheckBox(String name)
     {
-        try{Thread.sleep(1000);}catch(Exception e){}
+        waitForVisibilityOf(namesSelector);
 
         List<WebElement> nameElements = data.findElements(namesSelector);
         List<WebElement> checkboxes = data.findElements(checkboxesSelector);
