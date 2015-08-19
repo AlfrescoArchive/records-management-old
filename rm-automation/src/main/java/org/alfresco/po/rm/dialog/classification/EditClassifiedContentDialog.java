@@ -50,6 +50,12 @@ public class EditClassifiedContentDialog extends ClassificationDialog
     @FindBy(css="#RECLASSIFY_REASON_EDIT textarea")
     private WebElement reclassifyReason;
 
+    @FindBy(css="#LAST_RECLASSIFY_BY_EDIT .dijitInputField input")
+    private WebElement lastReclassifiedBy;
+
+    @FindBy(css="#LAST_RECLASSIFY_REASON_EDIT textarea")
+    private WebElement lastReclassifyReason;
+
     /**
      * @see org.alfresco.po.rm.dialog.classification.ClassificationDialog#getLevelSelectButton()
      */
@@ -115,6 +121,20 @@ public class EditClassifiedContentDialog extends ClassificationDialog
     public boolean isReclassificationReasonEnabled()
     {
         return reclassifyReason.isEnabled();
+    }
+
+    /** @return The current value in the 'Last reclassified by' field. */
+    public String getLastReclassifiedBy()
+    {
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return lastReclassifiedBy.getAttribute("value");
+    }
+
+    /** @return The current value in the 'Last reclassification reason' field. */
+    public String getLastReclassifiedReason()
+    {
+        // Use getAttribute as getText returns the empty string if the input is disabled.
+        return lastReclassifyReason.getAttribute("value");
     }
 
     /**

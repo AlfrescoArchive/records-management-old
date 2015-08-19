@@ -195,8 +195,8 @@ public class Reclassification extends BaseTest
             .clickOnEditClassification();
 
         // Check that the reclassification fields are disabled and set to the values from the last test.
-        assertEquals("Downgrade person", dialog.getReclassifiedBy());
-        assertEquals("Downgrade reason", dialog.getReclassifiedReason());
+        assertEquals("Downgrade person", dialog.getLastReclassifiedBy());
+        assertEquals("Downgrade reason", dialog.getLastReclassifiedReason());
         assertFalse("Expected 'Reclassified By' to be disabled.", dialog.isReclassifiedByEnabled());
         assertFalse("Expected 'Reclassification Reason' to be disabled.", dialog.isReclassificationReasonEnabled());
 
