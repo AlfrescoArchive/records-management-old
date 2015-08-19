@@ -44,10 +44,10 @@ public class EditClassifiedContentDialog extends ClassificationDialog
     @FindBy(css="#LEVELS_EDIT_CONTROL_menu")
     private WebElement levelsMenu;
 
-    @FindBy(css="#LAST_RECLASSIFY_BY_EDIT .dijitInputField input")
+    @FindBy(css="#RECLASSIFY_BY_EDIT .dijitInputField input")
     private WebElement reclassifiedBy;
 
-    @FindBy(css="#LAST_RECLASSIFY_REASON_EDIT textarea")
+    @FindBy(css="#RECLASSIFY_REASON_EDIT textarea")
     private WebElement reclassifyReason;
 
     /**
