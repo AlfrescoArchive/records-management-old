@@ -88,9 +88,9 @@ public class EditClassification extends BaseTest
         // Verify that the title of the dialog is "Edit Classified Record"
         String editClassificationDialogTitle = editContentClassificationDialog.getEditClasificationTitle();
         assertEquals("The dialog title is not Edit Classified Record it is " + editClassificationDialogTitle, editContentClassificationDialog.EDIT_RECORD_CLASSIFICATION_TITLE, editClassificationDialogTitle);
-        // Verify that the edit classification button label is "Edit"
+        // Verify that the edit classification button label is "Save"
         String editClassificationButtonLabel = editContentClassificationDialog.getEditButtonLabel();
-        assertEquals("The edit classification button does not have the label Edit, it is " + editClassificationButtonLabel, editContentClassificationDialog.EDIT_BUTTON_LABEL, editClassificationButtonLabel);
+        assertEquals("The edit classification button does not have the label Save, it is " + editClassificationButtonLabel, editContentClassificationDialog.EDIT_BUTTON_LABEL, editClassificationButtonLabel);
         // Verify the previously set classification properties are selected and set by default
         assertEquals("The classification level value from Edit Classification dialog is not the one set in Classification Dialog.", SECRET_CLASSIFICATION_LEVEL_TEXT, editContentClassificationDialog.getLevel());
         assertEquals("The classified by value from Edit Classification dialog is not the one set in Classification Dialog.", CLASSIFIED_BY, editContentClassificationDialog.getClassifiedBy());
@@ -133,9 +133,9 @@ public class EditClassification extends BaseTest
         // Verify that the title of the dialog is "Edit Classified File"
         String editClassificationDialogTitle = editContentClassificationDialog.getEditClasificationTitle();
         assertEquals("The dialog title is not Edit Classified Record it is " + editClassificationDialogTitle, editContentClassificationDialog.EDIT_DOCUMENT_CLASSIFICATION_TITLE, editClassificationDialogTitle);
-        // Verify that the edit classification button label is "Edit"
+        // Verify that the edit classification button label is "Save"
         String editClassificationButtonLabel = editContentClassificationDialog.getEditButtonLabel();
-        assertEquals("The edit classification button does not have the label Edit, it is " + editClassificationButtonLabel, editContentClassificationDialog.EDIT_BUTTON_LABEL, editClassificationButtonLabel);
+        assertEquals("The edit classification button does not have the label Save, it is " + editClassificationButtonLabel, editContentClassificationDialog.EDIT_BUTTON_LABEL, editClassificationButtonLabel);
         // Verify the previously set classification properties are selected and set by default
         assertEquals("The classification level value from Edit Classification dialog is not the one set in Classification Dialog.", SECRET_CLASSIFICATION_LEVEL_TEXT, editContentClassificationDialog.getLevel());
         assertEquals("The classified by value from Edit Classification dialog is not the one set in Classification Dialog.", CLASSIFIED_BY, editContentClassificationDialog.getClassifiedBy());

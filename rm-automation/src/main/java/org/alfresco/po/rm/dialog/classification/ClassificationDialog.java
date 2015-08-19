@@ -154,7 +154,7 @@ public abstract class ClassificationDialog extends Dialog
 
     /** Labels used in the dialog */
     public final String CLASSIFY_BUTTON_LABEL = "Classify";
-    public final String EDIT_BUTTON_LABEL = "Edit";
+    public final String EDIT_BUTTON_LABEL = "Save";
     public final String CLASSIFY_RECORD_TITLE = "Classify Record";
     public final String CLASSIFY_DOCUMENT_TITLE = "Classify File";
     public final String EDIT_DOCUMENT_CLASSIFICATION_TITLE = "Edit Classified File";
