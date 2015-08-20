@@ -22,6 +22,7 @@ import static org.alfresco.po.common.StreamHelper.zip;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,12 +31,17 @@ import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.console.ConsolePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import ru.yandex.qatools.htmlelements.element.TextInput;
+
+import com.google.common.base.Predicate;
 
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
@@ -51,9 +57,16 @@ public class SecurityClearancePage extends ConsolePage
     private static final By PROFILE_LINK_SELECTOR = By.cssSelector(".security-clearance-user-name .inner");
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
-    private static final By LOADING_SELECTOR = By.cssSelector(":not([class*='share-hidden'])[data-dojo-attach-point='dataLoadingNode']");
+    private static final By LOADING_SELECTOR = By.cssSelector(".data-loading ");
     private static final By NO_DATA = By.cssSelector("div[class$='no-data']");
-
+    
+    /** predicates */
+    private Predicate<WebDriver> waitTillHidden = (webDriver) ->
+    {
+        WebElement loadingMessage = webDriver.findElement(LOADING_SELECTOR);
+        return loadingMessage.getAttribute("class").contains("share-hidden");
+    };    
+    
     /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
 
@@ -85,8 +98,18 @@ public class SecurityClearancePage extends ConsolePage
     /** Sets text in the name filter input. */
     public SecurityClearancePage setNameFilter(String filter)
     {
+        // set the text
         Utils.clearAndType(nameFilterTextInput, filter);
-        Utils.waitForInvisibilityOf(LOADING_SELECTOR);
+        
+        // no easy way to wait for the loading message to appear
+        try { Thread.sleep(1000); } catch (InterruptedException e){}
+        
+        // wait for the loading message to disappear
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+            .withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS)
+            .until(waitTillHidden); 
+        
         return this;
     }
 
