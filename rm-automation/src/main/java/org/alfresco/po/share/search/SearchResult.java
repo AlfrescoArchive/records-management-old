@@ -23,6 +23,8 @@ import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Search result object, representing a row in the search results.
  * 
@@ -35,6 +37,9 @@ public class SearchResult
 {
     /** name selector */
     private static final By NAME_SELECTOR = By.cssSelector(".nameAndTitleCell [class*='PropertyLink'] span.value");
+
+    /** classified label selector */
+    private static final By CLASSIFIED_LABEL_SELECTOR = By.cssSelector(".classification-label");
     
     /** row web element */
     private WebElement row;
@@ -54,5 +59,20 @@ public class SearchResult
     {
         WebElement webElement = row.findElement(NAME_SELECTOR);
         return webElement.getText();
+    }
+
+    /**
+     * Get the classified label for a result. Returns empty string if no label.
+     */
+    public String getClassifiedLabel()
+    {
+        String result = "";
+        List<WebElement> webElements = row.findElements(CLASSIFIED_LABEL_SELECTOR);
+        if (webElements.size() > 0)
+        {
+            result = webElements.get(0).getText();
+        }
+
+        return result;
     }
 }
