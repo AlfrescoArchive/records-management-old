@@ -290,6 +290,43 @@ public class SearchClassifiedDocuments extends BaseTest
         return result;
     }
 
+    @Test
+    (
+        groups = {"integration"},
+        description = "Search results contain classification",
+        dependsOnMethods = "setupTestData"
+    )
+    @AlfrescoTest(jira="RM-2487, RM-2488")
+    public void classifiedSearchLabels()
+    {
+        List<SearchResult> results =
+                openPage(TOP_SECRET_USER, DEFAULT_PASSWORD, advancedSearchPage)
+                        .setKeywords(SEARCH_TERM)
+                        .clickOnSearch()
+                        .getSearchResults();
+
+        assertTrue("Unclassified document should not contain a classified label",
+                searchResultsContainClassifiedLabel(UNCLASSIFIED_DOCUMENT, results, ""));
+        assertTrue("Confidential document should contain confidential level",
+                searchResultsContainClassifiedLabel(CONFIDENTIAL_DOCUMENT, results, CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT));
+        assertTrue("Secret document should contain secret label",
+                searchResultsContainClassifiedLabel(SECRET_DOCUMENT, results, SECRET_CLASSIFICATION_LEVEL_TEXT));
+    }
+
+    private Boolean searchResultsContainClassifiedLabel(String partialDocumentName, List<SearchResult> searchResults, String classificationLevel)
+    {
+        boolean result = false;
+
+        for (SearchResult searchResult : searchResults) {
+            if (searchResult.getName().contains(partialDocumentName)) {
+                result = searchResult.getClassifiedLabel().toLowerCase().equals(classificationLevel.toLowerCase());
+                break;
+            }
+        }
+
+        return result;
+    }
+
     /** tear down data */
     @AfterSuite(alwaysRun=true)
     public void tearDownTestData() throws Exception
