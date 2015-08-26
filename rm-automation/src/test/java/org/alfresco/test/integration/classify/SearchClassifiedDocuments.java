@@ -313,7 +313,7 @@ public class SearchClassifiedDocuments extends BaseTest
                 searchResultsContainClassifiedLabel(SECRET_DOCUMENT, results, SECRET_CLASSIFICATION_LEVEL_TEXT));
     }
 
-    private Boolean searchResultsContainClassifiedLabel(String partialDocumentName, List<SearchResult> searchResults, String classificationLevel)
+    private boolean searchResultsContainClassifiedLabel(String partialDocumentName, List<SearchResult> searchResults, String classificationLevel)
     {
         boolean result = false;
 
