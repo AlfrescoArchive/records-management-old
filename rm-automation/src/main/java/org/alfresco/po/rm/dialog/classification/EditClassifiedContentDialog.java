@@ -122,6 +122,18 @@ public class EditClassifiedContentDialog extends ClassificationDialog
     {
         return reclassifyReason.isEnabled();
     }
+    
+    /** @return true if the 'Last Reclassified By' input is displayed. */
+    public boolean isLastReclassifiedByDisplayed()
+    {
+        return lastReclassifiedBy != null && lastReclassifiedBy.isDisplayed();
+    }
+
+    /** @return true if the 'Last Reclassification Reason' input is displayed. */
+    public boolean isLastReclassificationReasonDisplayed()
+    {
+        return lastReclassifyReason != null && lastReclassifyReason.isDisplayed();
+    }
 
     /** @return The current value in the 'Last reclassified by' field. */
     public String getLastReclassifiedBy()

@@ -37,6 +37,7 @@ import org.alfresco.po.rm.details.record.RecordActionsPanel;
 import org.alfresco.po.rm.details.record.RecordDetails;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -443,6 +444,86 @@ public class ClassifyRecord extends BaseTest
         record.clickOnLink(recordDetails);
         assertFalse("Edit Classification action should not be shown in Record Details to a user that does not have read & file permission over the classified record.",
                 recordDetails.getRecordActionsPanel().isActionAvailable(RecordActions.EDIT_CLASSIFIED_CONTENT));
+    }
+    
+    /**
+     * Downgrade instructions mandatory when downgrade on (or when) set
+     * <p>
+     * <a href="https://issues.alfresco.com/jira/browse/RM-2409">RM-2409</a><pre>
+     * Given I am a cleared user
+     * And I am classifying the content for the first time
+     * And I enter a downgrade date and/or event
+     * When I attempt to save the classification information
+     * Then I will be informed that downgrade instructions are mandatory when the downgrade date and/or event are set
+     * And the save will not be successful
+     * Note that downgrade instructions can be set without a date or event specified.
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "ignored", "CLASSIFICATION_ACTION"},
+        description = "Check the mandatory and non-mandatory states of the Instructions field.",
+        dependsOnGroups = { "GROUP_RECORD_FOLDER_THREE_EXISTS" }
+    )
+    @AlfrescoTest(jira = "RM-2409")
+    public void checkInstructionsFieldStates()
+    {
+        String recordName = "never-classified-record";
+        
+        openPage(filePlan, RM_SITE_ID,
+                createPathFrom("documentlibrary", RECORD_CATEGORY_THREE, RECORD_FOLDER_THREE));
+        
+        // upload a file
+        filePlan.getToolbar()
+                .clickOnFile()
+                .clickOnElectronic()
+                .uploadFile(recordName);
+        
+        // click on classify
+        filePlan.getRecord(recordName)
+            .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        
+        // complete the default required fields so that the classification to be possible
+        classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setAgency(CLASSIFICATION_AGENCY)
+            .addReason(CLASSIFICATION_REASON);
+        
+        // set the downgrade date   
+        classifyContentDialog.setDowngradeDate(DOWNGRADE_DATE_INPUT);
+        
+        // verify that the Instructions field becomes required and that the Classify button is disabled
+        assertTrue("The instructions are not required when the Downgrade date is completed.", classifyContentDialog.isInstructionsFieldRequired());  
+        assertFalse("The Clasify button is not disabled when setting the Downgrade date.", classifyContentDialog.isClassifyButtonEnabled());
+        
+        // clear the Downgrade date and verify that the Instructions field is not required anymore
+        classifyContentDialog.clearDowngradeDate();
+        assertFalse("The instructions are required when the Downgrade date has no value.", classifyContentDialog.isInstructionsFieldRequired());  
+        
+        // set the downgrade event
+        classifyContentDialog.setDowngradeEvent(DOWNGRADE_EVENT);
+        
+        // verify that the Instructions field becomes required and that the Classify button is disabled
+        assertTrue("The instructions are not required when the Downgrade date is completed.", classifyContentDialog.isInstructionsFieldRequired());  
+        assertFalse("The Clasify button is not disabled when setting the Downgrade event.", classifyContentDialog.isClassifyButtonEnabled());
+  
+        // set the downgrade date   
+        classifyContentDialog.setDowngradeDate(DOWNGRADE_DATE_INPUT);
+        
+        // verify that the Instructions field remains required and that the Classify button is still disabled when having both Downgrade date and event set
+        assertTrue("The instructions are not required when the Downgrade date and event are both completed.", classifyContentDialog.isInstructionsFieldRequired());  
+        assertFalse("The Clasify button is not disabled when setting the Downgrade date and event.", classifyContentDialog.isClassifyButtonEnabled());
+ 
+        // complete the instructions
+        classifyContentDialog.setDowngradeInstructions(DOWNGRADE_INSTRUCTIONS);
+        
+        // verify that the Classify button is enabled after the Instructions completion
+        assertTrue("The Clasify button is not disabled when setting the Downgrade date and event.", classifyContentDialog.isClassifyButtonEnabled());
+        
+        classifyContentDialog.clearDowngradeDate().clearDowngradeEvent();
+        
+        // verify that the Classify button is enabled even if the Downgrade Date and Event are not completed, but only the Instructions field
+        assertTrue("The Clasify button is not disabled when not setting the Downgrade date and event, but only the Instructions field.", classifyContentDialog.isClassifyButtonEnabled());
+       
     }
 
 }

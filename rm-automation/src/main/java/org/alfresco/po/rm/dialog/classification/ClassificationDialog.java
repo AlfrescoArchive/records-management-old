@@ -80,6 +80,9 @@ public abstract class ClassificationDialog extends Dialog
     @FindBy(css="#DOWNGRADE_INSTRUCTIONS textarea")
     private WebElement downgradeInstrucationsInput;
 
+    @FindBy(css="#DOWNGRADE_INSTRUCTIONS .validation.validation-error")
+    private WebElement downgradeInstrucationsValidationRequired;
+    
     @FindBy(css="span[class='tabLabel'][tabIndex='-1']")
     private WebElement declassificationScheduleTab;
 
@@ -205,8 +208,8 @@ public abstract class ClassificationDialog extends Dialog
     }
 
     /**
-    * Set classification agency to empty value
-    */
+     * Set classification agency to empty value
+     */
     public ClassificationDialog setAgencyEmpty()
     {
         clear(agencyTextInput);
@@ -223,11 +226,38 @@ public abstract class ClassificationDialog extends Dialog
     }
 
     /**
-    * Set classified by to empty value
-    */
-    public ClassificationDialog setClassifiedByEmpty()
+     *  Clear the Classified by field
+     */
+    public ClassificationDialog clearClassifiedByField()
     {
         clear(classifiedByTextInput);
+        return this;
+    }
+    
+    /**
+     *  Clear the Downgrade date field
+     */
+    public ClassificationDialog clearDowngradeDate()
+    {
+        clear(downgradeDateInput);
+        return this;
+    }
+    
+    /**
+     * Clear the Downgrade Event field
+     */
+    public ClassificationDialog clearDowngradeEvent()
+    {
+        clear(downgradeEventInput);
+        return this;
+    }
+    
+     /**
+     * Clear the Instructions field
+     */
+    public ClassificationDialog clearInstructionsField()
+    {
+        clear(downgradeInstrucationsInput);
         return this;
     }
 
@@ -471,6 +501,12 @@ public abstract class ClassificationDialog extends Dialog
         }
         String disabledAttribute = createButton.getAttribute("aria-disabled");
         return (disabledAttribute == null || disabledAttribute.toLowerCase().equals("false"));
+    }
+    
+    /** @return <code>true</code> if the Instructions field is required */
+    public boolean isInstructionsFieldRequired()
+    {
+       return downgradeInstrucationsValidationRequired != null && downgradeInstrucationsValidationRequired.isDisplayed();
     }
 
     /** @return The classification agency entered. */

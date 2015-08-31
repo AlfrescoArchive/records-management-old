@@ -271,7 +271,7 @@ public class EditClassification extends BaseTest
         openPage(filePlan, RM_SITE_ID, createPathFrom("documentlibrary", RECORD_CATEGORY_ONE, RECORD_FOLDER_ONE));
         filePlan.getRecord(EDIT_CLASSIFICATION_RECORD).clickOnEditClassification();
         // Edit the mandatory fields to empty values
-        editContentClassificationDialog.setClassifiedByEmpty()
+        editContentClassificationDialog.clearClassifiedByField()
                 .setAgencyEmpty()
                 .removeSelectedReason(CLASSIFICATION_REASON)
                 .removeSelectedExemption(EXEMPTION_ID);

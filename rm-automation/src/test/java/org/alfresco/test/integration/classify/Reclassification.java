@@ -230,7 +230,9 @@ public class Reclassification extends BaseTest
     }
 
     /**
-     * Classify a document as secret and check that when we reclassify it as confidential the "Reclassified By" field is
+     * Classify a document as secret and verify in the Edit classification page that Reclassified by and Reclassification reason are empty and disabled,
+     * Last reclassified by and Last reclassification reason are not displayed
+     * Also check that when we reclassify it as confidential the "Reclassified By" field is
      * pre-populated with the current user.
      */
     @Test
@@ -239,7 +241,7 @@ public class Reclassification extends BaseTest
        description = "Check the initial fields when trying to reclassify a document.",
        dependsOnMethods = "setUpReclassificationData"
     )
-    @AlfrescoTest(jira="RM-2444")
+    @AlfrescoTest(jira="RM-2444,RM-2539,RM-2540")
     public void checkInitialReclassificationFields() throws Exception
     {
         // Upload document specifically for this test.
@@ -257,14 +259,28 @@ public class Reclassification extends BaseTest
             .addReason(CLASSIFICATION_REASON)
             .clickOnClassify();
 
-        // Attempt to reclassify and check the initial value of the "reclassified by" field.
         openPage(documentLibrary, SITE_ID);
         EditClassifiedContentDialog dialog = (EditClassifiedContentDialog) documentLibrary
             .getDocument(document)
-            .clickOnEditClassification()
-            .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
+            .clickOnEditClassification();
+        // Verify that the Edit Classification page displays the Reclassified By and the Reclassification reason disabled and empty for the document that has never been reclassified.
+        assertFalse("The Reclassified By input is not disabled for content that has not been yet reclassified.", dialog.isReclassifiedByEnabled());
+        assertEquals("The Reclassified By input is not empty by default.", "", dialog.getReclassifiedBy());  
+        assertFalse("The Reclassification Reason input is not disabled for content that has not been yet reclassified.", dialog.isReclassificationReasonEnabled());
+        assertEquals("The Reclassification Reason input is not empty by default.", "", dialog.getReclassifiedReason());
+        
+        // Verify that the Last reclassified by and Last reclassification reason are not displayed.
+        assertFalse("The Last Reclassified By input is displayed even if the document has never been reclassified.", dialog.isLastReclassifiedByDisplayed());
+        assertFalse("The Last Reclassification reason input is displayed even if the document has never been reclassified.", dialog.isLastReclassificationReasonDisplayed());
+        
+        // Attempt to reclassify and check the initial value of the "reclassified by" field.
+        dialog.setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
         String reclassifiedBy = dialog.getReclassifiedBy();
-        assertEquals("'Reclassified by' should default to the current user.", "Administrator", reclassifiedBy);
+        assertEquals("'Reclassified by' should default to the current user full name.", "Administrator", reclassifiedBy);
+        
+        // Verify that Reclassified by and Reclassification reason are enabled for editing.
+        assertTrue("The Reclassified By input is not editable.", dialog.isReclassifiedByEnabled());
+        assertTrue("The Reclassification reason input is not editable.", dialog.isReclassificationReasonEnabled());
 
         dialog.clickOnCancel();
     }
