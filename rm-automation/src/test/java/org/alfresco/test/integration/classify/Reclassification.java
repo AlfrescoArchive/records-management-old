@@ -122,15 +122,15 @@ public class Reclassification extends BaseTest
             .clickOnLink(classifiedDocumentDetails);
         Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
         expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_BY, "Upgrade person");
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_REASON, "Upgrade reason");
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Upgrade");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, "Upgrade person");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, "Upgrade reason");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
         // To avoid complications with running in different timezones, just check that the date has been set.
-        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
-        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE);
+        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");   
     }
 
     /**
@@ -161,16 +161,16 @@ public class Reclassification extends BaseTest
             .clickOnLink(classifiedDocumentDetails);
         Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
         expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_BY, "Downgrade person");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, "Downgrade person");
         String expectedDate = DateTimeFormatter.ofPattern("EEE d MMM yyyy").withZone(ZoneOffset.UTC).format(Instant.now());
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_DATE, expectedDate);
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_REASON, "Downgrade reason");
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Downgrade");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE, expectedDate);
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, "Downgrade reason");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Downgrade");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
         // To avoid complications with running in different timezones, just check that the date has been set.
-        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE);
         checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
@@ -218,14 +218,14 @@ public class Reclassification extends BaseTest
             .clickOnLink(classifiedDocumentDetails);
         Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
         expectedFields.put(ClassifiedPropertiesPanelField.CURRENT_CLASSIFICATION, UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_BY, "Declassify person");
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_REASON, "Declassify reason");
-        expectedFields.put(ClassifiedPropertiesPanelField.RECLASSIFY_ACTION, "Declassify");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, "Declassify person");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, "Declassify reason");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Declassify");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
 
         // To avoid complications with running in different timezones, just check that the date has been set.
-        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.RECLASSIFY_DATE);
+        String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE);
         checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
@@ -260,6 +260,7 @@ public class Reclassification extends BaseTest
             .clickOnClassify();
 
         openPage(documentLibrary, SITE_ID);
+      
         EditClassifiedContentDialog dialog = (EditClassifiedContentDialog) documentLibrary
             .getDocument(document)
             .clickOnEditClassification();
@@ -283,7 +284,128 @@ public class Reclassification extends BaseTest
         assertTrue("The Reclassification reason input is not editable.", dialog.isReclassificationReasonEnabled());
 
         dialog.clickOnCancel();
+        
+        // Verify the Last Reclassified by, Last reclassification date, reason and action are empty in the Document details panel
+        documentLibrary.getDocument(document)
+            .clickOnLink(classifiedDocumentDetails);
+        Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, "(None)");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE, "(None)");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, "(None)");
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "(None)");
+        expectedFields.forEach(
+                    (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
     }
+    
+    /**
+     * Given that content has been classified and has been reclassified at least once 
+     * When the edit classification dialog is displayed 
+     * The the following properties are displayed as disabled and empty : Reclassified by, Reclassification reason 
+     * and the properties Last Reclassified by and Last Reclassification reason are editable, populated with values from the previous reclassification
+     * When changing the classification value (upgrade/downgrade/declassify)
+     * Then the following properties are shown as enabled for editing: Reclassified by, Reclassification reason
+     * And the value of 'Reclassified By' defaults to current user's full name, but is editable
+     * When changing the values of the Last reclassification reason and last reclassified by
+     * Then those changes are saved when Save button is clicked
+     */
+    @Test
+    (
+       groups = { "integration" },
+       description = "Editing the classification of content that has been classified, reclassify it, change the reclassification information.",
+       dependsOnMethods = "setUpReclassificationData"
+    )
+    @AlfrescoTest(jira="RM-2541,RM-2542,RM-2543")
+    public void checkLastReclassificationProperties() throws Exception 
+    {
+        String firstReclassificationUser = "Reclassify User Name 1";
+        String firstReclassificationReason = "Reclassify User Name 1 Reason";
+        String secondReclassificationUser = "Reclassify User Name 2";
+        String secondReclassificationReason = "Reclassify User Name 2 Reason";     
+        
+     // Upload document 
+        String document = "checkLastReclassificationProperties document";
+        openPage(documentLibrary, SITE_ID);
+        contentService.createDocument(getAdminName(), getAdminPassword(), SITE_ID, DocumentType.TEXT_PLAIN, document, TEST_CONTENT);
+
+        // Classify document
+        openPage(documentLibrary, SITE_ID);
+        documentLibrary
+            .getDocument(document)
+            .clickOnClassify()
+            .setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setClassifiedBy(CLASSIFIED_BY)
+            .addReason(CLASSIFICATION_REASON)
+            .clickOnClassify();
+        
+        // Reclassify it for the first time
+        openPage(documentLibrary, SITE_ID);
+        documentLibrary.getDocument(document)
+            .clickOnEditClassification().setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
+            .setReclassifiedBy(firstReclassificationUser).setReclassifyReason(firstReclassificationReason).clickOnEdit();
+      
+        EditClassifiedContentDialog reopenedDialog = documentLibrary
+            .getDocument(document)
+            .clickOnEditClassification();
+        
+        // Verify that the Reclassified by, Reclassification reason are displayed as disabled and empty
+        assertFalse("The Reclassified By field is enabled for editing.", reopenedDialog.isReclassifiedByEnabled());
+        assertFalse("The Reclassification reason is enabled for editing.", reopenedDialog.isReclassificationReasonEnabled());      
+        assertEquals("The Reclassified By field is not empty.", "", reopenedDialog.getReclassifiedBy());
+        assertEquals("The Reclassification reason is not empty.", "", reopenedDialog.getReclassifiedReason());
+        
+        // Verify the properties Last Reclassified by and Last Reclassification reason are editable, populated with values from the previous reclassification
+        assertTrue("The Last Reclassified By field is not enabled for editing.", reopenedDialog.isLastReclassifiedByEnabled());
+        assertTrue("The Last Reclassification reason is not enabled for editing.", reopenedDialog.isLastReclassificationReasonEnabled());     
+        assertEquals(firstReclassificationUser, reopenedDialog.getLastReclassifiedBy());
+        assertEquals(firstReclassificationReason, reopenedDialog.getLastReclassifiedReason());
+        
+        reopenedDialog.clickOnCancel();
+        // Check the Last Reclassification fields in the properties panel.
+        documentLibrary.getDocument(document)
+            .clickOnLink(classifiedDocumentDetails);
+        Map<ClassifiedPropertiesPanelField, String> expectedFields = new HashMap<>();
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, firstReclassificationUser);
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, firstReclassificationReason);
+        expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
+        expectedFields.forEach(
+                    (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
+        
+        openPage(documentLibrary, SITE_ID);
+        
+        // Change the last reclassification data, verify they are updated
+        documentLibrary
+            .getDocument(document)
+            .clickOnEditClassification().setLastReclassifiedBy(secondReclassificationUser).setLastReclassifyReason(secondReclassificationReason).clickOnEdit();
+       
+        // Check the Last Reclassification fields in the properties panel.
+        documentLibrary.getDocument(document)
+            .clickOnLink(classifiedDocumentDetails);
+        Map<ClassifiedPropertiesPanelField, String> expectedLastClassificationField = new HashMap<>();
+        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, secondReclassificationUser);
+        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, secondReclassificationReason);
+        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
+        expectedLastClassificationField.forEach(
+                    (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
+        
+        openPage(documentLibrary, SITE_ID);
+        
+        // Change the security clearance level
+        EditClassifiedContentDialog dialog = documentLibrary
+            .getDocument(document)
+            .clickOnEditClassification();
+        dialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
+        
+        // Verify that the Reclassified By and Reclassification Reason are shown as enabled for editing
+        assertTrue("The Reclassified By field is not enabled for editing after changing the security clearance level.", dialog.isReclassifiedByEnabled());
+        assertEquals("The Reclassified By value does not default to the current user's full name.", "Administrator", dialog.getReclassifiedBy());
+        assertTrue("The Reclassification Reason is not enabled for editing after changing the security clearance level.", dialog.isReclassificationReasonEnabled());
+        
+        // Verify that the Last Reclassified By and Last Reclassification Reason values are the ones previously saved.
+        assertEquals("The Last Reclassified By value is not the one previously stored.", secondReclassificationUser, dialog.getLastReclassifiedBy());
+        assertEquals("The Last Reclassification Reason is not the one previously stored.", secondReclassificationReason, dialog.getLastReclassifiedReason());
+
+    }
+    
 
     /**
      * Validate that a date is correctly displayed in the properties panel (i.e. is similar to "Wed 5 Aug 2015").
@@ -304,8 +426,7 @@ public class Reclassification extends BaseTest
             fail("Invalid " + dateName + " found: " + dateString);
         }
     }
-
-    /** Remove the test site. */
+    
     @AfterSuite(alwaysRun=true)
     public void tearDownReclassificationData() throws Exception
     {
@@ -315,4 +436,5 @@ public class Reclassification extends BaseTest
             siteService.delete(getAdminName(), getAdminPassword(), "", SITE_ID);
         }
     }
+    
 }

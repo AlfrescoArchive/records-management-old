@@ -503,7 +503,7 @@ public class ClassifyRecord extends BaseTest
         classifyContentDialog.setDowngradeEvent(DOWNGRADE_EVENT);
         
         // verify that the Instructions field becomes required and that the Classify button is disabled
-        assertTrue("The instructions are not required when the Downgrade date is completed.", classifyContentDialog.isInstructionsFieldRequired());  
+        assertTrue("The instructions are not required when the Downgrade event is completed.", classifyContentDialog.isInstructionsFieldRequired());  
         assertFalse("The Clasify button is not disabled when setting the Downgrade event.", classifyContentDialog.isClassifyButtonEnabled());
   
         // set the downgrade date   
@@ -517,7 +517,7 @@ public class ClassifyRecord extends BaseTest
         classifyContentDialog.setDowngradeInstructions(DOWNGRADE_INSTRUCTIONS);
         
         // verify that the Classify button is enabled after the Instructions completion
-        assertTrue("The Clasify button is not disabled when setting the Downgrade date and event.", classifyContentDialog.isClassifyButtonEnabled());
+        assertTrue("The Clasify button is not enabled when setting the Downgrade date, event and Instructions.", classifyContentDialog.isClassifyButtonEnabled());
         
         classifyContentDialog.clearDowngradeDate().clearDowngradeEvent();
         

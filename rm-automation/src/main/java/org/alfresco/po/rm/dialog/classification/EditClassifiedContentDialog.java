@@ -97,6 +97,20 @@ public class EditClassifiedContentDialog extends ClassificationDialog
         return this;
     }
 
+    /** Set the Last Reclassified By value. */
+    public EditClassifiedContentDialog setLastReclassifiedBy(String lastReclassifiedByText)
+    {
+        clearAndType(lastReclassifiedBy, lastReclassifiedByText);
+        return this;
+    }
+
+    /** Set the Last reclassification reason. */
+    public EditClassifiedContentDialog setLastReclassifyReason(String lastReclassifiedReasonText)
+    {
+        clearAndType(lastReclassifyReason, lastReclassifiedReasonText);
+        return this;
+    }
+       
     /** @return The current value in the 'Reclassified by' field. */
     public String getReclassifiedBy()
     {
@@ -133,6 +147,18 @@ public class EditClassifiedContentDialog extends ClassificationDialog
     public boolean isLastReclassificationReasonDisplayed()
     {
         return lastReclassifyReason != null && lastReclassifyReason.isDisplayed();
+    }
+    
+     /** @return true if the 'Last Reclassified By' input is enabled. */
+    public boolean isLastReclassifiedByEnabled()
+    {
+        return lastReclassifiedBy != null && lastReclassifiedBy.isEnabled();
+    }
+
+    /** @return true if the 'Last Reclassification Reason' input is enabled. */
+    public boolean isLastReclassificationReasonEnabled()
+    {
+        return lastReclassifyReason != null && lastReclassifyReason.isEnabled();
     }
 
     /** @return The current value in the 'Last reclassified by' field. */

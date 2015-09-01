@@ -37,10 +37,11 @@ public enum ClassifiedPropertiesPanelField
     DECLASSIFICATION_DATE(8),
     DECLASSIFICATION_EVENT(9),
     EXEMPTION_CATEGORIES(10),
-    RECLASSIFY_BY(11),
-    RECLASSIFY_DATE(12),
-    RECLASSIFY_REASON(13),
-    RECLASSIFY_ACTION(14);
+    LAST_RECLASSIFIED_BY(11),
+    LAST_RECLASSIFICATION_DATE(12),
+    LAST_RECLASSIFICATION_REASON(13),
+    LAST_RECLASSIFICATION_ACTION(14);
+    
 
     /** The index of the field in the classified properties panel. */
     private int index;
