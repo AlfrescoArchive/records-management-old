@@ -78,10 +78,10 @@ public abstract class ClassificationDialog extends Dialog
     private WebElement downgradeEventInput;
 
     @FindBy(css="#DOWNGRADE_INSTRUCTIONS textarea")
-    private WebElement downgradeInstrucationsInput;
+    private WebElement downgradeInstructionsInput;
 
     @FindBy(css="#DOWNGRADE_INSTRUCTIONS .validation.validation-error")
-    private WebElement downgradeInstrucationsValidationRequired;
+    private WebElement downgradeInstructionsValidationRequired;
     
     @FindBy(css="span[class='tabLabel'][tabIndex='-1']")
     private WebElement declassificationScheduleTab;
@@ -257,7 +257,7 @@ public abstract class ClassificationDialog extends Dialog
      */
     public ClassificationDialog clearInstructionsField()
     {
-        clear(downgradeInstrucationsInput);
+        clear(downgradeInstructionsInput);
         return this;
     }
 
@@ -291,7 +291,7 @@ public abstract class ClassificationDialog extends Dialog
     public ClassificationDialog setDowngradeInstructions(String instructions)
     {
         selectTab(DOWNGRADE_SCHEDULE);
-        clearAndType(downgradeInstrucationsInput, instructions);
+        clearAndType(downgradeInstructionsInput, instructions);
         return this;
     }
 
@@ -506,7 +506,7 @@ public abstract class ClassificationDialog extends Dialog
     /** @return <code>true</code> if the Instructions field is required */
     public boolean isInstructionsFieldRequired()
     {
-       return downgradeInstrucationsValidationRequired != null && downgradeInstrucationsValidationRequired.isDisplayed();
+       return downgradeInstructionsValidationRequired != null && downgradeInstructionsValidationRequired.isDisplayed();
     }
 
     /** @return The classification agency entered. */
@@ -558,7 +558,7 @@ public abstract class ClassificationDialog extends Dialog
     public String getDowngradeInstructions()
     {
         selectTab(DOWNGRADE_SCHEDULE);
-        return downgradeInstrucationsInput.getAttribute("value");
+        return downgradeInstructionsInput.getAttribute("value");
     }
 
     /** @return The declassification date. */

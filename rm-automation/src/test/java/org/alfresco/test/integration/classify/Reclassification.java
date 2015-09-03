@@ -317,10 +317,10 @@ public class Reclassification extends BaseTest
     @AlfrescoTest(jira="RM-2541,RM-2542,RM-2543")
     public void checkLastReclassificationProperties() throws Exception 
     {
-        String firstReclassificationUser = "Reclassify User Name 1";
-        String firstReclassificationReason = "Reclassify User Name 1 Reason";
-        String secondReclassificationUser = "Reclassify User Name 2";
-        String secondReclassificationReason = "Reclassify User Name 2 Reason";     
+        String firstReclassificationUser = "Reclassifier User Name 1";
+        String firstReclassificationReason = "Reclassification Reason 1";
+        String secondReclassificationUser = "Reclassifier User Name 2";
+        String secondReclassificationReason = "Reclassification Reason 2";     
         
      // Upload document 
         String document = "checkLastReclassificationProperties document";
@@ -372,19 +372,28 @@ public class Reclassification extends BaseTest
         
         openPage(documentLibrary, SITE_ID);
         
-        // Change the last reclassification data, verify they are updated
-        documentLibrary
+        // Change the last reclassification data, verify the values are updated
+        EditClassifiedContentDialog updatedDialog = documentLibrary
             .getDocument(document)
-            .clickOnEditClassification().setLastReclassifiedBy(secondReclassificationUser).setLastReclassifyReason(secondReclassificationReason).clickOnEdit();
+            .clickOnEditClassification();     
+        // Change the Reclassified By and Reclassification reason values 
+        updatedDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT).setReclassifiedBy("not saved user").setReclassifyReason("not saved reason");
+        // Change the security level back to the original one and verify that the Reclassified By and Reclassification reason fields are disabled
+        updatedDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);
+        assertFalse("The Reclassified By field is enabled for editing after changing back the security level to the original one.", updatedDialog.isReclassifiedByEnabled());
+        assertFalse("The Reclassification reason is enabled for editing after changing back the security level to the original one.", updatedDialog.isReclassificationReasonEnabled()); 
+        
+        // Change the Last Reclassification fields values
+        updatedDialog.setLastReclassifiedBy(secondReclassificationUser).setLastReclassifyReason(secondReclassificationReason).clickOnEdit();
        
-        // Check the Last Reclassification fields in the properties panel.
+        // Check the Last Reclassification fields have the values set above, not the ones from Reclassified By and Reclassification reason that were in the dialog before save
         documentLibrary.getDocument(document)
             .clickOnLink(classifiedDocumentDetails);
-        Map<ClassifiedPropertiesPanelField, String> expectedLastClassificationField = new HashMap<>();
-        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, secondReclassificationUser);
-        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, secondReclassificationReason);
-        expectedLastClassificationField.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
-        expectedLastClassificationField.forEach(
+        Map<ClassifiedPropertiesPanelField, String> expectedLastClassificationFields = new HashMap<>();
+        expectedLastClassificationFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFIED_BY, secondReclassificationUser);
+        expectedLastClassificationFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_REASON, secondReclassificationReason);
+        expectedLastClassificationFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
+        expectedLastClassificationFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
         
         openPage(documentLibrary, SITE_ID);
@@ -427,6 +436,7 @@ public class Reclassification extends BaseTest
         }
     }
     
+    /** Remove the test site. */
     @AfterSuite(alwaysRun=true)
     public void tearDownReclassificationData() throws Exception
     {

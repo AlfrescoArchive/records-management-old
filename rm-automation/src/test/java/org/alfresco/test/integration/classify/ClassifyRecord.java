@@ -480,8 +480,7 @@ public class ClassifyRecord extends BaseTest
                 .uploadFile(recordName);
         
         // click on classify
-        filePlan.getRecord(recordName)
-            .clickOnAction(RecordActionsPanel.CLASSIFY, classifyContentDialog);
+        classifyContentDialog = filePlan.getRecord(recordName).clickOnClassifyAction();
         
         // complete the default required fields so that the classification to be possible
         classifyContentDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT)
