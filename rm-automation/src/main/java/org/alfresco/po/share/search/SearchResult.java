@@ -29,7 +29,7 @@ import java.util.List;
  * Search result object, representing a row in the search results.
  * 
  * @author Roy Wetherall
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Scope("prototype")
 @Component

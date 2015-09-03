@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * A generic page object for Admin Tools pages that can be extended.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class AdminToolsNavigation extends Renderable

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author David Webster
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>

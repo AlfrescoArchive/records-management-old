@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  * Set the permissions for users to read and file in the file plan.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class SetPermissions extends BaseTest
 {

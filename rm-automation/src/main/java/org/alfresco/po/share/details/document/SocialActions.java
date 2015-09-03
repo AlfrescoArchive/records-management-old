@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  * library page.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class SocialActions extends Renderable

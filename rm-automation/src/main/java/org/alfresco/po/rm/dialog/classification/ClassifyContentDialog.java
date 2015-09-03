@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
  * The classify content dialog.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class ClassifyContentDialog extends ClassificationDialog

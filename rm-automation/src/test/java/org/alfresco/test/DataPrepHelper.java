@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Roy Wetherall
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class DataPrepHelper implements TestData

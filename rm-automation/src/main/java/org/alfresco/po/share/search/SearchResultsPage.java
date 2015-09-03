@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
  * Faceted search results page.
  * 
  * @author Roy Wetherall
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class SearchResultsPage extends SharePage

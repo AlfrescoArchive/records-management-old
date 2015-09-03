@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * A helper class containing utility methods for dealing with {@link Stream}s.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class StreamHelper
 {

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
  * The edit classified content dialog.
  *
  * @author Tuna Aksoy
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class EditClassifiedContentDialog extends ClassificationDialog

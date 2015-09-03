@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
  * Create holds
  *
  * @author Roy Wetherall
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class CreateHolds extends BaseTest
 {

@@ -51,7 +51,7 @@ import org.testng.annotations.Test;
  * Tests related to reclassification of content.
  *
  * @author Tom Page
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class Reclassification extends BaseTest
 {

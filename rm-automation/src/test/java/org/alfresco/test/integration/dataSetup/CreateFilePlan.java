@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
  * Create File Plan for Integration tests
  *
  * @author Roy Wetherall, David Webster
- * @since 3.0.a
+ * @since 2.4.a
  * todo: Copied form org.alfresco.test.regression.sanity - needs modification.
  */
 public class CreateFilePlan extends BaseTest

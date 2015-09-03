@@ -30,7 +30,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
  * A task panel containing an invitation to join a site.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class SiteInvitationTaskPanel extends TaskPanel

@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
  * Invite new users to a collaboration site.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class InviteUsersPage extends SharePage

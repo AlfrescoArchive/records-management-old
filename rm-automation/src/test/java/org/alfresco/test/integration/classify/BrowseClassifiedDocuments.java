@@ -45,7 +45,7 @@ import org.testng.annotations.Test;
  *
  * @author David Webster
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class BrowseClassifiedDocuments extends BaseTest
 {

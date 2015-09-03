@@ -24,7 +24,7 @@ import org.openqa.selenium.By;
  * Banners that can appear over content in the document library.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public enum ContentBanner
 {

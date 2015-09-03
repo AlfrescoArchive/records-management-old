@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
  * Unit tests for methods in the {@link SecurityClearanceTest}
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class SecurityClearanceTestUnitTest
 {

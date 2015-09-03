@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * Extends the Record Details page to add in the classified properties panel.
  *
  * @author David Webster
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class ClassifiedRecordDetails extends RecordDetails

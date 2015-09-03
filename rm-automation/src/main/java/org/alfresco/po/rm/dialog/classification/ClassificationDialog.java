@@ -46,7 +46,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
  * Abstract class for the classification dialog
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public abstract class ClassificationDialog extends Dialog
 {

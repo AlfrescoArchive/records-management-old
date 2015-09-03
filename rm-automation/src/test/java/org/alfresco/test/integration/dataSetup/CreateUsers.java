@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  * Create the test users.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 public class CreateUsers extends BaseTest
 {

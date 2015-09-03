@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
  * The "My Tasks" dashlet on the User Dashboard.
  *
  * @author tpage
- * @since 3.0.a
+ * @since 2.4.a
  */
 @Component
 public class MyTasks extends Dashlet

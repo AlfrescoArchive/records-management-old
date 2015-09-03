@@ -22,7 +22,7 @@ package org.alfresco.po.rm.details.record;
  * The fields exposed through the {@link ClassifiedPropertiesPanel}.
  *
  * @author Tom Page
- * @since 3.0.a
+ * @since 2.4.a
  */
 public enum ClassifiedPropertiesPanelField
 {
