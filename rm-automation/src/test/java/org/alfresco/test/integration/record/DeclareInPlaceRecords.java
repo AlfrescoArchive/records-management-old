@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.test.record;
+package org.alfresco.test.integration.record;
 
 import static org.junit.Assert.assertNotNull;
 
