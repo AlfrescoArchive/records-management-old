@@ -252,9 +252,11 @@ public abstract class ListItem
         {
             // do nothing
         }  
-        boolean clickable = (link != null && link.isEnabled());
+        boolean clickable = ((link != null) && (link.isEnabled()));
         // focus out by clicking on the Alfresco logo
         Utils.getWebDriver().findElement(By.cssSelector("img[alt='Logo image']")).click();    
+        Utils.waitForInvisibilityOf(By.cssSelector("tr[id$='" + actionName + "']"));
+        
         return clickable;
     } 
     

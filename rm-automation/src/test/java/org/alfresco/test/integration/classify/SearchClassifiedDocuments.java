@@ -189,7 +189,7 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
 
         SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
-        assertFalse(unclassifiedDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow(), false));
+        assertFalse("The classify action is available on a unclassified document for uncleared user.", unclassifiedDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow(), false));
     }
 
     @Test
@@ -220,8 +220,8 @@ public class SearchClassifiedDocuments extends BaseTest
         
         SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
         SearchResult confidentialDocument = getResult(CONFIDENTIAL_DOCUMENT, results);
-        assertTrue(unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
-        assertTrue(confidentialDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, confidentialDocument.getSearchResultRow()));
+        assertTrue("The classify action is not available on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
+        assertTrue("The edit classification action is not available on a confidential document for confidential user.", confidentialDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, confidentialDocument.getSearchResultRow()));
     }
 
     @Test
