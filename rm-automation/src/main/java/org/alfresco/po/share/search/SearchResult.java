@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.browse.ListItem;
+import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
  * Search result object, representing a row in the search results.
@@ -33,7 +36,7 @@ import java.util.List;
  */
 @Scope("prototype")
 @Component
-public class SearchResult
+public class SearchResult extends ListItem
 {
     /** name selector */
     private static final By NAME_SELECTOR = By.cssSelector(".nameAndTitleCell [class*='PropertyLink'] span.value");
@@ -51,6 +54,11 @@ public class SearchResult
     {
         this.row = row;
     }
+    
+    public WebElement getSearchResultRow()
+    {
+        return row;
+    }        
     
     /**
      * get the name of the file or folder on this row of the search results
@@ -74,5 +82,6 @@ public class SearchResult
         }
 
         return result;
-    }
+    }  
+    
 }

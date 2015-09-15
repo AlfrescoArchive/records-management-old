@@ -46,6 +46,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
+import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
+import org.openqa.selenium.WebElement;
 
 
 /**
@@ -166,7 +168,7 @@ public class SearchClassifiedDocuments extends BaseTest
        description = "Search as unclassified user.",
        dependsOnMethods = "setupTestData"
     )
-    @AlfrescoTest(jira="RM-2143")
+    @AlfrescoTest(jira="RM-2143,RM-2594")
     public void unclassifiedUserSearch()
     {
         List<SearchResult> results =
@@ -186,6 +188,8 @@ public class SearchClassifiedDocuments extends BaseTest
         assertFalse("Unclassified user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
 
+        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
+        assertFalse(unclassifiedDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow(), false));
     }
 
     @Test
@@ -194,7 +198,7 @@ public class SearchClassifiedDocuments extends BaseTest
        description = "Search as confidential user.",
        dependsOnMethods = "setupTestData"
     )
-    @AlfrescoTest(jira="RM-2144")
+    @AlfrescoTest(jira="RM-2144,RM-2595,RM-2596")
     public void confidentialUserSearch()
     {
         List<SearchResult> results =
@@ -213,6 +217,12 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
         assertFalse("Confidential user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
+        
+        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
+        SearchResult confidentialDocument = getResult(CONFIDENTIAL_DOCUMENT, results);
+        assertTrue(unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
+        assertTrue(confidentialDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, confidentialDocument.getSearchResultRow()));
+        assertFalse(confidentialDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, confidentialDocument.getSearchResultRow(), true));
     }
 
     @Test
@@ -289,7 +299,27 @@ public class SearchClassifiedDocuments extends BaseTest
 
         return result;
     }
+    
+    /**
+     * Helper method to get a specific search results row.
+     * <p>
+     * Document name is supplied as partial and 'contains' used to match.
+     */
+    private SearchResult getResult(String partialDocumentName, List<SearchResult> searchResults)
+    {
 
+        for (SearchResult searchResult : searchResults)
+        {
+            if (searchResult.getName().contains(partialDocumentName))
+            {
+                return searchResult;
+            }
+        }
+
+        return null;
+    }
+    
+/**
     @Test
     (
         groups = {"integration"},

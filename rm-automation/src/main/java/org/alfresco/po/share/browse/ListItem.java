@@ -58,6 +58,8 @@ public abstract class ListItem
     /** more actions */
     private static By moreActionsSelector = By.xpath(".//div[@class='internal-show-more']/a");
     private static By moreActionsPanelSelector = By.xpath(".//div[starts-with(@class,'more-actions')]");
+    
+    private static By searchResultsActionsSelector = By.cssSelector("div[aria-label*='Actions']");
 
     /* indicator selector */
     private static final By INDICATOR_SELECTORS = By.cssSelector("div.status img");
@@ -163,8 +165,42 @@ public abstract class ListItem
         }
         return moreAction;
     }
+    
+    // returns the Actions link from Search results page
+    private WebElement getActionsLink(WebElement row)
+    {
+        WebElement searchAction = null;
+        Wait<WebElement> wait = new FluentWait<WebElement>(row);
+        try
+        {
+            searchAction = wait.until((webElement) -> webElement.findElement(searchResultsActionsSelector));
+        }
+        catch (NoSuchElementException noSuchElementException)
+        {
+            // do nothing, return null
+        }
+        return searchAction;
+    }
         
-
+    /**
+     * Click on the Search results Actions link
+     */
+    private void clickOnActionsForSearchResult(WebElement searchResultsRow)
+    {
+        // click on the Actions link
+        Utils.mouseOver(searchResultsRow);
+        
+        WebElement actionsButton = getActionsLink(searchResultsRow);
+        if (actionsButton != null)
+        {
+            // mouse over and click
+            Utils.waitFor(ExpectedConditions.elementToBeClickable(actionsButton));
+            Utils.mouseOver(actionsButton);
+            Utils.waitFor(ExpectedConditions.visibilityOf(actionsButton));
+            actionsButton.click(); 
+        }
+    }
+    
     /**
      * Helper method to check whether the specified actions are clickable
      *
@@ -194,6 +230,59 @@ public abstract class ListItem
 
         return result;
     }
+                     
+    /**
+     * Helper method to check whether the specified Search results action is clickable
+     *
+     * @param actionName
+     * @param searchResultsRow
+     * @return boolean true if clickable, false otherwise
+     */
+    public boolean isSearchResultActionClickable(String actionName, WebElement searchResultsRow)
+    {
+        // click Actions button for search result
+        clickOnActionsForSearchResult(searchResultsRow);
+        WebElement link = null;     
+        try
+        {
+        // wait for the action to be displayed    
+        link = Utils.waitForVisibilityOf(By.cssSelector("tr[id$='" + actionName + "']"));
+        }
+        catch(TimeoutException e)
+        {
+            // do nothing
+        }  
+        boolean clickable = (link != null && link.isEnabled());
+        // focus out by clicking on the Alfresco logo
+        Utils.getWebDriver().findElement(By.cssSelector("img[alt='Logo image']")).click();    
+        return clickable;
+    } 
+    
+    /**
+     * Helper method to check whether the specified Search results action is displayed
+     *
+     * @param actionName
+     * @param searchResultsRow
+     * @param searchActionsExpanded if the Actions container is expanded and the actions are already visible
+     * @return boolean true if displayed, false otherwise
+     */
+    public boolean isSearchResultActionDisplayed(String actionName, WebElement searchResultsRow, boolean searchActionsExpanded)
+    {
+        if(!searchActionsExpanded)
+        {
+            clickOnActionsForSearchResult(searchResultsRow);
+        }
+        WebElement action = null;
+        try
+        {
+            action = Utils.getWebDriver().findElement(By.cssSelector("tr[id$='" + actionName + "']"));
+        }
+        catch(NoSuchElementException e)
+        {
+            // do nothing
+        }
+        return (action != null) && (action.isDisplayed());
+    } 
 
     public String[] getClickableActions()
     {
