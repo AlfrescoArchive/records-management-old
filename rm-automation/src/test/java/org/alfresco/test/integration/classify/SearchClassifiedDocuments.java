@@ -222,7 +222,6 @@ public class SearchClassifiedDocuments extends BaseTest
         SearchResult confidentialDocument = getResult(CONFIDENTIAL_DOCUMENT, results);
         assertTrue(unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
         assertTrue(confidentialDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, confidentialDocument.getSearchResultRow()));
-        assertFalse(confidentialDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, confidentialDocument.getSearchResultRow(), true));
     }
 
     @Test
