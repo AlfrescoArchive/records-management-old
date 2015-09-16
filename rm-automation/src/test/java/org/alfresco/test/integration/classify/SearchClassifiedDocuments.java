@@ -189,7 +189,7 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
 
         SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
-        assertFalse("The classify action is available on a unclassified document for uncleared user.", unclassifiedDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow(), false));
+        assertFalse("The classify action is available on a unclassified document for uncleared user.", unclassifiedDocument.isSearchResultActionDisplayed(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));
     }
 
     @Test
@@ -219,7 +219,7 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
         
         SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);        
-        assertTrue("The classify action is not available on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
+        assertTrue("The classify action is not clickable on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
     }
 
     @Test
@@ -249,7 +249,7 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
         
         SearchResult secretDocument = getResult(SECRET_DOCUMENT, results);    
-        assertTrue("The edit classification action is not available on a secret document for secret user.", secretDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, secretDocument.getSearchResultRow()));
+        assertTrue("The edit classification action is not clickable on a secret document for secret user.", secretDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, secretDocument.getSearchResultRow()));
     }
 
     @Test
@@ -319,7 +319,6 @@ public class SearchClassifiedDocuments extends BaseTest
         return null;
     }
     
-/**
     @Test
     (
         groups = {"integration"},

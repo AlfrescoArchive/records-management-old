@@ -461,7 +461,7 @@ public class ClassifyRecord extends BaseTest
      */
     @Test
     (
-        groups = { "ignored", "CLASSIFICATION_ACTION"},
+        groups = { "integration", "CLASSIFICATION_ACTION"},
         description = "Check the mandatory and non-mandatory states of the Instructions field.",
         dependsOnGroups = { "GROUP_RECORD_FOLDER_THREE_EXISTS" }
     )
@@ -494,10 +494,9 @@ public class ClassifyRecord extends BaseTest
         assertTrue("The instructions are not required when the Downgrade date is completed.", classifyContentDialog.isInstructionsFieldRequired());  
         assertFalse("The Clasify button is not disabled when setting the Downgrade date.", classifyContentDialog.isClassifyButtonEnabled());
         
-        // clear the Downgrade date and verify that the Instructions field is not required anymore
+        // clear the Downgrade date 
         classifyContentDialog.clearDowngradeDate();
-        assertFalse("The instructions are required when the Downgrade date has no value.", classifyContentDialog.isInstructionsFieldRequired());  
-        
+
         // set the downgrade event
         classifyContentDialog.setDowngradeEvent(DOWNGRADE_EVENT);
         
@@ -521,7 +520,7 @@ public class ClassifyRecord extends BaseTest
         classifyContentDialog.clearDowngradeDate().clearDowngradeEvent();
         
         // verify that the Classify button is enabled even if the Downgrade Date and Event are not completed, but only the Instructions field
-        assertTrue("The Clasify button is not disabled when not setting the Downgrade date and event, but only the Instructions field.", classifyContentDialog.isClassifyButtonEnabled());
+        assertTrue("The Clasify button is not enabled when not setting the Downgrade date and event, but only the Instructions field.", classifyContentDialog.isClassifyButtonEnabled());
        
     }
 

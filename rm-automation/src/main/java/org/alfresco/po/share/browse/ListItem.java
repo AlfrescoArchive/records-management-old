@@ -60,6 +60,7 @@ public abstract class ListItem
     private static By moreActionsPanelSelector = By.xpath(".//div[starts-with(@class,'more-actions')]");
     
     private static By searchResultsActionsSelector = By.cssSelector("div[aria-label*='Actions']");
+    private static By searchResultsActionsContainer = By.cssSelector("div[id*='MENU_dropdown']");
 
     /* indicator selector */
     private static final By INDICATOR_SELECTORS = By.cssSelector("div.status img");
@@ -198,9 +199,23 @@ public abstract class ListItem
             Utils.mouseOver(actionsButton);
             Utils.waitFor(ExpectedConditions.visibilityOf(actionsButton));
             actionsButton.click(); 
-            Utils.waitForVisibilityOf(By.cssSelector("div[id*='MENU_dropdown']"));
+            Utils.waitForVisibilityOf(searchResultsActionsContainer);
         }
     }
+    
+    private boolean isSearchResultActionsContainerDisplayed()
+    {
+        WebElement searchResultActionsContainer = null;
+        try
+        {
+          searchResultActionsContainer = Utils.getWebDriver().findElement(By.cssSelector("div[id*='MENU_dropdown']"));
+        }
+        catch(NoSuchElementException noSuchElementException)
+        {
+        return false;
+        }
+        return searchResultActionsContainer.isDisplayed();
+    }        
     
     /**
      * Helper method to check whether the specified actions are clickable
@@ -253,12 +268,7 @@ public abstract class ListItem
         {
             // do nothing
         }  
-        boolean clickable = ((link != null) && (link.isEnabled()));
-        // focus out by clicking on the Alfresco logo
-        Utils.getWebDriver().findElement(By.cssSelector("img[alt='Logo image']")).click();    
-        Utils.waitForInvisibilityOf(By.cssSelector("tr[id$='" + actionName + "']"));
-        
-        return clickable;
+        return ((link != null) && (link.isEnabled()));
     } 
     
     /**
@@ -269,12 +279,9 @@ public abstract class ListItem
      * @param searchActionsExpanded if the Actions container is expanded and the actions are already visible
      * @return boolean true if displayed, false otherwise
      */
-    public boolean isSearchResultActionDisplayed(String actionName, WebElement searchResultsRow, boolean searchActionsExpanded)
+    public boolean isSearchResultActionDisplayed(String actionName, WebElement searchResultsRow)
     {
-        if(!searchActionsExpanded)
-        {
-            clickOnActionsForSearchResult(searchResultsRow);
-        }
+        clickOnActionsForSearchResult(searchResultsRow);
         WebElement action = null;
         try
         {
