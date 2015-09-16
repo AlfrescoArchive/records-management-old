@@ -198,6 +198,7 @@ public abstract class ListItem
             Utils.mouseOver(actionsButton);
             Utils.waitFor(ExpectedConditions.visibilityOf(actionsButton));
             actionsButton.click(); 
+            Utils.waitForVisibilityOf(By.cssSelector("div[id*='MENU_dropdown']"));
         }
     }
     

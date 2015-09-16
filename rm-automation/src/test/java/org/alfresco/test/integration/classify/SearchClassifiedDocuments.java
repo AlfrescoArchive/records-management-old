@@ -198,7 +198,7 @@ public class SearchClassifiedDocuments extends BaseTest
        description = "Search as confidential user.",
        dependsOnMethods = "setupTestData"
     )
-    @AlfrescoTest(jira="RM-2144,RM-2595,RM-2596")
+    @AlfrescoTest(jira="RM-2144,RM-2595")
     public void confidentialUserSearch()
     {
         List<SearchResult> results =
@@ -218,10 +218,8 @@ public class SearchClassifiedDocuments extends BaseTest
         assertFalse("Confidential user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
         
-        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
-        SearchResult confidentialDocument = getResult(CONFIDENTIAL_DOCUMENT, results);
+        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);        
         assertTrue("The classify action is not available on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
-        assertTrue("The edit classification action is not available on a confidential document for confidential user.", confidentialDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, confidentialDocument.getSearchResultRow()));
     }
 
     @Test
@@ -230,7 +228,7 @@ public class SearchClassifiedDocuments extends BaseTest
        description = "Search as secret user.",
        dependsOnMethods = "setupTestData"
     )
-    @AlfrescoTest(jira="RM-2144")
+    @AlfrescoTest(jira="RM-2144,RM-2596")
     public void secretUserSearch()
     {
         List<SearchResult> results =
@@ -249,6 +247,9 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
         assertFalse("Confidential user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
+        
+        SearchResult secretDocument = getResult(SECRET_DOCUMENT, results);    
+        assertTrue("The edit classification action is not available on a secret document for secret user.", secretDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, secretDocument.getSearchResultRow()));
     }
 
     @Test
