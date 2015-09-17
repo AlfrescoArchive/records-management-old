@@ -125,7 +125,7 @@ public class SearchClassifiedDocuments extends BaseTest
         for (String user : Arrays.asList(UNCLASSIFIED_USER, CONFIDENTIAL_USER, SECRET_USER, TOP_SECRET_USER))
         {
             // invite user to site as site manager
-            userService.inviteUserToSiteAndAccept(user, getAdminName(), getAdminPassword(), SEARCH_TEST_SITE_ID, "SiteManager");
+            userService.inviteUserToSiteAndAccept(getAdminName(), getAdminPassword(), user, SEARCH_TEST_SITE_ID, "SiteManager");
         }
 
         // upload documents

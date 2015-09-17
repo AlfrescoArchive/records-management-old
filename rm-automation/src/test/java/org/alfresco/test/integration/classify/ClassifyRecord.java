@@ -521,7 +521,7 @@ public class ClassifyRecord extends BaseTest
         
         // verify that the Classify button is enabled even if the Downgrade Date and Event are not completed, but only the Instructions field
         assertTrue("The Clasify button is not enabled when not setting the Downgrade date and event, but only the Instructions field.", classifyContentDialog.isClassifyButtonEnabled());
-       
+        classifyContentDialog.clickOnCancel();
     }
 
 }
