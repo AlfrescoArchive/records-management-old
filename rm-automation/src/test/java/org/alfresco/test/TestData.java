@@ -51,7 +51,13 @@ public interface TestData
      * <p>"GROUP_UNCLEARED_USER_FILE_CATEGORY_ONE" The UNCLEARED_USER can file in RECORD_CATEGORY_ONE.
      */
     public static final String UNCLEARED_USER = "uncleared_user";
-
+    
+     /**
+     * A user with username containing space.
+     * <p>"GROUP_SPACE_USER_EXISTS" The SPACE_USER has been created.
+     */
+    public static final String SPACE_USER = "space user";
+     
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";
     public static final String DEFAULT_EMAIL = "default@alfresco.com";

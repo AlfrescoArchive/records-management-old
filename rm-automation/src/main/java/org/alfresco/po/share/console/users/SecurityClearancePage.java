@@ -42,11 +42,14 @@ import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
 import com.google.common.base.Predicate;
+import java.util.ArrayList;
+import org.openqa.selenium.Keys;
 
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
  * @author Neil Mc Erlean
  * @author David Webster
+ * @author Oana Nechiforescu
  */
 @Component
 public class SecurityClearancePage extends ConsolePage
@@ -59,6 +62,7 @@ public class SecurityClearancePage extends ConsolePage
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
     private static final By LOADING_SELECTOR = By.cssSelector(".data-loading ");
     private static final By NO_DATA = By.cssSelector("div[class$='no-data']");
+    private static final By ERROR_LOADING_DATA = By.cssSelector("div[data-dojo-attach-point='dataFailureNode']");
     
     /** predicates */
     private Predicate<WebDriver> waitTillHidden = (webDriver) ->
@@ -75,7 +79,25 @@ public class SecurityClearancePage extends ConsolePage
 
     @FindBy(css=".alfresco-lists-views-AlfListView")
     private WebElement clearanceTable;
-
+    
+    @FindBy(css="div[id$='_PAGE_BACK']")
+    private WebElement backButton;
+    
+    @FindBy(css="div[id$='_PAGE_FORWARD']")
+    private WebElement nextButton;
+    
+    @FindBy(css="div[class*='page-selector']")
+    private WebElement pageDropDownSelector;
+    
+    @FindBy(xpath="//div[not(contains(@id,'RESULTS_PER_PAGE_SELECTOR_dropdown')) and contains(@id,'PAGE_SELECTOR_dropdown')]")
+    private WebElement pagesContainerSelector;
+    
+    @FindBy(css="div[id$='_RESULTS_PER_PAGE_SELECTOR']")
+    private WebElement resultsPerPageSelector;
+    
+    @FindBy(css="div[aria-labelledby*='_RESULTS_PER_PAGE_SELECTOR'] table tbody tr td[id*='_text']")
+    private List<WebElement> resultsPerPageItems;
+    
     @Autowired
     private ConfirmationPrompt confirmationPrompt;
 
@@ -118,7 +140,34 @@ public class SecurityClearancePage extends ConsolePage
     {
         return nameFilterTextInput.getText();
     }
+    
+    /** Get the available pages. */
+    public int getNumberOfPages()
+    {
+        pageDropDownSelector.click();
+        Utils.waitForVisibilityOf(pagesContainerSelector);
+        return pagesContainerSelector.findElements(By.cssSelector("tr")).size();
+    }
 
+    /** Get the available results per page options.
+     * @return a list of Strings representing the numeric values of the options displayed for results per page.
+     * The regex below is used in order to remove all the non-numeric values from the displayed options
+     * The value of "25 items per page" would be kept as "25" to avoid language dependency
+     */
+    public List<String> getResultsPerPageOptions()
+    {
+        List<String> options = new ArrayList<>();
+        resultsPerPageSelector.click();
+        Utils.waitFor(ExpectedConditions.visibilityOfAllElements(resultsPerPageItems));
+        
+        // retain the numeric value only from the label
+        for(WebElement option : resultsPerPageItems)
+        {
+        options.add(option.getText().replaceAll("[^0-9]", ""));
+        }    
+        return options;
+    }        
+    
     /**
      * Indicates whether the result list is empty or not
      */
@@ -127,6 +176,70 @@ public class SecurityClearancePage extends ConsolePage
         return Utils.elementExists(NO_DATA);
     }
 
+    /**
+     * Checks if the "There was an error loading the data" error is displayed
+     * Waits for the loading message to disappear to make sure that the error page would have time to be displayed
+     */
+    public boolean isErrorLoadingDataDisplayed()
+    {
+        // no easy way to wait for the loading message to disappear
+        try { Thread.sleep(1000); } catch (InterruptedException e){}
+        
+        // wait for the loading message to disappear
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+            .withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS)
+            .until(waitTillHidden); 
+        return Utils.getWebDriver().findElement(ERROR_LOADING_DATA).isDisplayed();
+    }
+    
+    /**
+     * Checks if the Back button is enabled
+     */
+    public boolean isBackButtonEnabled()
+    {
+        return backButton.isEnabled();
+    }
+    
+    /**
+     * Checks if the Next button is enabled
+     */
+    public boolean isNextButtonEnabled()
+    {
+        return nextButton.isEnabled();
+    }
+    
+    /**
+     * Clears filter and waits for no data message to disappear in order to be sure that the empty filter has been applied
+     * Can be used after the "No matching users were found. Try changing your search criteria." error has been displayed
+     */
+    public void applyEmptyFilterAfterNoData()
+    {
+        clearFilter();
+        Utils.waitForInvisibilityOf(NO_DATA);
+        try 
+        {
+            Thread.sleep(1000);
+        } 
+        catch (InterruptedException e)
+        {
+        }
+        // wait for the loading message to disappear
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+                .withTimeout(10, TimeUnit.SECONDS)
+                .pollingEvery(1, TimeUnit.SECONDS)
+                .until(waitTillHidden);
+    }
+    
+    /**
+     * Clears the filter using CONTROL + a keys, then BACKSPACE to remove all content at once
+     */
+    private void clearFilter()
+    {
+        nameFilterTextInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        nameFilterTextInput.sendKeys(Keys.BACK_SPACE);
+    }        
+    
     /**
      * Indicates whether the given user is shown in the current page of results
      */
@@ -304,4 +417,31 @@ public class SecurityClearancePage extends ConsolePage
         WebElement profileLink = userRow.findElement(PROFILE_LINK_SELECTOR);
         profileLink.click();
     }
+    
+    /**
+     * Select results per page option
+     * @param optionLabel is the numeric value of option displayed, to avoid language dependency, so to select "50 per page" the parameter would be "50"
+     */
+    public void selectResultsPerPageOption(String optionLabel)
+    {
+        resultsPerPageSelector.click();
+        Utils.waitFor(ExpectedConditions.visibilityOfAllElements(resultsPerPageItems));
+
+        for (WebElement option : resultsPerPageItems) 
+        {
+            if (option.getText().contains(optionLabel)) 
+            {
+                option.click();
+                return;
+            }
+        }   
+    }
+    
+    /**
+     * Get the selected items per page value
+     */
+    public String getSelectedItemsPerPageValue()
+    {
+        return resultsPerPageSelector.getText();
+    }        
 }

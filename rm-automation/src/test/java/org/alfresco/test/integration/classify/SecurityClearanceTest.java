@@ -18,16 +18,19 @@
  */
 package org.alfresco.test.integration.classify;
 
+import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import org.alfresco.po.common.util.Utils;
 
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.console.users.UserProfilePage;
 import org.alfresco.po.share.page.SharePageNavigation;
+import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
@@ -52,7 +55,7 @@ public class SecurityClearanceTest extends BaseTest
     private UserProfilePage userProfilePage;
 
     /**
-     * Check that the displayed users are sorted correctly.
+     * Check that the displayed users are ordered correctly by default.
      */
     protected void checkUserOrdering(List<String> names)
     {
@@ -155,6 +158,10 @@ public class SecurityClearanceTest extends BaseTest
      * When I set their clearance level to something new
      * Then I am asked to confirm the change
      * And the new security clearance is show in the list
+     * 
+     * Given that I cancel the security clearance change
+     * Then the previous security clearance level value is still set
+     * See RM-2231
      * </pre>
      */
     @Test
@@ -163,6 +170,7 @@ public class SecurityClearanceTest extends BaseTest
         description = "Give a user clearance, reload the page and then revoke it again",
         dependsOnGroups = { "GROUP_RM_SITE_EXISTS", "GROUP_RM_MANAGER_EXISTS" }
     )
+    @AlfrescoTest(jira = "RM-2231")
     public void giveUserClearance()
     {
         String clearance = openPage(securityClearancePage).getUserSecurityClearance(RM_MANAGER);
@@ -176,9 +184,117 @@ public class SecurityClearanceTest extends BaseTest
                         .clickOnConfirm(securityClearancePage)
                         .getUserSecurityClearance(RM_MANAGER);
         assertEquals("Secret", clearance);
+        
+        // check that the security clearance level returns to the previous value after cancelling the change
+        clearance = securityClearancePage
+                        .setClearance(RM_MANAGER, "Top Secret")
+                        .clickOnCancel(securityClearancePage)
+                        .getUserSecurityClearance(RM_MANAGER);
+        assertEquals("Secret", clearance);      
     }
 
+    /**
+     * Set the security clearance of a user with username containing space, filter using special characters.
+     *
+     * <pre>
+     * Given that I change the security level of a user with username containing space
+     * Then its security clearance is set successful
+     * See RM-2547
+     * 
+     * Given that I filter the users using a special character
+     * Then the expected set of results is displayed
+     * See RM-2217
+     * 
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration"},
+        description = "Set the security clearance of a user with username containing space, filter using special caracters.",
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS", "GROUP_SPACE_USER_EXISTS" }
+    )
+    @AlfrescoTest(jira = "RM-2547,RM-2217")
+    public void testSecurityClearancePageSpecialCases()
+    {
+        // open Security Clearance page
+        openPage(securityClearancePage);
 
+        // set the security clearance of a user having its username containing space
+        String setSecurityClearance = securityClearancePage
+                .setClearance(SPACE_USER, "Confidential").clickOnConfirm(securityClearancePage)
+                .getUserSecurityClearance(SPACE_USER);
+        
+        // check that the security clearance has been changed successfully
+        assertEquals("Confidential", setSecurityClearance);
+        
+        // set the filter to "/" in order to verify that the filter works for special characters too
+        securityClearancePage.setNameFilter("/");
+        assertFalse(securityClearancePage.isErrorLoadingDataDisplayed());
+        assertTrue(securityClearancePage.isEmpty());
+        
+        // assert that no result is displayed
+        assertTrue(securityClearancePage.getUserNames().isEmpty());
+    }
+
+    /**
+     * Check the Security Clearance page pagination cases.
+     *
+     * <pre>
+     * Given that I click on the select page drop down
+     * Then the available pages are revealed
+     * See RM-2223
+     * 
+     * Given that I change the value of the items per page
+     * And I refresh the page
+     * Then the selected value is the previous one which is sent from the URL 
+     * See RM-2266
+     * 
+     * Given that I set currentPage and currentPageSize attributes to invalid values
+     * Then the error page is displayed
+     * See RM-2269
+     * 
+     * </pre>
+     */
+    @Test
+    (
+        groups = { "integration"},
+        description = "Check the Security Clearance page pagination cases.",
+        dependsOnGroups = {"GROUP_RM_SITE_EXISTS"}
+    )
+    @AlfrescoTest(jira = "RM-2223,RM-2266,RM-2269")
+    public void testSecurityClearancePagination()
+    {
+        // open Security Clearance page
+        openPage(securityClearancePage);
+        
+        // check that the select page drop down reveals the pages to navigate to on click
+        assertTrue(securityClearancePage.getNumberOfPages() >= 1);
+        
+        List<String> expectedResultsPerPageValues =  new ArrayList<>();
+        expectedResultsPerPageValues.add("25");
+        expectedResultsPerPageValues.add("50");
+        expectedResultsPerPageValues.add("75");
+        expectedResultsPerPageValues.add("100");
+        
+        // verify the items per page options
+        checkTheResultsPerPageOptionsAre(expectedResultsPerPageValues);
+        
+        // assert the default items per page value to be 25
+        assertTrue(securityClearancePage.getSelectedItemsPerPageValue().startsWith("25"));
+        // select a different value
+        securityClearancePage.selectResultsPerPageOption("50");
+		// assert the set value to be 50
+        assertTrue(securityClearancePage.getSelectedItemsPerPageValue().startsWith("50"));
+        securityClearancePage.refreshCurrentPage();
+        // assert the set value to be 50
+        assertTrue(securityClearancePage.getSelectedItemsPerPageValue().startsWith("50"));
+        // change the URL in order for the currentPage and currentPageSize to get invalid values
+        openPage(securityClearancePage);
+        Utils.getWebDriver().get(Utils.getWebDriver().getCurrentUrl() + "#currentPage=1000&currentPageSize=1000");
+        // check that the error page is displayed
+        assertTrue(securityClearancePage.isErrorLoadingDataDisplayed());   
+    }
+    
     /**
      * Check the admin user is not found by using the filter.
      *
@@ -191,6 +307,10 @@ public class SecurityClearanceTest extends BaseTest
      * When I enter a filter that has no results
      * Then no results are shown in the list
      * And a message is shown in the list indicating no results where found
+     * 
+     * Given that the filter has been removed
+     * Then all the users are displayed
+     * See RM-2517
      * </pre>
      */
     @Test
@@ -199,6 +319,7 @@ public class SecurityClearanceTest extends BaseTest
         description = "Check the admin user is not found by using the filter",
         dependsOnGroups = { "GROUP_RM_MANAGER_EXISTS", "GROUP_UNCLEARED_USER_EXISTS" }
     )
+    @AlfrescoTest(jira = "RM-2517")
     public void userNameFilter()
     {
         openPage(securityClearancePage);
@@ -215,11 +336,14 @@ public class SecurityClearanceTest extends BaseTest
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
         assertFalse(securityClearancePage.isUserShown(UNCLEARED_USER));
 
-        // partial filter
+        // remove the filter
         securityClearancePage.clearNameFilter();
+        assertTrue(securityClearancePage.getNameFilter().isEmpty()); 
+        
+        // partial filter
         securityClearancePage.setNameFilter("_user");
 
-        // assert that the filter has been cleared
+        // assert that the filter has been applied
         assertFalse(securityClearancePage.getNameFilter().isEmpty());
         assertTrue(securityClearancePage.getUserNames().size() >= 2);
         assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
@@ -231,6 +355,15 @@ public class SecurityClearanceTest extends BaseTest
 
         // assert that no results are shown
         assertTrue(securityClearancePage.isEmpty());
+        
+        // clear filter and wait for the empty filter to be taken into consideration
+         securityClearancePage.applyEmptyFilterAfterNoData();
+         
+        // assert that the empty filter has been applied and that all the users are displayed
+        assertTrue(securityClearancePage.getUserNames().size() > 2);
+        assertTrue(securityClearancePage.isUserShown(RM_MANAGER));
+        assertTrue(securityClearancePage.isUserShown(UNCLEARED_USER));
+        
     }
 
     /*
@@ -249,6 +382,8 @@ public class SecurityClearanceTest extends BaseTest
 
     When I change the order to descending
     Then they are reordered accordingly
+    
+    RM-2612 has to be covered as well 
     */
 
     /**
@@ -286,4 +421,17 @@ public class SecurityClearanceTest extends BaseTest
 
         assertEquals(securityClearancePage.getNameFilter(), RM_MANAGER);
     }
+    
+    private void checkTheResultsPerPageOptionsAre(List<String> expectedValues)
+    {
+        List<String> resultsPerPage = securityClearancePage.getResultsPerPageOptions();
+        
+        assertEquals(expectedValues.size(), resultsPerPage.size());
+        
+        for(String option : resultsPerPage)
+        {
+           assertTrue(expectedValues.contains(option));           
+        }    
+    }        
+            
 }

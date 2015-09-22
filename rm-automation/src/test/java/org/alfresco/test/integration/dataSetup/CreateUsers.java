@@ -79,6 +79,16 @@ public class CreateUsers extends BaseTest
                     UNCLEARED_USER);
     }
 
+    @Test
+    (
+        groups = { "integration", "GROUP_SPACE_USER_EXISTS" },
+        description = "Create users"
+    )
+    public void createSpaceUser()
+    {
+        userService.create(getAdminName(), getAdminPassword(), SPACE_USER, DEFAULT_PASSWORD, DEFAULT_EMAIL, SPACE_USER, SPACE_USER);
+    }
+    
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
     protected void deleteUsers()
@@ -90,6 +100,10 @@ public class CreateUsers extends BaseTest
         if (userService.userExists(getAdminName(), getAdminPassword(), UNCLEARED_USER))
         {
             userService.delete(getAdminName(), getAdminPassword(), UNCLEARED_USER);
+        }
+        if (userService.userExists(getAdminName(), getAdminPassword(), SPACE_USER))
+        {
+            userService.delete(getAdminName(), getAdminPassword(), SPACE_USER);
         }
     }
 }

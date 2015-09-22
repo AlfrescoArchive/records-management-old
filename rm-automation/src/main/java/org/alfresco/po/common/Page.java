@@ -19,6 +19,9 @@
 package org.alfresco.po.common;
 
 import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.common.util.Utils;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  * Page 
@@ -65,4 +68,9 @@ public abstract class Page extends Renderable
         webDriver.close();
     }
 
+    public void refreshCurrentPage()
+    {
+        Actions actions = new Actions(Utils.getWebDriver());
+        actions.keyDown(Keys.CONTROL).sendKeys(Keys.F5).perform();   
+    }        
 }

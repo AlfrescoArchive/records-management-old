@@ -203,20 +203,21 @@ public abstract class ListItem
         }
     }
     
-    private boolean isSearchResultActionsContainerDisplayed()
-    {
+    private boolean isSearchResultActionsContainerDisplayed() {
+       
         WebElement searchResultActionsContainer = null;
-        try
+       
+        try 
         {
-          searchResultActionsContainer = Utils.getWebDriver().findElement(By.cssSelector("div[id*='MENU_dropdown']"));
-        }
-        catch(NoSuchElementException noSuchElementException)
+            searchResultActionsContainer = Utils.getWebDriver().findElement(searchResultsActionsContainer);
+        } 
+        catch (NoSuchElementException noSuchElementException) 
         {
-        return false;
+            return false;
         }
         return searchResultActionsContainer.isDisplayed();
-    }        
-    
+    }
+
     /**
      * Helper method to check whether the specified actions are clickable
      *
@@ -249,7 +250,7 @@ public abstract class ListItem
                      
     /**
      * Helper method to check whether the specified Search results action is clickable
-     *
+     * Leaves the Actions drop down expanded
      * @param actionName
      * @param searchResultsRow
      * @return boolean true if clickable, false otherwise
@@ -273,7 +274,7 @@ public abstract class ListItem
     
     /**
      * Helper method to check whether the specified Search results action is displayed
-     *
+     * Leaves the Actions drop down expanded
      * @param actionName
      * @param searchResultsRow
      * @param searchActionsExpanded if the Actions container is expanded and the actions are already visible
