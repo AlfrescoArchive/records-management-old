@@ -18,19 +18,17 @@
  */
 package org.alfresco.po.share.search;
 
+import java.util.List;
+
+import org.alfresco.po.share.browse.ListItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.share.browse.ListItem;
-import ru.yandex.qatools.htmlelements.element.Link;
-
 /**
  * Search result object, representing a row in the search results.
- * 
+ *
  * @author Roy Wetherall
  * @since 2.4.a
  */
@@ -43,7 +41,7 @@ public class SearchResult extends ListItem
 
     /** classified label selector */
     private static final By CLASSIFIED_LABEL_SELECTOR = By.cssSelector(".classification-label");
-    
+
     /** row web element */
     private WebElement row;
 
@@ -54,12 +52,12 @@ public class SearchResult extends ListItem
     {
         this.row = row;
     }
-    
+
     public WebElement getSearchResultRow()
     {
         return row;
-    }        
-    
+    }
+
     /**
      * get the name of the file or folder on this row of the search results
      */
@@ -82,6 +80,6 @@ public class SearchResult extends ListItem
         }
 
         return result;
-    }  
-    
+    }
+
 }

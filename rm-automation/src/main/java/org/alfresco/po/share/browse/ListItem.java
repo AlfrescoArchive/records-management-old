@@ -49,7 +49,7 @@ public abstract class ListItem
     /** action(s) selector */
     private static final By ACTIONS_SELECTOR = By.cssSelector("div.action-set div");
     private static final String ACTION_SELECTOR_XPATH = ".//div[@class=''{0}'']/a";
-    
+
     private static final String ACTIONS_PANEL_DOCUMENT_DETAILS = "div[class='document-actions document-details-panel']";
 
     /** link selector */
@@ -58,7 +58,7 @@ public abstract class ListItem
     /** more actions */
     private static By moreActionsSelector = By.xpath(".//div[@class='internal-show-more']/a");
     private static By moreActionsPanelSelector = By.xpath(".//div[starts-with(@class,'more-actions')]");
-    
+
     private static By searchResultsActionsSelector = By.cssSelector("div[aria-label*='Actions']");
     private static By searchResultsActionsContainer = By.cssSelector("div[id*='MENU_dropdown']");
 
@@ -137,7 +137,7 @@ public abstract class ListItem
     {
         // click on the ...more link
         Utils.mouseOver(row);
-        
+
         WebElement moreAction = getMoreActionLink(row);
         if (moreAction != null)
         {
@@ -145,13 +145,13 @@ public abstract class ListItem
             Utils.waitFor(ExpectedConditions.elementToBeClickable(moreAction));
             Utils.mouseOver(moreAction);
             Utils.waitFor(ExpectedConditions.visibilityOf(moreAction));
-            moreAction.click(); 
+            moreAction.click();
             // wait for the actions to show
             waitForVisibilityOf(row.findElement(moreActionsPanelSelector));
         }
     }
 
-  
+
     private WebElement getMoreActionLink(WebElement row)
     {
         WebElement moreAction = null;
@@ -166,7 +166,7 @@ public abstract class ListItem
         }
         return moreAction;
     }
-    
+
     // returns the Actions link from Search results page
     private WebElement getActionsLink(WebElement row)
     {
@@ -182,7 +182,7 @@ public abstract class ListItem
         }
         return searchAction;
     }
-        
+
     /**
      * Click on the Search results Actions link
      */
@@ -190,7 +190,7 @@ public abstract class ListItem
     {
         // click on the Actions link
         Utils.mouseOver(searchResultsRow);
-        
+
         WebElement actionsButton = getActionsLink(searchResultsRow);
         if (actionsButton != null)
         {
@@ -198,24 +198,9 @@ public abstract class ListItem
             Utils.waitFor(ExpectedConditions.elementToBeClickable(actionsButton));
             Utils.mouseOver(actionsButton);
             Utils.waitFor(ExpectedConditions.visibilityOf(actionsButton));
-            actionsButton.click(); 
+            actionsButton.click();
             Utils.waitForVisibilityOf(searchResultsActionsContainer);
         }
-    }
-    
-    private boolean isSearchResultActionsContainerDisplayed() {
-       
-        WebElement searchResultActionsContainer = null;
-       
-        try 
-        {
-            searchResultActionsContainer = Utils.getWebDriver().findElement(searchResultsActionsContainer);
-        } 
-        catch (NoSuchElementException noSuchElementException) 
-        {
-            return false;
-        }
-        return searchResultActionsContainer.isDisplayed();
     }
 
     /**
@@ -247,7 +232,7 @@ public abstract class ListItem
 
         return result;
     }
-                     
+
     /**
      * Helper method to check whether the specified Search results action is clickable
      * Leaves the Actions drop down expanded
@@ -259,19 +244,19 @@ public abstract class ListItem
     {
         // click Actions button for search result
         clickOnActionsForSearchResult(searchResultsRow);
-        WebElement link = null;     
+        WebElement link = null;
         try
         {
-        // wait for the action to be displayed    
+        // wait for the action to be displayed
         link = Utils.waitForVisibilityOf(By.cssSelector("tr[id$='" + actionName + "']"));
         }
         catch(TimeoutException e)
         {
             // do nothing
-        }  
+        }
         return ((link != null) && (link.isEnabled()));
-    } 
-    
+    }
+
     /**
      * Helper method to check whether the specified Search results action is displayed
      * Leaves the Actions drop down expanded
@@ -293,7 +278,7 @@ public abstract class ListItem
             // do nothing
         }
         return (action != null) && (action.isDisplayed());
-    } 
+    }
 
     public String[] getClickableActions()
     {
@@ -338,7 +323,7 @@ public abstract class ListItem
      * Click on action from Details Page
      */
     public <T extends Renderable> T  clickOnActionFromDetailsPage(String actionName, T renderable)
-    {   
+    {
         Utils.waitForVisibilityOf(By.cssSelector(ACTIONS_PANEL_DOCUMENT_DETAILS));
      // get action link
         Link action = getActionLinkFromDetailsPage(actionName);
@@ -346,15 +331,15 @@ public abstract class ListItem
         {
             throw new RuntimeException("The action " + actionName + " could not be found for the item " + getName());
         }
-        
+
         action.click();
-        
+
         // render the return page
         return renderable.render();
     }
-    
+
     private Link getActionLinkFromDetailsPage(String actionName){
-    
+
         Link result = null;
         try
         {
@@ -367,7 +352,7 @@ public abstract class ListItem
         }
         return result;
     }
-    
+
     /**
      * Click on action
      */

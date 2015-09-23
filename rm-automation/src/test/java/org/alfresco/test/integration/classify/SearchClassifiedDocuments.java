@@ -32,6 +32,7 @@ import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.dataprep.UserService;
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.search.AdvancedSearchPage;
@@ -46,9 +47,6 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicate;
-import org.alfresco.po.share.browse.documentlibrary.DocumentActions;
-import org.openqa.selenium.WebElement;
-
 
 /**
  * Search classified document integration test
@@ -217,9 +215,9 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
         assertFalse("Confidential user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
-        
-        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);        
-        assertTrue("The classify action is not clickable on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));    
+
+        SearchResult unclassifiedDocument = getResult(UNCLASSIFIED_DOCUMENT, results);
+        assertTrue("The classify action is not clickable on a unclassified document for confidential user.", unclassifiedDocument.isSearchResultActionClickable(DocumentActions.CLASSIFY, unclassifiedDocument.getSearchResultRow()));
     }
 
     @Test
@@ -247,8 +245,8 @@ public class SearchClassifiedDocuments extends BaseTest
                     searchResultsContainDocument(SECRET_DOCUMENT, results));
         assertFalse("Confidential user should not be able to see the top secret document",
                     searchResultsContainDocument(TOP_SECRET_DOCUMENT, results));
-        
-        SearchResult secretDocument = getResult(SECRET_DOCUMENT, results);    
+
+        SearchResult secretDocument = getResult(SECRET_DOCUMENT, results);
         assertTrue("The edit classification action is not clickable on a secret document for secret user.", secretDocument.isSearchResultActionClickable(DocumentActions.EDIT_CLASSIFICATION, secretDocument.getSearchResultRow()));
     }
 
@@ -299,7 +297,7 @@ public class SearchClassifiedDocuments extends BaseTest
 
         return result;
     }
-    
+
     /**
      * Helper method to get a specific search results row.
      * <p>
@@ -318,7 +316,7 @@ public class SearchClassifiedDocuments extends BaseTest
 
         return null;
     }
-    
+
     @Test
     (
         groups = {"integration"},
