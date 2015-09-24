@@ -67,7 +67,7 @@ public final class Utils implements ApplicationContextAware
     private static ApplicationContext applicationContext;
 
     /** default wait 10 seconds */
-    private static final int DEFAULT_WAIT = 20;
+    private static final int DEFAULT_WAIT = 10;
     
     /** default retry 5 times */
     public static final int DEFAULT_RETRY = 5;

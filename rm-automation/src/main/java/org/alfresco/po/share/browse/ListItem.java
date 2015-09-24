@@ -120,6 +120,7 @@ public abstract class ListItem
         // mouse over the link
         Utils.mouseOver(link);
 
+        Utils.waitFor(ExpectedConditions.elementToBeClickable(row.findElement(linkSelector)));
         // click on the link
         link.click();
 
