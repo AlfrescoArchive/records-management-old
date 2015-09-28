@@ -101,7 +101,9 @@ public class CreateUsers extends BaseTest
         {
             userService.delete(getAdminName(), getAdminPassword(), UNCLEARED_USER);
         }
-        String encodedSpaceUser = SPACE_USER.replace(" ", "%20");
+        // TODO This string replace should be removed when updating to dataprep 1.6+. A fix was added here:
+        // https://github.com/AlfrescoTestAutomation/dataprep/commit/89a2db6f7d5a471b3f42ad8461b3021cc0ac9614
+        String encodedSpaceUser = SPACE_USER.replaceAll(" ", "%20");
         if (userService.userExists(getAdminName(), getAdminPassword(), encodedSpaceUser))
         {
             userService.delete(getAdminName(), getAdminPassword(), encodedSpaceUser);
