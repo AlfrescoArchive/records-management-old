@@ -19,42 +19,39 @@
 package org.alfresco.po.common;
 
 import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Utils;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 
 /**
- * Page 
- * 
+ * Page
+ *
  * @author	Roy Wetherall
  */
-public abstract class Page extends Renderable 
+public abstract class Page extends Renderable
 {
     /** last rendered page */
-	private static Renderable lastRenderedPage;
-	
-	/** 
-	 * @return {@link Renderable}  last rendered page
-	 */
-	public static final Renderable getLastRenderedPage()
-	{
-		return Page.lastRenderedPage;
-	}
-	
-	/**
-	 * @see org.alfresco.po.common.renderable.Renderable#render()
-	 */
-	@Override
-	public <T extends Renderable> T render() 
-	{
-		T page = super.render();
-		Page.lastRenderedPage = page;
-		return page;
-	}
-    
-	/**
-	 * Get page title
-	 */
+    private static Renderable lastRenderedPage;
+
+    /**
+     * @return {@link Renderable}  last rendered page
+     */
+    public static final Renderable getLastRenderedPage()
+    {
+        return Page.lastRenderedPage;
+    }
+
+    /**
+     * @see org.alfresco.po.common.renderable.Renderable#render()
+     */
+    @Override
+    public <T extends Renderable> T render()
+    {
+        T page = super.render();
+        Page.lastRenderedPage = page;
+        return page;
+    }
+
+    /**
+     * Get page title
+     */
     public String getPageTitle()
     {
         return webDriver.getTitle();
@@ -68,9 +65,9 @@ public abstract class Page extends Renderable
         webDriver.close();
     }
 
+    /** Refresh the current page. */
     public void refreshCurrentPage()
     {
-        Actions actions = new Actions(Utils.getWebDriver());
-        actions.keyDown(Keys.CONTROL).sendKeys(Keys.F5).perform();   
-    }        
+        webDriver.navigate().refresh();
+    }
 }
