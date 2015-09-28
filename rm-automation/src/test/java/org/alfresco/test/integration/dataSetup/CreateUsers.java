@@ -88,7 +88,7 @@ public class CreateUsers extends BaseTest
     {
         userService.create(getAdminName(), getAdminPassword(), SPACE_USER, DEFAULT_PASSWORD, DEFAULT_EMAIL, SPACE_USER, SPACE_USER);
     }
-    
+
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
     protected void deleteUsers()
@@ -101,9 +101,10 @@ public class CreateUsers extends BaseTest
         {
             userService.delete(getAdminName(), getAdminPassword(), UNCLEARED_USER);
         }
-        if (userService.userExists(getAdminName(), getAdminPassword(), SPACE_USER))
+        String encodedSpaceUser = SPACE_USER.replace(" ", "%20");
+        if (userService.userExists(getAdminName(), getAdminPassword(), encodedSpaceUser))
         {
-            userService.delete(getAdminName(), getAdminPassword(), SPACE_USER);
+            userService.delete(getAdminName(), getAdminPassword(), encodedSpaceUser);
         }
     }
 }
