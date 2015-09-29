@@ -44,6 +44,7 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import com.google.common.base.Predicate;
 import java.util.ArrayList;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
@@ -86,7 +87,7 @@ public class SecurityClearancePage extends ConsolePage
     @FindBy(css="div[id$='_PAGE_FORWARD']")
     private WebElement nextButton;
     
-    @FindBy(css="div[class*='page-selector']")
+    @FindBy(css="div.alfresco-lists-Paginator__page-selector")
     private WebElement pageDropDownSelector;
     
     @FindBy(xpath="//div[not(contains(@id,'RESULTS_PER_PAGE_SELECTOR_dropdown')) and contains(@id,'PAGE_SELECTOR_dropdown')]")
@@ -149,7 +150,8 @@ public class SecurityClearancePage extends ConsolePage
         return pagesContainerSelector.findElements(By.cssSelector("tr")).size();
     }
 
-    /** Get the available results per page options.
+    /** 
+     * Get the available results per page options.
      * @return a list of Strings representing the numeric values of the options displayed for results per page.
      * The regex below is used in order to remove all the non-numeric values from the displayed options
      * The value of "25 items per page" would be kept as "25" to avoid language dependency
@@ -181,10 +183,7 @@ public class SecurityClearancePage extends ConsolePage
      * Waits for the loading message to disappear to make sure that the error page would have time to be displayed
      */
     public boolean isErrorLoadingDataDisplayed()
-    {
-        // no easy way to wait for the loading message to disappear
-        try { Thread.sleep(1000); } catch (InterruptedException e){}
-        
+    {      
         // wait for the loading message to disappear
         new FluentWait<WebDriver>(Utils.getWebDriver())
             .withTimeout(10, TimeUnit.SECONDS)
@@ -217,13 +216,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         clearFilter();
         Utils.waitForInvisibilityOf(NO_DATA);
-        try 
-        {
-            Thread.sleep(1000);
-        } 
-        catch (InterruptedException e)
-        {
-        }
+        
         // wait for the loading message to disappear
         new FluentWait<WebDriver>(Utils.getWebDriver())
                 .withTimeout(10, TimeUnit.SECONDS)
@@ -232,12 +225,13 @@ public class SecurityClearancePage extends ConsolePage
     }
     
     /**
-     * Clears the filter using CONTROL + a keys, then BACKSPACE to remove all content at once
+     * Clears the filter and focuses out by clicking on the Alfresco logo in order of it to be taken into consideration
      */
     private void clearFilter()
     {
-        nameFilterTextInput.sendKeys(Keys.chord(Keys.CONTROL, "a"));
-        nameFilterTextInput.sendKeys(Keys.BACK_SPACE);
+        nameFilterTextInput.clear();
+        new Actions(Utils.getWebDriver()).moveToElement(Utils.getWebDriver().findElement(By.id("HEADER_LOGO"))).click().perform();
+        Utils.waitFor(ExpectedConditions.elementSelectionStateToBe(By.cssSelector(".security-clearance-filter .control input[name=nameFilter]"), false));
     }        
     
     /**

@@ -269,21 +269,15 @@ public class SecurityClearanceTest extends BaseTest
         
         // check that the select page drop down reveals the pages to navigate to on click
         assertTrue(securityClearancePage.getNumberOfPages() >= 1);
-        
-        List<String> expectedResultsPerPageValues =  new ArrayList<>();
-        expectedResultsPerPageValues.add("25");
-        expectedResultsPerPageValues.add("50");
-        expectedResultsPerPageValues.add("75");
-        expectedResultsPerPageValues.add("100");
-        
+              
         // verify the items per page options
-        checkTheResultsPerPageOptionsAre(expectedResultsPerPageValues);
+        checkTheResultsPerPageOptionsAre(Arrays.asList("25", "50", "75", "100"));
         
         // assert the default items per page value to be 25
         assertTrue(securityClearancePage.getSelectedItemsPerPageValue().startsWith("25"));
         // select a different value
         securityClearancePage.selectResultsPerPageOption("50");
-		// assert the set value to be 50
+	// assert the set value to be 50
         assertTrue(securityClearancePage.getSelectedItemsPerPageValue().startsWith("50"));
         securityClearancePage.refreshCurrentPage();
         // assert the set value to be 50
@@ -424,14 +418,7 @@ public class SecurityClearanceTest extends BaseTest
     
     private void checkTheResultsPerPageOptionsAre(List<String> expectedValues)
     {
-        List<String> resultsPerPage = securityClearancePage.getResultsPerPageOptions();
-        
-        assertEquals(expectedValues.size(), resultsPerPage.size());
-        
-        for(String option : resultsPerPage)
-        {
-           assertTrue(expectedValues.contains(option));           
-        }    
+        assertEquals(expectedValues, securityClearancePage.getResultsPerPageOptions());             
     }        
             
 }
