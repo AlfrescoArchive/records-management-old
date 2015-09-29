@@ -20,12 +20,14 @@ package org.alfresco.po.share.console.users;
 
 import static org.alfresco.po.common.StreamHelper.zip;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Predicate;
 import org.alfresco.po.common.ConfirmationPrompt;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.console.ConsolePage;
@@ -33,18 +35,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ru.yandex.qatools.htmlelements.element.TextInput;
-
-import com.google.common.base.Predicate;
-import java.util.ArrayList;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 
 /**
  * Page object for the "Security Clearance" page within the Share Admin Console.
@@ -64,14 +61,14 @@ public class SecurityClearancePage extends ConsolePage
     private static final By LOADING_SELECTOR = By.cssSelector(".data-loading ");
     private static final By NO_DATA = By.cssSelector("div[class$='no-data']");
     private static final By ERROR_LOADING_DATA = By.cssSelector("div[data-dojo-attach-point='dataFailureNode']");
-    
+
     /** predicates */
     private Predicate<WebDriver> waitTillHidden = (webDriver) ->
     {
         WebElement loadingMessage = webDriver.findElement(LOADING_SELECTOR);
         return loadingMessage.getAttribute("class").contains("share-hidden");
-    };    
-    
+    };
+
     /** page url */
     private static final String PAGE_URL = "/page/console/admin-console/security-clearance";
 
@@ -80,25 +77,25 @@ public class SecurityClearancePage extends ConsolePage
 
     @FindBy(css=".alfresco-lists-views-AlfListView")
     private WebElement clearanceTable;
-    
+
     @FindBy(css="div[id$='_PAGE_BACK']")
     private WebElement backButton;
-    
+
     @FindBy(css="div[id$='_PAGE_FORWARD']")
     private WebElement nextButton;
-    
+
     @FindBy(css="div.alfresco-lists-Paginator__page-selector")
     private WebElement pageDropDownSelector;
-    
+
     @FindBy(xpath="//div[not(contains(@id,'RESULTS_PER_PAGE_SELECTOR_dropdown')) and contains(@id,'PAGE_SELECTOR_dropdown')]")
     private WebElement pagesContainerSelector;
-    
+
     @FindBy(css="div[id$='_RESULTS_PER_PAGE_SELECTOR']")
     private WebElement resultsPerPageSelector;
-    
+
     @FindBy(css="div[aria-labelledby*='_RESULTS_PER_PAGE_SELECTOR'] table tbody tr td[id*='_text']")
     private List<WebElement> resultsPerPageItems;
-    
+
     @Autowired
     private ConfirmationPrompt confirmationPrompt;
 
@@ -123,16 +120,16 @@ public class SecurityClearancePage extends ConsolePage
     {
         // set the text
         Utils.clearAndType(nameFilterTextInput, filter);
-        
+
         // no easy way to wait for the loading message to appear
         try { Thread.sleep(1000); } catch (InterruptedException e){}
-        
+
         // wait for the loading message to disappear
         new FluentWait<WebDriver>(Utils.getWebDriver())
             .withTimeout(10, TimeUnit.SECONDS)
             .pollingEvery(1, TimeUnit.SECONDS)
-            .until(waitTillHidden); 
-        
+            .until(waitTillHidden);
+
         return this;
     }
 
@@ -141,7 +138,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         return nameFilterTextInput.getText();
     }
-    
+
     /** Get the available pages. */
     public int getNumberOfPages()
     {
@@ -150,7 +147,7 @@ public class SecurityClearancePage extends ConsolePage
         return pagesContainerSelector.findElements(By.cssSelector("tr")).size();
     }
 
-    /** 
+    /**
      * Get the available results per page options.
      * @return a list of Strings representing the numeric values of the options displayed for results per page.
      * The regex below is used in order to remove all the non-numeric values from the displayed options
@@ -161,15 +158,15 @@ public class SecurityClearancePage extends ConsolePage
         List<String> options = new ArrayList<>();
         resultsPerPageSelector.click();
         Utils.waitFor(ExpectedConditions.visibilityOfAllElements(resultsPerPageItems));
-        
+
         // retain the numeric value only from the label
         for(WebElement option : resultsPerPageItems)
         {
         options.add(option.getText().replaceAll("[^0-9]", ""));
-        }    
+        }
         return options;
-    }        
-    
+    }
+
     /**
      * Indicates whether the result list is empty or not
      */
@@ -183,15 +180,15 @@ public class SecurityClearancePage extends ConsolePage
      * Waits for the loading message to disappear to make sure that the error page would have time to be displayed
      */
     public boolean isErrorLoadingDataDisplayed()
-    {      
+    {
         // wait for the loading message to disappear
         new FluentWait<WebDriver>(Utils.getWebDriver())
             .withTimeout(10, TimeUnit.SECONDS)
             .pollingEvery(1, TimeUnit.SECONDS)
-            .until(waitTillHidden); 
+            .until(waitTillHidden);
         return Utils.getWebDriver().findElement(ERROR_LOADING_DATA).isDisplayed();
     }
-    
+
     /**
      * Checks if the Back button is enabled
      */
@@ -199,7 +196,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         return backButton.isEnabled();
     }
-    
+
     /**
      * Checks if the Next button is enabled
      */
@@ -207,7 +204,7 @@ public class SecurityClearancePage extends ConsolePage
     {
         return nextButton.isEnabled();
     }
-    
+
     /**
      * Clears filter and waits for no data message to disappear in order to be sure that the empty filter has been applied
      * Can be used after the "No matching users were found. Try changing your search criteria." error has been displayed
@@ -216,14 +213,14 @@ public class SecurityClearancePage extends ConsolePage
     {
         clearFilter();
         Utils.waitForInvisibilityOf(NO_DATA);
-        
+
         // wait for the loading message to disappear
         new FluentWait<WebDriver>(Utils.getWebDriver())
                 .withTimeout(10, TimeUnit.SECONDS)
                 .pollingEvery(1, TimeUnit.SECONDS)
                 .until(waitTillHidden);
     }
-    
+
     /**
      * Clears the filter and focuses out by clicking on the Alfresco logo in order of it to be taken into consideration
      */
@@ -232,8 +229,8 @@ public class SecurityClearancePage extends ConsolePage
         nameFilterTextInput.clear();
         new Actions(Utils.getWebDriver()).moveToElement(Utils.getWebDriver().findElement(By.id("HEADER_LOGO"))).click().perform();
         Utils.waitFor(ExpectedConditions.elementSelectionStateToBe(By.cssSelector(".security-clearance-filter .control input[name=nameFilter]"), false));
-    }        
-    
+    }
+
     /**
      * Indicates whether the given user is shown in the current page of results
      */
@@ -411,7 +408,7 @@ public class SecurityClearancePage extends ConsolePage
         WebElement profileLink = userRow.findElement(PROFILE_LINK_SELECTOR);
         profileLink.click();
     }
-    
+
     /**
      * Select results per page option
      * @param optionLabel is the numeric value of option displayed, to avoid language dependency, so to select "50 per page" the parameter would be "50"
@@ -421,21 +418,32 @@ public class SecurityClearancePage extends ConsolePage
         resultsPerPageSelector.click();
         Utils.waitFor(ExpectedConditions.visibilityOfAllElements(resultsPerPageItems));
 
-        for (WebElement option : resultsPerPageItems) 
+        for (WebElement option : resultsPerPageItems)
         {
-            if (option.getText().contains(optionLabel)) 
+            if (option.getText().contains(optionLabel))
             {
                 option.click();
                 return;
             }
-        }   
+        }
     }
-    
+
     /**
      * Get the selected items per page value
      */
     public String getSelectedItemsPerPageValue()
     {
         return resultsPerPageSelector.getText();
-    }        
+    }
+
+    /**
+     * Check if a user's clearance can be modified.
+     *
+     * @param userName The user's username.
+     * @return True if the clearance can be set.
+     */
+    public boolean isUsersClearanceModifiable(String userName)
+    {
+        return !getUserRow(userName).findElements(SECURITY_CLEARANCE_SELECTOR).isEmpty();
+    }
 }
