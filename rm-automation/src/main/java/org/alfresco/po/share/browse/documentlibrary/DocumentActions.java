@@ -39,6 +39,8 @@ public interface DocumentActions extends Actions
     static final String EDIT_CLASSIFICATION= "rm-edit-classified-content";
     /** Declare record */
     static final String ACTION_DECLARE_RECORD = "rm-create-record";
+    /** Declare version as record. */
+    static final String DECLARE_VERSION_AS_RECORD = "rm-declare-as-version-record";
     /** Upload new version. */
     static final String UPLOAD_NEW_VERSION = "document-upload-new-version";
 }

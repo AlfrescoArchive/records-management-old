@@ -132,4 +132,10 @@ public class Document extends ListItem implements DocumentActions
     {
         return clickOnAction(DocumentActionsPanel.UPLOAD_NEW_VERSION, uploadNewVersionDialog);
     }
+
+    /** Declare the current version of a document as an in-place record. */
+    public DocumentDetails declareVersionAsRecord()
+    {
+        return clickOnAction(DocumentActionsPanel.DECLARE_VERSION_AS_RECORD, documentDetails);
+    }
 }

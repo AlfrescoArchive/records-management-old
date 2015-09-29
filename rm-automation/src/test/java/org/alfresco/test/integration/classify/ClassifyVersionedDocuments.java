@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
+import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.browse.documentlibrary.Document;
@@ -51,6 +52,7 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
     @Autowired private DocumentLibrary documentLibrary;
     @Autowired private DocumentDetails documentDetails;
     @Autowired private ClassifyContentDialog classifyContentDialog;
+    @Autowired private FilePlan filePlan;
 
     /* Data prep services */
     @Autowired private DataPrepHelper dataPrepHelper;
@@ -153,6 +155,40 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
         assertEquals("Expected the document to remain classified after reverting to version 1.0.",
                     CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                     documentDetails.getBannerText(ContentBanner.CLASSIFICATION));
+    }
+
+    /**
+     * Create a classified document and declare a version of it as a record. Check that the record is still classified.
+     */
+    @Test
+    (
+        groups = { "integration" },
+        description = "Declare a verson of a classified document as a record",
+        dependsOnMethods = "setUpSite",
+        dependsOnGroups = { "GROUP_RM_SITE_EXISTS" }
+    )
+    @AlfrescoTest(jira="RM-2606")
+    public void declareClassifiedVersionedAsRecord() throws Exception
+    {
+        final String documentName = "declareClassifiedVersionedAsRecord Doc";
+
+        openPage(documentLibrary, SITE_ID);
+        createClassifiedDocument(documentName, SECRET_CLASSIFICATION_LEVEL_TEXT);
+
+        openPage(documentLibrary, SITE_ID);
+        documentLibrary.getDocument(documentName)
+            .declareVersionAsRecord();
+
+        // View the unfiled records.
+        openPage(filePlan, RM_SITE_ID,
+                 createPathFrom("documentlibrary#filter=unfiledRecords&page=1"));
+        String classificationLevel = filePlan
+                    .getList()
+                    .getByPartialName(documentName)
+                    .getBannerText(ContentBanner.CLASSIFICATION);
+        assertEquals("Derived record should be classified.",
+                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
+                     classificationLevel);
     }
 
     /** Create a classified document in the site. */
