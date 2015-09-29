@@ -21,6 +21,7 @@ package org.alfresco.po.share.browse.documentlibrary;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
+import org.alfresco.po.rm.dialog.UploadNewVersionDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
 import org.alfresco.po.share.browse.ListItem;
@@ -59,6 +60,9 @@ public class Document extends ListItem implements DocumentActions
 
     @Autowired
     private EditClassifiedContentDialog editClassifiedContentDialog;
+
+    @Autowired
+    private UploadNewVersionDialog uploadNewVersionDialog;
 
     /**
      * Click on declare as record action
@@ -121,5 +125,11 @@ public class Document extends ListItem implements DocumentActions
     public EditClassifiedContentDialog clickOnEditClassification()
     {
         return clickOnAction(DocumentActionsPanel.EDIT_CLASSIFICATION, editClassifiedContentDialog);
+    }
+
+    /** Click on upload new version. */
+    public UploadNewVersionDialog clickOnUploadNewVersion()
+    {
+        return clickOnAction(DocumentActionsPanel.UPLOAD_NEW_VERSION, uploadNewVersionDialog);
     }
 }

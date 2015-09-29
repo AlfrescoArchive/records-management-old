@@ -130,7 +130,7 @@ public class Reclassification extends BaseTest
 
         // To avoid complications with running in different timezones, just check that the date has been set.
         String reclassifyDate = classifiedPropertiesPanel.getClassifiedProperty(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_DATE);
-        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");   
+        checkValidPropertiesPanelDate(reclassifyDate, "reclassified date");
     }
 
     /**
@@ -260,31 +260,31 @@ public class Reclassification extends BaseTest
             .clickOnClassify();
 
         openPage(documentLibrary, SITE_ID);
-      
+
         EditClassifiedContentDialog dialog = (EditClassifiedContentDialog) documentLibrary
             .getDocument(document)
             .clickOnEditClassification();
         // Verify that the Edit Classification page displays the Reclassified By and the Reclassification reason disabled and empty for the document that has never been reclassified.
         assertFalse("The Reclassified By input is not disabled for content that has not been yet reclassified.", dialog.isReclassifiedByEnabled());
-        assertEquals("The Reclassified By input is not empty by default.", "", dialog.getReclassifiedBy());  
+        assertEquals("The Reclassified By input is not empty by default.", "", dialog.getReclassifiedBy());
         assertFalse("The Reclassification Reason input is not disabled for content that has not been yet reclassified.", dialog.isReclassificationReasonEnabled());
         assertEquals("The Reclassification Reason input is not empty by default.", "", dialog.getReclassifiedReason());
-        
+
         // Verify that the Last reclassified by and Last reclassification reason are not displayed.
         assertFalse("The Last Reclassified By input is displayed even if the document has never been reclassified.", dialog.isLastReclassifiedByDisplayed());
         assertFalse("The Last Reclassification reason input is displayed even if the document has never been reclassified.", dialog.isLastReclassificationReasonDisplayed());
-        
+
         // Attempt to reclassify and check the initial value of the "reclassified by" field.
         dialog.setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT);
         String reclassifiedBy = dialog.getReclassifiedBy();
         assertEquals("'Reclassified by' should default to the current user full name.", "Administrator", reclassifiedBy);
-        
+
         // Verify that Reclassified by and Reclassification reason are enabled for editing.
         assertTrue("The Reclassified By input is not editable.", dialog.isReclassifiedByEnabled());
         assertTrue("The Reclassification reason input is not editable.", dialog.isReclassificationReasonEnabled());
 
         dialog.clickOnCancel();
-        
+
         // Verify the Last Reclassified by, Last reclassification date, reason and action are empty in the Document details panel
         documentLibrary.getDocument(document)
             .clickOnLink(classifiedDocumentDetails);
@@ -296,11 +296,11 @@ public class Reclassification extends BaseTest
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
     }
-    
+
     /**
-     * Given that content has been classified and has been reclassified at least once 
-     * When the edit classification dialog is displayed 
-     * The the following properties are displayed as disabled and empty : Reclassified by, Reclassification reason 
+     * Given that content has been classified and has been reclassified at least once
+     * When the edit classification dialog is displayed
+     * The the following properties are displayed as disabled and empty : Reclassified by, Reclassification reason
      * and the properties Last Reclassified by and Last Reclassification reason are editable, populated with values from the previous reclassification
      * When changing the classification value (upgrade/downgrade/declassify)
      * Then the following properties are shown as enabled for editing: Reclassified by, Reclassification reason
@@ -315,14 +315,14 @@ public class Reclassification extends BaseTest
        dependsOnMethods = "setUpReclassificationData"
     )
     @AlfrescoTest(jira="RM-2541,RM-2542,RM-2543")
-    public void checkLastReclassificationProperties() throws Exception 
+    public void checkLastReclassificationProperties() throws Exception
     {
         String firstReclassificationUser = "Reclassifier User Name 1";
         String firstReclassificationReason = "Reclassification Reason 1";
         String secondReclassificationUser = "Reclassifier User Name 2";
-        String secondReclassificationReason = "Reclassification Reason 2";     
-        
-     // Upload document 
+        String secondReclassificationReason = "Reclassification Reason 2";
+
+     // Upload document
         String document = "checkLastReclassificationProperties document";
         openPage(documentLibrary, SITE_ID);
         contentService.createDocument(getAdminName(), getAdminPassword(), SITE_ID, DocumentType.TEXT_PLAIN, document, TEST_CONTENT);
@@ -336,29 +336,29 @@ public class Reclassification extends BaseTest
             .setClassifiedBy(CLASSIFIED_BY)
             .addReason(CLASSIFICATION_REASON)
             .clickOnClassify();
-        
+
         // Reclassify it for the first time
         openPage(documentLibrary, SITE_ID);
         documentLibrary.getDocument(document)
             .clickOnEditClassification().setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT)
             .setReclassifiedBy(firstReclassificationUser).setReclassifyReason(firstReclassificationReason).clickOnEdit();
-      
+
         EditClassifiedContentDialog reopenedDialog = documentLibrary
             .getDocument(document)
             .clickOnEditClassification();
-        
+
         // Verify that the Reclassified by, Reclassification reason are displayed as disabled and empty
         assertFalse("The Reclassified By field is enabled for editing.", reopenedDialog.isReclassifiedByEnabled());
-        assertFalse("The Reclassification reason is enabled for editing.", reopenedDialog.isReclassificationReasonEnabled());      
+        assertFalse("The Reclassification reason is enabled for editing.", reopenedDialog.isReclassificationReasonEnabled());
         assertEquals("The Reclassified By field is not empty.", "", reopenedDialog.getReclassifiedBy());
         assertEquals("The Reclassification reason is not empty.", "", reopenedDialog.getReclassifiedReason());
-        
+
         // Verify the properties Last Reclassified by and Last Reclassification reason are editable, populated with values from the previous reclassification
         assertTrue("The Last Reclassified By field is not enabled for editing.", reopenedDialog.isLastReclassifiedByEnabled());
-        assertTrue("The Last Reclassification reason is not enabled for editing.", reopenedDialog.isLastReclassificationReasonEnabled());     
+        assertTrue("The Last Reclassification reason is not enabled for editing.", reopenedDialog.isLastReclassificationReasonEnabled());
         assertEquals(firstReclassificationUser, reopenedDialog.getLastReclassifiedBy());
         assertEquals(firstReclassificationReason, reopenedDialog.getLastReclassifiedReason());
-        
+
         reopenedDialog.clickOnCancel();
         // Check the Last Reclassification fields in the properties panel.
         documentLibrary.getDocument(document)
@@ -369,23 +369,23 @@ public class Reclassification extends BaseTest
         expectedFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
         expectedFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
-        
+
         openPage(documentLibrary, SITE_ID);
-        
+
         // Change the last reclassification data, verify the values are updated
         EditClassifiedContentDialog updatedDialog = documentLibrary
             .getDocument(document)
-            .clickOnEditClassification();     
-        // Change the Reclassified By and Reclassification reason values 
+            .clickOnEditClassification();
+        // Change the Reclassified By and Reclassification reason values
         updatedDialog.setLevel(SECRET_CLASSIFICATION_LEVEL_TEXT).setReclassifiedBy("not saved user").setReclassifyReason("not saved reason");
         // Change the security level back to the original one and verify that the Reclassified By and Reclassification reason fields are disabled
         updatedDialog.setLevel(TOP_SECRET_CLASSIFICATION_LEVEL_TEXT);
         assertFalse("The Reclassified By field is enabled for editing after changing back the security level to the original one.", updatedDialog.isReclassifiedByEnabled());
-        assertFalse("The Reclassification reason is enabled for editing after changing back the security level to the original one.", updatedDialog.isReclassificationReasonEnabled()); 
-        
+        assertFalse("The Reclassification reason is enabled for editing after changing back the security level to the original one.", updatedDialog.isReclassificationReasonEnabled());
+
         // Change the Last Reclassification fields values
         updatedDialog.setLastReclassifiedBy(secondReclassificationUser).setLastReclassifyReason(secondReclassificationReason).clickOnEdit();
-       
+
         // Check the Last Reclassification fields have the values set above, not the ones from Reclassified By and Reclassification reason that were in the dialog before save
         documentLibrary.getDocument(document)
             .clickOnLink(classifiedDocumentDetails);
@@ -395,26 +395,26 @@ public class Reclassification extends BaseTest
         expectedLastClassificationFields.put(ClassifiedPropertiesPanelField.LAST_RECLASSIFICATION_ACTION, "Upgrade");
         expectedLastClassificationFields.forEach(
                     (field, value) -> assertEquals(value, classifiedPropertiesPanel.getClassifiedProperty(field)));
-        
+
         openPage(documentLibrary, SITE_ID);
-        
+
         // Change the security clearance level
         EditClassifiedContentDialog dialog = documentLibrary
             .getDocument(document)
             .clickOnEditClassification();
         dialog.setLevel(UNCLASSIFIED_CLASSIFICATION_LEVEL_TEXT);
-        
+
         // Verify that the Reclassified By and Reclassification Reason are shown as enabled for editing
         assertTrue("The Reclassified By field is not enabled for editing after changing the security clearance level.", dialog.isReclassifiedByEnabled());
         assertEquals("The Reclassified By value does not default to the current user's full name.", "Administrator", dialog.getReclassifiedBy());
         assertTrue("The Reclassification Reason is not enabled for editing after changing the security clearance level.", dialog.isReclassificationReasonEnabled());
-        
+
         // Verify that the Last Reclassified By and Last Reclassification Reason values are the ones previously saved.
         assertEquals("The Last Reclassified By value is not the one previously stored.", secondReclassificationUser, dialog.getLastReclassifiedBy());
         assertEquals("The Last Reclassification Reason is not the one previously stored.", secondReclassificationReason, dialog.getLastReclassifiedReason());
 
     }
-    
+
 
     /**
      * Validate that a date is correctly displayed in the properties panel (i.e. is similar to "Wed 5 Aug 2015").
@@ -435,7 +435,7 @@ public class Reclassification extends BaseTest
             fail("Invalid " + dateName + " found: " + dateString);
         }
     }
-    
+
     /** Remove the test site. */
     @AfterSuite(alwaysRun=true)
     public void tearDownReclassificationData() throws Exception
@@ -446,5 +446,5 @@ public class Reclassification extends BaseTest
             siteService.delete(getAdminName(), getAdminPassword(), "", SITE_ID);
         }
     }
-    
+
 }

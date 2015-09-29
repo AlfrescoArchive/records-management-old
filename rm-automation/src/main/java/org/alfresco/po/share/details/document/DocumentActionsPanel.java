@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 public class DocumentActionsPanel extends ActionPanel implements DocumentActions
 {
     @Autowired private ClassifyContentDialog classifyContentDialog;
-    
+
     @FindBy(css = "div.document-actions h2")
     private WebElement clickableTitle;
 
@@ -46,7 +46,7 @@ public class DocumentActionsPanel extends ActionPanel implements DocumentActions
     {
         return clickableTitle;
     }
-    
+
     /**
      * Click on classify content
      */

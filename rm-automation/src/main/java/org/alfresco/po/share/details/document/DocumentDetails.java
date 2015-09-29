@@ -38,6 +38,9 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     @Autowired
     @RenderableChild
     private SocialActions socialActions;
+    @Autowired
+    @RenderableChild
+    private VersionHistory versionHistory;
 
     public DocumentActionsPanel getDocumentActionsPanel()
     {
@@ -47,5 +50,10 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     public SocialActions getSocialActions()
     {
         return socialActions;
+    }
+
+    public VersionHistory getVersionHistory()
+    {
+        return versionHistory;
     }
 }

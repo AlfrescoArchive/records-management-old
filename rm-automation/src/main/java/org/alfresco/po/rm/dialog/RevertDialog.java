@@ -16,39 +16,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.po.share.details.document;
+package org.alfresco.po.rm.dialog;
 
-import org.alfresco.po.common.renderable.Renderable;
-import org.alfresco.po.common.util.Utils;
-import org.openqa.selenium.By;
+import org.alfresco.po.common.Dialog;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.stereotype.Component;
 
 /**
- * The social actions available at the top of the document details page and underneath each document on the document
- * library page.
+ * The dialog that appears when a version is selected to revert to.
  *
- * @author tpage
+ * @author Tom Page
  * @since 2.4.a
  */
 @Component
-public class SocialActions extends Renderable
+public class RevertDialog extends Dialog
 {
-    private static final String QUICKSHARE_ACTION_SELECTOR = ".node-social a.quickshare-action";
+    @FindBy(css="#alfresco-revertVersion-instance-ok-button-button")
+    private WebElement okButton;
+    @FindBy(css="#alfresco-revertVersion-instance-cancel-button-button")
+    private WebElement revertButton;
 
-    @FindBy(css = QUICKSHARE_ACTION_SELECTOR)
-    private WebElement shareDocumentLink;
-
-    /** Share the document. */
-    public SocialActions clickShareDocument()
+    /** Click the ok button on the revert dialog. */
+    public void clickOK()
     {
-        shareDocumentLink.click();
-        return this;
-    }
-
-    public boolean isShareDocumentAvailable()
-    {
-        return Utils.elementExists(By.cssSelector(QUICKSHARE_ACTION_SELECTOR));
+        okButton.click();
     }
 }
