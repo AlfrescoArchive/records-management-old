@@ -63,4 +63,14 @@ public class VersionHistory extends Renderable
             .ifPresent(row -> row.findElement(REVERT_BUTTON_SELECTOR).click());
         return revertDialog.render();
     }
+
+    /**
+     * Count the number of versions of a document.
+     *
+     * @return The number of versions of the current document.
+     */
+    public int countVersions()
+    {
+        return versionList.size();
+    }
 }

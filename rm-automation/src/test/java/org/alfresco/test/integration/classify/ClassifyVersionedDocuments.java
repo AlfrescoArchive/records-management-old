@@ -74,7 +74,7 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
     @Test
     (
         groups = { "integration" },
-        description = "Verify classify action is available",
+        description = "Reverting to classified version is still classified",
         dependsOnMethods = "setUpSite"
     )
     @AlfrescoTest(jira="RM-2606")
@@ -100,11 +100,59 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
             .revertToVersion("1.0")
             .clickOK();
 
+        // Check the document is still classified.
         openPage(documentLibrary, SITE_ID);
         document = documentLibrary.getDocument(documentName);
         assertEquals("Expected the document to remain classified after reverting to version 1.0.",
                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                     document.getBannerText(ContentBanner.CLASSIFICATION));
+    }
+
+    /**
+     * Classify a document, upload a new version and then edit the classification level. Check the document has two
+     * versions and that the current version is classified with the edited level.
+     */
+    @Test
+    (
+        groups = { "integration" },
+        description = "Editing classification of versioned document",
+        dependsOnMethods = "setUpSite"
+    )
+    @AlfrescoTest(jira="RM-2606")
+    public void editClassificationOfVersionedDocument() throws Exception
+    {
+        final String documentName = "editClassificationOfVersionedDocument Doc";
+
+        openPage(documentLibrary, SITE_ID);
+        createClassifiedDocument(documentName, SECRET_CLASSIFICATION_LEVEL_TEXT);
+
+        openPage(documentLibrary, SITE_ID);
+        documentLibrary.getDocument(documentName)
+            .clickOnUploadNewVersion()
+            .uploadFakeDocument();
+
+        Document document = documentLibrary.getDocument(documentName);
+        assertEquals("Expected the document to remain classified after new version is created.",
+                    SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
+                    document.getBannerText(ContentBanner.CLASSIFICATION));
+
+        document.clickOnEditClassification()
+            .setLevel(CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT)
+            .setReclassifyReason(REASON)
+            .clickOnEdit();
+
+        openPage(documentLibrary, SITE_ID);
+        document = documentLibrary.getDocument(documentName);
+        document.clickOnLink(documentDetails);
+
+        // Check there are exactly two versions of the document.
+        assertEquals("Expected exactly two versions of the document to exist.",
+                     2, documentDetails.getVersionHistory().countVersions());
+
+        // Check editing the classification level succeeded.
+        assertEquals("Expected the document to remain classified after reverting to version 1.0.",
+                    CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
+                    documentDetails.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
     /** Create a classified document in the site. */
