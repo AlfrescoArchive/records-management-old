@@ -19,12 +19,14 @@
 package org.alfresco.test.integration.classify;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
+import org.alfresco.po.share.browse.ListItem;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.browse.documentlibrary.Document;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
@@ -105,7 +107,9 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
         // Check the document is still classified.
         openPage(documentLibrary, SITE_ID);
         document = documentLibrary.getDocument(documentName);
-        assertEquals("Expected the document to remain classified after reverting to version 1.0.",
+        assertTrue("Document should have a classification banner after reverting to version 1.0.",
+                    document.hasBanner(ContentBanner.CLASSIFICATION));
+        assertEquals("Expected the classification to remain at Secret after reverting to version 1.0.",
                     SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                     document.getBannerText(ContentBanner.CLASSIFICATION));
     }
@@ -152,6 +156,8 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
                      2, documentDetails.getVersionHistory().countVersions());
 
         // Check editing the classification level succeeded.
+        assertTrue("Expected derived record to be classified.",
+                    documentDetails.hasBanner(ContentBanner.CLASSIFICATION));
         assertEquals("Expected the document to remain classified after reverting to version 1.0.",
                     CONFIDENTIAL_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
                     documentDetails.getBannerText(ContentBanner.CLASSIFICATION));
@@ -182,13 +188,12 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
         // View the unfiled records.
         openPage(filePlan, RM_SITE_ID,
                  createPathFrom("documentlibrary#filter=unfiledRecords&page=1"));
-        String classificationLevel = filePlan
-                    .getList()
-                    .getByPartialName(documentName)
-                    .getBannerText(ContentBanner.CLASSIFICATION);
+        ListItem unfiledRecord = filePlan.getList().getByPartialName(documentName);
+        assertTrue("Expected derived record to be classified.",
+                   unfiledRecord.hasBanner(ContentBanner.CLASSIFICATION));
         assertEquals("Derived record should be classified.",
                      SECRET_CLASSIFICATION_LEVEL_TEXT.toUpperCase(),
-                     classificationLevel);
+                     unfiledRecord.getBannerText(ContentBanner.CLASSIFICATION));
     }
 
     /** Create a classified document in the site. */

@@ -36,7 +36,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-
 import ru.yandex.qatools.htmlelements.element.Link;
 
 /**
@@ -339,8 +338,8 @@ public abstract class ListItem
         return renderable.render();
     }
 
-    private Link getActionLinkFromDetailsPage(String actionName){
-
+    private Link getActionLinkFromDetailsPage(String actionName)
+    {
         Link result = null;
         try
         {
@@ -494,5 +493,16 @@ public abstract class ListItem
     public String getBannerText(ContentBanner banner) throws NoSuchElementException
     {
         return Utils.waitForFind(row, banner.getSelector()).getText();
+    }
+
+    /**
+     * Check if a given banner is present.
+     *
+     * @param The type of banner to look for.
+     * @return true if the banner exists.
+     */
+    public boolean hasBanner(ContentBanner banner)
+    {
+        return Utils.elementExists(row, banner.getSelector());
     }
 }

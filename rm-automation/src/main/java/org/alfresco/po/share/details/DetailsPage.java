@@ -119,4 +119,15 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
     {
         return Utils.getWebDriver().findElement(banner.getSelector()).getText();
     }
+
+    /**
+     * Check if a given banner is present.
+     *
+     * @param The type of banner to look for.
+     * @return true if the banner exists.
+     */
+    public boolean hasBanner(ContentBanner banner)
+    {
+        return Utils.elementExists(banner.getSelector());
+    }
 }

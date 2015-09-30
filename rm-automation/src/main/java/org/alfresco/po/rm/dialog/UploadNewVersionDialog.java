@@ -20,14 +20,12 @@ package org.alfresco.po.rm.dialog;
 
 import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.UUID;
 
 import org.alfresco.po.common.Dialog;
 import org.alfresco.po.common.Page;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -67,22 +65,10 @@ public class UploadNewVersionDialog extends Dialog
         return SharePage.getLastRenderedPage().render();
     }
 
-    /**
-     * Upload a new version of a document.
-     *
-     * @throws IOException If there is a problem creating the temporary file.
-     */
-    public Page uploadFakeDocument() throws IOException
+    /** Upload a new version of a document. */
+    public Page uploadFakeDocument()
     {
-        // TODO Determine if this works on the server without the LocalFileDetector.
-        //LocalFileDetector localFileDetector = new LocalFileDetector();
-        File localFile = File.createTempFile(UUID.randomUUID().toString(), ".txt");
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(localFile)))
-        {
-            bufferedWriter.write("Document contents");
-        }
-        //File file = localFileDetector.getLocalFile(localFile.getAbsolutePath());
-        //((RemoteWebDriver) webDriver).setFileDetector(localFileDetector);
+        File localFile = Utils.createTempFile(UUID.randomUUID().toString());
         return this.selectFile(localFile.getAbsolutePath())
                    .upload();
     }
