@@ -132,6 +132,7 @@ public class ContentClassificationDialogTests extends BaseTest
         // Classify the content.
         classifyContentDialog.clickOnClassify();
 
+        openPage(documentLibrary, COLLAB_SITE_ID);
         // Check that the classify content action is no longer available.
         String[] clickableActions = documentLibrary.getDocument(SECRET_DOCUMENT).getClickableActions();
         assertFalse("The classify action should no longer be available.",
