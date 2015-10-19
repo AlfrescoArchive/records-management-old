@@ -25,7 +25,6 @@ import org.alfresco.dataprep.CMISUtil.DocumentType;
 import org.alfresco.dataprep.ContentService;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.share.browse.ListItem;
 import org.alfresco.po.share.browse.documentlibrary.ContentBanner;
 import org.alfresco.po.share.browse.documentlibrary.Document;
@@ -53,7 +52,6 @@ public class ClassifyVersionedDocuments extends BaseTest implements TestData
     /* Page objects */
     @Autowired private DocumentLibrary documentLibrary;
     @Autowired private DocumentDetails documentDetails;
-    @Autowired private ClassifyContentDialog classifyContentDialog;
     @Autowired private FilePlan filePlan;
 
     /* Data prep services */
