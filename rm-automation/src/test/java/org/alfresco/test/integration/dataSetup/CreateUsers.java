@@ -88,6 +88,16 @@ public class CreateUsers extends BaseTest
     {
         userService.create(getAdminName(), getAdminPassword(), SPACE_USER, DEFAULT_PASSWORD, DEFAULT_EMAIL, SPACE_USER, SPACE_USER);
     }
+    
+    @Test
+    (
+        groups = { "integration", "GROUP_ANOTHER_ADMIN_EXISTS"},
+        description = "Create users"
+    )
+    public void createAnotherAdmin()
+    {
+        userService.create(getAdminName(), getAdminPassword(), ANOTHER_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, ANOTHER_ADMIN, ANOTHER_ADMIN);
+    }
 
     /** delete users on test teardown */
     @AfterSuite(alwaysRun = true)
@@ -100,6 +110,10 @@ public class CreateUsers extends BaseTest
         if (userService.userExists(getAdminName(), getAdminPassword(), UNCLEARED_USER))
         {
             userService.delete(getAdminName(), getAdminPassword(), UNCLEARED_USER);
+        }
+        if (userService.userExists(getAdminName(), getAdminPassword(), ANOTHER_ADMIN))
+        {
+            userService.delete(getAdminName(), getAdminPassword(), ANOTHER_ADMIN);
         }
         // TODO This string replace should be removed when updating to dataprep 1.6+. A fix was added here:
         // https://github.com/AlfrescoTestAutomation/dataprep/commit/89a2db6f7d5a471b3f42ad8461b3021cc0ac9614

@@ -45,15 +45,20 @@ public class UserProfilePage extends ConsolePage
     private static final String PAGE_URL = "/page/console/admin-console/users#state=panel%3Dview%26userid%3D{0}";
     private static final By USERNAME_SELECTOR = By.cssSelector("[id$='default-view-username']");
     private static final By BACK_BUTTON_SELECTOR = By.cssSelector("button[id$='default-goback-button-button']");
+    private static final By EDIT_BUTTON_SELECTOR = By.cssSelector("button[id$='edituser-button-button']");
 
     /** confirmation prompt */
     @Autowired
     private ConfirmationPrompt confirmationPrompt;
-
+    
+    /** Edit user page */
+    @Autowired
+    private EditUserPage editUserPage;
+    
     /** delete user button */
     @FindBy(css="button[id$='deleteuser-button-button']")
     private Button deleteUserButton;
-
+    
     /**
      * @see org.alfresco.po.share.console.ConsolePage#getPageURL(java.lang.String[])
      */
@@ -92,6 +97,17 @@ public class UserProfilePage extends ConsolePage
     {
         deleteUserButton.click();
         return confirmationPrompt.render();
+    }
+    
+    /**
+     * Click on edit user
+     */
+    public EditUserPage clickOnEditUser()
+    {
+        WebElement editButton = Utils.waitForVisibilityOf(EDIT_BUTTON_SELECTOR);
+        Utils.mouseOver(editButton);
+        editButton.click();
+        return editUserPage.render();
     }
 
     /**

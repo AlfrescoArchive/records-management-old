@@ -55,6 +55,7 @@ public class SecurityClearancePage extends ConsolePage
     /** selectors */
     private static final By ROWS = By.cssSelector("tbody[id$='ITEMS'] tr[id*='Row']");
     private static final By SECURITY_CLEARANCE_SELECTOR = By.cssSelector(".control span[role=option]");
+    private static final By FIXED_SECURITY_CLEARANCE = By.cssSelector("span[id^='FIXED_CLEARANCE_ITEM']");
     private static final By PROFILE_LINK_SELECTOR = By.cssSelector(".security-clearance-user-name .inner");
     private static final By USER_NAME_SELECTOR = By.cssSelector(".security-clearance-user-name .value");
     private static final By VISIBLE_CLEARANCE_OPTIONS_SELECTOR = By.cssSelector("div:not([style*='display: none']).dijitMenuPopup");
@@ -445,5 +446,21 @@ public class SecurityClearancePage extends ConsolePage
     public boolean isUsersClearanceModifiable(String userName)
     {
         return !getUserRow(userName).findElements(SECURITY_CLEARANCE_SELECTOR).isEmpty();
+    }
+    
+    /**
+     * Get administrators security clearances
+     *
+     * @param userName The user's username.
+     * @return The security clearance of the specified user
+     */
+    public String getFixedClearance(String userName)
+    {
+        WebElement securityClearance = getUserRow(userName).findElement(FIXED_SECURITY_CLEARANCE);
+        if (securityClearance != null) 
+        {
+            return securityClearance.getText();
+        }
+        return "";
     }
 }

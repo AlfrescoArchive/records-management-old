@@ -57,7 +57,13 @@ public interface TestData
      * <p>"GROUP_SPACE_USER_EXISTS" The SPACE_USER has been created.
      */
     public static final String SPACE_USER = "space user";
-     
+    
+    /**
+     * A user with ALFRESCO_ADMINISTRATORS role.
+     * <p>"GROUP_ANOTHER_ADMIN_EXISTS" The ANOTHER_ADMIN user has been created.
+     */
+    public static final String ANOTHER_ADMIN = "another_admin";
+    
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";
     public static final String DEFAULT_EMAIL = "default@alfresco.com";

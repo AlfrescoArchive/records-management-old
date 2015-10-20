@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.console.users.EditUserPage;
 import org.alfresco.po.share.console.users.SecurityClearancePage;
 import org.alfresco.po.share.console.users.UserProfilePage;
 import org.alfresco.po.share.page.SharePageNavigation;
@@ -52,6 +53,8 @@ public class SecurityClearanceTest extends BaseTest
     private SharePageNavigation sharePageNavigation;
     @Autowired
     private UserProfilePage userProfilePage;
+    @Autowired
+    private EditUserPage editUserPage;
 
     /**
      * Check that the displayed users are ordered correctly by default.
@@ -118,19 +121,43 @@ public class SecurityClearanceTest extends BaseTest
 
     /**
      * When I view the classification security clearances
-     * Then I am not able to edit the admin's security clearance
+     * Then I am not able to edit the security clearance of admin and of users with ALFRESCO_ADMINISTRATORS role
+     * And the default security clearance of admin user is Top Secret
+     * And the default security clearance of users with ALFRESCO_ADMINISTRATORS role is No Clearance
      */
     @Test
     (
-        groups = { "integration" },
-        description = "Check the admin user is not found by using the filter",
-        dependsOnGroups = { }
+        groups = { "integration"},
+        description = "Check the admin security clearance can not be modified.",
+        dependsOnGroups = {"GROUP_ANOTHER_ADMIN_EXISTS"}
     )
-    public void adminIsNotShown()
+    @AlfrescoTest(jira = "RM-2394")
+    public void adminSecurityClearanceIsNotEditable()
     {
         openPage(securityClearancePage);
-        assertFalse("There should not be a dropdown to set the admin's security clearance.",
+        
+        // Click on the another_admin user
+        securityClearancePage.setNameFilter("another_admin");
+        securityClearancePage.clickOnUser("another_admin");
+
+        // Check we're on the right profile page
+        assertEquals(userProfilePage.getUserName(), "another_admin");
+        userProfilePage.clickOnEditUser();
+        // Add the another_admin user to ALFRESCO_ADMINISTRATORS role
+        editUserPage.addUserToGroup("ALFRESCO_ADMINISTRATORS");
+       
+        // Navigate to Security Clearance page
+        openPage(securityClearancePage);
+        // Check the admin's security clearance can not be edited
+        assertFalse("There should not be a dropdown to edit the admin's security clearance.",
                     securityClearancePage.isUsersClearanceModifiable("admin"));
+        // Check the default security clearance is Top Secret for admin
+        assertEquals("Top Secret", securityClearancePage.getFixedClearance("admin"));
+        // Check the user with ALFRESCO_ADMINISTRATORS role can not have its security clearance edited
+        assertFalse("There should not be a dropdown to set the another_admin's security clearance.",
+                    securityClearancePage.isUsersClearanceModifiable("another_admin"));
+        // Check the default security clearance is No Clearance for users with ALFRESCO_ADMINISTRATORS role
+        assertEquals("No Clearance", securityClearancePage.getFixedClearance("another_admin"));
     }
 
     /**
