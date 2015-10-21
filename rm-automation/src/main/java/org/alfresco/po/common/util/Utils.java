@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -467,4 +468,23 @@ public final class Utils implements ApplicationContextAware
         }
         throw new RuntimeException("Tried " + count + " times without successful completion.");
     }
+    
+    /**
+     * Get the visible element from the list of elements that can be retrieved with the same selector
+     * @param selector used to find elements
+     * @return the visible element
+     */
+    public static WebElement getVisibleElement(By selector)
+    {
+        List<WebElement> sameSelectorElements = Utils.getWebDriver().findElements(selector);
+        
+        for (WebElement element : sameSelectorElements) 
+        {
+            if (element.isDisplayed()) 
+            {
+                return element;
+            }
+        }
+        return null;
+    } 
 }

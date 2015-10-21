@@ -18,14 +18,15 @@
  */
 package org.alfresco.po.share.console.users;
 
+import static org.alfresco.po.common.util.Utils.*;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements;
+
 import java.util.List;
-import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.console.ConsolePage;
 import org.alfresco.po.share.page.Message;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -48,6 +49,9 @@ public class EditUserPage extends ConsolePage
     /** css selectors */
     private static final By SEARCH_GROUP_INPUTS = By.cssSelector("input[id$='groupfinder-search-text']");
     private static final By SEARCH_GROUP_BUTTONS = By.cssSelector("button[id$='groupfinder-group-search-button-button']");
+    private static final By FOUND_GROUP_NAME = By.cssSelector("td *[class='itemname']");
+    private static final By ADD_GROUP_BUTTON = By.cssSelector("td[class*='actions'] button");
+    private static final By SELECTED_GROUP = By.cssSelector("div[class='groupselection-row'] span");
     /** the groups found after search */        
     @FindBy(css="tbody[class*='data'] tr")
     private List<WebElement> foundGroups;
@@ -89,7 +93,7 @@ public class EditUserPage extends ConsolePage
      */
     public void addUserToGroup(String groupName)
     {
-        Utils.waitForVisibilityOf(saveChangesButton);
+        waitForVisibilityOf(saveChangesButton);
         WebElement searchGroupInput = getVisibleElement(SEARCH_GROUP_INPUTS);
         WebElement searchButton = getVisibleElement(SEARCH_GROUP_BUTTONS);
     
@@ -98,35 +102,20 @@ public class EditUserPage extends ConsolePage
             searchGroupInput.sendKeys(groupName);
             searchButton.click();
 
-            Utils.waitFor(ExpectedConditions.visibilityOfAllElements(foundGroups));
+            waitFor(visibilityOfAllElements(foundGroups));
 
             for (WebElement groupRow : foundGroups) 
             {
-                if (groupRow.findElement(By.cssSelector("td *[class='itemname']")).getText().equals(groupName)) 
+                // if the group is one of the found ones
+                if (groupRow.findElement(FOUND_GROUP_NAME).getText().equals(groupName)) 
                 {
-                    groupRow.findElement(By.cssSelector("td[class*='actions'] button")).click();
+                // click on Add button to select the group    
+                    groupRow.findElement(ADD_GROUP_BUTTON).click();
                 }
             }
-            Utils.waitForVisibilityOf(By.cssSelector("div[class='groupselection-row'] span"));
+            // wait for the visibility of the added group as selected in the bottom 
+            waitForVisibilityOf(SELECTED_GROUP);
             clickOnSaveChanges();
         }
-    }
-    /**
-     * Get the visible element from the list of elements that can be retrieved with the same selector
-     * @param selector used to find elements
-     * @return the visible element
-     */
-    private WebElement getVisibleElement(By selector)
-    {
-        List<WebElement> sameSelectorElements = Utils.getWebDriver().findElements(selector);
-        
-        for (WebElement element : sameSelectorElements) 
-        {
-            if (element.isDisplayed()) 
-            {
-                return element;
-            }
-        }
-        return null;
-    }    
+    }   
 }
