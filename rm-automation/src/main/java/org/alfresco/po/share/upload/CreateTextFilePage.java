@@ -51,6 +51,7 @@ public class CreateTextFilePage
         Utils.waitForVisibilityOf(By.cssSelector("input[id*='default_prop_cm_name']")).sendKeys(fileName);
         Utils.waitForVisibilityOf(By.cssSelector("textarea[id*='default_prop_cm_content']")).sendKeys(content);
         Utils.getWebDriver().findElement(By.cssSelector("button[id*='default-form-submit-button']")).click();
+        Utils.waitForVisibilityOf(By.cssSelector(".textLayer"));
     }        
     
     

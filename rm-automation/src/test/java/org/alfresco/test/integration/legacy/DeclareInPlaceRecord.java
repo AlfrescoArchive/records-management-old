@@ -19,30 +19,7 @@
 
 package org.alfresco.test.integration.legacy;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.alfresco.dataprep.RecordsManagementService;
-import org.alfresco.dataprep.UserService;
-import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
-import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
-import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
-import org.alfresco.po.share.site.CollaborationSiteDashboard;
-import org.alfresco.po.share.site.create.SiteType;
-import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
-import org.alfresco.test.TestData;
-import static org.alfresco.test.TestData.COLLAB_SITE;
-import static org.alfresco.test.TestData.DEFAULT_EMAIL;
-import static org.alfresco.test.TestData.DEFAULT_PASSWORD;
-import static org.alfresco.test.TestData.DESCRIPTION;
-import static org.alfresco.test.TestData.FIRST_NAME;
-import static org.alfresco.test.TestData.LAST_NAME;
-import static org.alfresco.test.TestData.RM_ADMIN;
-import static org.alfresco.test.TestData.RM_SITE_ID;
-import static org.alfresco.test.TestData.SANITY_COLLAB_SITE_ID;
-import org.junit.Assert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 /**
@@ -53,38 +30,14 @@ public class DeclareInPlaceRecord extends BaseTest
 {   
     String uploadedInplaceRecord = "in-place record";
     String createdInplaceRecord = "created in-place record";
-  /** my sites dashlet */
-    @Autowired
-    private MySitesDashlet mySitesDashlet;
-   
-    /** collab site dashboard */
-    @Autowired
-    private CollaborationSiteDashboard siteDashboard;
-    
-    /** file plan browse view*/
-    @Autowired
-    private FilePlan filePlan;
 
-    /** document library browse view */
-    @Autowired
-    private DocumentLibrary documentLibrary;
-
-    /** unfiled records browse view */
-    @Autowired
-    private UnfiledRecords unfiledRecords;
-    
-     /** user service */
-    @Autowired private UserService userService;
-    
-
-    @Test
-    (
+    @Test(
             groups = {"legacy"},
             dependsOnGroups = {"preconditionForSanity"}
     )
     public void declareInplaceRecord() 
     {
-        
+
     }        
 
    

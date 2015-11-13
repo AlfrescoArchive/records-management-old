@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2005-2015 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco
+ *
+ * Alfresco is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.alfresco.test.integration.legacy;
@@ -33,15 +46,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 /**
- *
- * @author Oana
+ * Class to cover the precondition creation for all the tests in legacy module
+ * 
+ * @author Oana Nechiforescu
  */
 public class SanityPrecondition extends BaseTest
-{
-     
+{   
     String uploadedInplaceRecord = "in-place record";
     String createdInplaceRecord = "created in-place record";
-  /** my sites dashlet */
+    
+    /** data prep services */
+    @Autowired private RecordsManagementService service;
+    @Autowired private UserService userService;
+    
+    /** my sites dashlet */
     @Autowired
     private MySitesDashlet mySitesDashlet;
    
@@ -61,76 +79,70 @@ public class SanityPrecondition extends BaseTest
     @Autowired
     private UnfiledRecords unfiledRecords;
     
-     /** user service */
-    @Autowired private UserService userService;
-    
-       
-
-/**
- * Method to be used to add precondition for DeclareInPlaceRecord Test
- * see Preconditions from https://issues.alfresco.com/jira/browse/RM-2366
- */    
-    
- @Test
- (
-         groups={"preconditionForSanity"}
- )
-public void prepareEnvironmentForDeclareInPlaceRecord()
-{
-    createRMSiteIfDoesNotExist();
-    createCollaborationSiteIfDoesNotExist();
-    uploadDocumentToCollaborationSite(uploadedInplaceRecord);
-    createDocumentInCollaborationSite(createdInplaceRecord, "default content");
-    createRMAdminIfNotExists();
-    inviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
-}
-
- public void createRMSiteIfDoesNotExist()
+    /**
+     * Method to be used to add precondition for DeclareInPlaceRecord Test
+     * see Preconditions from https://issues.alfresco.com/jira/browse/RM-2366
+     */    
+    @Test(
+            groups = {"preconditionForSanity"}
+    )
+    public void prepareEnvironmentForDeclareInPlaceRecord() 
     {
-        openPage(userDashboardPage);
-
-        // check for existence of site
-        if (!mySitesDashlet.siteExists(RM_SITE_ID))
-        {
-        // create RM site
-        mySitesDashlet
-            .clickOnCreateSite()
-            .setSiteType(SiteType.RM_SITE)
-            .clickOnOk();
-
-        // navigate back to the user dashboard
-        openPage(userDashboardPage);
-
-        // ensure the rm site exists
-        Assert.assertTrue(mySitesDashlet.siteExists(RM_SITE_ID));
-
-        // enter the rm site via the my sites dashlet
-        mySitesDashlet.clickOnRMSite(RM_SITE_ID);          
-        }
-    }  
-
-    public void createCollaborationSiteIfDoesNotExist()
-    {
-         openPage(userDashboardPage);
-         
-         if(!mySitesDashlet.siteExists(COLLAB_SANITY_ID))
-         {     
-         // create collaboration site
-             mySitesDashlet.clickOnCreateSite()
-            .setSiteName(COLLAB_SITE)
-            .setSiteURL(COLLAB_SANITY_ID)
-            .setSiteDescription(DESCRIPTION)
-            .clickOnOk(); 
-             
-         // navigate back to the user dashboard
-        openPage(userDashboardPage);
-
-        // ensure the collab site exists
-        Assert.assertTrue(mySitesDashlet.siteExists(COLLAB_SANITY_ID));      
-    } 
+        createRMSiteIfDoesNotExist();
+        createCollaborationSiteIfDoesNotExist();
+        uploadDocumentToCollaborationSite(uploadedInplaceRecord);
+        createDocumentInCollaborationSite(createdInplaceRecord, "default content");
+        createRMAdminIfNotExists();
+        createAndInviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
     }
-    
-    public void uploadDocumentToCollaborationSite(String documentName)
+
+    public void createRMSiteIfDoesNotExist()
+    {
+        openPage(userDashboardPage);
+
+        // check for existence of RM site
+        if (!mySitesDashlet.siteExists(RM_SITE_ID)) 
+        {
+            // create RM site
+            mySitesDashlet
+                    .clickOnCreateSite()
+                    .setSiteType(SiteType.RM_SITE)
+                    .clickOnOk();
+
+            // navigate back to the user dashboard
+            openPage(userDashboardPage);
+
+            // ensure the rm site exists
+            Assert.assertTrue(mySitesDashlet.siteExists(RM_SITE_ID));
+
+            // enter the rm site via the my sites dashlet
+            mySitesDashlet.clickOnRMSite(RM_SITE_ID);
+        }
+    }
+
+    public void createCollaborationSiteIfDoesNotExist() 
+    {  
+        openPage(userDashboardPage);
+
+        // check for existence of Collaboration site
+        if (!mySitesDashlet.siteExists(COLLAB_SANITY_ID)) 
+        {
+            // create collaboration site
+            mySitesDashlet.clickOnCreateSite()
+                    .setSiteName(COLLAB_SITE)
+                    .setSiteURL(COLLAB_SANITY_ID)
+                    .setSiteDescription(DESCRIPTION)
+                    .clickOnOk();
+
+            // navigate back to the user dashboard
+            openPage(userDashboardPage);
+
+            // ensure the collab site exists
+            Assert.assertTrue(mySitesDashlet.siteExists(COLLAB_SANITY_ID));
+        }
+    }
+
+    public void uploadDocumentToCollaborationSite(String documentName) 
     {
         openPage(documentLibrary, COLLAB_SANITY_ID);
         // upload document
@@ -139,41 +151,37 @@ public void prepareEnvironmentForDeclareInPlaceRecord()
                 .clickOnUpload()
                 .uploadFile(documentName);
     }
-       
-    public void createDocumentInCollaborationSite(String documentName, String content)
+
+    public void createDocumentInCollaborationSite(String documentName, String content) 
     {
         openPage(documentLibrary, COLLAB_SANITY_ID);
-       // create document
-            documentLibrary
-            .getToolbar()
-            .clickOnCreateTextFile()
-            .createTextFile(documentName, content);
+        // create document
+        documentLibrary
+                .getToolbar()
+                .clickOnCreateTextFile()
+                .createTextFile(documentName, content);
     }
 
     public void createRMAdminIfNotExists()
     {
-        RecordsManagementService service = new RecordsManagementService();
-        if (!userService.userExists("admin", "admin", RM_ADMIN)) 
+        String encodedRMAdminUser = RM_ADMIN.replaceAll(" ", "%20");
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), encodedRMAdminUser, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+    }
+
+    public void createAndInviteUserToSiteAs(String username, String siteID, String role) 
+    {
+        if(!userService.userExists(getAdminName(), getAdminPassword(), username))
         {
-            service.createUserAndAssignToRole("admin", "admin", RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
-        }
-    }    
-    
-    public void inviteUserToSiteAs(String username, String siteID, String role)
-    { 
-        if(userService.userExists("admin", "admin", username))
-        {
-        return;
-        }    
         try 
         {
-            userService.create("admin", "admin", username, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);
+            userService.create(getAdminName(), getAdminPassword(), username, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);
             userService.inviteUserToSiteAndAccept(getAdminName(), getAdminPassword(), username, siteID, role);
         } 
         catch (Exception ex)
         {
-            Logger.getLogger("error:").log(Level.SEVERE, null, ex);
+            Logger.getLogger("").log(Level.SEVERE, null, ex);
         }
-    }        
-    
+        }   
+    }
+
 }

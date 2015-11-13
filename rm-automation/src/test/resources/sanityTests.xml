@@ -1,14 +1,13 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="TestNG AllTestSuite" verbose="1" time-out="300000">
+<suite name="TestNG RM Sanity Tests" verbose="1" time-out="300000">
 
-    <test name="classification">
+    <test name="Sanity">
         <groups>
             <run>
                 <include name="legacy"/>
                 <include name="preconditionForSanity"/>
                 <exclude name="ignored"/>
-                <exclude name="integration"/>
             </run>
         </groups>
         <packages>
