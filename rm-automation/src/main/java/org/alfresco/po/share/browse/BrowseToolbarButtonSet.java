@@ -33,4 +33,8 @@ public abstract class BrowseToolbarButtonSet extends ButtonSet
     /** file upload button */
     @FindBy(css="button[id$='fileUpload-button-button']")
     protected Button fileUpload;
+    
+     /** create content button */
+    @FindBy(css="button[id$='createContent-button-button']")
+    protected Button createContent;
 }

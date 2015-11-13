@@ -64,6 +64,16 @@ public interface TestData
      */
     public static final String ANOTHER_ADMIN = "another_admin";
     
+    /**
+     * A user with Records Management Administrator role.
+     */
+    public static final String RM_ADMIN = "rm admin";
+    
+      /**
+     * A user with Collaborator role in Collaboration site.
+     */
+    public static final String COLLABORATOR = "collab_user";
+    
     /** The default password used when creating test users. */
     public static final String DEFAULT_PASSWORD = "password";
     public static final String DEFAULT_EMAIL = "default@alfresco.com";
@@ -172,6 +182,9 @@ public interface TestData
 
     public static final String COLLAB_SITE_NAME = "My Site";
 
+    public static final String COLLAB_SITE = "Collaboration Site";
+    
+    public static final String COLLAB_SANITY_ID = "CollaborationSite123";
     /**
      * A document within the collaboration site.
      * <p>"GROUP_DOCUMENT_EXISTS" The DOCUMENT has been created.

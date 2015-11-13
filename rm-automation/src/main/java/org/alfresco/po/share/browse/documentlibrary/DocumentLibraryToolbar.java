@@ -19,9 +19,14 @@
 package org.alfresco.po.share.browse.documentlibrary;
 
 import org.alfresco.po.common.Toolbar;
+import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.file.FileChoiceDialog;
+import org.alfresco.po.share.page.SharePage;
+import org.alfresco.po.share.upload.CreateTextFilePage;
 import org.alfresco.po.share.upload.UploadDialog;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +39,8 @@ import org.springframework.stereotype.Component;
 public class DocumentLibraryToolbar extends Toolbar
 {
     public static final String FILE_UPLOAD = "fileUpload";
+    public static final String CREATE_CONTENT = "createContent";
+    public static final String TEXT_FILE = "a[href*='mimeType=text/plain']";
     
     /** toolbar buttons */
     @FindBy(css="div.header-bar")
@@ -41,6 +48,9 @@ public class DocumentLibraryToolbar extends Toolbar
     
     @Autowired
     private UploadDialog uploadDialog;
+    
+    @Autowired
+    private CreateTextFilePage createTextFilePage;
     
     /**
      * @return  boolean true if the file upload button is clickable, false otherwise
@@ -58,5 +68,19 @@ public class DocumentLibraryToolbar extends Toolbar
     public UploadDialog clickOnUpload()
     {
         return toolbarButtons.click(FILE_UPLOAD, uploadDialog);
+    }
+         
+    /**
+     * Click on create text file
+     * 
+     * @return 
+     */
+    public CreateTextFilePage clickOnCreateTextFile()
+    {
+        toolbarButtons.click(CREATE_CONTENT, this);
+        Utils.waitForVisibilityOf(By.cssSelector(TEXT_FILE));
+        Utils.getWebDriver().findElement(By.cssSelector(TEXT_FILE)).click();
+        Utils.waitFor(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[id*='default_prop_cm_name']")));
+        return createTextFilePage;
     }
 }
