@@ -20,8 +20,14 @@
 package org.alfresco.po.share.details.document;
 
 import org.alfresco.po.common.annotations.RenderableChild;
+import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.browse.documentlibrary.Document;
+import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.details.DetailsPage;
 import org.alfresco.po.share.site.CollaborationSiteNavigation;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +47,9 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     @Autowired
     @RenderableChild
     private VersionHistory versionHistory;
+    @Autowired
+    private DocumentLibrary documentLibrary;
+    
 
     public DocumentActionsPanel getDocumentActionsPanel()
     {
@@ -56,4 +65,26 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     {
         return versionHistory;
     }
+    
+    public boolean isPreviewAvailable()
+    {
+        try 
+        {
+            Utils.getWebDriver().findElement(By.cssSelector("div[id*='document-details'] .message"));
+        } 
+            catch (NoSuchElementException e)
+        {
+            return true;
+        }
+        return false;
+    }       
+    
+    public DocumentLibrary navigateUpToDocumentsBrowseView()
+    {
+        Utils.waitForFind(By.cssSelector(".node-info .folder-link a[href $='documentlibrary']")).click();  
+        Utils.waitFor(ExpectedConditions.visibilityOfElementLocated(By.id("alfresco-documentlibrary")));
+        return documentLibrary.render();
+    }        
+    
+    
 }

@@ -30,11 +30,14 @@ public interface RecordActions extends Actions
     static final String REOPEN_RECORD = "rm-undeclare";
     static final String COPY = "rm-copy-record-to";
     static final String MOVE = "rm-move-record-to";
+    static final String MOVE_INPLACE = "dm-move-record";
     static final String LINK = "rm-link-to";
     static final String REQUEST_INFORMATION = "rm-request-info";
     static final String ADD_RELATIONSHIP = "rm-add-relationship";
     static final String CLASSIFY = "rm-classify-content";
     static final String EDIT_CLASSIFIED_CONTENT= "rm-edit-classified-content";
+    /** Hide in-place record */
+    static final String HIDE_RECORD =  "rm-hide-record";
 
     /** incomplete record actions with download */
     static final String[] INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD = new String[]

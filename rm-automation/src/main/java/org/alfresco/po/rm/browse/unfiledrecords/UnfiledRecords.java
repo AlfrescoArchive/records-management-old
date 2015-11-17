@@ -20,6 +20,7 @@ package org.alfresco.po.rm.browse.unfiledrecords;
 
 import org.alfresco.po.rm.browse.RMBrowsePage;
 import org.alfresco.po.rm.browse.RMBrowsePlanList;
+import org.alfresco.po.rm.browse.fileplan.Record;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,5 +31,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UnfiledRecords extends RMBrowsePage<RMBrowsePlanList, UnfiledRecordsToolbar> 
 {
-    
+    /**
+     * Helper method to get the named record from the list
+     */
+    public Record getRecord(String recordName)
+    {
+        return getList().getByPartialName(recordName, Record.class);
+    }
 }

@@ -20,7 +20,7 @@ package org.alfresco.po.share.browse.documentlibrary;
 
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.util.Utils;
-import org.alfresco.po.rm.dialog.DeleteConfirmationDialog;
+import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
 import org.alfresco.po.rm.dialog.UploadNewVersionDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
@@ -46,7 +46,7 @@ public class Document extends ListItem implements DocumentActions
     private DocumentDetails documentDetails;
 
     @Autowired
-    private DeleteConfirmationDialog deleteConfirmationDialog;
+    private GeneralConfirmationDialog deleteConfirmationDialog;
 
     @Autowired
     @RenderableChild
@@ -84,7 +84,7 @@ public class Document extends ListItem implements DocumentActions
     /**
      * Click on delete action
      */
-    public DeleteConfirmationDialog clickOnDelete()
+    public GeneralConfirmationDialog clickOnDelete()
     {
         return clickOnAction(DELETE, deleteConfirmationDialog);
     }

@@ -24,24 +24,24 @@ import org.springframework.stereotype.Component;
 import ru.yandex.qatools.htmlelements.element.Button;
 
 /**
- * Confirmation dialog shown when deleting a piece of content.
+ * Confirmation dialog shown when deleting/hiding a piece of content.
  *
  * @author tpage
  */
 @Component
-public class DeleteConfirmationDialog extends Renderable
+public class GeneralConfirmationDialog extends Renderable
 {
-    /** Here we assume the "Delete" button is the first in the dialog. */
+    /** Here we assume the confirmation (OK) button is the first in the dialog. */
     @FindBy(xpath=".//span[@class='button-group']/span[1]//button")
-    private Button deleteButton;
+    private Button confirmButton;
 
     /** Here we assume the "Cancel" button is the second in the dialog. */
     @FindBy (xpath=".//span[@class='button-group']/span[2]//button")
     private Button cancelButton;
 
-    /** Confirm the delete request. */
-    public void confirmDelete()
+    /** Confirm the request. */
+    public void confirm()
     {
-        deleteButton.click();
+        confirmButton.click();       
     }
 }

@@ -31,7 +31,6 @@ import org.alfresco.po.share.site.CollaborationSiteDashboard;
 import org.alfresco.po.share.site.create.SiteType;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
-import static org.alfresco.test.TestData.COLLABORATOR;
 import static org.alfresco.test.TestData.COLLAB_SANITY_ID;
 import static org.alfresco.test.TestData.COLLAB_SITE;
 import static org.alfresco.test.TestData.DEFAULT_EMAIL;
@@ -93,7 +92,7 @@ public class SanityPrecondition extends BaseTest
         uploadDocumentToCollaborationSite(uploadedInplaceRecord);
         createDocumentInCollaborationSite(createdInplaceRecord, "default content");
         createRMAdminIfNotExists();
-        createAndInviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
+        createAndInviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");  
     }
 
     public void createRMSiteIfDoesNotExist()

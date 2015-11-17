@@ -43,4 +43,8 @@ public interface DocumentActions extends Actions
     static final String DECLARE_VERSION_AS_RECORD = "rm-declare-as-version-record";
     /** Upload new version. */
     static final String UPLOAD_NEW_VERSION = "document-upload-new-version";
+    /** Declare as record */
+    static final String DECLARE_AS_RECORD =  "rm-create-record";
+    /** Auto-declare options */
+    static final String AUTO_DECLARE_OPTIONS =  "dm-recorded-version-config";
 }
