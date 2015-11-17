@@ -28,7 +28,9 @@ import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.share.browse.documentlibrary.DocumentLibrary;
 import org.alfresco.po.share.site.CollaborationSiteDashboard;
+import org.alfresco.po.share.site.InviteUsersPage;
 import org.alfresco.po.share.site.create.SiteType;
+import org.alfresco.po.share.userdashboard.UserDashboardPage;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
 import static org.alfresco.test.TestData.COLLAB_SANITY_ID;
@@ -78,6 +80,13 @@ public class SanityPrecondition extends BaseTest
     @Autowired
     private UnfiledRecords unfiledRecords;
     
+     /** invite users page */
+    @Autowired 
+    private InviteUsersPage inviteUsersPage;
+    
+    @Autowired 
+    private UserDashboardPage userDashboard;
+    
     /**
      * Method to be used to add precondition for DeclareInPlaceRecord Test
      * see Preconditions from https://issues.alfresco.com/jira/browse/RM-2366
@@ -89,10 +98,10 @@ public class SanityPrecondition extends BaseTest
     {
         createRMSiteIfDoesNotExist();
         createCollaborationSiteIfDoesNotExist();
-        uploadDocumentToCollaborationSite(uploadedInplaceRecord);
-        createDocumentInCollaborationSite(createdInplaceRecord, "default content");
         createRMAdminIfNotExists();
-        createAndInviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");  
+        createAndInviteUserToSiteAs(COLLABORATOR, COLLAB_SANITY_ID, COLLAB_SITE, "Contributor");  
+        uploadDocumentToCollaborationSite(COLLABORATOR, uploadedInplaceRecord);
+        createDocumentInCollaborationSite(COLLABORATOR, createdInplaceRecord, "default content");
     }
 
     public void createRMSiteIfDoesNotExist()
@@ -141,9 +150,9 @@ public class SanityPrecondition extends BaseTest
         }
     }
 
-    public void uploadDocumentToCollaborationSite(String documentName) 
+    public void uploadDocumentToCollaborationSite(String username, String documentName) 
     {
-        openPage(documentLibrary, COLLAB_SANITY_ID);
+        openPage(username, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
         // upload document
         documentLibrary
                 .getToolbar()
@@ -151,9 +160,9 @@ public class SanityPrecondition extends BaseTest
                 .uploadFile(documentName);
     }
 
-    public void createDocumentInCollaborationSite(String documentName, String content) 
+    public void createDocumentInCollaborationSite(String username, String documentName, String content) 
     {
-        openPage(documentLibrary, COLLAB_SANITY_ID);
+        openPage(username, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
         // create document
         documentLibrary
                 .getToolbar()
@@ -167,19 +176,23 @@ public class SanityPrecondition extends BaseTest
         service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), encodedRMAdminUser, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
     }
 
-    public void createAndInviteUserToSiteAs(String username, String siteID, String role) 
-    {
+    public void createAndInviteUserToSiteAs(String username, String siteID, String siteName, String role) 
+    {   
         if(!userService.userExists(getAdminName(), getAdminPassword(), username))
         {
         try 
         {
-            userService.create(getAdminName(), getAdminPassword(), username, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);
-            userService.inviteUserToSiteAndAccept(getAdminName(), getAdminPassword(), username, siteID, role);
-        } 
+            userService.create(getAdminName(), getAdminPassword(), username, DEFAULT_PASSWORD, DEFAULT_EMAIL, FIRST_NAME, LAST_NAME);        
+        }          
         catch (Exception ex)
         {
-            Logger.getLogger("").log(Level.SEVERE, null, ex);
+            Logger.getLogger("Could not complete the creation of the user.").log(Level.SEVERE, null, ex);
         }
+        
+        openPage(inviteUsersPage, siteID);
+        inviteUsersPage.addUser(username, role);
+        openPage(username, DEFAULT_PASSWORD, userDashboard);
+        userDashboard.getMyTasks().acceptInvitation(siteName);
         }   
     }
 

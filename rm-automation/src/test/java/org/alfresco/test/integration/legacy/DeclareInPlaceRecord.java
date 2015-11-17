@@ -111,7 +111,7 @@ public class DeclareInPlaceRecord extends BaseTest
         assertTrue(actionsPanel.isActionClickable(RecordActions.MOVE_INPLACE));
         
         assertTrue(PropertiesPanel.getPropertyValue(Properties.NAME).startsWith(uploadedInplaceRecord));
-        assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(getAdminName()));
+        assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(COLLABORATOR));
       
         DocumentLibrary docLibrary = documentDetails.navigateUpToDocumentsBrowseView();
        
@@ -124,7 +124,7 @@ public class DeclareInPlaceRecord extends BaseTest
         assertTrue(actionsPanel.isActionClickable(RecordActions.MOVE_INPLACE));  
                
         assertTrue(PropertiesPanel.getPropertyValue(Properties.NAME).startsWith(createdInplaceRecord));
-        assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(getAdminName()));
+        assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(COLLABORATOR));
         
         documentDetails.navigateUpToDocumentsBrowseView();
         
