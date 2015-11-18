@@ -18,11 +18,16 @@
  */
 package org.alfresco.po.share.site;
 
+import com.google.common.base.Predicate;
+import java.util.concurrent.TimeUnit;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.share.page.SharePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,9 +39,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class InviteUsersPage extends SharePage
 {
-    @FindBy(css = "#template_x002e_people-finder_x002e_invite_x0023_default-search-text")
+    @FindBy(css = "input[id$='default-search-text']")
     private WebElement userSearchBox;
-    @FindBy(css = "#template_x002e_people-finder_x002e_invite_x0023_default-search-button-button")
+    @FindBy(css = "button[id$='default-search-button-button']")
     private WebElement userSearchButton;
     @FindBy(css = "#template_x002e_people-finder_x002e_invite_x0023_default-results")
     private WebElement userSearchResultList;
@@ -61,8 +66,14 @@ public class InviteUsersPage extends SharePage
     public void addUser(String user, String role)
     {
         Utils.clearAndType(userSearchBox, user);
-        userSearchButton.click();
-        By addButtonSelector = By.cssSelector("#template_x002e_people-finder_x002e_invite_x0023_default-action-" + user + " button");
+        
+        // wait for user to be available for search
+        new FluentWait<WebDriver>(Utils.getWebDriver())
+            .withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS)
+            .until(userAvailableForSearch);
+        
+        By addButtonSelector = By.cssSelector("span[id$='default-action-" + user + "'] button");
         Utils.waitForVisibilityOf(addButtonSelector);
         WebElement addButton = userSearchResultList.findElement(addButtonSelector);
         addButton.click();
@@ -72,4 +83,11 @@ public class InviteUsersPage extends SharePage
         userRoleList.findElement(By.xpath("//a[.='" + role + "']")).click();
         inviteButton.click();
     }
+    
+        private final Predicate<WebDriver> userAvailableForSearch = (w) ->
+    {
+        userSearchButton.click();
+        
+        return ((Utils.getWebDriver().findElements(By.cssSelector("tbody[class$='data'] td[class*='person']")).size()) >= 1);
+    };
 }
