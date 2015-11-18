@@ -88,6 +88,6 @@ public class InviteUsersPage extends SharePage
     {
         userSearchButton.click();
         
-        return ((Utils.getWebDriver().findElements(By.cssSelector("tbody[class$='data'] td[class*='person']")).size()) >= 1);
+        return (!Utils.getWebDriver().findElement(By.cssSelector("div[id$='_default-results-info']")).getText().isEmpty());
     };
 }
