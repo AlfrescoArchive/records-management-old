@@ -22,9 +22,7 @@ package org.alfresco.test.integration.legacy;
 import java.util.Arrays;
 import org.alfresco.po.rm.browse.FilePlanFilterPanel;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
-import org.alfresco.po.rm.browse.fileplan.Record;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
-import org.alfresco.po.rm.browse.unfiledrecords.UnfiledRecords;
 import org.alfresco.po.rm.details.record.PropertiesPanel;
 import org.alfresco.po.rm.details.record.PropertiesPanel.Properties;
 import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
@@ -62,9 +60,6 @@ public class DeclareInPlaceRecord extends BaseTest
     private FilePlan filePlan;
     
     @Autowired
-    private UnfiledRecords unfiledRecords;
-    
-    @Autowired
     private FilePlanFilterPanel filePlanPanel;
     
     @Autowired
@@ -80,65 +75,84 @@ public class DeclareInPlaceRecord extends BaseTest
     @AlfrescoTest(jira="RM-2366")
     public void declareInplaceRecord() 
     {
+        // log in with collaborator user
         openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
         Document uploadedDoc = documentLibrary.getDocument(uploadedInplaceRecord);
         String[] uploadedDocClickableActions = uploadedDoc.getClickableActions();
        
+        // check the uploaded document available actions
         assertTrue(Arrays.asList(uploadedDocClickableActions).contains(DocumentActions.DECLARE_AS_RECORD));
         assertTrue(Arrays.asList(uploadedDocClickableActions).contains(DocumentActions.DECLARE_VERSION_AS_RECORD));
         assertTrue(Arrays.asList(uploadedDocClickableActions).contains(DocumentActions.AUTO_DECLARE_OPTIONS));
-         
+        
+        // check the created document available actions
         Document createdDoc = documentLibrary.getDocument(createdInplaceRecord);
         String[] createdDocClickableActions = createdDoc.getClickableActions();
         assertTrue(Arrays.asList(createdDocClickableActions).contains(DocumentActions.DECLARE_AS_RECORD));
         assertFalse(Arrays.asList(createdDocClickableActions).contains(DocumentActions.DECLARE_VERSION_AS_RECORD));
         assertFalse(Arrays.asList(createdDocClickableActions).contains(DocumentActions.AUTO_DECLARE_OPTIONS));
         
+        // declare as record the uploaded document
         uploadedDoc.clickOnAction(DocumentActions.DECLARE_AS_RECORD);
         
+        // check the uploaded document declared now as record available actions
         String[] uploadedRecordClickableActions = documentLibrary.getInplaceRecord(uploadedInplaceRecord).getClickableActions();
         assertFalse(Arrays.asList(uploadedRecordClickableActions).contains(DocumentActions.DECLARE_AS_RECORD));
         assertFalse(Arrays.asList(uploadedRecordClickableActions).contains(DocumentActions.DECLARE_VERSION_AS_RECORD));
         assertFalse(Arrays.asList(uploadedRecordClickableActions).contains(DocumentActions.AUTO_DECLARE_OPTIONS));
         
+        // navigate to Document Details page
         documentLibrary.getInplaceRecord(uploadedInplaceRecord).clickOnLink(documentDetails);
+        // check the preview of the file is available
         assertTrue("The in-place record text file preview is not available", documentDetails.isPreviewAvailable());
-        DocumentActionsPanel actionsPanel = documentDetails.getDocumentActionsPanel();
-        
+       
+        // check the uploaded record available actions
+        DocumentActionsPanel actionsPanel = documentDetails.getDocumentActionsPanel();       
         assertTrue(actionsPanel.isActionClickable(RecordActions.DOWNLOAD));
         assertTrue(actionsPanel.isActionClickable(RecordActions.EDIT_METADATA));
         assertTrue(actionsPanel.isActionClickable(RecordActions.HIDE_RECORD));
         assertTrue(actionsPanel.isActionClickable(RecordActions.MOVE_INPLACE));
         
+        // check some of the uploaded record properties  
         assertTrue(PropertiesPanel.getPropertyValue(Properties.NAME).startsWith(uploadedInplaceRecord));
         assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(COLLABORATOR));
       
+        // check the record location is still in Document Library by clicking on its "Documents" container
         DocumentLibrary docLibrary = documentDetails.navigateUpToDocumentsBrowseView();
        
+        // declare as record the created document from its Document Details page
         DocumentDetails createdDocumentDetails = docLibrary.getDocument(createdInplaceRecord).clickOnLink(documentDetails);
         createdDocumentDetails.getDocumentActionsPanel().clickOnAction(DocumentActions.DECLARE_AS_RECORD);
 
+         // check the created record available actions
         assertTrue(actionsPanel.isActionClickable(RecordActions.DOWNLOAD));
         assertTrue(actionsPanel.isActionClickable(RecordActions.EDIT_METADATA));
         assertTrue(actionsPanel.isActionClickable(RecordActions.HIDE_RECORD));
         assertTrue(actionsPanel.isActionClickable(RecordActions.MOVE_INPLACE));  
                
+        // check some of the created record properties  
         assertTrue(PropertiesPanel.getPropertyValue(Properties.NAME).startsWith(createdInplaceRecord));
         assertTrue(PropertiesPanel.getPropertyValue(Properties.CREATOR).equals(COLLABORATOR));
         
+        // check the record location is still in Document Library by clicking on its "Documents" container
         documentDetails.navigateUpToDocumentsBrowseView();
         
+        // hide the uploaded record
         documentLibrary.getInplaceRecord(uploadedInplaceRecord).clickOnAction(RecordActions.HIDE_RECORD, confirmationDialog).confirm();
         documentLibrary.render();
        
+        // hide the created record
         documentLibrary.getInplaceRecord(createdInplaceRecord).clickOnAction(RecordActions.HIDE_RECORD, confirmationDialog).confirm();
         documentLibrary.render();
         
+        // check the records are not visible anymore in Document Library
         assertNull("The uploaded record is still visible after being hidden.", documentLibrary.getInplaceRecord(uploadedInplaceRecord));
         assertNull("The created record is still visible after being hidden.", documentLibrary.getInplaceRecord(createdInplaceRecord)); 
         
-        openPage(getAdminName(), getAdminPassword(), filePlan, RM_SITE_ID, "documentlibrary");
+        // log in with the RM admin user
+        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         
+        // check the hiden records above are displayed in Unfiled Records
         assertNotNull(filePlanPanel.clickOnUnfiledRecords().getRecord(uploadedInplaceRecord));
         assertNotNull(filePlanPanel.clickOnUnfiledRecords().getRecord(createdInplaceRecord));
     }          
