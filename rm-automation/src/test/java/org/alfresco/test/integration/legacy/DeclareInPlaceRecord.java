@@ -149,8 +149,9 @@ public class DeclareInPlaceRecord extends BaseTest
         assertNull("The uploaded record is still visible after being hidden.", documentLibrary.getInplaceRecord(uploadedInplaceRecord));
         assertNull("The created record is still visible after being hidden.", documentLibrary.getInplaceRecord(createdInplaceRecord)); 
         
+         String encodedRMAdminUser = RM_ADMIN.replaceAll(" ", "");
         // log in with the RM admin user
-        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+        openPage(encodedRMAdminUser, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         
         // check the hiden records above are displayed in Unfiled Records
         assertNotNull(filePlanPanel.clickOnUnfiledRecords().getRecord(uploadedInplaceRecord));

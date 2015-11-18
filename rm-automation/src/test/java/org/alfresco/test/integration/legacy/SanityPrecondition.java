@@ -172,7 +172,8 @@ public class SanityPrecondition extends BaseTest
 
     public void createRMAdminIfNotExists()
     {
-        String encodedRMAdminUser = RM_ADMIN.replaceAll(" ", "%20");
+        // To do: get the rm admin with space back after checking the user service support 
+        String encodedRMAdminUser = RM_ADMIN.replaceAll(" ", "");
         service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), encodedRMAdminUser, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
     }
 
