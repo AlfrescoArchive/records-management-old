@@ -20,9 +20,11 @@
 package org.alfresco.test.integration.legacy;
 
 import java.util.Arrays;
+import org.alfresco.dataprep.RecordsManagementService;
 import org.alfresco.po.rm.browse.FilePlanFilterPanel;
 import org.alfresco.po.rm.browse.fileplan.FilePlan;
 import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.console.usersandgroups.UsersAndGroupsPage;
 import org.alfresco.po.rm.details.record.PropertiesPanel;
 import org.alfresco.po.rm.details.record.PropertiesPanel.Properties;
 import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
@@ -33,6 +35,8 @@ import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
+import org.alfresco.test.DataPrepHelper;
+import static org.alfresco.test.TestData.RM_SITE_ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -65,18 +69,39 @@ public class DeclareInPlaceRecord extends BaseTest
     @Autowired
     private GeneralConfirmationDialog confirmationDialog;
     
+    /** data prep services */
+    @Autowired private RecordsManagementService service;
+    @Autowired private DataPrepHelper dataPrep;
+    
     String uploadedInplaceRecord = "in-place record";
     String createdInplaceRecord = "created in-place record";
     
-    @Test(
-            groups = {"legacy"},
-            dependsOnGroups = {"preconditionForSanity"}
-    )
+    @Test(dependsOnGroups="createRMSite")
     @AlfrescoTest(jira="RM-2366")
     public void declareInplaceRecord() 
     {
-        // log in with collaborator user
+        // create "rm admin" user
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+        // create Collaboration site
+        dataPrep.createSite(COLLAB_SITE, COLLAB_SANITY_ID);
+        // create collab_user
+        dataPrep.createUser(COLLABORATOR);
+        // invite collab_user to Collaboration site with Contributor role
+        service.inviteUserToSite(getAdminName(), getAdminPassword(), COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
+        
         openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
+        // upload document
+        documentLibrary
+                .getToolbar()
+                .clickOnUpload()
+                .uploadFile(uploadedInplaceRecord);
+        
+        // create document
+        documentLibrary
+                .getToolbar()
+                .clickOnCreateTextFile()
+                .createTextFile(createdInplaceRecord, "default content").navigateUpToDocumentsBrowseView();
+         
         Document uploadedDoc = documentLibrary.getDocument(uploadedInplaceRecord);
         String[] uploadedDocClickableActions = uploadedDoc.getClickableActions();
        
@@ -156,5 +181,5 @@ public class DeclareInPlaceRecord extends BaseTest
         // check the hiden records above are displayed in Unfiled Records
         assertNotNull(filePlanPanel.clickOnUnfiledRecords().getRecord(uploadedInplaceRecord));
         assertNotNull(filePlanPanel.clickOnUnfiledRecords().getRecord(createdInplaceRecord));
-    }          
+    }      
 }

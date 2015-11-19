@@ -81,7 +81,7 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     
     public DocumentLibrary navigateUpToDocumentsBrowseView()
     {
-        Utils.waitForFind(By.cssSelector(".node-info .folder-link a[href $='documentlibrary']")).click();  
+        Utils.waitForFind(By.cssSelector(".node-info span[class$='folder-link'] a[href*='documentlibrary']")).click();  
         Utils.waitFor(ExpectedConditions.visibilityOfElementLocated(By.id("alfresco-documentlibrary")));
         return documentLibrary.render();
     }        

@@ -67,7 +67,7 @@ public interface TestData
     /**
      * A user with Records Management Administrator role.
      */
-    public static final String RM_ADMIN = "rm admin";
+    public static final String RM_ADMIN = "rm_admin";
     
       /**
      * A user with Collaborator role in Collaboration site.

@@ -3,13 +3,6 @@
 <suite name="TestNG RM Sanity Tests" verbose="1" time-out="300000">
 
     <test name="Sanity">
-        <groups>
-            <run>
-                <include name="legacy"/>
-                <include name="preconditionForSanity"/>
-                <exclude name="ignored"/>
-            </run>
-        </groups>
         <packages>
             <package name="org.alfresco.test.integration.legacy.*"/>
         </packages>

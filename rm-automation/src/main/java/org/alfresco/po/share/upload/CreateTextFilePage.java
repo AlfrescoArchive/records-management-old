@@ -19,9 +19,11 @@
 package org.alfresco.po.share.upload;
 
 import org.alfresco.po.common.util.Utils;
+import org.alfresco.po.share.details.document.DocumentDetails;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,28 +32,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CreateTextFilePage 
-{
-    @FindBy(css = "input[id*='default_prop_cm_name']")
-    private WebElement nameInput;
-
-    @FindBy(css = "input[id*='default_prop_cm_title']")
-    private WebElement titleInput;
-
-    @FindBy(css = "textarea[id*='default_prop_cm_content']")
-    private WebElement contentTextarea;
-
-    @FindBy(css = "button[id*='default-form-submit-button']")
-    private WebElement createButton;
-    @FindBy(css = "button[id*='default-form-cancel-button']")
-    private WebElement cancelButton;
+{    
+    @Autowired
+    private DocumentDetails documentDetails;
     
-    public void createTextFile(String fileName, String content)
+    public DocumentDetails createTextFile(String fileName, String content)
     {
         Utils.waitForVisibilityOf(By.cssSelector("button[id*='default-form-submit-button']"));
         Utils.waitForVisibilityOf(By.cssSelector("input[id*='default_prop_cm_name']")).sendKeys(fileName);
         Utils.waitForVisibilityOf(By.cssSelector("textarea[id*='default_prop_cm_content']")).sendKeys(content);
         Utils.getWebDriver().findElement(By.cssSelector("button[id*='default-form-submit-button']")).click();
         Utils.waitForVisibilityOf(By.cssSelector(".textLayer"));
+        return documentDetails.render();
     }        
     
     

@@ -19,6 +19,8 @@
 package org.alfresco.dataprep;
 
 import java.text.MessageFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpResponse;
@@ -104,5 +106,26 @@ public class RecordsManagementService
 
         return false;
     }
+    
+    /**
+     * invite user to site with given role
+     */
+    public void inviteUserToSite(
+            String adminUser, 
+            String adminPassword,
+            String userName, 
+            String siteName,
+            String role)
+    {
+        if (userService.userExists(adminUser, adminPassword, userName))
+        {
+            try {
+                userService.inviteUserToSiteAndAccept(adminUser, adminPassword, userName, siteName, role);
+            } catch (Exception ex) {
+                Logger.getLogger(RecordsManagementService.class.getName()).log(Level.SEVERE, null, "The user could not be invited to site. " + ex);
+            }
+        }
+    }
+
 
 }
