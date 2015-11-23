@@ -43,7 +43,6 @@ import static org.junit.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
-
 /**
  * CreateCategories test
  * 
@@ -62,10 +61,10 @@ public class CreateCategories extends BaseTest
     private CategoryDetailsPage category1DetailsPage;
     @Autowired
     private GeneralConfirmationDialog confirmationDialog;
-    
+
     @Test(dependsOnGroups="createRMSite")
     @AlfrescoTest(jira = "RM-2756")
-    public void createCategories() 
+    public void createCategories()
     {     
         String category1 = "RM-2756 category1";
         String editedCategory1 = "edited RM-2756 category1";
@@ -73,7 +72,7 @@ public class CreateCategories extends BaseTest
         String editedCategory1Description = "this is the category 1 description";
         
         String category2 = "RM-2756 category2";
-        // create "rm admin" user
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
         service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
         // log in with the RM admin user
         openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
@@ -157,6 +156,11 @@ public class CreateCategories extends BaseTest
         properties.setTitle(editedCategory1Title);
         properties.setDescription(editedCategory1Description);
         editRecordCategoryPage.saveChanges(category1DetailsPage);
+
+        // check some of the edited category 1 properties
+        assertEquals(PropertiesPanel.getPropertyValue(Properties.NAME), editedCategory1);
+        assertEquals(PropertiesPanel.getPropertyValue(Properties.TITLE), editedCategory1Title);
+        assertEquals(PropertiesPanel.getPropertyValue(Properties.DESCRIPTION), editedCategory1Description);
 
         openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate inside category 2

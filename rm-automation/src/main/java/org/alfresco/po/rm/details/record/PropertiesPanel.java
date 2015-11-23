@@ -5,6 +5,7 @@ import org.alfresco.po.share.panel.Panel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Properties panel
@@ -50,6 +51,7 @@ public class PropertiesPanel extends Panel
     
     public static String getPropertyValue(Properties prop)
     {
+        Utils.waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".form-field .viewmode-value")));
         return Utils.getWebDriver().findElements(By.cssSelector(".form-field .viewmode-value")).get(prop.getIndex()).getText();
     }        
     
