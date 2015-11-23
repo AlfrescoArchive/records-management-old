@@ -27,7 +27,7 @@ public class PropertiesPanel extends Panel
         NAME(0),
         TITLE(1),
         DESCRIPTION(2),
-        MIMETYPE(3),
+        MIMETYPE_OR_IDENTIFIER(3),
         AUTHOR(4),
         SIZE(5),
         CREATOR(6),

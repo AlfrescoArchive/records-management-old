@@ -102,4 +102,9 @@ public class IdentifierAndVitalInformation extends HtmlElement
         return vitalIndicatorCheckbox.isSelected();
     }
 
+    public boolean isIdentifierRequired()
+    {
+        return (identifierTextInput.getWrappedElement().getAttribute("alf-validation-msg")) != null;
+    }
+
 }

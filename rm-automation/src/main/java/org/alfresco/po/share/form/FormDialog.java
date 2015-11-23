@@ -122,4 +122,20 @@ public abstract class FormDialog extends Dialog
     {
         return buttonset.click(CANCEL);
     }
+
+
+    public boolean isNameRequired()
+    {
+        return (nameTextInput.getWrappedElement().getAttribute("alf-validation-msg")) != null;
+    }
+
+    public boolean isTitleRequired()
+    {
+        return (titleTextInput.getWrappedElement().getAttribute("alf-validation-msg")) != null;
+    }
+
+    public boolean isDescriptionRequired()
+    {
+        return (descriptionTextInput.getWrappedElement().getAttribute("alf-validation-msg")) != null;
+    }
 }

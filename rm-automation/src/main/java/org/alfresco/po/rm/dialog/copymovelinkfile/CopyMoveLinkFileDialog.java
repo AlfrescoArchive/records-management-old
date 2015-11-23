@@ -48,6 +48,7 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
 
     /** selectors */
     private static By selectedSelector = By.cssSelector(VISIBLE_DIALOG + " div.treeview div.selected");
+    private static By selectedItemSelector = By.xpath("//div[@class='treeview']//div[@class='ygtvitem selected']");
     private static By spanSelector = By.cssSelector("div.ygtvitem span");
 
     /**
@@ -55,25 +56,30 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
      */
     public CopyMoveLinkFileDialog select(String name)
     {
-        // wait for the selected item to be visible
+        // wait for the dialog to be visible
         Utils.waitForVisibilityOf(selectedSelector);
-
+        
+        Utils.waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
+        Utils.waitForVisibilityOf(selectedItemSelector);
+        /*
+        commented this piece of code until being sure it isn't what we need for all dialogs
         // re-try in order to deal with unreliable rendering
         for (int retryCount = 0; retryCount < 3; retryCount++)
         {
             try
             {
                 // get all the items in the tree
-                List<WebElement> spans = tree.findElements(spanSelector);
+                List<WebElement> spans = Utils.getWebDriver().findElements(By.cssSelector("div[id$='dialog_c'][style*='visibility: visible'] div[class='ygtvitem'] div.ygtvitem span"));
 
                 for (WebElement span : spans)
                 {
                     // find the item that matches the text provided
-                    if (span.getText().equals(name))
+                    if (span.getText().startsWith(name))
                     {
                         // select the item in the tree
                         Utils.mouseOver(span);
                         span.click();
+                        Utils.waitForVisibilityOf(By.cssSelector("tr[class='ygtvrow'] td[class*='ygtvtm']"));
                     }
                 }
 
@@ -88,6 +94,7 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
                 }
             }
         }
+        */
 
         return this;
     }
