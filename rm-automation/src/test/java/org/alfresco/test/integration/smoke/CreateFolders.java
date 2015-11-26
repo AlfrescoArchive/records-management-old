@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.test.integration.legacy;
+package org.alfresco.test.integration.smoke;
 
 import org.alfresco.dataprep.RecordsManagementService;
 import org.alfresco.po.rm.actions.edit.EditRecordFolderPage;
@@ -34,7 +34,6 @@ import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-import java.util.Arrays;
 
 import static org.testng.AssertJUnit.*;
 
@@ -116,13 +115,13 @@ public class CreateFolders extends BaseTest
         assertNotNull(filePlan.getRecordFolder(folder1));
         
         // check the folder's actions
-        assertNull(filePlan.getRecordFolder(folder1).isActionsClickable(
+        assertNull(filePlan.getRecordFolder(folder1).getUnclickableActions(
                 FolderActions.COPY, FolderActions.DELETE, FolderActions.EDIT_METADATA, FolderActions.MANAGE_PERMISSIONS,
                 FolderActions.MANAGE_RULES, FolderActions.MOVE, FolderActions.VIEW_AUDIT,
                 FolderActions.VIEW_DETAILS, FolderActions.CLOSE_FOLDER));
         
         // go to folder 1 Details page
-        filePlan.getRecordFolder(folder1).clickOnAction(FolderActions.VIEW_DETAILS, folderDetailsPage);
+        folderDetailsPage = filePlan.getRecordFolder(folder1).clickOnViewDetails();
        
         // check the available actions from folder's details page
         FolderActionsPanel folderActions = folderDetailsPage.getFolderActionsPanel();
@@ -208,7 +207,7 @@ public class CreateFolders extends BaseTest
         filePlan.getRecordFolder(editedFolder1).clickOnAction(FolderActions.CLOSE_FOLDER);
 
         // check the available actions of a closed folder
-        assertNull(filePlan.getRecordFolder(editedFolder1).isActionsClickable(FolderActions.VIEW_DETAILS,
+        assertNull(filePlan.getRecordFolder(editedFolder1).getUnclickableActions(FolderActions.VIEW_DETAILS,
                 FolderActions.COPY,
                 FolderActions.VIEW_AUDIT, FolderActions.MANAGE_RULES,
                 FolderActions.MANAGE_PERMISSIONS, FolderActions.REOPEN_FOLDER));

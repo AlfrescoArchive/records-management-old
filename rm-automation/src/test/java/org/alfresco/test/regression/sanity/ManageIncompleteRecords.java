@@ -208,7 +208,7 @@ public class ManageIncompleteRecords extends BaseTest
         assertTrue(nonElectronicRecord.isHeld());
 
         // check the correct actions for a held record are being shown
-        assertNull(nonElectronicRecord.isActionsClickable(
+        assertNull(nonElectronicRecord.getUnclickableActions(
                 Record.ADD_TO_HOLD,
                 Record.REMOVE_FROM_HOLD,
                 Record.VIEW_AUDIT));

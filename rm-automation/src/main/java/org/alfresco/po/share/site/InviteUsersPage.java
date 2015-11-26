@@ -56,38 +56,4 @@ public class InviteUsersPage extends SharePage
         String siteId = context[0];
         return "/page/site/" + siteId + "/invite";
     }
-
-    /**
-     * Invite a user to the site.
-     *
-     * @param user The username.
-     * @param role The role to give the user.
-     */
-    public void addUser(String user, String role)
-    {
-        Utils.clearAndType(userSearchBox, user);
-        
-        // wait for user to be available for search
-        new FluentWait<WebDriver>(Utils.getWebDriver())
-            .withTimeout(10, TimeUnit.SECONDS)
-            .pollingEvery(1, TimeUnit.SECONDS)
-            .until(userAvailableForSearch);
-        
-        By addButtonSelector = By.cssSelector("span[id$='default-action-" + user + "'] button");
-        Utils.waitForVisibilityOf(addButtonSelector);
-        WebElement addButton = userSearchResultList.findElement(addButtonSelector);
-        addButton.click();
-        // This will only work if we invite one user at a time.
-        By roleButtonSelector = By.cssSelector("button");
-        userRoleList.findElement(roleButtonSelector).click();
-        userRoleList.findElement(By.xpath("//a[.='" + role + "']")).click();
-        inviteButton.click();
-    }
-    
-        private final Predicate<WebDriver> userAvailableForSearch = (w) ->
-    {
-        userSearchButton.click();
-        
-        return (!Utils.getWebDriver().findElement(By.cssSelector("div[id$='_default-results-info']")).getText().isEmpty());
-    };
 }

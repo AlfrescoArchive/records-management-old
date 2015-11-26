@@ -130,4 +130,52 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
     {
         return Utils.elementExists(banner.getSelector());
     }
+
+    public String getBreadcrumbPath()
+    {
+        String path = "";
+        List<WebElement> breadcrumb = webDriver.findElements(breadcrumbSelector);
+        for(WebElement node : breadcrumb)
+        {
+            path = path + node.getText();
+            if(breadcrumb.size() <= breadcrumb.indexOf(node) + 1)
+            {
+                path = path + "/";
+            }
+
+        }
+        return path;
+    }
+
+    public Renderable clickOnParentInBreadcrumb(String parentName, Renderable pageToRender)
+    {
+        List<WebElement> breadcrumb = webDriver.findElements(breadcrumbSelector);
+        for(WebElement node : breadcrumb)
+        {
+            if(node.getText().equals(parentName))
+            {
+                node.click();
+                return pageToRender.render();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check if the content of the file is available for being previewed
+     * @return true if the content is available and the message that the file has no content is not displayed
+     */
+    public boolean isContentAvailable()
+    {
+        try
+        {
+            Utils.getWebDriver().findElement(By.cssSelector("div[id*='document-details'] .message"));
+        }
+        catch (NoSuchElementException e)
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -65,26 +65,4 @@ public class DocumentDetails extends DetailsPage<CollaborationSiteNavigation>
     {
         return versionHistory;
     }
-    
-    public boolean isPreviewAvailable()
-    {
-        try 
-        {
-            Utils.getWebDriver().findElement(By.cssSelector("div[id*='document-details'] .message"));
-        } 
-            catch (NoSuchElementException e)
-        {
-            return true;
-        }
-        return false;
-    }       
-    
-    public DocumentLibrary navigateUpToDocumentsBrowseView()
-    {
-        Utils.waitForFind(By.cssSelector(".node-info span[class$='folder-link'] a[href*='documentlibrary']")).click();  
-        Utils.waitFor(ExpectedConditions.visibilityOfElementLocated(By.id("alfresco-documentlibrary")));
-        return documentLibrary.render();
-    }        
-    
-    
 }

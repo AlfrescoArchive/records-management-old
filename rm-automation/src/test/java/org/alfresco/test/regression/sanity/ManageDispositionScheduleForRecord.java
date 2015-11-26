@@ -187,7 +187,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
         assertTrue(record.isCutOff());
 
         //verify available actions
-        assertNull(record.isActionsClickable(
+        assertNull(record.getUnclickableActions(
                 Record.DOWNLOAD,
                 Record.EDIT_METADATA,
                 Record.UNDO_CUTOFF,
@@ -215,7 +215,7 @@ public class ManageDispositionScheduleForRecord extends BaseTest
 
         //verify end retention is no longer available
         record = filePlan.getRecord(RECORD);
-        assertNull(record.isActionsClickable(
+        assertNull(record.getUnclickableActions(
                 Record.DOWNLOAD,
                 Record.EDIT_METADATA,
                 Record.COPY,

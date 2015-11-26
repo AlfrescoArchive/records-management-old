@@ -18,6 +18,7 @@
  */
 package org.alfresco.po.share.browse;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.alfresco.po.common.Toolbar;
@@ -28,6 +29,8 @@ import org.alfresco.po.common.site.SitePage;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,6 +54,9 @@ public abstract class BrowsePage<N extends SiteNavigation,
     @RenderableChild
     @Autowired
     private S toolbar;
+
+    @FindBy(css = "div[id$='default-navBar'] a:not(.filter-path)")
+    private List<WebElement> breadCrumbNodes;
     
     /**
      * @return L list view
@@ -138,4 +144,31 @@ public abstract class BrowsePage<N extends SiteNavigation,
         }        
         return browsePage;
     }
+
+
+    public String getBreadcrumbPath()
+    {
+        String path = "";
+        for (WebElement node : breadCrumbNodes) {
+            path = path + node.getText();
+            if (breadCrumbNodes.size() <= breadCrumbNodes.indexOf(node) + 1) {
+                path = path + "/";
+            }
+        }
+        return path;
+    }
+
+    public Renderable clickOnParentInBreadcrumb(String parentName, Renderable pageToRender)
+    {
+        for(WebElement node : breadCrumbNodes)
+        {
+            if(node.getText().equals(parentName))
+            {
+                node.click();
+                return pageToRender.render();
+            }
+        }
+        return null;
+    }
+
 }

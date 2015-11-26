@@ -21,6 +21,7 @@ package org.alfresco.po.share.browse.documentlibrary;
 import org.alfresco.po.common.annotations.RenderableChild;
 import org.alfresco.po.common.util.Utils;
 import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
+import org.alfresco.po.rm.dialog.RejectedRecordInformationDialog;
 import org.alfresco.po.rm.dialog.UploadNewVersionDialog;
 import org.alfresco.po.rm.dialog.classification.ClassifyContentDialog;
 import org.alfresco.po.rm.dialog.classification.EditClassifiedContentDialog;
@@ -29,9 +30,16 @@ import org.alfresco.po.share.details.document.DocumentActionsPanel;
 import org.alfresco.po.share.details.document.DocumentDetails;
 import org.alfresco.po.share.details.document.SocialActions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.yandex.qatools.htmlelements.element.Button;
+
+import static org.alfresco.po.common.util.Utils.elementExists;
+import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
 
 /**
  * Document list item
@@ -63,6 +71,21 @@ public class Document extends ListItem implements DocumentActions
 
     @Autowired
     private UploadNewVersionDialog uploadNewVersionDialog;
+
+    @Autowired
+    private RejectedRecordInformationDialog rejectedRecordInformationDialog;
+
+    @Autowired
+    private GeneralConfirmationDialog confirmationDialog;
+
+    /** rejected banner selector */
+    By REJECTED_RECORD_BANNER_SELECTOR = By.cssSelector("div.info-banner");
+
+    /** see information about rejection button */
+    By SEE_REJECTION_INFO_SELECTOR = By.cssSelector("div.info-banner .item-rejected-record-info");
+
+    /** remove rejected banner button */
+    By REMOVE_REJECTED_BANNER_SELECTOR = By.cssSelector("div.info-banner .item-rejected-record-close");
 
     /**
      * Click on declare as record action
@@ -137,5 +160,47 @@ public class Document extends ListItem implements DocumentActions
     public DocumentDetails declareVersionAsRecord()
     {
         return clickOnAction(DocumentActionsPanel.DECLARE_VERSION_AS_RECORD, documentDetails);
+    }
+
+    /**
+     * check if the Rejected Record banner is displayed for the document
+     * @return true if displayed
+     */
+    public boolean isRejectedBannerDisplayed()
+    {
+        if(elementExists(getRow(), REJECTED_RECORD_BANNER_SELECTOR))
+        {
+            return getRow().findElement(REJECTED_RECORD_BANNER_SELECTOR).isDisplayed();
+        }
+        return false;
+    }
+
+    /**
+     * opens up the information dialog about the rejection
+     * @return the dialog
+     */
+    public RejectedRecordInformationDialog seeInfoAboutRejection()
+    {
+        if(elementExists(getRow(), SEE_REJECTION_INFO_SELECTOR))
+        {
+            getRow().findElement(SEE_REJECTION_INFO_SELECTOR).click();
+        }
+        return rejectedRecordInformationDialog.render();
+    }
+
+    /** removes the rejected record banner for the document */
+    public Document removeRejectedBanner()
+    {
+        if (elementExists(getRow(), REMOVE_REJECTED_BANNER_SELECTOR))
+        {
+            getRow().findElement(REMOVE_REJECTED_BANNER_SELECTOR).click();
+            // wait for the confirmation dialog to appear
+            waitForVisibilityOf(By.cssSelector("#prompt"));
+            confirmationDialog.render();
+            confirmationDialog.confirm();
+            // wait for the confirmation dialog to disappear
+            waitForInvisibilityOf(By.cssSelector("#prompt"));
+        }
+        return this;
     }
 }

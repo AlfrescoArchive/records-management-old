@@ -18,10 +18,21 @@
  */
 package org.alfresco.po.share.browse.documentlibrary;
 
+import org.alfresco.po.common.renderable.Renderable;
+import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
+import org.alfresco.po.rm.dialog.RejectedRecordInformationDialog;
 import org.alfresco.po.share.browse.ListItem;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.yandex.qatools.htmlelements.element.Button;
 
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
+import static org.alfresco.po.common.util.Utils.waitForInvisibilityOf;
 /**
  * In-place record list item
  * 
@@ -31,5 +42,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class InplaceRecord extends ListItem
 {
+    @Autowired
+    private GeneralConfirmationDialog confirmationDialog;
 
+    public Renderable hideRecordFromDocumentLibrary(Renderable renderable)
+    {
+        clickOnAction(RecordActions.HIDE_RECORD, confirmationDialog).confirm();
+        return renderable.render();
+    }
 }

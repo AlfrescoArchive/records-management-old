@@ -18,9 +18,13 @@
  */
 package org.alfresco.po.rm.browse.unfiledrecords;
 
+import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.rm.browse.RMBrowsePage;
 import org.alfresco.po.rm.browse.RMBrowsePlanList;
 import org.alfresco.po.rm.browse.fileplan.Record;
+import org.alfresco.po.rm.browse.fileplan.RecordActions;
+import org.alfresco.po.rm.dialog.RejectDialog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,11 +35,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class UnfiledRecords extends RMBrowsePage<RMBrowsePlanList, UnfiledRecordsToolbar> 
 {
+    @Autowired
+    private RejectDialog rejectDialog;
     /**
      * Helper method to get the named record from the list
      */
     public Record getRecord(String recordName)
     {
         return getList().getByPartialName(recordName, Record.class);
+    }
+
+    public Renderable rejectRecordWithReason(String recordName, String reason, Renderable renderable)
+    {
+        return getRecord(recordName).clickOnAction(RecordActions.REJECT_RECORD, rejectDialog).rejectRecordWithReason(reason, renderable);
     }
 }

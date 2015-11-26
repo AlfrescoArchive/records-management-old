@@ -66,7 +66,7 @@ public class ManageCategories extends BaseTest
         assertEquals("Sub-category should be present in record category", 1, filePlan.getList().size());
 
         // verify sub-category actions
-        assertNull(filePlan.getRecordCategory(SUB_RECORD_CATEGORY_NAME).isActionsClickable(
+        assertNull(filePlan.getRecordCategory(SUB_RECORD_CATEGORY_NAME).getUnclickableActions(
                 RecordCategory.VIEW_DETAILS,
                 RecordCategory.EDIT_METADATA,
                 RecordCategory.COPY,

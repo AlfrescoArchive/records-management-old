@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="TestNG RM Smoke Tests" verbose="1" time-out="300000">
+
+    <test name="Smoke">
+        <packages>
+            <package name="org.alfresco.test.integration.smoke.*"/>
+        </packages>
+    </test>
+
+</suite>

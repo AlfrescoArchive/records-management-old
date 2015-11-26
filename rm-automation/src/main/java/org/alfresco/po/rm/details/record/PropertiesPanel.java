@@ -7,6 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static org.alfresco.po.common.util.Utils.waitFor;
+import static org.alfresco.po.common.util.Utils.getWebDriver;
+
 /**
  * Properties panel
  *
@@ -37,9 +40,10 @@ public class PropertiesPanel extends Panel
         MODIFIED_DATE(9),
         OWNER(10);
         
-         private int index;
+        private int index;
 
-        private Properties(int index) {
+        private Properties(int index)
+        {
             this.index = index;
         }
         
@@ -51,8 +55,8 @@ public class PropertiesPanel extends Panel
     
     public static String getPropertyValue(Properties prop)
     {
-        Utils.waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".form-field .viewmode-value")));
-        return Utils.getWebDriver().findElements(By.cssSelector(".form-field .viewmode-value")).get(prop.getIndex()).getText();
+        waitFor(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".form-field .viewmode-value")));
+        return getWebDriver().findElements(By.cssSelector(".form-field .viewmode-value")).get(prop.getIndex()).getText();
     }        
     
 }

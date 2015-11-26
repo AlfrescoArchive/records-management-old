@@ -142,7 +142,7 @@ public class Content extends HtmlElement
      */
     public Content setOwner(String owner)
     {
-        clearAndType(authorTextInput, owner);
+        clearAndType(ownerTextInput, owner);
         return this;
     }
 

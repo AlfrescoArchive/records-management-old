@@ -44,7 +44,7 @@ public interface DocumentActions extends Actions
     /** Upload new version. */
     static final String UPLOAD_NEW_VERSION = "document-upload-new-version";
     /** Declare as record */
-    static final String DECLARE_AS_RECORD =  "rm-create-record";
+    static final String DECLARE_AS_RECORD = "rm-create-record";
     /** Auto-declare options */
-    static final String AUTO_DECLARE_OPTIONS =  "dm-recorded-version-config";
+    static final String AUTO_DECLARE_OPTIONS = "dm-recorded-version-config";
 }

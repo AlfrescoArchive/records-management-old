@@ -100,7 +100,7 @@ public class ManageFolders extends BaseTest
         assertEquals("Both folders should be present in sub category", 2, filePlan.getList().size());
 
        // verify record folder one actions
-        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_ONE).isActionsClickable(
+        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_ONE).getUnclickableActions(
                 RecordFolder.VIEW_DETAILS,
                 RecordFolder.EDIT_METADATA,
                 RecordFolder.CLOSE_FOLDER,
@@ -164,7 +164,7 @@ public class ManageFolders extends BaseTest
         folder1 = filePlan.getRecordFolder(folderName);
         assertTrue(folder1.isHeld());
         // check the correct actions for a held folder are being shown
-        assertNull(folder1.isActionsClickable(
+        assertNull(folder1.getUnclickableActions(
                 RecordFolder.VIEW_DETAILS,
                 RecordFolder.ADD_TO_HOLD,
                 RecordFolder.REMOVE_FROM_HOLD,
@@ -213,7 +213,7 @@ public class ManageFolders extends BaseTest
         //verify the indicator is displayed
         assertTrue(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isClosed());
         //verify the available actions
-        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isActionsClickable(
+        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).getUnclickableActions(
                 RecordFolder.VIEW_DETAILS,
                 RecordFolder.REOPEN_FOLDER,
                 RecordFolder.ADD_TO_HOLD,
@@ -226,7 +226,7 @@ public class ManageFolders extends BaseTest
         //verify the indicator is not displayed
         assertFalse(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isClosed());
         // verify that all the expected actions are available
-        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).isActionsClickable(
+        assertNull(filePlan.getRecordFolder(RECORD_FOLDER_TWO).getUnclickableActions(
                 RecordFolder.EDIT_METADATA,
                 RecordFolder.CLOSE_FOLDER,
                 RecordFolder.COPY,

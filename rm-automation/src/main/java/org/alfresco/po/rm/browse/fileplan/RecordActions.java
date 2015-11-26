@@ -37,7 +37,9 @@ public interface RecordActions extends Actions
     static final String CLASSIFY = "rm-classify-content";
     static final String EDIT_CLASSIFIED_CONTENT= "rm-edit-classified-content";
     /** Hide in-place record */
-    static final String HIDE_RECORD =  "rm-hide-record";
+    static final String HIDE_RECORD = "rm-hide-record";
+    /** Reject in-place record */
+    static final String REJECT_RECORD = "rm-reject";
 
     /** incomplete record actions with download */
     static final String[] INCOMPLETE_RECORD_ACTIONS_WITH_DOWNLOAD = new String[]

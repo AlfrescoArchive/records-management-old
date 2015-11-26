@@ -16,18 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.test.integration.legacy;
+package org.alfresco.test.integration.smoke;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.alfresco.dataprep.SiteService;
 import org.alfresco.po.share.site.create.SiteType;
 import org.alfresco.po.share.userdashboard.dashlet.MySitesDashlet;
 import org.alfresco.test.BaseTest;
-import static org.alfresco.test.TestData.RM_SITE_ID;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.testng.AssertJUnit.assertTrue;
 import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertTrue;
+
 
 /**
  * Test that creates the RM site
@@ -44,9 +43,10 @@ public class CreateRMSite extends BaseTest
     private MySitesDashlet mySitesDashlet;
     
     @Test(groups="createRMSite") 
-    public void createRMSite()
+    public void createRMSite() throws Exception
     {
-        try {
+        try
+        {
             if (!siteService.exists(RM_SITE_ID, getAdminName(), getAdminPassword()))
             {
                 // create RM site
@@ -60,10 +60,10 @@ public class CreateRMSite extends BaseTest
                 openPage(userDashboardPage);
                 assertTrue(siteService.exists(RM_SITE_ID, getAdminName(), getAdminPassword()));
             }
-        } 
-        catch (Exception ex) 
+        }
+        catch (Exception ex)
         {
-            Logger.getLogger(DeclareInPlaceRecord.class.getName()).log(Level.SEVERE, null, "RM site could not be created. " + ex);
+            throw new Exception(ex);
         }
     }
 }

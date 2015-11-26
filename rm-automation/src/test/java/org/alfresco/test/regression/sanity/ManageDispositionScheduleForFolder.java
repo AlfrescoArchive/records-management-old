@@ -204,7 +204,7 @@ public class ManageDispositionScheduleForFolder extends BaseTest
         assertTrue(folder.isCutOff());
         assertTrue(folder.isClosed());
         //verify available actions
-        assertNull(folder.isActionsClickable(
+        assertNull(folder.getUnclickableActions(
                 RecordFolder.VIEW_DETAILS,
                 RecordFolder.UNDO_CUTOFF,
                 RecordFolder.COPY,

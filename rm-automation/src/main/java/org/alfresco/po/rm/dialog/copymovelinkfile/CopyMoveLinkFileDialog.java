@@ -30,6 +30,8 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
+
 /**
  * Base dialog for copy, move, link
  *
@@ -57,45 +59,9 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
     public CopyMoveLinkFileDialog select(String name)
     {
         // wait for the dialog to be visible
-        Utils.waitForVisibilityOf(selectedSelector);
-        
-        Utils.waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
-        Utils.waitForVisibilityOf(selectedItemSelector);
-        /*
-        commented this piece of code until being sure it isn't what we need for all dialogs
-        // re-try in order to deal with unreliable rendering
-        for (int retryCount = 0; retryCount < 3; retryCount++)
-        {
-            try
-            {
-                // get all the items in the tree
-                List<WebElement> spans = Utils.getWebDriver().findElements(By.cssSelector("div[id$='dialog_c'][style*='visibility: visible'] div[class='ygtvitem'] div.ygtvitem span"));
-
-                for (WebElement span : spans)
-                {
-                    // find the item that matches the text provided
-                    if (span.getText().startsWith(name))
-                    {
-                        // select the item in the tree
-                        Utils.mouseOver(span);
-                        span.click();
-                        Utils.waitForVisibilityOf(By.cssSelector("tr[class='ygtvrow'] td[class*='ygtvtm']"));
-                    }
-                }
-
-                // break on success
-                break;
-            }
-            catch (StaleElementReferenceException exception)
-            {
-                if (retryCount == 2)
-                {
-                    throw exception;
-                }
-            }
-        }
-        */
-
+        waitForVisibilityOf(selectedSelector);
+        waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
+        waitForVisibilityOf(selectedItemSelector);
         return this;
     }
 

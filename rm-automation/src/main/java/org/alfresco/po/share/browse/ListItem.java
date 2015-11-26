@@ -209,7 +209,7 @@ public abstract class ListItem
      * @param actionNames action names
      * @return boolean true if all clickable, false otherwise
      */
-    public List<String> isActionsClickable(String... actionNames)
+    public List<String> getUnclickableActions(String... actionNames)
     {
         List<String> result = null;
 

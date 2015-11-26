@@ -97,7 +97,7 @@ public class ManageCompleteRecords extends BaseTest
         assertEquals("Both records should be present in record folder one", 2, filePlan.getList().size());
 
         // verify electronic record actions
-        assertNull(filePlan.getRecord(RECORD).isActionsClickable(
+        assertNull(filePlan.getRecord(RECORD).getUnclickableActions(
                 Record.DOWNLOAD,
                 Record.EDIT_METADATA,
                 Record.REOPEN_RECORD,
@@ -132,7 +132,7 @@ public class ManageCompleteRecords extends BaseTest
         recordDetails.navigateUp();
 
         // verify non-electronic record actions
-        assertNull(filePlan.getRecord(NON_ELECTRONIC_RECORD).isActionsClickable(
+        assertNull(filePlan.getRecord(NON_ELECTRONIC_RECORD).getUnclickableActions(
                 Record.EDIT_METADATA,
                 Record.REOPEN_RECORD,
                 Record.ADD_TO_HOLD,
@@ -227,7 +227,7 @@ public class ManageCompleteRecords extends BaseTest
         assertTrue("Electronic record should be held", filePlan.getRecord(RECORD).isHeld());
 
         // check the available actions on the held record
-        assertNull(filePlan.getRecord(RECORD).isActionsClickable(
+        assertNull(filePlan.getRecord(RECORD).getUnclickableActions(
                 Record.DOWNLOAD,
                 Record.ADD_TO_HOLD,
                 Record.REMOVE_FROM_HOLD,
@@ -244,7 +244,7 @@ public class ManageCompleteRecords extends BaseTest
         assertFalse("Electronic record should not be held", filePlan.getRecord(RECORD).isHeld());
 
         // check the list of actions available on the record after it has been removed from the hold
-        assertEquals(null, filePlan.getRecord(RECORD).isActionsClickable(
+        assertNull(filePlan.getRecord(RECORD).getUnclickableActions(
                 Record.DOWNLOAD,
                 Record.EDIT_METADATA,
                 Record.REOPEN_RECORD,

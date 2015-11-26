@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.alfresco.test.integration.legacy;
+package org.alfresco.test.integration.smoke;
 
 import org.alfresco.dataprep.RecordsManagementService;
 import org.alfresco.po.rm.actions.edit.EditRecordCategoryPage;
@@ -29,7 +29,6 @@ import org.alfresco.po.rm.details.category.CategoryDetailsPage;
 import org.alfresco.po.rm.details.record.PropertiesPanel;
 import org.alfresco.po.rm.details.record.PropertiesPanel.Properties;
 import org.alfresco.po.rm.dialog.GeneralConfirmationDialog;
-import org.alfresco.po.rm.properties.CommonProperties;
 import org.alfresco.po.share.properties.Content;
 import org.alfresco.test.AlfrescoTest;
 import org.alfresco.test.BaseTest;
