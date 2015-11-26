@@ -81,27 +81,10 @@ public class CreateNonElectronicRecords extends BaseTest
         String recordDescription = record + " description";
         String editedRecord = "edited RM-2777 record";
         String editedRecordTitle = "edited RM-2777 record title";
-        String editedRecordAuthor = "edited RM-2777 record author";
         String editedRecordDescription = "edited RM-2777 record description";
-        // create "rm admin" user
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
-        // log in with the RM admin user
-        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
 
-        // create category 1
-        filePlan.getToolbar()
-                .clickOnNewCategory()
-                .setName(category1)
-                .setTitle(TITLE)
-                .clickOnSave();
-        // navigate inside category 1
-        filePlan.getRecordCategory(category1).clickOnLink();
-        // create folder 1
-        filePlan.getToolbar().clickOnNewRecordFolder()
-                .setName(folder1).setTitle(TITLE).clickOnSave();
-        // create folder 2
-        filePlan.getToolbar().clickOnNewRecordFolder()
-                .setName(folder2).setTitle(TITLE).clickOnSave();
+        // add test precondition
+        createTestPrecondition(category1, folder1, folder2);
 
         filePlan.getRecordFolder(folder1).clickOnLink();
         // create a non-electronic record by completing some of the fields
@@ -226,7 +209,36 @@ public class CreateNonElectronicRecords extends BaseTest
         recordDetails.clickOnParentInBreadcrumb(folder1, filePlan);
         // check the record is displayed in folder 1
         assertNotNull(filePlan.getRecord(editedRecord));
+
         // delete the category 1
+        deleteCategory1(category1);
+    }
+
+    private void createTestPrecondition(String category1, String folder1, String folder2)
+    {
+        // create "rm admin" user
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+        // log in with the RM admin user
+        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+
+        // create category 1
+        filePlan.getToolbar()
+                .clickOnNewCategory()
+                .setName(category1)
+                .setTitle(TITLE)
+                .clickOnSave();
+        // navigate inside category 1
+        filePlan.getRecordCategory(category1).clickOnLink();
+        // create folder 1
+        filePlan.getToolbar().clickOnNewRecordFolder()
+                .setName(folder1).setTitle(TITLE).clickOnSave();
+        // create folder 2
+        filePlan.getToolbar().clickOnNewRecordFolder()
+                .setName(folder2).setTitle(TITLE).clickOnSave();
+    }
+
+    private void deleteCategory1(String category1)
+    {
         filePlan.navigateUp().navigateUp();
         filePlan.getRecordCategory(category1).clickOnDelete().clickOnConfirm();
         assertNull(filePlan.getRecordCategory(category1));

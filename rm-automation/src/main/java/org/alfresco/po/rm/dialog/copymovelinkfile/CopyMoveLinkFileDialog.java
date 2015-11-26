@@ -60,7 +60,8 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
     {
         // wait for the dialog to be visible
         waitForVisibilityOf(selectedSelector);
-        waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
+        WebElement destination = waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]"));
+        destination.click();
         waitForVisibilityOf(selectedItemSelector);
         return this;
     }

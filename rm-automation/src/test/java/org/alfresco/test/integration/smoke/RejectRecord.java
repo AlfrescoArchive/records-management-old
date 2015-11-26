@@ -84,28 +84,10 @@ public class RejectRecord extends BaseTest
 
     @Test(dependsOnGroups="createRMSite")
     @AlfrescoTest(jira="RM-2748")
-    public void rejectRecords() {
-        // create "rm admin" user if it does not exist and assign it to RM Administrator role
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
-        // create Collaboration site
-        dataPrep.createSite(COLLAB_SITE, COLLAB_SANITY_ID);
-        // create collab_user
-        dataPrep.createUser(COLLABORATOR);
-        // invite collab_user to Collaboration site with Contributor role
-        service.inviteUserToSite(getAdminName(), getAdminPassword(), COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
-
-        openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
-        // upload document
-        documentLibrary
-                .getToolbar()
-                .clickOnUpload()
-                .uploadFile(rejectedUploadedInplaceRecord);
-
-        // create document
-        documentLibrary
-                .getToolbar()
-                .clickOnCreateTextFile()
-                .createTextFile(rejectedCreatedInplaceRecord, "default content").clickOnParentInBreadcrumb("Documents", documentLibrary);
+    public void rejectRecords()
+    {
+        // add test precondition
+        addTestPrecondition();
 
         // declare the uploaded document as record
         documentLibrary.getDocument(rejectedUploadedInplaceRecord).clickOnDeclareAsRecord();
@@ -170,6 +152,36 @@ public class RejectRecord extends BaseTest
         assertTrue(Arrays.asList(newUploadedRecordActions).contains(DocumentActions.DECLARE_AS_RECORD));
 
         // delete the documents
+        deleteDocuments();
+    }
+
+    private void addTestPrecondition()
+    {
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+        // create Collaboration site
+        dataPrep.createSite(COLLAB_SITE, COLLAB_SANITY_ID);
+        // create collab_user
+        dataPrep.createUser(COLLABORATOR);
+        // invite collab_user to Collaboration site with Contributor role
+        service.inviteUserToSite(getAdminName(), getAdminPassword(), COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
+
+        openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
+        // upload document
+        documentLibrary
+                .getToolbar()
+                .clickOnUpload()
+                .uploadFile(rejectedUploadedInplaceRecord);
+
+        // create document
+        documentLibrary
+                .getToolbar()
+                .clickOnCreateTextFile()
+                .createTextFile(rejectedCreatedInplaceRecord, "default content").clickOnParentInBreadcrumb("Documents", documentLibrary);
+    }
+
+    private void deleteDocuments()
+    {
         documentLibrary.getDocument(rejectedCreatedInplaceRecord).clickOnDelete().confirm();
         documentLibrary.render();
         assertNull(documentLibrary.getDocument(rejectedCreatedInplaceRecord));

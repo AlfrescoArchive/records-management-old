@@ -77,25 +77,9 @@ public class CreateElectronicRecords extends BaseTest
         String editedRecordTitle = "edited RM-2768 record title";
         String editedRecordAuthor = "edited RM-2768 record author";
         String editedRecordDescription = "edited RM-2768 record description";
-        // create "rm admin" user
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
-        // log in with the RM admin user
-        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
-        
-        // create category 1
-        filePlan.getToolbar()
-            .clickOnNewCategory()
-            .setName(category1)
-            .setTitle(TITLE)
-            .clickOnSave();
-        // navigate inside category 1
-        filePlan.getRecordCategory(category1).clickOnLink();
-        // create folder 1
-        filePlan.getToolbar().clickOnNewRecordFolder()
-                .setName(folder1).setTitle(TITLE).clickOnSave();
-        // create folder 2
-        filePlan.getToolbar().clickOnNewRecordFolder()
-                .setName(folder2).setTitle(TITLE).clickOnSave();
+
+        // add test precondition
+        createTestPrecondition(category1, folder1, folder2);
 
         // upload a file in folder 1
         filePlan.getRecordFolder(folder1).clickOnLink();       
@@ -133,14 +117,8 @@ public class CreateElectronicRecords extends BaseTest
         recordDetails.navigateUp();
         assertNotNull(filePlan.getRecord("Copy of " + record));
 
-        // move record to folder 2
-        filePlan.getRecord(record).clickOnMoveTo().select(folder2).clickOnMove();
-        // navigate to category level
-        filePlan.navigateUp();
-        // check the record has been moved successfully to folder 2
-        filePlan.getRecordFolder(folder2).clickOnLink();
-        assertNotNull(filePlan.getRecord(record));
-
+        // move record to folder 2 and check it is moved successfully
+        moveRecordAndCheckItHasBeenMoved(record, folder2);
         // navigate to category level
         filePlan.navigateUp();
         // delete the record copy from folder 1
@@ -165,13 +143,7 @@ public class CreateElectronicRecords extends BaseTest
         assertFalse(filePlan.getRecord(record).isActionClickable(Record.COMPLETE_RECORD));
 
         // navigate to record's Details page and check its metadata can not be edited anymore
-        filePlan.getRecord(record).clickOnEditMetadata(editElectronicRecordPage);
-        assertFalse(editElectronicRecordPage.getContent().isNameEnabled());
-        assertFalse(editElectronicRecordPage.getContent().isTitleEnabled());
-        assertFalse(editElectronicRecordPage.getContent().isDescritionEnabled());
-        assertFalse(editElectronicRecordPage.getContent().isAuthorEnabled());
-        assertFalse(editElectronicRecordPage.getContent().isOwnerEnabled());
-        editElectronicRecordPage.clickOnCancel();
+        checkRecordCanNotHaveItsMetadataEdited(record);
 
         // re-open the record from its Details page
         filePlan.getRecord(record).clickOnLink(recordDetails).getRecordActionsPanel().clickOnAction(RecordActions.REOPEN_RECORD);
@@ -200,28 +172,88 @@ public class CreateElectronicRecords extends BaseTest
         assertEquals( editedRecordDescription, PropertiesPanel.getPropertyValue(Properties.DESCRIPTION));
         assertEquals(editedRecordAuthor, PropertiesPanel.getPropertyValue(Properties.AUTHOR));
 
-        // navigate to folder 2 level and link the record to folder 1
+        // navigate to folder 2 level
         recordDetails.clickOnParentInBreadcrumb(folder2, filePlan);
-        filePlan.getRecord(editedRecord).clickOnLinkTo().select(folder1).clickOnLink();
+        // link record to folder 1 and check it is linked successfully
+        linkRecordToFolderAndCheckItsLinked(editedRecord, folder1, folder2);
+
+        // delete category
+        deleteCategory(category1);
+    }
+
+    private void createTestPrecondition(String category1, String folder1, String folder2)
+    {
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+        // log in with the RM admin user
+        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+
+        // create category 1
+        filePlan.getToolbar()
+                .clickOnNewCategory()
+                .setName(category1)
+                .setTitle(TITLE)
+                .clickOnSave();
+        // navigate inside category 1
+        filePlan.getRecordCategory(category1).clickOnLink();
+        // create folder 1
+        filePlan.getToolbar().clickOnNewRecordFolder()
+                .setName(folder1).setTitle(TITLE).clickOnSave();
+        // create folder 2
+        filePlan.getToolbar().clickOnNewRecordFolder()
+                .setName(folder2).setTitle(TITLE).clickOnSave();
+    }
+
+    private void moveRecordAndCheckItHasBeenMoved(String recordName, String toFolder)
+    {
+        // move record
+        filePlan.getRecord(recordName).clickOnMoveTo().select(toFolder).clickOnMove();
+        // navigate to category level
+        filePlan.navigateUp();
+        // check the record has been moved successfully to folder 2
+        filePlan.getRecordFolder(toFolder).clickOnLink();
+        assertNotNull(filePlan.getRecord(recordName));
+    }
+
+    private void checkRecordCanNotHaveItsMetadataEdited(String record)
+    {
+        filePlan.getRecord(record).clickOnEditMetadata(editElectronicRecordPage);
+        assertFalse(editElectronicRecordPage.getContent().isNameEnabled());
+        assertFalse(editElectronicRecordPage.getContent().isTitleEnabled());
+        assertFalse(editElectronicRecordPage.getContent().isDescritionEnabled());
+        assertFalse(editElectronicRecordPage.getContent().isAuthorEnabled());
+        assertFalse(editElectronicRecordPage.getContent().isOwnerEnabled());
+        editElectronicRecordPage.clickOnCancel();
+    }
+
+    private void linkRecordToFolderAndCheckItsLinked(String record, String folderTo, String parentFolder)
+    {
+        filePlan.getRecord(record).clickOnLinkTo().select(folderTo).clickOnLink();
         // check the linked indicator is displayed for the record
-        assertTrue(filePlan.getRecord(editedRecord).isLinked());
+        assertTrue(filePlan.getRecord(record).isLinked());
 
         // navigate inside folder 1 and verify that the record is displayed there as well
         filePlan.navigateUp();
-        filePlan.getRecordFolder(folder1).clickOnLink();
-        assertNotNull(filePlan.getRecord(editedRecord));
+        filePlan.getRecordFolder(folderTo).clickOnLink();
+        assertNotNull(filePlan.getRecord(record));
         // check that the folder 2 is displayed in the record Details page breadcrumb
-        filePlan.getRecord(editedRecord).clickOnLink(recordDetails);
-        assertTrue(recordDetails.getBreadcrumbPath().contains(folder2));
+        filePlan.getRecord(record).clickOnLink(recordDetails);
+        assertTrue(recordDetails.getBreadcrumbPath().contains(parentFolder));
 
         // click on folder 2 in breadcrumb
-        recordDetails.clickOnParentInBreadcrumb(folder2, filePlan);
+        recordDetails.clickOnParentInBreadcrumb(parentFolder, filePlan);
         // check the navigation is made to folder 2 and that the record is inside it
-        assertTrue(filePlan.getBreadcrumbPath().contains(folder2));
-        assertNotNull(filePlan.getRecord(editedRecord));
-        // navigate to FilePlan level and delete the category
+        assertTrue(filePlan.getBreadcrumbPath().contains(parentFolder));
+        assertNotNull(filePlan.getRecord(record));
+    }
+
+
+    private void deleteCategory(String categoryName)
+    {
+        // navigate to File Plan level and delete the category
         filePlan.navigateUp().navigateUp();
-        filePlan.getRecordCategory(category1).clickOnDelete().clickOnConfirm();
+        filePlan.getRecordCategory(categoryName).clickOnDelete().clickOnConfirm();
+        assertNull(filePlan.getRecordCategory(categoryName));
     }
     
 }

@@ -155,6 +155,10 @@ public class DetailsPage<N extends SiteNavigation> extends SitePage<N>
             if(node.getText().equals(parentName))
             {
                 node.click();
+                // Wait for the parent link to become stale.
+                Utils.waitForStalenessOf(node);
+                // Wait for the browse page to have loaded (by waiting for the breadcrumbs to appear).
+                Utils.waitForVisibilityOf(By.cssSelector("div.crumb"));
                 return pageToRender.render();
             }
         }

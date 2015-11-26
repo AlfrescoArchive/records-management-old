@@ -80,27 +80,8 @@ public class DeclareInPlaceRecord extends BaseTest
     @AlfrescoTest(jira="RM-2366")
     public void declareInplaceRecord()
     {
-        // create "rm admin" user if it does not exist and assign it to RM Administrator role
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
-        // create Collaboration site
-        dataPrep.createSite(COLLAB_SITE, COLLAB_SANITY_ID);
-        // create collab_user
-        dataPrep.createUser(COLLABORATOR);
-        // invite collab_user to Collaboration site with Contributor role
-        service.inviteUserToSite(getAdminName(), getAdminPassword(), COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
-
-        openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
-        // upload document
-        documentLibrary
-                .getToolbar()
-                .clickOnUpload()
-                .uploadFile(uploadedInplaceRecord);
-
-        // create document
-        documentLibrary
-                .getToolbar()
-                .clickOnCreateTextFile()
-                .createTextFile(createdInplaceRecord, "default content").clickOnParentInBreadcrumb("Documents", documentLibrary);
+        // create test precondition
+        createTestPrecondition();
 
         Document uploadedDoc = documentLibrary.getDocument(uploadedInplaceRecord);
         String[] uploadedDocClickableActions = uploadedDoc.getClickableActions();
@@ -187,5 +168,30 @@ public class DeclareInPlaceRecord extends BaseTest
         // check the records have been successfully deleted
         assertNull("The uploaded inplace record could not be deleted.",filePlanPanel.clickOnUnfiledRecords().getRecord(uploadedInplaceRecord));
         assertNull("The created inplace record could not be deleted.", filePlanPanel.clickOnUnfiledRecords().getRecord(createdInplaceRecord));
-    }      
+    }
+
+    private void createTestPrecondition()
+    {
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+        // create Collaboration site
+        dataPrep.createSite(COLLAB_SITE, COLLAB_SANITY_ID);
+        // create collab_user
+        dataPrep.createUser(COLLABORATOR);
+        // invite collab_user to Collaboration site with Contributor role
+        service.inviteUserToSite(getAdminName(), getAdminPassword(), COLLABORATOR, COLLAB_SANITY_ID, "SiteContributor");
+
+        openPage(COLLABORATOR, DEFAULT_PASSWORD, documentLibrary, COLLAB_SANITY_ID);
+        // upload document
+        documentLibrary
+                .getToolbar()
+                .clickOnUpload()
+                .uploadFile(uploadedInplaceRecord);
+
+        // create document
+        documentLibrary
+                .getToolbar()
+                .clickOnCreateTextFile()
+                .createTextFile(createdInplaceRecord, "default content").clickOnParentInBreadcrumb("Documents", documentLibrary);
+    }
 }

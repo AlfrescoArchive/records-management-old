@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -69,10 +70,9 @@ public class CreateCategories extends BaseTest
         String editedCategory1 = "edited RM-2756 category1";
         String editedCategory1Title = "category1 title";
         String editedCategory1Description = "this is the category 1 description";
-        
         String category2 = "RM-2756 category2";
-        // create "rm admin" user if it does not exist and assign it to RM Administrator role
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+
+        createTestPrecondition();
         // log in with the RM admin user
         openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // check that create category button is clickable
@@ -90,18 +90,10 @@ public class CreateCategories extends BaseTest
         RecordCategory recordCategory1 = filePlan.getRecordCategory(category1);
         assertNotNull(recordCategory1);
         assertEquals(category1, recordCategory1.getName());
-        
-        String[] category1Actions = recordCategory1.getClickableActions();
-   
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.COPY));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.DELETE));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.EDIT_METADATA));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.MANAGE_PERMISSIONS));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.MANAGE_RULES));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.MOVE));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.VIEW_AUDIT));
-        assertTrue(Arrays.asList(category1Actions).contains(CategoryActions.VIEW_DETAILS));
-        
+
+        // check the available actions
+        checkCategoryActions(recordCategory1.getClickableActions());
+
         // copy category 1 to File Plan
         recordCategory1.clickOnCopyTo().clickOnCopy();
         // check that a copy of the category has been created
@@ -119,29 +111,12 @@ public class CreateCategories extends BaseTest
         RecordCategory recordCategory2 = filePlan.getRecordCategory(category2);
         assertNotNull(recordCategory2);
         assertEquals(category2, recordCategory2.getName());
-        
-        // copy category 1 to category 2
-        filePlan.getRecordCategory(category1).clickOnCopyTo().select(category2).clickOnCopy();
-        
-        // navigate inside category 2
-        filePlan.getRecordCategory(category2).clickOnLink();
-        
-        // check category 1 is displayed
-        RecordCategory recordCategory1Copy = filePlan.getRecordCategory(category1);
-        assertNotNull(recordCategory1Copy);
-        
-        // navigate to category 1 details page
-        category1DetailsPage = recordCategory1Copy.clickOnViewDetails();
+
+        // copy category 1 to category 2 and navigate to the copy of category 1 details page
+        category1DetailsPage = copyCategory1ToCategory2(category1, category2).clickOnViewDetails();
         
         // check the category 1 available actions    
-        CategoryActionsPanel actionsPanel = category1DetailsPage.getCategoryActionsPanel();
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.EDIT_METADATA));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.MANAGE_PERMISSIONS));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.COPY));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.MOVE));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.DELETE));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.VIEW_AUDIT));
-        assertTrue(actionsPanel.isActionClickable(CategoryActions.MANAGE_RULES));
+        checkCategoryActionsFromDetailsPage(category1DetailsPage.getCategoryActionsPanel());
               
         // check some of category's properties  
         assertTrue(PropertiesPanel.getPropertyValue(Properties.NAME).equals(category1));
@@ -163,7 +138,7 @@ public class CreateCategories extends BaseTest
 
         openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
         // navigate inside category 2
-        filePlan.getRecordCategory(category2).clickOnLink();
+        filePlan.getRecordCategory(category2).clickOnLink(filePlan);
 
         // move category 1 edited copy to File Plan
         filePlan.getRecordCategory(editedCategory1).clickOnMoveTo().select("File Plan").clickOnMove();
@@ -177,24 +152,63 @@ public class CreateCategories extends BaseTest
         // check the edited copy of category 1 is displayed in File Plan
         assertNotNull(filePlan.getRecordCategory(editedCategory1));
 
-        // delete category 1
-        filePlan.getRecordCategory(category1).clickOnAction(CategoryActions.DELETE,confirmationDialog).confirm();
-        filePlan.render();
-        // delete category 2
-        filePlan.getRecordCategory(category2).clickOnAction(CategoryActions.DELETE,confirmationDialog).confirm();
-        filePlan.render();
-        // delete edited copy of category 1 
-        filePlan.getRecordCategory(editedCategory1).clickOnAction(CategoryActions.DELETE, confirmationDialog).confirm();
-        filePlan.render();
-        // delete initial copy of category 1
-        filePlan.getRecordCategory("Copy of " + category1).clickOnAction(CategoryActions.DELETE, confirmationDialog).confirm();
-        filePlan.render();
-
-        // check the categories have been successfully deleted
-        assertNull(filePlan.getRecordCategory(category1));  
-        assertNull(filePlan.getRecordCategory(category2));  
-        assertNull(filePlan.getRecordCategory(editedCategory1));       
+        // delete categories
+        deleteCategories(Arrays.asList(category1, category2, editedCategory1, "Copy of "+ category1));
     }
-    
+
+    private void createTestPrecondition()
+    {
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+    }
+
+    private void checkCategoryActions(String[] actualActions)
+    {
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.COPY));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.DELETE));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.EDIT_METADATA));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.MANAGE_PERMISSIONS));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.MANAGE_RULES));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.MOVE));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.VIEW_AUDIT));
+        assertTrue(Arrays.asList(actualActions).contains(CategoryActions.VIEW_DETAILS));
+    }
+
+    private void checkCategoryActionsFromDetailsPage(CategoryActionsPanel categoryActionsPanel)
+    {
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.EDIT_METADATA));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.MANAGE_PERMISSIONS));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.COPY));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.MOVE));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.DELETE));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.VIEW_AUDIT));
+        assertTrue(categoryActionsPanel.isActionClickable(CategoryActions.MANAGE_RULES));
+
+    }
+
+    private RecordCategory copyCategory1ToCategory2(String category1Name, String category2Name)
+    {
+        // copy category 1 to category 2
+        filePlan.getRecordCategory(category1Name).clickOnCopyTo().select(category2Name).clickOnCopy();
+
+        // navigate inside category 2
+        filePlan.getRecordCategory(category2Name).clickOnLink();
+
+        // check category 1 is displayed
+        RecordCategory recordCategory1Copy = filePlan.getRecordCategory(category1Name);
+        assertNotNull(recordCategory1Copy);
+        return recordCategory1Copy;
+    }
+
+    private void deleteCategories(List<String> categories)
+    {
+        for(String category : categories)
+        {
+            filePlan.getRecordCategory(category).clickOnAction(CategoryActions.DELETE, confirmationDialog).confirm();
+            filePlan.render();
+            assertNull(filePlan.getRecordCategory(category));
+        }
+
+    }
     
 }   

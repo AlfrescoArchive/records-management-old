@@ -72,26 +72,9 @@ public class CreateFolders extends BaseTest
         String editedFolder1 = "edited folder 1 RM-2757";
         String editedFolder1Title = "edited title folder 1 RM-2757";
         String editedFolder1Description = "edited description folder 1 RM-2757";
-        
-        // create "rm admin" user if it does not exist and assign it to RM Administrator role
-        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
 
-        // log in with the RM admin user
-        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
-
-        // create category 1
-        filePlan.getToolbar()
-            .clickOnNewCategory()
-            .setName(category1)
-            .setTitle(TITLE)
-            .clickOnSave();
-
-        // create category 2
-        filePlan.getToolbar()
-            .clickOnNewCategory()
-            .setName(category2)
-            .setTitle(TITLE)
-            .clickOnSave();
+        // add test precondition
+        createTestPrecondition(category1, category2);
 
         // navigate inside category 1
         filePlan.getRecordCategory(category1).clickOnLink();
@@ -213,6 +196,34 @@ public class CreateFolders extends BaseTest
                 FolderActions.MANAGE_PERMISSIONS, FolderActions.REOPEN_FOLDER));
 
         // navigate to File Plan Level and delete the root category 1
+        deleteCategory(category1);
+    }
+
+    private void createTestPrecondition(String category1, String category2)
+    {
+        // create "rm admin" user if it does not exist and assign it to RM Administrator role
+        service.createUserAndAssignToRole(getAdminName(), getAdminPassword(), RM_ADMIN, DEFAULT_PASSWORD, DEFAULT_EMAIL, UsersAndGroupsPage.ROLE_RM_ADMIN, FIRST_NAME, LAST_NAME);
+
+        // log in with the RM admin user
+        openPage(RM_ADMIN, DEFAULT_PASSWORD, filePlan, RM_SITE_ID, "documentlibrary");
+
+        // create category 1
+        filePlan.getToolbar()
+                .clickOnNewCategory()
+                .setName(category1)
+                .setTitle(TITLE)
+                .clickOnSave();
+
+        // create category 2
+        filePlan.getToolbar()
+                .clickOnNewCategory()
+                .setName(category2)
+                .setTitle(TITLE)
+                .clickOnSave();
+    }
+
+    private void deleteCategory(String category1)
+    {
         filePlan.navigateUp();
         filePlan.navigateUp();
         filePlan.getRecordCategory(category1).clickOnDelete().clickOnConfirm();
