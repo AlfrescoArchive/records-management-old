@@ -26,10 +26,12 @@ import org.alfresco.po.common.buttonset.StandardButtons;
 import org.alfresco.po.common.renderable.Renderable;
 import org.alfresco.po.common.util.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import static org.alfresco.po.common.util.Utils.getWebDriver;
 import static org.alfresco.po.common.util.Utils.waitForVisibilityOf;
 
 /**
@@ -60,9 +62,21 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
     {
         // wait for the dialog to be visible
         waitForVisibilityOf(selectedSelector);
-        WebElement destination = waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]"));
-        destination.click();
-        waitForVisibilityOf(selectedItemSelector);
+        waitForVisibilityOf(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]"));
+
+        for(int i = 0; i<=3; i++)
+        {
+            try
+            {
+                getWebDriver().findElement(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
+                waitForVisibilityOf(selectedItemSelector);
+            }
+            catch (StaleElementReferenceException staleElement)
+            {
+                i = i + 1;
+                retrySelection(name);
+            }
+        }
         return this;
     }
 
@@ -72,5 +86,11 @@ public abstract class CopyMoveLinkFileDialog extends Dialog
     public Renderable clickOnCancel()
     {
         return buttonset.click(CANCEL);
+    }
+
+    private void retrySelection(String name)
+    {
+        getWebDriver().findElement(By.xpath("//div[@class='treeview']//td//span[contains(text(), '" + name + "')]")).click();
+        waitForVisibilityOf(selectedItemSelector);
     }
 }
