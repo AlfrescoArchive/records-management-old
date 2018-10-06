@@ -45,7 +45,7 @@ Summary of Available Internal Ant Targets
  - copyWebDirectory             : Copies the source/web folder
  - deleteExplodedWar            : Deletes the exploded war file
  - deleteWarFile                : Deletes the war file
- - fetchSolr                    : Gets the the Solr artifact
+ - fetchSolr                    : Gets the Solr artifact
  - fetchWarFile                 : Gets the "original" Community war file
  - fetchEntpriseWarFile         : Gets the "original" Enterprise war file
  - package                      : Executes the "mvn package" command
